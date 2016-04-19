@@ -1,0 +1,428 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="FlinkWhen the Flink system is started, it bring up the JobManager and one or more TaskManagers. 
+The JobManager is the coordinator of the Flink system">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flink/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h2><p>When the Flink system is started, it bring up the JobManager and one or more TaskManagers. </p>
+<p>The JobManager is the coordinator of the Flink system, while the TaskManagers are the workers that execute parts of the parallel programs. When starting the system in local mode, a single JobManager and TaskManager are brought up within the same JVM.</p>
+<p><img src="../resource/distribution/flink/process_model.svg" alt="flink process model"></p>
+<h3 id="Command-Line-Interface"><a href="#Command-Line-Interface" class="headerlink" title="Command Line Interface"></a>Command Line Interface</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">bin/flink</span><br><span class="line">./flink &lt;ACTION&gt; [OPTIONS] [ARGUMENTS]</span><br><span class="line"></span><br><span class="line">The following actions are available:</span><br><span class="line"></span><br><span class="line">Action &quot;run&quot; compiles and runs a program.</span><br><span class="line"></span><br><span class="line">  Syntax: run [OPTIONS] &lt;jar-file&gt; &lt;arguments&gt;</span><br><span class="line">  &quot;run&quot; action options:</span><br><span class="line">     -c,--class &lt;classname&gt;           Class with the program entry point (&quot;main&quot;</span><br><span class="line">                                      method or &quot;getPlan()&quot; method. Only needed</span><br><span class="line">                                      if the JAR file does not specify the class</span><br><span class="line">                                      in its manifest.</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;      Address of the JobManager (master) to</span><br><span class="line">                                      which to connect. Specify &apos;yarn-cluster&apos;</span><br><span class="line">                                      as the JobManager to deploy a YARN cluster</span><br><span class="line">                                      for the job. Use this flag to connect to a</span><br><span class="line">                                      different JobManager than the one</span><br><span class="line">                                      specified in the configuration.</span><br><span class="line">     -p,--parallelism &lt;parallelism&gt;   The parallelism with which to run the</span><br><span class="line">                                      program. Optional flag to override the</span><br><span class="line">                                      default value specified in the</span><br><span class="line">                                      configuration.</span><br><span class="line">  Additional arguments if -m yarn-cluster is set:</span><br><span class="line">     -yd,--yarndetached                   Start detached</span><br><span class="line">     -yD &lt;arg&gt;                            Dynamic properties</span><br><span class="line">     -yj,--yarnjar &lt;arg&gt;                  Path to Flink jar file</span><br><span class="line">     -yjm,--yarnjobManagerMemory &lt;arg&gt;    Memory for JobManager Container [in</span><br><span class="line">                                          MB]</span><br><span class="line">     -yn,--yarncontainer &lt;arg&gt;            Number of YARN container to allocate</span><br><span class="line">                                          (=Number of Task Managers)</span><br><span class="line">     -ynm,--yarnname &lt;arg&gt;                Set a custom name for the application</span><br><span class="line">                                          on YARN</span><br><span class="line">     -yq,--yarnquery                      Display available YARN resources</span><br><span class="line">                                          (memory, cores)</span><br><span class="line">     -yqu,--yarnqueue &lt;arg&gt;               Specify YARN queue.</span><br><span class="line">     -ys,--yarnslots &lt;arg&gt;                Number of slots per TaskManager</span><br><span class="line">     -yst,--yarnstreaming                 Start Flink in streaming mode</span><br><span class="line">     -yt,--yarnship &lt;arg&gt;                 Ship files in the specified directory</span><br><span class="line">                                          (t for transfer)</span><br><span class="line">     -ytm,--yarntaskManagerMemory &lt;arg&gt;   Memory per TaskManager Container [in</span><br><span class="line">                                          MB]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;info&quot; shows the optimized execution plan of the program (JSON).</span><br><span class="line"></span><br><span class="line">  Syntax: info [OPTIONS] &lt;jar-file&gt; &lt;arguments&gt;</span><br><span class="line">  &quot;info&quot; action options:</span><br><span class="line">     -c,--class &lt;classname&gt;           Class with the program entry point (&quot;main&quot;</span><br><span class="line">                                      method or &quot;getPlan()&quot; method. Only needed</span><br><span class="line">                                      if the JAR file does not specify the class</span><br><span class="line">                                      in its manifest.</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;      Address of the JobManager (master) to</span><br><span class="line">                                      which to connect. Specify &apos;yarn-cluster&apos;</span><br><span class="line">                                      as the JobManager to deploy a YARN cluster</span><br><span class="line">                                      for the job. Use this flag to connect to a</span><br><span class="line">                                      different JobManager than the one</span><br><span class="line">                                      specified in the configuration.</span><br><span class="line">     -p,--parallelism &lt;parallelism&gt;   The parallelism with which to run the</span><br><span class="line">                                      program. Optional flag to override the</span><br><span class="line">                                      default value specified in the</span><br><span class="line">                                      configuration.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;list&quot; lists running and scheduled programs.</span><br><span class="line"></span><br><span class="line">  Syntax: list [OPTIONS]</span><br><span class="line">  &quot;list&quot; action options:</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;   Address of the JobManager (master) to which</span><br><span class="line">                                   to connect. Specify &apos;yarn-cluster&apos; as the</span><br><span class="line">                                   JobManager to deploy a YARN cluster for the</span><br><span class="line">                                   job. Use this flag to connect to a different</span><br><span class="line">                                   JobManager than the one specified in the</span><br><span class="line">                                   configuration.</span><br><span class="line">     -r,--running                  Show only running programs and their JobIDs</span><br><span class="line">     -s,--scheduled                Show only scheduled programs and their JobIDs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;cancel&quot; cancels a running program.</span><br><span class="line"></span><br><span class="line">  Syntax: cancel [OPTIONS] &lt;Job ID&gt;</span><br><span class="line">  &quot;cancel&quot; action options:</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;   Address of the JobManager (master) to which</span><br><span class="line">                                   to connect. Specify &apos;yarn-cluster&apos; as the</span><br><span class="line">                                   JobManager to deploy a YARN cluster for the</span><br><span class="line">                                   job. Use this flag to connect to a different</span><br><span class="line">                                   JobManager than the one specified in the</span><br><span class="line">                                   configuration.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Please specify an action.</span><br></pre></td></tr></table></figure>
+<p>###Configuration</p>
+<p>###Web Client<br>Flink provides a web interface to upload jobs, inspect their execution plans, and execute them. </p>
+<p>The web interface runs on port 8080 by default.To specify a custom port set the webclient.port property in the conf/flink.yaml.</p>
+<p>Jobs are submitted to the JobManager specified by jobmanager.rpc.address and jobmanager.rpc.port.</p>
+<p><code>job view</code> Upload a Flink program as a jar file, execute an uploaded program.</p>
+<p> jar’s manifest file does not specify the program class, you can specify it before the argument list as:<code>-c &lt;assemblerClass&gt; &lt;programArgs...&gt;</code></p>
+<p><code>Plan View</code>  optimized execution plan of the submitted program in the upper half of the page.</p>
+<h3 id="DataSet"><a href="#DataSet" class="headerlink" title="DataSet"></a>DataSet</h3><p>The batch processing APIs of Flink are centered around the DataSet abstraction. </p>
+<p>A DataSet is only an abstract representation of a set of data that can contain duplicates.</p>
+<table>
+<thead>
+<tr>
+<th>Transformation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Map</td>
+<td></td>
+</tr>
+<tr>
+<td>FlatMap</td>
+<td></td>
+</tr>
+<tr>
+<td>MapPartition</td>
+<td></td>
+</tr>
+<tr>
+<td>Filter</td>
+<td></td>
+</tr>
+<tr>
+<td>Reduce</td>
+<td></td>
+</tr>
+<tr>
+<td>ReduceGroup</td>
+<td></td>
+</tr>
+<tr>
+<td>Aggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>Join</td>
+<td></td>
+</tr>
+<tr>
+<td>CoGroup</td>
+<td></td>
+</tr>
+<tr>
+<td>Cross</td>
+<td></td>
+</tr>
+<tr>
+<td>Union</td>
+<td></td>
+</tr>
+<tr>
+<td>Rebalance</td>
+<td></td>
+</tr>
+<tr>
+<td>Hash-Partition</td>
+<td></td>
+</tr>
+<tr>
+<td>Custom Partitioning</td>
+<td></td>
+</tr>
+<tr>
+<td>Sort Partition</td>
+<td></td>
+</tr>
+<tr>
+<td>First-n</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Program-Skeleton"><a href="#Program-Skeleton" class="headerlink" title="Program Skeleton"></a>Program Skeleton</h3><p>Flink programs look like regular Java programs with a main() method. Each program consists of the same basic parts:</p>
+<ol>
+<li>Obtain an ExecutionEnvironment</li>
+<li>Load/create the initial data</li>
+<li>Specify transformations on this data</li>
+<li>Specify where to put the results</li>
+<li>Trigger the program execution</li>
+</ol>
+<h3 id="DataSet-Transformations"><a href="#DataSet-Transformations" class="headerlink" title="DataSet Transformations"></a>DataSet Transformations</h3><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><p>Applies a map function on each element of a DataSet.</p>
+<p>One element must be returned by the function.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.flink.api.common.functions.MapFunction;</span><br><span class="line">import org.apache.flink.api.java.tuple.Tuple2;</span><br><span class="line"></span><br><span class="line">public class SumMapFunction implements MapFunction&lt;Tuple2&lt;Integer, Integer&gt;, Integer&gt; &#123;</span><br><span class="line"></span><br><span class="line">	private static final long serialVersionUID = 3830811031233724943L;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Integer map(Tuple2&lt;Integer, Integer&gt; tuple) throws Exception &#123;</span><br><span class="line">		return tuple.f0 + tuple.f1;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="FlatMap"><a href="#FlatMap" class="headerlink" title="FlatMap"></a>FlatMap</h5><p>Applies a flat-map function on each element of a DataSet. </p>
+<p>This variant of a map function can return arbitrary many result elements (including none) for each input element.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.flink.api.common.functions.FlatMapFunction;</span><br><span class="line">import org.apache.flink.util.Collector;</span><br><span class="line"></span><br><span class="line">public class Tokenizer implements FlatMapFunction&lt;String, String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	private static final long serialVersionUID = 2350322299357354023L;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void flatMap(String line, Collector&lt;String&gt; collector) throws Exception &#123;</span><br><span class="line">		for (String token : line.split(&quot;\\W&quot;)) &#123;</span><br><span class="line">			collector.collect(token);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="MapPartition"><a href="#MapPartition" class="headerlink" title="MapPartition"></a>MapPartition</h5><p>Transforms a parallel partition in a single function call. </p>
+<p>The map-partition function gets the partition as Iterable and can produce an arbitrary number of result values. </p>
+<p>The number of elements in each partition depends on the degree-of-parallelism and previous operations.</p>
+<h5 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h5><h5 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h5><h5 id="Grouped-DataSet"><a href="#Grouped-DataSet" class="headerlink" title="Grouped DataSet"></a>Grouped DataSet</h5><h5 id="Combinable-GroupReduceFunctions"><a href="#Combinable-GroupReduceFunctions" class="headerlink" title="Combinable GroupReduceFunctions"></a>Combinable GroupReduceFunctions</h5><h5 id="GroupCombine-on-a-Grouped-DataSet"><a href="#GroupCombine-on-a-Grouped-DataSet" class="headerlink" title="GroupCombine on a Grouped DataSet"></a>GroupCombine on a Grouped DataSet</h5><h5 id="Aggregate-on-Grouped-Tuple-DataSet"><a href="#Aggregate-on-Grouped-Tuple-DataSet" class="headerlink" title="Aggregate on Grouped Tuple DataSet"></a>Aggregate on Grouped Tuple DataSet</h5><h5 id="Reduce-on-full-DataSet"><a href="#Reduce-on-full-DataSet" class="headerlink" title="Reduce on full DataSet"></a>Reduce on full DataSet</h5><h5 id="GroupReduce-on-full-DataSet"><a href="#GroupReduce-on-full-DataSet" class="headerlink" title="GroupReduce on full DataSet"></a>GroupReduce on full DataSet</h5><h5 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h5><h5 id="Cross"><a href="#Cross" class="headerlink" title="Cross"></a>Cross</h5><h5 id="CoGroup"><a href="#CoGroup" class="headerlink" title="CoGroup"></a>CoGroup</h5><h5 id="Union"><a href="#Union" class="headerlink" title="Union"></a>Union</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br></pre></td></tr></table></figure>
+<h5 id="First-n"><a href="#First-n" class="headerlink" title="First-n"></a>First-n</h5><h3 id="Flink-Streaming"><a href="#Flink-Streaming" class="headerlink" title="Flink Streaming"></a>Flink Streaming</h3><p><code>Transformations</code></p>
+<p>Data transformations transform one or more DataStreams into a new DataStream.</p>
+<table>
+<thead>
+<tr>
+<th>Transformation</th>
+<th>Structure</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Map</td>
+<td>DataStream → DataStream</td>
+<td>Takes one element and produces one element.</td>
+<td>dataStream.map { x =&gt; x * 2 }</td>
+</tr>
+<tr>
+<td>FlatMap</td>
+<td>DataStream → DataStream</td>
+<td>Takes one element and produces zero, one, or more elements.</td>
+<td>dataStream.flatMap { str =&gt; str.split(“ “) }</td>
+</tr>
+<tr>
+<td>Filter</td>
+<td>DataStream → DataStream</td>
+<td>Evaluates a boolean function for each element and retains those for which the function returns true.</td>
+<td>dataStream.filter { _ != 0 }</td>
+</tr>
+<tr>
+<td>KeyBy</td>
+<td>DataStream → KeyedStream</td>
+<td>Logically partitions a stream into disjoint partitions, each partition containing elements of the same key.</td>
+<td>dataStream.keyBy(“someKey”) dataStream.keyBy(0) </td>
+</tr>
+<tr>
+<td>Reduce</td>
+<td>KeyedStream → DataStream</td>
+<td></td>
+<td>keyedStream.reduce { <em> + </em> }</td>
+</tr>
+<tr>
+<td>Fold</td>
+<td>KeyedStream → DataStream</td>
+<td></td>
+<td>val result: DataStream[String] = keyedStream.fold(“start”, (str, i) =&gt; { str + “-“ + i })</td>
+</tr>
+<tr>
+<td>Aggregations</td>
+<td>KeyedStream → DataStream</td>
+<td></td>
+<td>keyedStream.sum(0) keyedStream.sum(“key”) keyedStream.min(0) keyedStream.min(“key”) keyedStream.max(0) keyedStream.max(“key”) keyedStream.minBy(0) keyedStream.minBy(“key”) keyedStream.maxBy(0) keyedStream.maxBy(“key”)</td>
+</tr>
+<tr>
+<td>Window</td>
+<td>KeyedStream → WindowedStream</td>
+<td></td>
+<td>dataStream.keyBy(0).window(TumblingTimeWindows.of(Time.of(5, TimeUnit.SECONDS)))</td>
+</tr>
+<tr>
+<td>WindowAll</td>
+<td>DataStream → AllWindowedStream</td>
+<td></td>
+<td>dataStream.windowAll(TumblingTimeWindows.of(Time.of(5, TimeUnit.SECONDS)))</td>
+</tr>
+<tr>
+<td>Window Apply</td>
+<td>WindowedStream → DataStream AllWindowedStream → DataStream</td>
+<td></td>
+<td>windowedStream.apply { applyFunction }</td>
+</tr>
+<tr>
+<td>Window Reduce</td>
+<td>WindowedStream → DataStream</td>
+<td></td>
+<td>windowedStream.reduce { <em> + </em> }</td>
+</tr>
+<tr>
+<td>Window Fold</td>
+<td>WindowedStream → DataStream</td>
+<td></td>
+<td>val result: DataStream[String] = windowedStream.fold(“start”, (str, i) =&gt; { str + “-“ + i })</td>
+</tr>
+<tr>
+<td>Aggregations on windows</td>
+<td>WindowedStream → DataStream</td>
+<td></td>
+<td>windowedStream.sum(0) windowedStream.sum(“key”) windowedStream.min(0) windowedStream.min(“key”) windowedStream.max(0) windowedStream.max(“key”) windowedStream.minBy(0) windowedStream.minBy(“key”) windowedStream.maxBy(0) windowedStream.maxBy(“key”)</td>
+</tr>
+<tr>
+<td>Union</td>
+<td>DataStream* → DataStream</td>
+<td></td>
+<td>dataStream.union(otherStream1, otherStream2, …)</td>
+</tr>
+<tr>
+<td>Window Join</td>
+<td>DataStream,DataStream → DataStream</td>
+<td></td>
+<td>dataStream.join(otherStream).where(0).equalTo(1).window(TumblingTimeWindows.of(Time.of(3, TimeUnit.SECONDS))).apply { … }</td>
+</tr>
+<tr>
+<td>Window CoGroup</td>
+<td>DataStream,DataStream → DataStream</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Connect</td>
+<td>DataStream,DataStream → ConnectedStreams</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CoMap, CoFlatMap</td>
+<td>ConnectedStreams → DataStream</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Split</td>
+<td>DataStream → SplitStream</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Select</td>
+<td>SplitStream → DataStream</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Iterate</td>
+<td>DataStream → IterativeStream → DataStream</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Extract Timestamps</td>
+<td>DataStream → DataStream</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="Table-API-Relational-Queries"><a href="#Table-API-Relational-Queries" class="headerlink" title="Table API - Relational Queries"></a>Table API - Relational Queries</h4><p>Flink provides an API that allows specifying operations using SQL-like expressions.</p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://flink.apache.org/news/2015/02/09/streaming-example.html" target="_blank" rel="external">Introducing Flink Streaming</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/01/21/distribution/flink/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Kategorien</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/dis/">dis</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
