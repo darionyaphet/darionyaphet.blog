@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>Game | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="####Gearpump
-#####Basic Concepts
-
-System timestamp and Application timestamp
-12345   System timestamp is the time of backend cluster system.    Applic">
+  <meta name="description" content="Nim 游戏
+123传统的Nim游戏是对一些放置成堆的一定数量的硬币开始的：硬币和堆的数量取决于你。有两名玩家玩这个游戏，当轮到某位玩家时，他能从某一堆里取任意数量的硬币，但是至少要取一枚硬币，但是也不能从除你取的这个堆以外的其他堆里再取硬币。赢家是取得最后一枚硬币的人，所以最后是没有硬币剩余的。
+">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Game"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -55,39 +53,42 @@ System timestamp and Application timestamp
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/game/">2016-04-19</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">Game</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
+        <p><a href="http://www.guokr.com/blog/777525/" target="_blank" rel="external">Nim 游戏</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">传统的Nim游戏是对一些放置成堆的一定数量的硬币开始的：硬币和堆的数量取决于你。</span><br><span class="line">有两名玩家玩这个游戏，当轮到某位玩家时，他能从某一堆里取任意数量的硬币，但是至少要取一枚硬币，但是也不能从除你取的这个堆以外的其他堆里再取硬币。</span><br><span class="line">赢家是取得最后一枚硬币的人，所以最后是没有硬币剩余的。</span><br></pre></td></tr></table></figure>
+<p><img src="resource/game/NimGame.jpg" alt="Nim Game"></p>
+<p>从这个🌰看 A是最终的胜者！如果我是player，如何才能必胜！！！</p>
+<p>两玩家分别称为A和B，A先走。</p>
+<p>一共两堆各有一枚硬币。那么显然，玩家B必胜：A必须取两个硬币里的一个，留下一个被B取走。</p>
+<p>现在的两堆分别有2和1个硬币。A有必胜策略：从有两个硬币的那堆取一个。这样造成的局面和上面的例子等同，我们知道这时A会赢。</p>
+<p>美国数学家Charles Bouton同样感觉到这点并促使他毫不畏惧的开始分析这个游戏。1902年他找到了这个窍门——及其精妙！</p>
+<hr>
 
       
     </div>
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/live/">live</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/game/">game</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -128,7 +129,7 @@ System timestamp and Application timestamp
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/01/21/distribution/gearpump/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/04/19/live/game/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>

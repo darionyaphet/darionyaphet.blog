@@ -67,7 +67,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <p>It also supports a rich set of higher-level tools including Spark SQL for SQL and structured data processing, MLlib for machine learning, GraphX for graph processing, and Spark Streaming.</p>
 <p>Spark’s primary abstraction is a distributed collection of items called a Resilient Distributed Dataset (RDD). RDDs can be created from Hadoop InputFormats or by transforming other RDDs. </p>
 <p>RDDs have actions, which return values, and transformations, which return pointers to new RDDs.</p>
-<p><img src="../resource/distribution/spark/architecture.jpg" alt="architecture"></p>
+<p><img src="resource/spark/architecture.jpg" alt="architecture"></p>
 <h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><p>One of the strongest features of Spark is its shell. </p>
 <p>The Spark-Shell allows users to type and execute commands in a Unix-Terminal-like fashion. </p>
 <ol>
@@ -80,6 +80,14 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <h3 id="RDD-API"><a href="#RDD-API" class="headerlink" title="RDD API"></a>RDD API</h3><p>RDD is short for Resilient Distributed Dataset. RDDs are the workhorse of the Spark<br>system. As a user, one can consider a RDD as a handle for a collection of individual data partitions which are the result of some computation.</p>
 <p>RDDs have <strong>actions</strong>, which return values, and <strong>transformations</strong>, which return pointers to new RDDs.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">λ ~/service/spark-1.6.0/ bin/spark-shell</span><br><span class="line">log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).</span><br><span class="line">log4j:WARN Please initialize the log4j system properly.</span><br><span class="line">log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.</span><br><span class="line">Using Spark&apos;s repl log4j profile: org/apache/spark/log4j-defaults-repl.properties</span><br><span class="line">To adjust logging level use sc.setLogLevel(&quot;INFO&quot;)</span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  &apos;_/</span><br><span class="line">   /___/ .__/\_,_/_/ /_/\_\   version 1.6.0</span><br><span class="line">      /_/</span><br><span class="line"></span><br><span class="line">Using Scala version 2.10.5 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_40)</span><br><span class="line">Type in expressions to have them evaluated.</span><br><span class="line">Type :help for more information.</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Your hostname, localhost resolves to a loopback address: 127.0.0.1; using 192.168.1.142 instead (on interface en0)</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address</span><br><span class="line">Spark context available as sc.</span><br><span class="line">SQL context available as sqlContext.</span><br><span class="line"></span><br><span class="line">scala&gt; val list = sc.parallelize(List(1,2,3,4,5,6), 2)</span><br><span class="line">list: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:27</span><br></pre></td></tr></table></figure>
+<p><strong>Spark会把数据都载入到内存么 ? </strong></p>
+<p><em>如果没有主动对RDD进行Cache/Persist等相关操作，RDD不过是一个概念上存在的虚拟数据集</em></p>
+<p>一个 RDD 本质上是一个函数，RDD变换不过是函数嵌套。 RDD有两类：</p>
+<ol>
+<li>输入RDD,典型如KafkaRDD，JdbcRDD以及HadoopRDD等</li>
+<li>转换RDD，如MapPartitionsRDD</li>
+</ol>
+<p><strong>Shuffle的本质是什么 ? </strong></p>
 <hr>
 <h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p>Spark SQL is a Spark module for structured data processing. </p>
 <p>It provides a programming abstraction called DataFrames and can also act as distributed SQL query engine.</p>
@@ -90,9 +98,10 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <h3 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h3><p>Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like map, reduce, join and window. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark’s machine learning and graph processing algorithms on data streams.</p>
 <p>Spark Streaming provides a high-level abstraction called discretized stream or DStream, which represents a continuous stream of data.</p>
 <p>Internally, a DStream is represented as a sequence of RDDs.</p>
-<p><img src="../resource/distribution/spark/streaming-dstream-window.png" alt="streaming-dstream-window"></p>
+<p><img src="resource/spark/streaming-dstream-window.png" alt="streaming-dstream-window"></p>
 <hr>
-<h3 id="GraphX"><a href="#GraphX" class="headerlink" title="GraphX"></a>GraphX</h3><hr>
+<h3 id="GraphX"><a href="#GraphX" class="headerlink" title="GraphX"></a>GraphX</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val vertexArray = Array(</span><br><span class="line">  (1L, (&quot;Alice&quot;, 28)),</span><br><span class="line">  (2L, (&quot;Bob&quot;, 27)),</span><br><span class="line">  (3L, (&quot;Charlie&quot;, 65)),</span><br><span class="line">  (4L, (&quot;David&quot;, 42)),</span><br><span class="line">  (5L, (&quot;Ed&quot;, 55)),</span><br><span class="line">  (6L, (&quot;Fran&quot;, 50)))</span><br><span class="line">  </span><br><span class="line">val edgeArray = Array(</span><br><span class="line">  Edge(2L, 1L, 7),</span><br><span class="line">  Edge(2L, 4L, 2),</span><br><span class="line">  Edge(3L, 2L, 4),</span><br><span class="line">  Edge(3L, 6L, 3),</span><br><span class="line">  Edge(4L, 1L, 1),</span><br><span class="line">  Edge(5L, 2L, 2),</span><br><span class="line">  Edge(5L, 3L, 8),</span><br><span class="line">  Edge(5L, 6L, 3))</span><br><span class="line"></span><br><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val graph: Graph[(String, Int), Int] = Graph(vertexRDD, edgeRDD)</span><br></pre></td></tr></table></figure>
+<hr>
 <h3 id="MLlib"><a href="#MLlib" class="headerlink" title="MLlib"></a>MLlib</h3><hr>
 <h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><p>SparkR provides a distributed data frame implementation that supports operations like selection, filtering, aggregation etc.</p>
 <p>SparkR also supports distributed machine learning using MLlib.</p>
@@ -371,7 +380,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 </tr>
 </tbody>
 </table>
-<p><img src="../resource/distribution/spark/spark_on_yarn.jpg" alt="spark_on_yarn"></p>
+<p><img src="resource/spark//spark_on_yarn.jpg" alt="spark_on_yarn"></p>
 <hr>
 <h3 id="PySpark"><a href="#PySpark" class="headerlink" title="PySpark"></a>PySpark</h3><h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><table>
 <thead>
@@ -394,7 +403,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <hr>
 <h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><p>Spark applications run as independent sets of processes on a cluster,coordinated by the SparkContext (<code>driver program</code>).</p>
 <p>SparkContext can connect to several types of cluster managers.</p>
-<p><img src="../resource/distribution/spark/cluster-overview.png" alt="architecture"></p>
+<p><img src="resource/spark/cluster-overview.png" alt="architecture"></p>
 <table>
 <thead>
 <tr>
@@ -450,6 +459,8 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <li><a href="https://databricks.gitbooks.io/databricks-spark-reference-applications/content/index.html" target="_blank" rel="external">databricks.gitbooks.io</a></li>
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402777570&amp;idx=1&amp;sn=b06881f5d374cc181784cd8ba31893ad&amp;scene=23&amp;srcid=0318eIjnKdNTXNnQxbXTVpyp#rd" target="_blank" rel="external">一个SparkSQL作业的一生</a></li>
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402803628&amp;idx=1&amp;sn=bd72f7e43ddefb0946121778ac161ab5&amp;scene=23&amp;srcid=0318z3Rle2LCaZomw5S45p9D#rd" target="_blank" rel="external">Spark生态顶级项目汇总</a></li>
+<li><a href="http://ampcamp.berkeley.edu/big-data-mini-course/graph-analytics-with-graphx.html" target="_blank" rel="external">graph analytics with graphx</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=2650713520&amp;idx=1&amp;sn=9e27441611ac6411eca5c13b489a6d37&amp;scene=23&amp;srcid=0421d2KxIwEnxywTxa2W06TT#rd" target="_blank" rel="external">Spark会把数据都载入到内存么</a></li>
 </ol>
 
       
@@ -529,6 +540,8 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
   
     <li><a href="/categories/dis/">dis</a><small>1</small></li>
   
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
   </ul>
 </div>
 
@@ -537,6 +550,12 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <div class="widget tag">
   <h3 class="title">Tags</h3>
   <ul class="entry">
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
   
     <li><a href="/tags/spark/">spark</a><small>1</small></li>
   

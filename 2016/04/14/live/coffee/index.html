@@ -3,19 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>Coffee | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="####Gearpump
-#####Basic Concepts
-
-System timestamp and Application timestamp
-12345   System timestamp is the time of backend cluster system.    Applic">
+  <meta name="description" content="咖啡萃取的原理=化学反应+物理反应？！整个咖啡冲泡分成三个阶段：润湿——萃取——水解。
+当咖啡粉已经被高温润湿后，气体以及活泼的气体化合物首先逸散，咖啡内部的可溶有机分子同时被渗透压“拉扯”到水中，进而溶解。这个过程主要是咖啡粉与热水接触导致的一系列化学和物理变化，我们称之为“萃取”。但是事实上，这">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Coffee"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -55,39 +52,48 @@ System timestamp and Application timestamp
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+        <time datetime="2016-04-13T16:00:00.000Z"><a href="/2016/04/14/live/coffee/">2016-04-14</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">Coffee</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
+        <h4 id="咖啡萃取的原理-化学反应-物理反应？！"><a href="#咖啡萃取的原理-化学反应-物理反应？！" class="headerlink" title="咖啡萃取的原理=化学反应+物理反应？！"></a><a href="http://www.wtoutiao.com/p/ZfaC0p.html" target="_blank" rel="external">咖啡萃取的原理=化学反应+物理反应？！</a></h4><p>整个咖啡冲泡分成三个阶段：润湿——萃取——水解。</p>
+<p>当咖啡粉已经被高温润湿后，气体以及活泼的气体化合物首先逸散，咖啡内部的可溶有机分子同时被渗透压“拉扯”到水中，进而溶解。这个过程主要是咖啡粉与热水接触导致的一系列化学和物理变化，我们称之为“萃取”。<code>但是事实上，这个“萃取”一词也可以与“冲泡”混淆，因为萃取的确是咖啡冲泡中用时最长、影响最大的环节。</code></p>
+<hr>
+<h4 id="世界各地的人都喝啥样的咖啡"><a href="#世界各地的人都喝啥样的咖啡" class="headerlink" title="世界各地的人都喝啥样的咖啡?"></a><a href="http://www.wtoutiao.com/p/E2d3UJ.html" target="_blank" rel="external">世界各地的人都喝啥样的咖啡?</a></h4><p><code>德国：Pharisäer咖啡</code> 在咖啡里加2盎司朗姆酒。黑咖啡配上朗姆酒和糖，再加上点打发的奶油，味道简直没得说！</p>
+<p><code>越南：鸡蛋咖啡</code> 两个蛋黄和炼乳、蜂蜜和香草共同打发，然后再倒入刚刚泡好的越南咖啡里。打发的蛋黄漂浮在咖啡之上，口感丝滑，唇齿留香。</p>
+<p><code>美国：Gibraltar咖啡</code> 意大利浓缩咖啡的量加至2杯，配上打发的牛奶</p>
+<p><code>西班牙：Cafe Bombón</code> 蜜糖咖啡  由浓缩咖啡和炼乳制成。</p>
+<p><code>土耳其：土耳其咖啡</code> 土耳其咖啡壶冲煮研磨极为精细的咖啡粉，口味香甜，口感醇厚。</p>
+<p><code>法国：Cafe au Lait</code> 等量的咖啡和打发的牛奶制成。法国人还喜欢在咖啡里加入菊苣，以增加咖啡的甜度。</p>
+<p><code>墨西哥：Cafe de Olla</code> 用锅煮的咖啡 将深度烘焙的、研磨好的咖啡粉用煎锅熬制，并加入肉桂棒、橙皮和棕糖。直到棕糖完全融化，关火浸泡5分钟，即可趁热饮用</p>
+<p><code>意大利：Romano意大利浓缩咖啡</code> 浓缩咖啡里加入一片柠檬</p>
+<p><code>新西兰和澳大利亚：Flat White咖啡</code>  双倍意大利浓缩咖啡和打发至口感细腻的牛奶制成。有人说这种咖啡的口味介于卡布奇诺和拿铁之间。</p>
+<p><code>希腊：Frappe咖啡</code> 冰饮咖啡，用速溶咖啡、糖、加水威士忌制成。</p>
+<p><code>澳大利亚：Kaisermelange咖啡</code> 皇帝特饮（Emperor’s Blend） 咖啡里加入蛋黄、糖和干邑白兰地</p>
+<hr>
 
       
     </div>
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/live/">live</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/coffee/">coffee</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -128,7 +134,7 @@ System timestamp and Application timestamp
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/01/21/distribution/gearpump/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/04/14/live/coffee/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
