@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="####Django
+projects和apps的区别:
+123app是专注于做某件事的web应用，比如用户认证系统，公开投票系统；project则是一个web站点，可能包括许多app和一些配置。一个project可以包含许多app，一个app可以用于许多project中。
+
+django_lear">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Django</p>
+<p>projects和apps的区别:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app是专注于做某件事的web应用，比如用户认证系统，公开投票系统；</span><br><span class="line">project则是一个web站点，可能包括许多app和一些配置。</span><br><span class="line">一个project可以包含许多app，一个app可以用于许多project中。</span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>django_learning/settings.py</code> 对项目进行一定配置，比如时区，数据库连接，app添加、删除等</p>
+<p><code>python manage.py migrate</code> 生成相应的数据库表</p>
+<p>默认情况下，项目配置文件<code>settings.py</code>里面已经配置有Django自带的应用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><code>python manage.py runserver</code> 开启Django自带的开发环境web服务</p>
+<p><code>python manage.py createsuperuser</code> 添加后台管理员账号 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="external">http://127.0.0.1:8000/admin/</a> 进入管理员登录页面</p>
+<p><code>python manage.py test examples</code> </p>
+<p><code>python manage.py shell</code> 使用python解释器的交互模式</p>
+<p>Django提供了models方便设计数据库，因此我们的questions/models.py看起来可能是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">λ ~/django_learning/ master* python manage.py help</span><br><span class="line"></span><br><span class="line">Type &apos;manage.py help &lt;subcommand&gt;&apos; for help on a specific subcommand.</span><br><span class="line"></span><br><span class="line">Available subcommands:</span><br><span class="line"></span><br><span class="line">[auth]</span><br><span class="line">    changepassword</span><br><span class="line">    createsuperuser</span><br><span class="line"></span><br><span class="line">[django]</span><br><span class="line">    check</span><br><span class="line">    compilemessages</span><br><span class="line">    createcachetable</span><br><span class="line">    dbshell</span><br><span class="line">    diffsettings</span><br><span class="line">    dumpdata</span><br><span class="line">    flush</span><br><span class="line">    inspectdb</span><br><span class="line">    loaddata</span><br><span class="line">    makemessages</span><br><span class="line">    makemigrations</span><br><span class="line">    migrate</span><br><span class="line">    sendtestemail</span><br><span class="line">    shell</span><br><span class="line">    showmigrations</span><br><span class="line">    sqlflush</span><br><span class="line">    sqlmigrate</span><br><span class="line">    sqlsequencereset</span><br><span class="line">    squashmigrations</span><br><span class="line">    startapp</span><br><span class="line">    startproject</span><br><span class="line">    test</span><br><span class="line">    testserver</span><br><span class="line"></span><br><span class="line">[sessions]</span><br><span class="line">    clearsessions</span><br><span class="line"></span><br><span class="line">[staticfiles]</span><br><span class="line">    collectstatic</span><br><span class="line">    findstatic</span><br><span class="line">    runserver</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py</span><br><span class="line">cleanup           -- remove old data from the database</span><br><span class="line">compilemessages   -- compile .po files to .mo for use with gettext</span><br><span class="line">createcachetable  -- creates table for SQL cache backend</span><br><span class="line">createsuperuser   -- create a superuser</span><br><span class="line">dbshell           -- run command-line client for the current database</span><br><span class="line">diffsettings      -- display differences between the current settings and Django defaults</span><br><span class="line">dumpdata          -- output contents of database as a fixture</span><br><span class="line">flush             -- execute &apos;sqlflush&apos; on the current database</span><br><span class="line">inspectdb         -- output Django model module for tables in database</span><br><span class="line">loaddata          -- install the named fixture(s) in the database</span><br><span class="line">makemessages      -- pull out all strings marked for translation</span><br><span class="line">reset             -- executes &apos;sqlreset&apos; for the given app(s)</span><br><span class="line">runfcgi           -- run this project as a fastcgi</span><br><span class="line">runserver         -- start a lightweight web server for development</span><br><span class="line">shell             -- run a Python interactive interpreter. Tries to use IPython, if it&apos;s available</span><br><span class="line">sql               -- print the CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlall            -- print the CREATE TABLE, CREATE INDEX and custom statements for the given app(s)</span><br><span class="line">sqlclear          -- print the DROP TABLE statements for the given app(s)</span><br><span class="line">sqlcustom         -- print the custom table-modifying SQL statements for the given app(s)</span><br><span class="line">sqlflush          -- print the SQL statements required to return all tables to installation state</span><br><span class="line">sqlindexes        -- print the CREATE INDEX statements for the given app(s)</span><br><span class="line">sqlreset          -- print the DROP TABLE and CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlsequencereset  -- print the SQL statements for resetting sequences for the given app(s)</span><br><span class="line">startapp          -- create Django app directory in this project&apos;s directory</span><br><span class="line">syncdb            -- create database tables for apps in INSTALLED_APPS where required</span><br><span class="line">test              -- run the test suite for the specified app, or the entire site</span><br><span class="line">testserver        -- run a development server with data from the given fixture(s)</span><br><span class="line">validate          -- validate all installed modules</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py changepassword --help</span><br><span class="line">usage: manage.py changepassword [-h] [--version] [-v &#123;0,1,2,3&#125;]</span><br><span class="line">                                [--settings SETTINGS]</span><br><span class="line">                                [--pythonpath PYTHONPATH] [--traceback]</span><br><span class="line">                                [--no-color] [--database DATABASE]</span><br><span class="line">                                [username]</span><br><span class="line"></span><br><span class="line">Change a user&apos;s password for django.contrib.auth.</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  username              Username to change password for; by default, it&apos;s the</span><br><span class="line">                        current username.</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  -v &#123;0,1,2,3&#125;, --verbosity &#123;0,1,2,3&#125;</span><br><span class="line">                        Verbosity level; 0=minimal output, 1=normal output,</span><br><span class="line">                        2=verbose output, 3=very verbose output</span><br><span class="line">  --settings SETTINGS   The Python path to a settings module, e.g.</span><br><span class="line">                        &quot;myproject.settings.main&quot;. If this isn&apos;t provided, the</span><br><span class="line">                        DJANGO_SETTINGS_MODULE environment variable will be</span><br><span class="line">                        used.</span><br><span class="line">  --pythonpath PYTHONPATH</span><br><span class="line">                        A directory to add to the Python path, e.g.</span><br><span class="line">                        &quot;/home/djangoprojects/myproject&quot;.</span><br><span class="line">  --traceback           Raise on CommandError exceptions</span><br><span class="line">  --no-color            Don&apos;t colorize the command output.</span><br><span class="line">  --database DATABASE   Specifies the database to use. Default is &quot;default&quot;.</span><br></pre></td></tr></table></figure>
+<hr>
+<p>参考:</p>
+<ol>
+<li><p><a href="http://segmentfault.com/a/1190000002447511" target="_blank" rel="external">两篇文章帮你入门Django(上)</a></p>
+</li>
+<li><p><a href="http://segmentfault.com/a/1190000002479013" target="_blank" rel="external">两篇文章帮你入门Django(下)</a></p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/04/22/web/django/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Kategorien</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/dis/">dis</a><small>1</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

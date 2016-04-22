@@ -50,23 +50,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+        <time datetime="2016-04-22T14:46:44.000Z"><a href="/2016/04/22/algorithms/community-detection/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/algorithms/community-detection/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
+        <h3 id="Community-Detection-社区发现算法"><a href="#Community-Detection-社区发现算法" class="headerlink" title="Community Detection (社区发现算法)"></a>Community Detection (社区发现算法)</h3><p>针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研究者所重视，而近年来随着社交网络的崛起，这一领域的关注度已大大提升。</p>
+<p>Reference :</p>
 <ol>
-<li>#<code>runtime metaprogramming</code></li>
-</ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
+<li><a href="http://senseable.mit.edu/community_detection/" target="_blank" rel="external">Community Detection - MIT Senseable City Lab</a></li>
 </ol>
 
       
@@ -90,828 +87,290 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Domain-specific language</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/web/django/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Scala</p>
-<p>###trait</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/jvm/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/jvm/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Java Virtual Machine</p>
-<p>###Introduction</p>
-<p>###Command Line Tools </p>
-<p>jstat -gc 106607</p>
-<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
-
-2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
-</code></pre><table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Value</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>S0C</td>
-<td>3584.0</td>
-<td>S0容量</td>
-</tr>
-<tr>
-<td>S1C</td>
-<td>2048.0</td>
-</tr>
-<tr>
-<td>S0U</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
-<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-AllowUserSignalHandlers</td>
-<td>Do not complain if the application installs signal handlers.</td>
-</tr>
-<tr>
-<td>-XX:AltStackSize=16384</td>
-<td>Alternate signal stack size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:-DisableExplicitGC</td>
-<td>Disable calls to System.gc().</td>
-</tr>
-<tr>
-<td>-XX:+FailOverToOldVerifier</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:+HandlePromotionFailure</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><code>Garbage First Garbage Collection Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+UseG1GC</td>
-<td>Use the Garbage First Collector</td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=n</td>
-<td>Sets a target for the maximum GC pause time.</td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=n</td>
-<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=n</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=n</td>
-<td>Ratio of eden/survivor space size.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Maximum value for tenuring threshold.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td>Number of threads concurrent garbage collectors will use.</td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=n</td>
-<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
-</tr>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Performance Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+AggressiveOpts</td>
-<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
-</tr>
-<tr>
-<td>-XX:CompileThreshold=10000</td>
-<td>Number of method invocations/branches before compiling</td>
-</tr>
-<tr>
-<td>-XX:LargePageSizeInBytes=4m</td>
-<td>Sets the large page size used for the Java heap.</td>
-</tr>
-<tr>
-<td>-XX:MaxHeapFreeRatio=70</td>
-<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
-</tr>
-<tr>
-<td>-XX:MaxNewSize=size</td>
-<td>Maximum size of new generation (in bytes).</td>
-</tr>
-<tr>
-<td>-XX:MaxPermSize=64m</td>
-<td>Size of the Permanent Generation.</td>
-</tr>
-<tr>
-<td>-XX:MinHeapFreeRatio=40</td>
-<td>Minimum percentage of heap free after GC to avoid expansion.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=2</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:NewSize=2m</td>
-<td>Default size of new generation (in bytes)</td>
-</tr>
-<tr>
-<td>-XX:ReservedCodeCacheSize=32m</td>
-<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=8</td>
-<td>Ratio of eden/survivor space size</td>
-</tr>
-<tr>
-<td>-XX:TargetSurvivorRatio=50</td>
-<td>Desired percentage of survivor space used after scavenge.</td>
-</tr>
-<tr>
-<td>-XX:ThreadStackSize=512</td>
-<td>Thread Stack Size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:+UseBiasedLocking</td>
-<td>Enable biased locking. For more details, see this tuning example.</td>
-</tr>
-<tr>
-<td>-XX:+UseFastAccessorMethods</td>
-<td>Use optimized versions of Get Primitive Field.</td>
-</tr>
-<tr>
-<td>-XX:-UseISM</td>
-<td>Use Intimate Shared Memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseLargePages</td>
-<td>Use large page memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseMPSS</td>
-<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
-</tr>
-<tr>
-<td>-XX:+UseStringCache</td>
-<td>Enables caching of commonly allocated strings.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchLines=1</td>
-<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchStyle=1</td>
-<td>Generated code style for prefetch instructions.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedStrings</td>
-<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
-</tr>
-<tr>
-<td>-XX:+OptimizeStringConcat</td>
-<td>Optimize String concatenation operations where possible.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Debugging Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-CITime</td>
-<td>Prints time spent in JIT Compiler.</td>
-</tr>
-<tr>
-<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
-<td>Save the error data to this file.</td>
-</tr>
-<tr>
-<td>-XX:-ExtendedDTraceProbes</td>
-<td>Enable performance-impacting dtrace probes.</td>
-</tr>
-<tr>
-<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
-<td>Path to directory or filename for heap dump.</td>
-</tr>
-<tr>
-<td>-XX:-HeapDumpOnOutOfMemoryError</td>
-<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
-</tr>
-<tr>
-<td>-XX:OnError=”cmd args;cmd args”</td>
-<td>Run user-defined commands on fatal error.</td>
-</tr>
-<tr>
-<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
-<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
-</tr>
-<tr>
-<td>-XX:-PrintClassHistogram</td>
-<td>Print a histogram of class instances on Ctrl-Break.</td>
-</tr>
-<tr>
-<td>-XX:-PrintConcurrentLocks</td>
-<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCommandLineFlags</td>
-<td>Print flags that appeared on the command line.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCompilation</td>
-<td>Print message when a method is compiled.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGC</td>
-<td>Print messages at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCDetails</td>
-<td>Print more details at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCTimeStamps</td>
-<td>Print timestamps at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintTenuringDistribution</td>
-<td>Print tenuring age information.</td>
-</tr>
-<tr>
-<td>-XX:-PrintAdaptiveSizePolicy</td>
-<td>Enables printing of information about adaptive generation sizing.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoading</td>
-<td>Trace loading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoadingPreorder</td>
-<td>Trace all classes loaded in order referenced</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassResolution</td>
-<td>Trace constant pool resolutions.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassUnloading</td>
-<td>Trace unloading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceLoaderConstraints</td>
-<td>Trace recording of loader constraints.</td>
-</tr>
-<tr>
-<td>-XX:+PerfDataSaveToFile</td>
-<td>Saves jvmstat binary data on exit.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedOops</td>
-<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
-</tr>
-<tr>
-<td>-XX:+AlwaysPreTouch</td>
-<td>Pre-touch the Java heap during JVM initialization.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchDistance=n</td>
-<td>Sets the prefetch distance for object allocation.</td>
-</tr>
-<tr>
-<td>-XX:InlineSmallCode=n</td>
-<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
-</tr>
-<tr>
-<td>-XX:MaxInlineSize=35</td>
-<td>Maximum bytecode size of a method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:FreqInlineSize=n</td>
-<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:LoopUnrollLimit=n</td>
-<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
-</tr>
-<tr>
-<td>-XX:InitialTenuringThreshold=7</td>
-<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
-</tr>
-<tr>
-<td>-Xloggc:<filename></filename></td>
-<td>Log GC verbose output to specified file.</td>
-</tr>
-<tr>
-<td>-XX:-UseGCLogFileRotation</td>
-<td>Enabled GC log rotation, requires -Xloggc.</td>
-</tr>
-<tr>
-<td>-XX:NumberOfGClogFiles=1</td>
-<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
-</tr>
-<tr>
-<td>-XX:GCLogFileSize=8K</td>
-<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
-</tr>
-</tbody>
-</table>
-<p>#####GC</p>
-<p>Garbage Collector is a memory management tool.</p>
-<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
-<p><code>Major GC vs Full GC</code></p>
-<p>#####Garbage First Garbage Collector</p>
-<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
-<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=200</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1NewSizePercent=5</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MaxNewSizePercent=60</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=45</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1HeapWastePercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCCountTarget=8</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=10</td>
-</tr>
-</tbody>
-</table>
-<p><code>How to Unlock Experimental VM Flags</code></p>
-<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
-<p><strong>Recommendations</strong>:</p>
-<ol>
-<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
-<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
-<li>Taming Mixed Garbage Collections : </li>
-</ol>
-<p>###JShell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
-<p>参考资料:</p>
-<ol>
-<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
-<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
-<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
-<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/python/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/python/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Python</p>
-<p>####Debugger framework</p>
-<p>####Python Debugger</p>
-<p>Reference:</p>
-<ol>
-<li><a href="http://www.snarky.ca/why-print-became-a-function-in-python-3" target="_blank" rel="external">Why <code>print</code> became a function in Python 3</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/java/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/java/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Java</p>
-<p>####Class Loader</p>
-<p>####Collection</p>
-<p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
-<p><code>ConcurrentHashMap</code> 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。</p>
-<p>JMM由一些规则组成，这些规则确定线程对内存访问如何排序以及何时可以确保它们对线程是可见的。</p>
-<p><code>ConcurrentHashMap</code> 类中包含两个静态内部类 HashEntry 和 Segment。</p>
-<p><code>HashEntry</code> 用来封装映射表的键值对；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">static final class HashEntry&lt;K,V&gt; &#123; </span><br><span class="line">        final K key;                </span><br><span class="line">        final int hash;             </span><br><span class="line">        volatile V value;           </span><br><span class="line">        final HashEntry&lt;K,V&gt; next;  </span><br><span class="line"></span><br><span class="line">        HashEntry(K key, int hash, HashEntry&lt;K,V&gt; next, V value) &#123; </span><br><span class="line">            this.key = key; </span><br><span class="line">            this.hash = hash; </span><br><span class="line">            this.next = next; </span><br><span class="line">            this.value = value; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p><code>Segment</code> 用来充当锁的角色，每个 Segment 对象守护整个散列映射表的若干个桶。每个桶是由若干个 HashEntry 对象链接起来的链表。一个 ConcurrentHashMap 实例中包含由若干个 Segment 对象组成的数组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable &#123; </span><br><span class="line">        /** </span><br><span class="line">         * 在本 segment 范围内，包含的 HashEntry 元素的个数</span><br><span class="line">         * 该变量被声明为 volatile 型</span><br><span class="line">         */ </span><br><span class="line">        transient volatile int count; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 被更新的次数</span><br><span class="line">         */ </span><br><span class="line">        transient int modCount; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 当 table 中包含的 HashEntry 元素的个数超过本变量值时，触发 table 的再散列</span><br><span class="line">         */ </span><br><span class="line">        transient int threshold; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 是由 HashEntry 对象组成的数组</span><br><span class="line">         * 如果散列时发生碰撞，碰撞的 HashEntry 对象就以链表的形式链接成一个链表</span><br><span class="line">         * table 数组的数组成员代表散列映射表的一个桶</span><br><span class="line">         * 每个 table 守护整个 ConcurrentHashMap 包含桶总数的一部分</span><br><span class="line">         * 如果并发级别为 16，table 则守护 ConcurrentHashMap 包含的桶总数的 1/16 </span><br><span class="line">         */ </span><br><span class="line">        transient volatile HashEntry&lt;K,V&gt;[] table; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 装载因子</span><br><span class="line">         */ </span><br><span class="line">        final float loadFactor; </span><br><span class="line"></span><br><span class="line">        Segment(int initialCapacity, float lf) &#123; </span><br><span class="line">            loadFactor = lf; </span><br><span class="line">            setTable(HashEntry.&lt;K,V&gt;newArray(initialCapacity)); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 设置 table 引用到这个新生成的 HashEntry 数组</span><br><span class="line">         * 只能在持有锁或构造函数中调用本方法</span><br><span class="line">         */ </span><br><span class="line">        void setTable(HashEntry&lt;K,V&gt;[] newTable) &#123; </span><br><span class="line">            // 计算临界阀值为新数组的长度与装载因子的乘积</span><br><span class="line">            threshold = (int)(newTable.length * loadFactor); </span><br><span class="line">            table = newTable; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 根据 key 的散列值，找到 table 中对应的那个桶（table 数组的某个数组成员）</span><br><span class="line">         */ </span><br><span class="line">        HashEntry&lt;K,V&gt; getFirst(int hash) &#123; </span><br><span class="line">            HashEntry&lt;K,V&gt;[] tab = table; </span><br><span class="line">            // 把散列值与 table 数组长度减 1 的值相“与”，</span><br><span class="line">           	 // 得到散列值对应的 table 数组的下标</span><br><span class="line">            // 然后返回 table 数组中此下标对应的 HashEntry 元素</span><br><span class="line">            return tab[hash &amp; (tab.length - 1)]; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+        <p>####Django</p>
+<p>projects和apps的区别:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app是专注于做某件事的web应用，比如用户认证系统，公开投票系统；</span><br><span class="line">project则是一个web站点，可能包括许多app和一些配置。</span><br><span class="line">一个project可以包含许多app，一个app可以用于许多project中。</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>HashMap的工作原理</strong></p>
-<p>HashMap基于hashing原理。</p>
-<p>将键值对传递给<code>put()</code>时，调用键对象的hashCode()方法来计算hashcode，让后找到bucket位置来储存值对象。当<code>get()</code>时，通过键对象的equals()方法找到正确的键值对，然后返回值对象。</p>
-<p>HashMap使用<code>链表</code>来解决碰撞问题，当发生碰撞了，对象将会储存在链表的下一个节点中。 HashMap在每个链表节点中储存键值对对象。</p>
-<p>当两个不同的键对象的<code>hashcode相同</code>时会发生什么？ 它们会储存在同一个bucket位置的链表中。键对象的equals()方法用来找到键值对。</p>
-<p><code>HashTable</code>是synchronized的,但<code>ConcurrentHashMap</code>同步性能更好,因为它仅仅根据同步级别对map的一部分进行上锁。</p>
+<p><code>django_learning/settings.py</code> 对项目进行一定配置，比如时区，数据库连接，app添加、删除等</p>
+<p><code>python manage.py migrate</code> 生成相应的数据库表</p>
+<p>默认情况下，项目配置文件<code>settings.py</code>里面已经配置有Django自带的应用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><code>python manage.py runserver</code> 开启Django自带的开发环境web服务</p>
+<p><code>python manage.py createsuperuser</code> 添加后台管理员账号 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="external">http://127.0.0.1:8000/admin/</a> 进入管理员登录页面</p>
+<p><code>python manage.py test examples</code> </p>
+<p><code>python manage.py shell</code> 使用python解释器的交互模式</p>
+<p>Django提供了models方便设计数据库，因此我们的questions/models.py看起来可能是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">λ ~/django_learning/ master* python manage.py help</span><br><span class="line"></span><br><span class="line">Type &apos;manage.py help &lt;subcommand&gt;&apos; for help on a specific subcommand.</span><br><span class="line"></span><br><span class="line">Available subcommands:</span><br><span class="line"></span><br><span class="line">[auth]</span><br><span class="line">    changepassword</span><br><span class="line">    createsuperuser</span><br><span class="line"></span><br><span class="line">[django]</span><br><span class="line">    check</span><br><span class="line">    compilemessages</span><br><span class="line">    createcachetable</span><br><span class="line">    dbshell</span><br><span class="line">    diffsettings</span><br><span class="line">    dumpdata</span><br><span class="line">    flush</span><br><span class="line">    inspectdb</span><br><span class="line">    loaddata</span><br><span class="line">    makemessages</span><br><span class="line">    makemigrations</span><br><span class="line">    migrate</span><br><span class="line">    sendtestemail</span><br><span class="line">    shell</span><br><span class="line">    showmigrations</span><br><span class="line">    sqlflush</span><br><span class="line">    sqlmigrate</span><br><span class="line">    sqlsequencereset</span><br><span class="line">    squashmigrations</span><br><span class="line">    startapp</span><br><span class="line">    startproject</span><br><span class="line">    test</span><br><span class="line">    testserver</span><br><span class="line"></span><br><span class="line">[sessions]</span><br><span class="line">    clearsessions</span><br><span class="line"></span><br><span class="line">[staticfiles]</span><br><span class="line">    collectstatic</span><br><span class="line">    findstatic</span><br><span class="line">    runserver</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py</span><br><span class="line">cleanup           -- remove old data from the database</span><br><span class="line">compilemessages   -- compile .po files to .mo for use with gettext</span><br><span class="line">createcachetable  -- creates table for SQL cache backend</span><br><span class="line">createsuperuser   -- create a superuser</span><br><span class="line">dbshell           -- run command-line client for the current database</span><br><span class="line">diffsettings      -- display differences between the current settings and Django defaults</span><br><span class="line">dumpdata          -- output contents of database as a fixture</span><br><span class="line">flush             -- execute &apos;sqlflush&apos; on the current database</span><br><span class="line">inspectdb         -- output Django model module for tables in database</span><br><span class="line">loaddata          -- install the named fixture(s) in the database</span><br><span class="line">makemessages      -- pull out all strings marked for translation</span><br><span class="line">reset             -- executes &apos;sqlreset&apos; for the given app(s)</span><br><span class="line">runfcgi           -- run this project as a fastcgi</span><br><span class="line">runserver         -- start a lightweight web server for development</span><br><span class="line">shell             -- run a Python interactive interpreter. Tries to use IPython, if it&apos;s available</span><br><span class="line">sql               -- print the CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlall            -- print the CREATE TABLE, CREATE INDEX and custom statements for the given app(s)</span><br><span class="line">sqlclear          -- print the DROP TABLE statements for the given app(s)</span><br><span class="line">sqlcustom         -- print the custom table-modifying SQL statements for the given app(s)</span><br><span class="line">sqlflush          -- print the SQL statements required to return all tables to installation state</span><br><span class="line">sqlindexes        -- print the CREATE INDEX statements for the given app(s)</span><br><span class="line">sqlreset          -- print the DROP TABLE and CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlsequencereset  -- print the SQL statements for resetting sequences for the given app(s)</span><br><span class="line">startapp          -- create Django app directory in this project&apos;s directory</span><br><span class="line">syncdb            -- create database tables for apps in INSTALLED_APPS where required</span><br><span class="line">test              -- run the test suite for the specified app, or the entire site</span><br><span class="line">testserver        -- run a development server with data from the given fixture(s)</span><br><span class="line">validate          -- validate all installed modules</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py changepassword --help</span><br><span class="line">usage: manage.py changepassword [-h] [--version] [-v &#123;0,1,2,3&#125;]</span><br><span class="line">                                [--settings SETTINGS]</span><br><span class="line">                                [--pythonpath PYTHONPATH] [--traceback]</span><br><span class="line">                                [--no-color] [--database DATABASE]</span><br><span class="line">                                [username]</span><br><span class="line"></span><br><span class="line">Change a user&apos;s password for django.contrib.auth.</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  username              Username to change password for; by default, it&apos;s the</span><br><span class="line">                        current username.</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  -v &#123;0,1,2,3&#125;, --verbosity &#123;0,1,2,3&#125;</span><br><span class="line">                        Verbosity level; 0=minimal output, 1=normal output,</span><br><span class="line">                        2=verbose output, 3=very verbose output</span><br><span class="line">  --settings SETTINGS   The Python path to a settings module, e.g.</span><br><span class="line">                        &quot;myproject.settings.main&quot;. If this isn&apos;t provided, the</span><br><span class="line">                        DJANGO_SETTINGS_MODULE environment variable will be</span><br><span class="line">                        used.</span><br><span class="line">  --pythonpath PYTHONPATH</span><br><span class="line">                        A directory to add to the Python path, e.g.</span><br><span class="line">                        &quot;/home/djangoprojects/myproject&quot;.</span><br><span class="line">  --traceback           Raise on CommandError exceptions</span><br><span class="line">  --no-color            Don&apos;t colorize the command output.</span><br><span class="line">  --database DATABASE   Specifies the database to use. Default is &quot;default&quot;.</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>HashMap和Hashtable的区别</strong></p>
-<p><code>HashMap</code>和<code>HashTable</code>都实现了Map接口</p>
-<p>主要的区别有：线程安全性，同步以及速度。</p>
+<p>参考:</p>
 <ol>
-<li>HashMap是非synchronized  HashTable是synchronized2. </li>
-<li>HashMap可以接受null</li>
-<li>HashMap的Iterator是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构，将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。</li>
-<li>HashMap不能保证随着时间的推移Map中的元素次序是不变的。</li>
-<li>单线程HashMap性能优于HashTable。</li>
+<li><p><a href="http://segmentfault.com/a/1190000002447511" target="_blank" rel="external">两篇文章帮你入门Django(上)</a></p>
+</li>
+<li><p><a href="http://segmentfault.com/a/1190000002479013" target="_blank" rel="external">两篇文章帮你入门Django(下)</a></p>
+</li>
 </ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/log4j/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/log4j/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Loj4J</p>
+<p>#####Basic<br>Log4j由三个重要的组件构成：日志信息的优先级，日志信息的输出目的地，日志信息的输出格式。</p>
+<p><code>日志信息优先级</code>从高到低有ERROR、WARN、 INFO、DEBUG，分别用来指定这条日志信息的重要程度；<br><code>日志信息的输出目的地</code>指定了日志将打印到控制台还是文件中；<br><code>日志输出格式</code>则控制了日志信息的显示内容。</p>
+<p>#####定义配置文件<br>Log4j支持两种配置文件格式，一种是XML文件，一种是Java Properties文件。</p>
+<ol>
+<li><p>配置根Logger语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger = [ level ] , appenderName, appenderName, …</span><br></pre></td></tr></table></figure>
+<p>level 是日志记录的优先级，分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL或者您定义的级别。</p>
+<p>Log4j建议只使用四个级别，优 先级从高到低分别是ERROR、WARN、INFO、DEBUG。通过在这里定义的级别，可以控制到应用程序中相应级别的日志信息的开关。</p>
+</li>
+<li><p>配置日志信息输出目的地Appender语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName = fully.qualified.name.of.appender.class  </span><br><span class="line">log4j.appender.appenderName.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.optionN = valueN</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   Log4j提供的appender有以下几种：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.ConsoleAppender（控制台）</span><br><span class="line">org.apache.log4j.FileAppender（文件）</span><br><span class="line">org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件）</span><br><span class="line">org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件）</span><br><span class="line">org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>配置日志信息的格式（布局）语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName.layout = fully.qualified.name.of.layout.class  </span><br><span class="line">log4j.appender.appenderName.layout.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.layout.optionN = valueN</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   Log4j提供的layout有已下几种：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.HTMLLayout（以HTML表格形式布局） </span><br><span class="line">org.apache.log4j.PatternLayout（可以灵活地指定布局模式）</span><br><span class="line">org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串）</span><br><span class="line">org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</span><br></pre></td></tr></table></figure>
+<p>   Log4J采用类似C语言中的printf函数的打印格式格式化日志信息，打印参数如下：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL  </span><br><span class="line">%r 输出自应用启动到输出该log信息耗费的毫秒数  </span><br><span class="line">%c 输出所属的类目，通常就是所在类的全名  </span><br><span class="line">%t 输出产生该日志事件的线程名  </span><br><span class="line">%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”  </span><br><span class="line">%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d&#123;yyy MMM dd HH:mm:ss,SSS&#125;，输出类似：2002年10月18日 22：10：28，921  </span><br><span class="line">%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li><a href="http://www.codeceo.com/article/log4j-usage.html" target="_blank" rel="external">最详细的Log4j使用教程</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:41.000Z"><a href="/2016/04/22/other/calcite/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/calcite/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Calcite</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">First, we define a schema based on a schema factory class in a model file. </span><br><span class="line"></span><br><span class="line">Then the schema factory creates a schema, and the schema creates several tables, each of which knows how to get data by scanning a CSV file. </span><br><span class="line"></span><br><span class="line">Last, after Calcite has parsed the query and planned it to use those tables, Calcite invokes the tables to read the data as the query is being executed.</span><br></pre></td></tr></table></figure>
+<p>Here is a JSON Modle:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  version: &apos;1.0&apos;,</span><br><span class="line">  defaultSchema: &apos;SALES&apos;,</span><br><span class="line">  schemas: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: &apos;SALES&apos;,</span><br><span class="line">      type: &apos;custom&apos;,</span><br><span class="line">      factory: &apos;org.apache.calcite.adapter.csv.CsvSchemaFactory&apos;,</span><br><span class="line">      operand: &#123;</span><br><span class="line">        directory: &apos;target/test-classes/sales&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Driven by the model, the schema factory instantiates a single schema <code>SALES</code></p>
+<p>A schema’s job is to produce a list of tables. </p>
+<p>The tables implement Calcite’s <code>Table</code> interface.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line">package org.darion.yaphet.calcite;</span><br><span class="line"></span><br><span class="line">import org.apache.calcite.adapter.jdbc.JdbcSchema;</span><br><span class="line">import org.apache.calcite.schema.SchemaPlus;</span><br><span class="line">import org.apache.calcite.sql.SqlBasicCall;</span><br><span class="line">import org.apache.calcite.sql.SqlDelete;</span><br><span class="line">import org.apache.calcite.sql.SqlInsert;</span><br><span class="line">import org.apache.calcite.sql.SqlNode;</span><br><span class="line">import org.apache.calcite.sql.SqlUpdate;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParseException;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParser;</span><br><span class="line">import org.apache.calcite.tools.FrameworkConfig;</span><br><span class="line">import org.apache.calcite.tools.Frameworks;</span><br><span class="line">import org.apache.calcite.tools.Planner;</span><br><span class="line">import org.apache.calcite.tools.RelConversionException;</span><br><span class="line">import org.apache.calcite.tools.ValidationException;</span><br><span class="line"></span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by darion.johannes.yaphet on 16/3/8.</span><br><span class="line"> */</span><br><span class="line">public class ParseSQL &#123;</span><br><span class="line"></span><br><span class="line">    private static final String[] SQLArray = &#123;</span><br><span class="line">            &quot;INSERT INTO TABLE0(ID,NAME) VALUES(0,&apos;darion&apos;)&quot;,</span><br><span class="line">            &quot;UPDATE TABLE0 SET NAME = &apos;darion.yaphet&apos; WHERE ID = 1&quot;,</span><br><span class="line">            &quot;DELETE FROM TABLE0 WHERE ID = 1 &quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws ClassNotFoundException, SqlParseException, ValidationException, RelConversionException &#123;</span><br><span class="line">        String sDriverName = &quot;com.mysql.jdbc.Driver&quot;;</span><br><span class="line">        Class.forName(sDriverName);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; operand = new HashMap&lt;&gt;();</span><br><span class="line">        operand.put(&quot;jdbcDriver&quot;, sDriverName);</span><br><span class="line">        operand.put(&quot;jdbcUrl&quot;, &quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">        operand.put(&quot;jdbcUser&quot;, &quot;root&quot;);</span><br><span class="line">        operand.put(&quot;jdbcPassword&quot;, &quot;&quot;);</span><br><span class="line">        operand.put(&quot;Lex&quot;, &quot;MYSQL_ANSI&quot;);</span><br><span class="line"></span><br><span class="line">        SchemaPlus rootSchema = Frameworks.createRootSchema(true);</span><br><span class="line">        org.apache.calcite.schema.Schema schema = new JdbcSchema.Factory().create(rootSchema, &quot;TABLE0&quot;, operand);</span><br><span class="line">        rootSchema = rootSchema.add(&quot;TABLE0&quot;, schema);</span><br><span class="line"></span><br><span class="line">        Frameworks.ConfigBuilder configBuilder = Frameworks.newConfigBuilder();</span><br><span class="line">        configBuilder.defaultSchema(rootSchema);</span><br><span class="line"></span><br><span class="line">        FrameworkConfig config = Frameworks.newConfigBuilder()</span><br><span class="line">                .parserConfig(SqlParser.configBuilder()</span><br><span class="line">                        .setCaseSensitive(false)</span><br><span class="line">                        .build())</span><br><span class="line">                .defaultSchema(rootSchema)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;SELECT * FROM TABLE0 WHERE AGE &gt; 15.0&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,CONCAT(&apos;NAME&apos;,&apos;AGE&apos;))&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) SELECT ID,NAME FROM TABLE0 WHERE ID = 0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;select concat(&apos;11&apos;,&apos;22&apos;,&apos;33&apos;) FROM TABLE0&quot;;</span><br><span class="line">        //String SQL = &quot;select COUNT(*) FROM TABLE0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,&apos;darion&apos;)&quot;;</span><br><span class="line"></span><br><span class="line">        for (String SQL : SQLArray) &#123;</span><br><span class="line">            System.out.println(SQL);</span><br><span class="line">            Planner planner = Frameworks.getPlanner(config);</span><br><span class="line">            SqlNode node = planner.parse(SQL);</span><br><span class="line">            SqlNode validated = planner.validate(node);</span><br><span class="line">            System.out.println(&quot;Type : &quot; + validated.getKind());</span><br><span class="line"></span><br><span class="line">            switch (validated.getKind().toString()) &#123;</span><br><span class="line">                case &quot;INSERT&quot;:</span><br><span class="line">                    SqlInsert insertNode = (SqlInsert) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List : &quot; + insertNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Column List  : &quot; + insertNode.getTargetColumnList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Target Table : &quot; + insertNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    for (SqlNode insertToken : ((SqlBasicCall) insertNode.getSource()).getOperandList()) &#123;</span><br><span class="line">                        System.out.println(&quot;Source       : &quot; + ((SqlBasicCall) insertToken) + &quot; &quot; +</span><br><span class="line">                                ((SqlBasicCall) insertToken).getKind());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;DELETE&quot;:</span><br><span class="line">                    SqlDelete deleteNode = (SqlDelete) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + deleteNode.getOperandList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + deleteNode.getCondition() + &quot; &quot;);// where</span><br><span class="line">                    System.out.println(&quot;Target Table  : &quot; + deleteNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + deleteNode.getSourceSelect() + &quot; &quot; + deleteNode.getSourceSelect().getKind());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;UPDATE&quot;:</span><br><span class="line">                    SqlUpdate updateNode = (SqlUpdate) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + updateNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + updateNode.getSourceSelect());</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + updateNode.getCondition());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                default:</span><br><span class="line">                    System.out.println(&quot;Unknow Type : &quot; + validated.getKind());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //RelNode relationalExpression = planner.rel(validated).rel;</span><br><span class="line">            System.out.println(&quot;-----------------------------------&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //System.out.println(relationalExpression.getRowType());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getQualifiedName());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getCollationList());</span><br><span class="line"></span><br><span class="line">        //JavaTypeFactory typeFactory = new JavaTypeFactoryImpl(</span><br><span class="line">        //        RelDataTypeSystem.DEFAULT);</span><br><span class="line"></span><br><span class="line">        //RelToSqlConverter converter = new RelToSqlConverter(SqlDialect.CALCITE);</span><br><span class="line">        //SqlImplementor.Result result = converter.visitChild(0, relationalExpression);</span><br><span class="line"></span><br><span class="line">        // select</span><br><span class="line">        //SqlNode sqlNode = converter.visitChild(0, relationalExpression).asQuery();</span><br><span class="line">        //System.out.println(sqlNode.getKind());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getSelectList());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getFrom());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getWhere());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getGroup());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getHaving());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getOrderList());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // insert</span><br><span class="line">        //System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:19.000Z"><a href="/2016/04/22/other/git/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/git/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Git - the stupid content tracker</p>
+<p><code>Git</code> is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
+<p>Git 会把<code>每次提交的文件的全部内容</code>都会记录下来</p>
 <hr>
-<p><strong>HashMap和HashSet的区别</strong></p>
-<p><code>HashSet</code>实现了Set接口，它不允许集合中有重复的值</p>
-<p>首先要确保对象重写equals()和hashCode()方法，以确保set中没有储存相等的对象。</p>
-<p><code>HashMap</code>实现了Map接口，Map中不允许重复的键。</p>
-<p>Map接口有两个基本的实现，HashMap和TreeMap。</p>
-<p><code>TreeMap</code>保存了对象的排列次序，而HashMap则不能。</p>
-<p><code>HashMap</code>允许键和值为null。HashMap是非synchronized的。</p>
+<p><strong>Config</strong></p>
 <hr>
-<p>####Concurrent</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">λ ~/ git</span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c name=value]</span><br><span class="line">           [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">           [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">           &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">These are common Git commands used in various situations:</span><br><span class="line"></span><br><span class="line">start a working area (see also: git help tutorial)</span><br><span class="line">   clone      Clone a repository into a new directory</span><br><span class="line">   init       Create an empty Git repository or reinitialize an existing one</span><br><span class="line"></span><br><span class="line">work on the current change (see also: git help everyday)</span><br><span class="line">   add        Add file contents to the index</span><br><span class="line">   mv         Move or rename a file, a directory, or a symlink</span><br><span class="line">   reset      Reset current HEAD to the specified state</span><br><span class="line">   rm         Remove files from the working tree and from the index</span><br><span class="line"></span><br><span class="line">examine the history and state (see also: git help revisions)</span><br><span class="line">   bisect     Use binary search to find the commit that introduced a bug</span><br><span class="line">   grep       Print lines matching a pattern</span><br><span class="line">   log        Show commit logs</span><br><span class="line">   show       Show various types of objects</span><br><span class="line">   status     Show the working tree status</span><br><span class="line"></span><br><span class="line">grow, mark and tweak your common history</span><br><span class="line">   branch     List, create, or delete branches</span><br><span class="line">   checkout   Switch branches or restore working tree files</span><br><span class="line">   commit     Record changes to the repository</span><br><span class="line">   diff       Show changes between commits, commit and working tree, etc</span><br><span class="line">   merge      Join two or more development histories together</span><br><span class="line">   rebase     Forward-port local commits to the updated upstream head</span><br><span class="line">   tag        Create, list, delete or verify a tag object signed with GPG</span><br><span class="line"></span><br><span class="line">collaborate (see also: git help workflows)</span><br><span class="line">   fetch      Download objects and refs from another repository</span><br><span class="line">   pull       Fetch from and integrate with another repository or a local branch</span><br><span class="line">   push       Update remote refs along with associated objects</span><br><span class="line"></span><br><span class="line">&apos;git help -a&apos; and &apos;git help -g&apos; list available subcommands and some</span><br><span class="line">concept guides. See &apos;git help &lt;command&gt;&apos; or &apos;git help &lt;concept&gt;&apos;</span><br><span class="line">to read about a specific subcommand or concept.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Branch</strong></p>
+<p>使用分支意味着可以把你的工作从开发主线上分离开来，以免影响开发主线。</p>
+<p><em>Git 保存的不是文件的变化或者差异，而是一系列不同时刻的文件快照。</em></p>
+<p>在进行提交操作时，Git 会保存一个提交对象。提交对象会包含一个指向暂存内容快照的指针。 但不仅仅是这样，该提交对象还包含了作者的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针。首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象，而由多个分支合并产生的提交对象有多个父对象，</p>
+<p>暂存操作会为每一个文件计算校验和，然后会把当前版本的文件快照保存到 Git 仓库中，最终将校验和加入到暂存区域等待提交。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch  列出本地分支 当前分支前加*标记</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -r 列出远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -r</span><br><span class="line">  origin/HEAD -&gt; origin/master</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -a 列出本地分支和远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch 创建一个新的本地分支 只创建分支 不切换支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch local</span><br><span class="line">λ ~/git.learning/ master</span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">  local</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout 切换分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git checkout local</span><br><span class="line">Switched to branch &apos;local&apos;</span><br><span class="line">λ ~/git.learning/ local</span><br><span class="line">λ ~/git.learning/ local git branch</span><br><span class="line">* local</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d | -D  删除分支</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d -r  删除远程分支</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Remote</strong></p>
+<hr>
+<p><strong>Log 显示提交记录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log [&lt;options&gt;] [&lt;revision range&gt;] [[\--] &lt;path&gt;…​]</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Alias</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.last &apos;log -1 HEAD&apos;</span><br><span class="line">git config --global alias.unstage &apos;reset HEAD --&apos;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Tag</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag 列出已有的标签</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 看到标签信息与对应的提交信息</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Bisect</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git bisect &lt;subcommand&gt; &lt;options&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git bisect start [--term-&#123;old,good&#125;=&lt;term&gt; --term-&#123;new,bad&#125;=&lt;term&gt;]</span><br><span class="line">         [--no-checkout] [&lt;bad&gt; [&lt;good&gt;...]] [--] [&lt;paths&gt;...]</span><br><span class="line">git bisect (bad|new) [&lt;rev&gt;]</span><br><span class="line">git bisect (good|old) [&lt;rev&gt;...]</span><br><span class="line">git bisect terms [--term-good | --term-bad]</span><br><span class="line">git bisect skip [(&lt;rev&gt;|&lt;range&gt;)...]</span><br><span class="line">git bisect reset [&lt;commit&gt;]</span><br><span class="line">git bisect visualize</span><br><span class="line">git bisect replay &lt;logfile&gt;</span><br><span class="line">git bisect log</span><br><span class="line">git bisect run &lt;cmd&gt;...</span><br><span class="line">git bisect help</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Blame</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>Tips :</code></p>
+<p><strong>Git自动补全</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash</span><br></pre></td></tr></table></figure>
+<p>在~/.bash_profile文件中添加以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ -f ~/.git-completion.bash ]; then</span><br><span class="line">    . ~/.git-completion.bash</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://hubingforever.blog.163.com/blog/static/1710405792012587105464/" target="_blank" rel="external">Git对象模型</a> </li>
+<li><a href="http://hubingforever.blog.163.com/blog/static/17104057920125794943922/" target="_blank" rel="external">Git索引</a></li>
+<li><a href="http://git-scm.com/" target="_blank" rel="external">git Doc</a></li>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></li>
+<li><a href="http://gitref.org/" target="_blank" rel="external">gitref</a></li>
+<li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
+</ol>
 
       
     </div>
@@ -934,17 +393,40 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/gradle/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>##Gradle</p>
+<p>###Build Script Basic<br>任何一个Gradle构建都是由一个或多个 projects 组成.</p>
+<p>每个project包括许多可构建组成部分. 这完全取决于你要构建些什么.</p>
+<p>举个栗子.每个project或许是一个jar包或者一个web应用, 它也可以是一个由许多其他项目中产生的jar构成的zip压缩包.一个project不必描述它只能进行构建操作. </p>
+<p>它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大.<br>Gradle的build-by-convention可以让您来具体定义一个project到底该做什么.</p>
+<p>每个project都由多个tasks组成.每个task都代表了构建执行过程中的一个原子性操作.如编译,打包,生成javadoc,发布到某个仓库等操作</p>
+<p>你可以通过在命令行运行gradle命令来执行构建, gradle命令会从当前目录下寻找 build.gradle 文件来执行构建.</p>
+<p>我们称 build.gradle 文件为构建脚本. 严格来说这其实是一个构建配置脚本</p>
+<p>build.gradle</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println &apos;Hello World !&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &apos;Hello World&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doFirst &#123;</span><br><span class="line">    println &apos;Before&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doLast &#123;</span><br><span class="line">   println &apos;After&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task &lt;&lt; &#123;</span><br><span class="line">    println &apos;Last&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>doFirst 和 doLast 可以进行多次调用. 分别被添加在任务的开头和结尾.</p>
+<p>当任务开始执行时这些动作会按照既定顺序进行.其中 &lt;&lt; 操作符 是 doLast 的简写方式.</p>
+<p><code>增加自定义属性</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task myTask &#123;</span><br><span class="line">    ext.name = &apos;darion.yaphet&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task printName &#123;</span><br><span class="line">    println myTask.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>默认任务</code></p>
+<p>Gradle允许在脚本中定义多个默认任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks &apos;clean&apos; ,&apos;run&apos;</span><br><span class="line"></span><br><span class="line">task clean &lt;&lt; &#123;</span><br><span class="line">    println &apos;default clean&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task  run &lt;&lt; &#123;</span><br><span class="line">    println &apos;default run&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###Java Plugin<br>大部分Java项目基本流程都是相似的:编译源文件,进行单元测试,创建Jar包.<br>使用Gradle做这些工作不必为每个工程都编写代码.<br>Gradle已经提供了完美的插件来解决这些问题. </p>
+<p>插件就是Gradle的扩展,简而言之就是为你添加一些非常有用的默认配置.<br>Gradle自带了很多插件,并且你也可以很容易的编写和分享自己的插件.<br>Java plugin作为其中之一,为你提供了诸如编译,测试,打包等一些功能.</p>
+<p>Java插件为工程定义了许多默认值,如Java源文件位置.<br>如果你遵循这些默认规则,那么你无需在你的脚本文件中书写太多代码.<br>当然,Gradle也允许你自定义项目中的一些规则.<br>实际上,由于对Java工程的构建是基于插件的,那么你也可以完全不用插件自己编写代码来进行构建.</p>
+<p><code>一个基本Java项目</code></p>
+<p>###Web Plugin</p>
+
       
     </div>
     <footer>
@@ -966,17 +448,21 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/maven/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/maven/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>###Maven</p>
+<p>###Commands</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">mvn -h</span><br><span class="line"></span><br><span class="line">usage: mvn [options] [&lt;goal(s)&gt;] [&lt;phase(s)&gt;]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"> -am,--also-make                        If project list is specified, also</span><br><span class="line">                                        build projects required by the</span><br><span class="line">                                        list</span><br><span class="line"> -amd,--also-make-dependents            If project list is specified, also</span><br><span class="line">                                        build projects that depend on</span><br><span class="line">                                        projects on the list</span><br><span class="line"> -B,--batch-mode                        Run in non-interactive (batch)</span><br><span class="line">                                        mode</span><br><span class="line"> -b,--builder &lt;arg&gt;                     The id of the build strategy to</span><br><span class="line">                                        use.</span><br><span class="line"> -C,--strict-checksums                  Fail the build if checksums don&apos;t</span><br><span class="line">                                        match</span><br><span class="line"> -c,--lax-checksums                     Warn if checksums don&apos;t match</span><br><span class="line"> -cpu,--check-plugin-updates            Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -D,--define &lt;arg&gt;                      Define a system property</span><br><span class="line"> -e,--errors                            Produce execution error messages</span><br><span class="line"> -emp,--encrypt-master-password &lt;arg&gt;   Encrypt master security password</span><br><span class="line"> -ep,--encrypt-password &lt;arg&gt;           Encrypt server password</span><br><span class="line"> -f,--file &lt;arg&gt;                        Force the use of an alternate POM</span><br><span class="line">                                        file (or directory with pom.xml).</span><br><span class="line"> -fae,--fail-at-end                     Only fail the build afterwards;</span><br><span class="line">                                        allow all non-impacted builds to</span><br><span class="line">                                        continue</span><br><span class="line"> -ff,--fail-fast                        Stop at first failure in</span><br><span class="line">                                        reactorized builds</span><br><span class="line"> -fn,--fail-never                       NEVER fail the build, regardless</span><br><span class="line">                                        of project result</span><br><span class="line"> -gs,--global-settings &lt;arg&gt;            Alternate path for the global</span><br><span class="line">                                        settings file</span><br><span class="line"> -gt,--global-toolchains &lt;arg&gt;          Alternate path for the global</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -h,--help                              Display help information</span><br><span class="line"> -l,--log-file &lt;arg&gt;                    Log file where all build output</span><br><span class="line">                                        will go.</span><br><span class="line"> -llr,--legacy-local-repository         Use Maven 2 Legacy Local</span><br><span class="line">                                        Repository behaviour, ie no use of</span><br><span class="line">                                        _remote.repositories. Can also be</span><br><span class="line">                                        activated by using</span><br><span class="line">                                        -Dmaven.legacyLocalRepo=true</span><br><span class="line"> -N,--non-recursive                     Do not recurse into sub-projects</span><br><span class="line"> -npr,--no-plugin-registry              Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -npu,--no-plugin-updates               Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -nsu,--no-snapshot-updates             Suppress SNAPSHOT updates</span><br><span class="line"> -o,--offline                           Work offline</span><br><span class="line"> -P,--activate-profiles &lt;arg&gt;           Comma-delimited list of profiles</span><br><span class="line">                                        to activate</span><br><span class="line"> -pl,--projects &lt;arg&gt;                   Comma-delimited list of specified</span><br><span class="line">                                        reactor projects to build instead</span><br><span class="line">                                        of all projects. A project can be</span><br><span class="line">                                        specified by [groupId]:artifactId</span><br><span class="line">                                        or by its relative path.</span><br><span class="line"> -q,--quiet                             Quiet output - only show errors</span><br><span class="line"> -rf,--resume-from &lt;arg&gt;                Resume reactor from specified</span><br><span class="line">                                        project</span><br><span class="line"> -s,--settings &lt;arg&gt;                    Alternate path for the user</span><br><span class="line">                                        settings file</span><br><span class="line"> -T,--threads &lt;arg&gt;                     Thread count, for instance 2.0C</span><br><span class="line">                                        where C is core multiplied</span><br><span class="line"> -t,--toolchains &lt;arg&gt;                  Alternate path for the user</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -U,--update-snapshots                  Forces a check for missing</span><br><span class="line">                                        releases and updated snapshots on</span><br><span class="line">                                        remote repositories</span><br><span class="line"> -up,--update-plugins                   Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -V,--show-version                      Display version information</span><br><span class="line">                                        WITHOUT stopping build</span><br><span class="line"> -v,--version                           Display version information</span><br><span class="line"> -X,--debug                             Produce execution debug output</span><br></pre></td></tr></table></figure>
+<p>###Configuring</p>
+
       
     </div>
     <footer>
@@ -998,49 +484,18 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Golang</p>
+        <p>###Simple Build Tool</p>
+<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
 
       
     </div>

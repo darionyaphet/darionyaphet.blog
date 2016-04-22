@@ -50,25 +50,122 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-19T15:53:43.000Z"><a href="/2016/04/19/live/chess/">2016-04-19</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/sort/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/19/live/chess/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/sort/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Chess"><a href="#Chess" class="headerlink" title="Chess"></a>Chess</h3><p><img src="resource/chess/chess.jpg" alt="Chess"></p>
-<h3 id="入门-amp-常识"><a href="#入门-amp-常识" class="headerlink" title="入门&amp;常识"></a>入门&amp;常识</h3><p>国际象棋有8*8共64个棋格，相邻的两个棋格总是黑白相间。为了方便，我们可以用A——H，和1——8这些字母和数字来标志每个格子。如下图。对局双方分为黑、白两方，各执16个棋子。这16个棋子分别是8个兵，2个车，2个马，2个象，1个王后，1个国王。只要将对方的国王吃掉就算胜利。</p>
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/list/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/list/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/dynamic-programming/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/dynamic-programming/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Dynamic Programming</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">把多阶段过程转化为一系列单阶段问题，利用各阶段之间的关系，逐个求解</span><br><span class="line">创立了解决这类过程优化问题的新方法——动态规划</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/red-black-tree/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/red-black-tree/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Red Black Tree</p>
+<p>Red Black Tree由Rudolf Bayer发明的，当时被称为平衡二叉B树。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。</p>
+<p>红黑树每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了额外要求:</p>
 <ol>
-<li>国王。国王可以直行、横行、斜行，但是每次只能动一个格。国王死掉，棋局结束。</li>
-<li>王后。王后是国际象棋中最为厉害的棋子，她可以直行、横行、斜行，且行走的格数不受限制，只要前方没有其它棋子。</li>
-<li>象。只能斜行。国际象棋中有两个象，一个位于黑格，一个位于白格，着也意味着，黑格中的象永远不会出现在白格的位置。</li>
-<li>马。国际象棋中的马和中国象棋中的马的行走方法是一样的，都是走“日”字。但是国际象棋中的马没有“拌腿”一说。</li>
-<li>车。国际象棋中的车与中国象棋中的车一样，都是可以直走、横走，且走的格数不受限制。另外，车还有一种特殊的走法，叫做“王车易位”。每局中，对局双方都有一次同时移动国王和车的机会。但是王车易位有诸多限制。</li>
-<li>兵。如果兵是第一次行走，可以走一格或者两格，如果不是第一次行走，只能走一格，且只能直行，不能横行和斜行。另外，兵吃子儿的方法比较特殊，一般，兵只能吃斜前方的子儿，吃完后占据斜前方的位置，还有一种特殊的吃法，兵一次走两格，走完后在同一横线上有对方的兵时，可以将其吃掉，然后占据斜前方的位置。这叫做“吃过路兵”。如果己方的兵走到对方的底线时，这时候兵就可以升为除国王和兵以外的其它棋子，由于王后的威力最大，所以，兵经常升为王后。</li>
+<li>节点是红色或黑色</li>
+<li>根节点是黑色</li>
+<li>每个叶节点是黑色的</li>
+<li>每个红色节点的两个子节点都是黑色</li>
+<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
 </ol>
 
       
@@ -92,194 +189,29 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/binary-tree/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/game/">2016-04-19</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/19/live/game/">Game</a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/binary-tree/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p><a href="http://www.guokr.com/blog/777525/" target="_blank" rel="external">Nim 游戏</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">传统的Nim游戏是对一些放置成堆的一定数量的硬币开始的：硬币和堆的数量取决于你。</span><br><span class="line">有两名玩家玩这个游戏，当轮到某位玩家时，他能从某一堆里取任意数量的硬币，但是至少要取一枚硬币，但是也不能从除你取的这个堆以外的其他堆里再取硬币。</span><br><span class="line">赢家是取得最后一枚硬币的人，所以最后是没有硬币剩余的。</span><br></pre></td></tr></table></figure>
-<p><img src="resource/game/NimGame.jpg" alt="Nim Game"></p>
-<p>从这个🌰看 A是最终的胜者！如果我是player，如何才能必胜！！！</p>
-<p>两玩家分别称为A和B，A先走。</p>
-<p>一共两堆各有一枚硬币。那么显然，玩家B必胜：A必须取两个硬币里的一个，留下一个被B取走。</p>
-<p>现在的两堆分别有2和1个硬币。A有必胜策略：从有两个硬币的那堆取一个。这样造成的局面和上面的例子等同，我们知道这时A会赢。</p>
-<p>美国数学家Charles Bouton同样感觉到这点并促使他毫不畏惧的开始分析这个游戏。1902年他找到了这个窍门——及其精妙！</p>
-<hr>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-13T16:00:00.000Z"><a href="/2016/04/14/live/coffee/">2016-04-14</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/14/live/coffee/">Coffee</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h4 id="咖啡萃取的原理-化学反应-物理反应？！"><a href="#咖啡萃取的原理-化学反应-物理反应？！" class="headerlink" title="咖啡萃取的原理=化学反应+物理反应？！"></a><a href="http://www.wtoutiao.com/p/ZfaC0p.html" target="_blank" rel="external">咖啡萃取的原理=化学反应+物理反应？！</a></h4><p>整个咖啡冲泡分成三个阶段：润湿——萃取——水解。</p>
-<p>当咖啡粉已经被高温润湿后，气体以及活泼的气体化合物首先逸散，咖啡内部的可溶有机分子同时被渗透压“拉扯”到水中，进而溶解。这个过程主要是咖啡粉与热水接触导致的一系列化学和物理变化，我们称之为“萃取”。<code>但是事实上，这个“萃取”一词也可以与“冲泡”混淆，因为萃取的确是咖啡冲泡中用时最长、影响最大的环节。</code></p>
-<hr>
-<h4 id="世界各地的人都喝啥样的咖啡"><a href="#世界各地的人都喝啥样的咖啡" class="headerlink" title="世界各地的人都喝啥样的咖啡?"></a><a href="http://www.wtoutiao.com/p/E2d3UJ.html" target="_blank" rel="external">世界各地的人都喝啥样的咖啡?</a></h4><p><code>德国：Pharisäer咖啡</code> 在咖啡里加2盎司朗姆酒。黑咖啡配上朗姆酒和糖，再加上点打发的奶油，味道简直没得说！</p>
-<p><code>越南：鸡蛋咖啡</code> 两个蛋黄和炼乳、蜂蜜和香草共同打发，然后再倒入刚刚泡好的越南咖啡里。打发的蛋黄漂浮在咖啡之上，口感丝滑，唇齿留香。</p>
-<p><code>美国：Gibraltar咖啡</code> 意大利浓缩咖啡的量加至2杯，配上打发的牛奶</p>
-<p><code>西班牙：Cafe Bombón</code> 蜜糖咖啡  由浓缩咖啡和炼乳制成。</p>
-<p><code>土耳其：土耳其咖啡</code> 土耳其咖啡壶冲煮研磨极为精细的咖啡粉，口味香甜，口感醇厚。</p>
-<p><code>法国：Cafe au Lait</code> 等量的咖啡和打发的牛奶制成。法国人还喜欢在咖啡里加入菊苣，以增加咖啡的甜度。</p>
-<p><code>墨西哥：Cafe de Olla</code> 用锅煮的咖啡 将深度烘焙的、研磨好的咖啡粉用煎锅熬制，并加入肉桂棒、橙皮和棕糖。直到棕糖完全融化，关火浸泡5分钟，即可趁热饮用</p>
-<p><code>意大利：Romano意大利浓缩咖啡</code> 浓缩咖啡里加入一片柠檬</p>
-<p><code>新西兰和澳大利亚：Flat White咖啡</code>  双倍意大利浓缩咖啡和打发至口感细腻的牛奶制成。有人说这种咖啡的口味介于卡布奇诺和拿铁之间。</p>
-<p><code>希腊：Frappe咖啡</code> 冰饮咖啡，用速溶咖啡、糖、加水威士忌制成。</p>
-<p><code>澳大利亚：Kaisermelange咖啡</code> 皇帝特饮（Emperor’s Blend） 咖啡里加入蛋黄、糖和干邑白兰地</p>
-<hr>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Flume</p>
-<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
-<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
-<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
-<p>#####Channel</p>
-<p>#####Sink</p>
-<p>#####Exceptions Collection</p>
+        <p>###Binary Tree</p>
+<p>####Traverse<br>遍历操作分为递归与非递归两种，递归操作一般需要借助辅助数据结构。</p>
 <ol>
-<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
+<li><p>Pre-Order</p>
+</li>
+<li><p>In-Order</p>
+</li>
+<li><p>Post-Order</p>
+</li>
+<li><p>Level</p>
 </li>
 </ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
+<p>####求二叉树第K层的节点个数</p>
 
       
     </div>
@@ -302,142 +234,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/yarn/">2016-01-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/divide-and-conquer/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/01/21/distribution/yarn/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/divide-and-conquer/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Yarn</p>
-<p>###Architecture Overview</p>
-<p><code>Yarn</code> (Yet Another Resource Negotiator) 是一种通用资源管理系统，可为上层应用提供统一资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大提升。</p>
-<p>The fundamental idea of Yarn is to split up the two major functionalities of the <code>JobTracker</code>, resource management and job scheduling/monitoring into separate daemons. </p>
-<p>The idea is to have a global ResourceManager and per-application ApplicationMaster. </p>
-<p>The <code>ResourceManager</code> and per-node slave, the <code>NodeManager</code>, form the data-computation framework. </p>
-<p>The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system.</p>
-<p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p>
-<p>The ResourceManager has two main components: Scheduler and ApplicationsManager.</p>
-<p>The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The Scheduler is pure scheduler in the sense that it performs no monitoring or tracking of status for the application. Also, it offers no guarantees about restarting failed tasks either due to application failure or hardware failures. The Scheduler performs its scheduling function based the resource requirements of the applications; it does so based on the abstract notion of a resource Container which incorporates elements such as memory, cpu, disk, network etc. In the first version, only memory is supported.</p>
-<p>The Scheduler has a pluggable policy plug-in, which is responsible for partitioning the cluster resources among the various queues, applications etc. The current Map-Reduce schedulers such as the CapacityScheduler and the FairScheduler would be some examples of the plug-in.</p>
-<p>The CapacityScheduler supports hierarchical queues to allow for more predictable sharing of cluster resources</p>
-<p>The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.</p>
-<p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
-<p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
-<p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
-<p>###ResourceManager<br>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
-<p>###NodeManager</p>
-<p>###ApplicationsManager</p>
-<p>###Commands</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
-<p><code>yarn application [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-appStates <states></states></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application states.</td>
-</tr>
-<tr>
-<td style="text-align:left">-appTypes <types></types></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application types.</td>
-</tr>
-<tr>
-<td style="text-align:left">-list</td>
-<td style="text-align:left">Lists applications from the RM. </td>
-</tr>
-<tr>
-<td style="text-align:left">-kill <applicationid></applicationid></td>
-<td style="text-align:left">Kills the application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <applicationid></applicationid></td>
-<td style="text-align:left">Prints the status of the application.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn applicationattempt [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <applicationid></applicationid></td>
-<td style="text-align:left">Lists applications attempts for the given application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <application attempt="" id=""></application></td>
-<td style="text-align:left">Prints the status of the application attempt.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn classpath</code></p>
-<p>Prints the class path needed to get the Hadoop jar and the required libraries</p>
-<p><code>yarn container [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <application attempt="" id=""></application></td>
-<td style="text-align:left">Lists containers for the application attempt.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <containerid></containerid></td>
-<td style="text-align:left">Prints the status of the container.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn jar &lt;jar&gt; [mainClass] args...</code></p>
-<p>Runs a jar file. </p>
-<p><code>yarn logs -applicationId &lt;application ID&gt; [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-applicationId <application id=""></application></td>
-<td style="text-align:left">Specifies an application id</td>
-</tr>
-<tr>
-<td style="text-align:left">appOwner <appowner></appowner></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-containerId <containerid></containerid></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-nodeAddress <nodeaddress></nodeaddress></td>
-<td style="text-align:left">nodename:port</td>
-</tr>
-</tbody>
-</table>
-<p>####ResourceManager</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">####NodeManager</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">####Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
-<p>```</p>
-
+        
       
     </div>
     <footer>
@@ -459,703 +266,157 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flink/">2016-01-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/stack/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/01/21/distribution/flink/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/stack/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h2><p>When the Flink system is started, it bring up the JobManager and one or more TaskManagers. </p>
-<p>The JobManager is the coordinator of the Flink system, while the TaskManagers are the workers that execute parts of the parallel programs. When starting the system in local mode, a single JobManager and TaskManager are brought up within the same JVM.</p>
-<p><img src="../resource/distribution/flink/process_model.svg" alt="flink process model"></p>
-<h3 id="Command-Line-Interface"><a href="#Command-Line-Interface" class="headerlink" title="Command Line Interface"></a>Command Line Interface</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">bin/flink</span><br><span class="line">./flink &lt;ACTION&gt; [OPTIONS] [ARGUMENTS]</span><br><span class="line"></span><br><span class="line">The following actions are available:</span><br><span class="line"></span><br><span class="line">Action &quot;run&quot; compiles and runs a program.</span><br><span class="line"></span><br><span class="line">  Syntax: run [OPTIONS] &lt;jar-file&gt; &lt;arguments&gt;</span><br><span class="line">  &quot;run&quot; action options:</span><br><span class="line">     -c,--class &lt;classname&gt;           Class with the program entry point (&quot;main&quot;</span><br><span class="line">                                      method or &quot;getPlan()&quot; method. Only needed</span><br><span class="line">                                      if the JAR file does not specify the class</span><br><span class="line">                                      in its manifest.</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;      Address of the JobManager (master) to</span><br><span class="line">                                      which to connect. Specify &apos;yarn-cluster&apos;</span><br><span class="line">                                      as the JobManager to deploy a YARN cluster</span><br><span class="line">                                      for the job. Use this flag to connect to a</span><br><span class="line">                                      different JobManager than the one</span><br><span class="line">                                      specified in the configuration.</span><br><span class="line">     -p,--parallelism &lt;parallelism&gt;   The parallelism with which to run the</span><br><span class="line">                                      program. Optional flag to override the</span><br><span class="line">                                      default value specified in the</span><br><span class="line">                                      configuration.</span><br><span class="line">  Additional arguments if -m yarn-cluster is set:</span><br><span class="line">     -yd,--yarndetached                   Start detached</span><br><span class="line">     -yD &lt;arg&gt;                            Dynamic properties</span><br><span class="line">     -yj,--yarnjar &lt;arg&gt;                  Path to Flink jar file</span><br><span class="line">     -yjm,--yarnjobManagerMemory &lt;arg&gt;    Memory for JobManager Container [in</span><br><span class="line">                                          MB]</span><br><span class="line">     -yn,--yarncontainer &lt;arg&gt;            Number of YARN container to allocate</span><br><span class="line">                                          (=Number of Task Managers)</span><br><span class="line">     -ynm,--yarnname &lt;arg&gt;                Set a custom name for the application</span><br><span class="line">                                          on YARN</span><br><span class="line">     -yq,--yarnquery                      Display available YARN resources</span><br><span class="line">                                          (memory, cores)</span><br><span class="line">     -yqu,--yarnqueue &lt;arg&gt;               Specify YARN queue.</span><br><span class="line">     -ys,--yarnslots &lt;arg&gt;                Number of slots per TaskManager</span><br><span class="line">     -yst,--yarnstreaming                 Start Flink in streaming mode</span><br><span class="line">     -yt,--yarnship &lt;arg&gt;                 Ship files in the specified directory</span><br><span class="line">                                          (t for transfer)</span><br><span class="line">     -ytm,--yarntaskManagerMemory &lt;arg&gt;   Memory per TaskManager Container [in</span><br><span class="line">                                          MB]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;info&quot; shows the optimized execution plan of the program (JSON).</span><br><span class="line"></span><br><span class="line">  Syntax: info [OPTIONS] &lt;jar-file&gt; &lt;arguments&gt;</span><br><span class="line">  &quot;info&quot; action options:</span><br><span class="line">     -c,--class &lt;classname&gt;           Class with the program entry point (&quot;main&quot;</span><br><span class="line">                                      method or &quot;getPlan()&quot; method. Only needed</span><br><span class="line">                                      if the JAR file does not specify the class</span><br><span class="line">                                      in its manifest.</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;      Address of the JobManager (master) to</span><br><span class="line">                                      which to connect. Specify &apos;yarn-cluster&apos;</span><br><span class="line">                                      as the JobManager to deploy a YARN cluster</span><br><span class="line">                                      for the job. Use this flag to connect to a</span><br><span class="line">                                      different JobManager than the one</span><br><span class="line">                                      specified in the configuration.</span><br><span class="line">     -p,--parallelism &lt;parallelism&gt;   The parallelism with which to run the</span><br><span class="line">                                      program. Optional flag to override the</span><br><span class="line">                                      default value specified in the</span><br><span class="line">                                      configuration.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;list&quot; lists running and scheduled programs.</span><br><span class="line"></span><br><span class="line">  Syntax: list [OPTIONS]</span><br><span class="line">  &quot;list&quot; action options:</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;   Address of the JobManager (master) to which</span><br><span class="line">                                   to connect. Specify &apos;yarn-cluster&apos; as the</span><br><span class="line">                                   JobManager to deploy a YARN cluster for the</span><br><span class="line">                                   job. Use this flag to connect to a different</span><br><span class="line">                                   JobManager than the one specified in the</span><br><span class="line">                                   configuration.</span><br><span class="line">     -r,--running                  Show only running programs and their JobIDs</span><br><span class="line">     -s,--scheduled                Show only scheduled programs and their JobIDs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Action &quot;cancel&quot; cancels a running program.</span><br><span class="line"></span><br><span class="line">  Syntax: cancel [OPTIONS] &lt;Job ID&gt;</span><br><span class="line">  &quot;cancel&quot; action options:</span><br><span class="line">     -m,--jobmanager &lt;host:port&gt;   Address of the JobManager (master) to which</span><br><span class="line">                                   to connect. Specify &apos;yarn-cluster&apos; as the</span><br><span class="line">                                   JobManager to deploy a YARN cluster for the</span><br><span class="line">                                   job. Use this flag to connect to a different</span><br><span class="line">                                   JobManager than the one specified in the</span><br><span class="line">                                   configuration.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Please specify an action.</span><br></pre></td></tr></table></figure>
-<p>###Configuration</p>
-<p>###Web Client<br>Flink provides a web interface to upload jobs, inspect their execution plans, and execute them. </p>
-<p>The web interface runs on port 8080 by default.To specify a custom port set the webclient.port property in the conf/flink.yaml.</p>
-<p>Jobs are submitted to the JobManager specified by jobmanager.rpc.address and jobmanager.rpc.port.</p>
-<p><code>job view</code> Upload a Flink program as a jar file, execute an uploaded program.</p>
-<p> jar’s manifest file does not specify the program class, you can specify it before the argument list as:<code>-c &lt;assemblerClass&gt; &lt;programArgs...&gt;</code></p>
-<p><code>Plan View</code>  optimized execution plan of the submitted program in the upper half of the page.</p>
-<h3 id="DataSet"><a href="#DataSet" class="headerlink" title="DataSet"></a>DataSet</h3><p>The batch processing APIs of Flink are centered around the DataSet abstraction. </p>
-<p>A DataSet is only an abstract representation of a set of data that can contain duplicates.</p>
-<table>
-<thead>
-<tr>
-<th>Transformation</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Map</td>
-<td></td>
-</tr>
-<tr>
-<td>FlatMap</td>
-<td></td>
-</tr>
-<tr>
-<td>MapPartition</td>
-<td></td>
-</tr>
-<tr>
-<td>Filter</td>
-<td></td>
-</tr>
-<tr>
-<td>Reduce</td>
-<td></td>
-</tr>
-<tr>
-<td>ReduceGroup</td>
-<td></td>
-</tr>
-<tr>
-<td>Aggregate</td>
-<td></td>
-</tr>
-<tr>
-<td>Join</td>
-<td></td>
-</tr>
-<tr>
-<td>CoGroup</td>
-<td></td>
-</tr>
-<tr>
-<td>Cross</td>
-<td></td>
-</tr>
-<tr>
-<td>Union</td>
-<td></td>
-</tr>
-<tr>
-<td>Rebalance</td>
-<td></td>
-</tr>
-<tr>
-<td>Hash-Partition</td>
-<td></td>
-</tr>
-<tr>
-<td>Custom Partitioning</td>
-<td></td>
-</tr>
-<tr>
-<td>Sort Partition</td>
-<td></td>
-</tr>
-<tr>
-<td>First-n</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="Program-Skeleton"><a href="#Program-Skeleton" class="headerlink" title="Program Skeleton"></a>Program Skeleton</h3><p>Flink programs look like regular Java programs with a main() method. Each program consists of the same basic parts:</p>
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/search/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/search/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/string/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/string/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/paxos/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/paxos/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Paxos </p>
+<p>角色分为proposers，acceptors，和learners（允许身兼数职）。</p>
+<p><code>proposers</code>提出提案，提案信息包括提案编号和提议的value；<code>acceptor</code>收到提案后可以接受（accept）提案，若提案获得多数acceptors的接受，则称该提案被批准（chosen）；<code>learners</code>只能“学习”被批准的提案。划分角色后，就可以更精确的定义问题：</p>
 <ol>
-<li>Obtain an ExecutionEnvironment</li>
-<li>Load/create the initial data</li>
-<li>Specify transformations on this data</li>
-<li>Specify where to put the results</li>
-<li>Trigger the program execution</li>
+<li>决议（value）只有在被proposers提出后才能被批准（未经批准的决议称为“提案（proposal）”）</li>
+<li>在一次Paxos算法的执行实例中，只批准（chosen）一个value</li>
+<li>learners只能获得被批准（chosen）的value</li>
 </ol>
-<h3 id="DataSet-Transformations"><a href="#DataSet-Transformations" class="headerlink" title="DataSet Transformations"></a>DataSet Transformations</h3><h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><p>Applies a map function on each element of a DataSet.</p>
-<p>One element must be returned by the function.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.flink.api.common.functions.MapFunction;</span><br><span class="line">import org.apache.flink.api.java.tuple.Tuple2;</span><br><span class="line"></span><br><span class="line">public class SumMapFunction implements MapFunction&lt;Tuple2&lt;Integer, Integer&gt;, Integer&gt; &#123;</span><br><span class="line"></span><br><span class="line">	private static final long serialVersionUID = 3830811031233724943L;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Integer map(Tuple2&lt;Integer, Integer&gt; tuple) throws Exception &#123;</span><br><span class="line">		return tuple.f0 + tuple.f1;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="FlatMap"><a href="#FlatMap" class="headerlink" title="FlatMap"></a>FlatMap</h5><p>Applies a flat-map function on each element of a DataSet. </p>
-<p>This variant of a map function can return arbitrary many result elements (including none) for each input element.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.flink.api.common.functions.FlatMapFunction;</span><br><span class="line">import org.apache.flink.util.Collector;</span><br><span class="line"></span><br><span class="line">public class Tokenizer implements FlatMapFunction&lt;String, String&gt; &#123;</span><br><span class="line"></span><br><span class="line">	private static final long serialVersionUID = 2350322299357354023L;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void flatMap(String line, Collector&lt;String&gt; collector) throws Exception &#123;</span><br><span class="line">		for (String token : line.split(&quot;\\W&quot;)) &#123;</span><br><span class="line">			collector.collect(token);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="MapPartition"><a href="#MapPartition" class="headerlink" title="MapPartition"></a>MapPartition</h5><p>Transforms a parallel partition in a single function call. </p>
-<p>The map-partition function gets the partition as Iterable and can produce an arbitrary number of result values. </p>
-<p>The number of elements in each partition depends on the degree-of-parallelism and previous operations.</p>
-<h5 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h5><h5 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h5><h5 id="Grouped-DataSet"><a href="#Grouped-DataSet" class="headerlink" title="Grouped DataSet"></a>Grouped DataSet</h5><h5 id="Combinable-GroupReduceFunctions"><a href="#Combinable-GroupReduceFunctions" class="headerlink" title="Combinable GroupReduceFunctions"></a>Combinable GroupReduceFunctions</h5><h5 id="GroupCombine-on-a-Grouped-DataSet"><a href="#GroupCombine-on-a-Grouped-DataSet" class="headerlink" title="GroupCombine on a Grouped DataSet"></a>GroupCombine on a Grouped DataSet</h5><h5 id="Aggregate-on-Grouped-Tuple-DataSet"><a href="#Aggregate-on-Grouped-Tuple-DataSet" class="headerlink" title="Aggregate on Grouped Tuple DataSet"></a>Aggregate on Grouped Tuple DataSet</h5><h5 id="Reduce-on-full-DataSet"><a href="#Reduce-on-full-DataSet" class="headerlink" title="Reduce on full DataSet"></a>Reduce on full DataSet</h5><h5 id="GroupReduce-on-full-DataSet"><a href="#GroupReduce-on-full-DataSet" class="headerlink" title="GroupReduce on full DataSet"></a>GroupReduce on full DataSet</h5><h5 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h5><h5 id="Cross"><a href="#Cross" class="headerlink" title="Cross"></a>Cross</h5><h5 id="CoGroup"><a href="#CoGroup" class="headerlink" title="CoGroup"></a>CoGroup</h5><h5 id="Union"><a href="#Union" class="headerlink" title="Union"></a>Union</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals1 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals2 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; vals3 = // [...]</span><br><span class="line">DataSet&lt;Tuple2&lt;String, Integer&gt;&gt; unioned = vals1.union(vals2).union(vals3);</span><br></pre></td></tr></table></figure>
-<h5 id="First-n"><a href="#First-n" class="headerlink" title="First-n"></a>First-n</h5><h3 id="Flink-Streaming"><a href="#Flink-Streaming" class="headerlink" title="Flink Streaming"></a>Flink Streaming</h3><p><code>Transformations</code></p>
-<p>Data transformations transform one or more DataStreams into a new DataStream.</p>
-<table>
-<thead>
-<tr>
-<th>Transformation</th>
-<th>Structure</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Map</td>
-<td>DataStream → DataStream</td>
-<td>Takes one element and produces one element.</td>
-<td>dataStream.map { x =&gt; x * 2 }</td>
-</tr>
-<tr>
-<td>FlatMap</td>
-<td>DataStream → DataStream</td>
-<td>Takes one element and produces zero, one, or more elements.</td>
-<td>dataStream.flatMap { str =&gt; str.split(“ “) }</td>
-</tr>
-<tr>
-<td>Filter</td>
-<td>DataStream → DataStream</td>
-<td>Evaluates a boolean function for each element and retains those for which the function returns true.</td>
-<td>dataStream.filter { _ != 0 }</td>
-</tr>
-<tr>
-<td>KeyBy</td>
-<td>DataStream → KeyedStream</td>
-<td>Logically partitions a stream into disjoint partitions, each partition containing elements of the same key.</td>
-<td>dataStream.keyBy(“someKey”) dataStream.keyBy(0) </td>
-</tr>
-<tr>
-<td>Reduce</td>
-<td>KeyedStream → DataStream</td>
-<td></td>
-<td>keyedStream.reduce { <em> + </em> }</td>
-</tr>
-<tr>
-<td>Fold</td>
-<td>KeyedStream → DataStream</td>
-<td></td>
-<td>val result: DataStream[String] = keyedStream.fold(“start”, (str, i) =&gt; { str + “-“ + i })</td>
-</tr>
-<tr>
-<td>Aggregations</td>
-<td>KeyedStream → DataStream</td>
-<td></td>
-<td>keyedStream.sum(0) keyedStream.sum(“key”) keyedStream.min(0) keyedStream.min(“key”) keyedStream.max(0) keyedStream.max(“key”) keyedStream.minBy(0) keyedStream.minBy(“key”) keyedStream.maxBy(0) keyedStream.maxBy(“key”)</td>
-</tr>
-<tr>
-<td>Window</td>
-<td>KeyedStream → WindowedStream</td>
-<td></td>
-<td>dataStream.keyBy(0).window(TumblingTimeWindows.of(Time.of(5, TimeUnit.SECONDS)))</td>
-</tr>
-<tr>
-<td>WindowAll</td>
-<td>DataStream → AllWindowedStream</td>
-<td></td>
-<td>dataStream.windowAll(TumblingTimeWindows.of(Time.of(5, TimeUnit.SECONDS)))</td>
-</tr>
-<tr>
-<td>Window Apply</td>
-<td>WindowedStream → DataStream AllWindowedStream → DataStream</td>
-<td></td>
-<td>windowedStream.apply { applyFunction }</td>
-</tr>
-<tr>
-<td>Window Reduce</td>
-<td>WindowedStream → DataStream</td>
-<td></td>
-<td>windowedStream.reduce { <em> + </em> }</td>
-</tr>
-<tr>
-<td>Window Fold</td>
-<td>WindowedStream → DataStream</td>
-<td></td>
-<td>val result: DataStream[String] = windowedStream.fold(“start”, (str, i) =&gt; { str + “-“ + i })</td>
-</tr>
-<tr>
-<td>Aggregations on windows</td>
-<td>WindowedStream → DataStream</td>
-<td></td>
-<td>windowedStream.sum(0) windowedStream.sum(“key”) windowedStream.min(0) windowedStream.min(“key”) windowedStream.max(0) windowedStream.max(“key”) windowedStream.minBy(0) windowedStream.minBy(“key”) windowedStream.maxBy(0) windowedStream.maxBy(“key”)</td>
-</tr>
-<tr>
-<td>Union</td>
-<td>DataStream* → DataStream</td>
-<td></td>
-<td>dataStream.union(otherStream1, otherStream2, …)</td>
-</tr>
-<tr>
-<td>Window Join</td>
-<td>DataStream,DataStream → DataStream</td>
-<td></td>
-<td>dataStream.join(otherStream).where(0).equalTo(1).window(TumblingTimeWindows.of(Time.of(3, TimeUnit.SECONDS))).apply { … }</td>
-</tr>
-<tr>
-<td>Window CoGroup</td>
-<td>DataStream,DataStream → DataStream</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Connect</td>
-<td>DataStream,DataStream → ConnectedStreams</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>CoMap, CoFlatMap</td>
-<td>ConnectedStreams → DataStream</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Split</td>
-<td>DataStream → SplitStream</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Select</td>
-<td>SplitStream → DataStream</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Iterate</td>
-<td>DataStream → IterativeStream → DataStream</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Extract Timestamps</td>
-<td>DataStream → DataStream</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h4 id="Table-API-Relational-Queries"><a href="#Table-API-Relational-Queries" class="headerlink" title="Table API - Relational Queries"></a>Table API - Relational Queries</h4><p>Flink provides an API that allows specifying operations using SQL-like expressions.</p>
+<p>批准value的过程中，首先proposers将value发送给acceptors，之后acceptors对value进行接受（accept）。</p>
+<p>为了满足只批准一个value的约束，要求经“多数派（majority）”接受的value成为正式的决议（称为“批准”决议）。这是因为无论是按照人数还是按照权重划分，两组“多数派”至少有一个公共的acceptor，如果每个acceptor只能接受一个value，约束2就能保证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1：一个acceptor必须接受（accept）第一次收到的提案。</span><br></pre></td></tr></table></figure>
+<p>如果恰好一半acceptor接受的提案具有value A，另一半接受的提案具有value B，那么就无法形成多数派，无法批准任何一个value。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2a：一旦一个具有value v的提案被批准（chosen），那么之后任何acceptor再次接受（accept）的提案必须具有value v。</span><br></pre></td></tr></table></figure>
+<p>由于通信是异步的，P2a和P1会发生冲突。如果一个value被批准后，一个proposer和一个acceptor从休眠中苏醒，前者提出一个具有新的value的提案。根据P1，后者应当接受，根据P2a，则不应当接受，这中场景下P2a和P1有矛盾。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2b：一旦一个具有value v的提案被批准（chosen），那么以后任何proposer提出的提案必须具有value v。</span><br></pre></td></tr></table></figure>
+<p>由于acceptor能接受的提案都必须由proposer提出，所以P2b蕴涵了P2a，是一个更强的约束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2c：如果一个编号为n的提案具有value v，那么存在一个多数派，要么他们中所有人都没有接受（accept）编号小于n </span><br><span class="line">的任何提案，要么他们已经接受（accept）的所有编号小于n的提案中编号最大的那个提案具有value v。</span><br></pre></td></tr></table></figure>
+<p><strong><code>数学归纳法</code>证明P2c蕴涵P2b：</strong></p>
+<p>假设具有value v的提案m获得批准，当n=m+1时，采用反证法，假如提案n不具有value v，而是具有value w，根据P2c，则存在一个多数派S1，要么他们中没有人接受过编号小于n的任何提案，要么他们已经接受的所有编号小于n的提案中编号最大的那个提案是value w。由于S1和通过提案m时的多数派C之间至少有一个公共的acceptor，所以以上两个条件都不成立，导出矛盾从而推翻假设，证明了提案n必须具有value v；</p>
+<p>若（m+1）..（N-1）所有提案都具有value v，采用反证法，假如新提案N不具有value v，而是具有value w’,根据P2c，则存在一个多数派S2，要么他们没有接受过m..（N-1）中的任何提案，要么他们已经接受的所有编号小于N的提案中编号最大的那个提案是value w’。由于S2和通过m的多数派C之间至少有一个公共的acceptor，所以至少有一个acceptor曾经接受了m，从而也可以推出S2中已接受的所有编号小于n的提案中编号最大的那个提案的编号范围在m..（N-1）之间，而根据初始假设，m..（N-1）之间的所有提案都具有value v，所以S2中已接受的所有编号小于n的提案中编号最大的那个提案肯定具有value v，导出矛盾从而推翻新提案n不具有value v的假设。根据数学归纳法，我们证明了若满足P2c，则P2b一定满足。</p>
+<p>P2c是可以通过消息传递模型实现的。另外，引入了P2c后，也解决了前文提到的P1不完备的问题。</p>
+<p>如果一个没有chosen过任何proposer提案的acceptor在prepare过程中回答了一个proposer针对提案n的问题，但是在开始对n进行投票前，又接受（accept）了编号小于n的另一个提案（例如n-1），如果n-1和n具有不同的value，这个投票就会违背P2c。因此在prepare过程中，acceptor进行的回答同时也应包含承诺：不会再接受（accept）编号小于n的提案。这是对P1的加强：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1a：当且仅当acceptor没有回应过编号大于n的prepare请求时，acceptor接受（accept）编号为n的提案。</span><br></pre></td></tr></table></figure>
+<p><strong>通过一个决议分为两个阶段：</strong></p>
+<ol>
+<li><p>prepare阶段:</p>
+<ul>
+<li>proposer选择一个提案编号n并将prepare请求发送给acceptors中的一个多数派</li>
+<li>acceptor收到prepare消息后，如果提案的编号大于它已经回复的所有prepare消息，则acceptor将自己上次接受的提案回复给proposer，并承诺不再回复小于n的提案；</li>
+</ul>
+</li>
+<li><p>批准阶段：</p>
+<ul>
+<li><p>当一个proposer收到了多数acceptors对prepare的回复后，就进入批准阶段。</p>
+<p>它要向回复prepare请求的acceptors发送accept请求，包括编号n和根据P2c决定的value（如果根据P2c没有已经接受的value，那么它可以自由决定value）。</p>
+</li>
+<li><p>在不违背自己向其他proposer的承诺的前提下，acceptor收到accept请求后即接受这个请求。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
 <p>Reference :</p>
 <ol>
-<li><a href="https://flink.apache.org/news/2015/02/09/streaming-example.html" target="_blank" rel="external">Introducing Flink Streaming</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/distribution/spark/">2016-01-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/01/distribution/spark/">spark</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h3><p>Apache Spark is a fast and general-purpose cluster computing system. </p>
-<p>It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs. </p>
-<p>It also supports a rich set of higher-level tools including Spark SQL for SQL and structured data processing, MLlib for machine learning, GraphX for graph processing, and Spark Streaming.</p>
-<p>Spark’s primary abstraction is a distributed collection of items called a Resilient Distributed Dataset (RDD). RDDs can be created from Hadoop InputFormats or by transforming other RDDs. </p>
-<p>RDDs have actions, which return values, and transformations, which return pointers to new RDDs.</p>
-<p><img src="resource/spark/architecture.jpg" alt="architecture"></p>
-<h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><p>One of the strongest features of Spark is its shell. </p>
-<p>The Spark-Shell allows users to type and execute commands in a Unix-Terminal-like fashion. </p>
-<ol>
-<li><p>To adjust the amount of memory that Spark may use for executing queries you have to set the following environment prior to starting the shell <code>export SPARK_MEM =1 g</code></p>
-</li>
-<li><p>To  controls the number of worker threads that Spark uses <code>export SPARK_WORKER_INSTANCES =4</code> If you run Spark in local mode you can also set the number of worker threads in one setting as follows: <code>export MASTER = local [32]</code></p>
-</li>
-</ol>
-<hr>
-<h3 id="RDD-API"><a href="#RDD-API" class="headerlink" title="RDD API"></a>RDD API</h3><p>RDD is short for Resilient Distributed Dataset. RDDs are the workhorse of the Spark<br>system. As a user, one can consider a RDD as a handle for a collection of individual data partitions which are the result of some computation.</p>
-<p>RDDs have <strong>actions</strong>, which return values, and <strong>transformations</strong>, which return pointers to new RDDs.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">λ ~/service/spark-1.6.0/ bin/spark-shell</span><br><span class="line">log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).</span><br><span class="line">log4j:WARN Please initialize the log4j system properly.</span><br><span class="line">log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.</span><br><span class="line">Using Spark&apos;s repl log4j profile: org/apache/spark/log4j-defaults-repl.properties</span><br><span class="line">To adjust logging level use sc.setLogLevel(&quot;INFO&quot;)</span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  &apos;_/</span><br><span class="line">   /___/ .__/\_,_/_/ /_/\_\   version 1.6.0</span><br><span class="line">      /_/</span><br><span class="line"></span><br><span class="line">Using Scala version 2.10.5 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_40)</span><br><span class="line">Type in expressions to have them evaluated.</span><br><span class="line">Type :help for more information.</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Your hostname, localhost resolves to a loopback address: 127.0.0.1; using 192.168.1.142 instead (on interface en0)</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address</span><br><span class="line">Spark context available as sc.</span><br><span class="line">SQL context available as sqlContext.</span><br><span class="line"></span><br><span class="line">scala&gt; val list = sc.parallelize(List(1,2,3,4,5,6), 2)</span><br><span class="line">list: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:27</span><br></pre></td></tr></table></figure>
-<p><strong>Spark会把数据都载入到内存么 ? </strong></p>
-<p><em>如果没有主动对RDD进行Cache/Persist等相关操作，RDD不过是一个概念上存在的虚拟数据集</em></p>
-<p>一个 RDD 本质上是一个函数，RDD变换不过是函数嵌套。 RDD有两类：</p>
-<ol>
-<li>输入RDD,典型如KafkaRDD，JdbcRDD以及HadoopRDD等</li>
-<li>转换RDD，如MapPartitionsRDD</li>
-</ol>
-<p><strong>Shuffle的本质是什么 ? </strong></p>
-<hr>
-<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p>Spark SQL is a Spark module for structured data processing. </p>
-<p>It provides a programming abstraction called DataFrames and can also act as distributed SQL query engine.</p>
-<ol>
-<li>DataFrame: a distributed collection of data organized into named columns.</li>
-</ol>
-<hr>
-<h3 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h3><p>Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like map, reduce, join and window. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark’s machine learning and graph processing algorithms on data streams.</p>
-<p>Spark Streaming provides a high-level abstraction called discretized stream or DStream, which represents a continuous stream of data.</p>
-<p>Internally, a DStream is represented as a sequence of RDDs.</p>
-<p><img src="resource/spark/streaming-dstream-window.png" alt="streaming-dstream-window"></p>
-<hr>
-<h3 id="GraphX"><a href="#GraphX" class="headerlink" title="GraphX"></a>GraphX</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val vertexArray = Array(</span><br><span class="line">  (1L, (&quot;Alice&quot;, 28)),</span><br><span class="line">  (2L, (&quot;Bob&quot;, 27)),</span><br><span class="line">  (3L, (&quot;Charlie&quot;, 65)),</span><br><span class="line">  (4L, (&quot;David&quot;, 42)),</span><br><span class="line">  (5L, (&quot;Ed&quot;, 55)),</span><br><span class="line">  (6L, (&quot;Fran&quot;, 50)))</span><br><span class="line">  </span><br><span class="line">val edgeArray = Array(</span><br><span class="line">  Edge(2L, 1L, 7),</span><br><span class="line">  Edge(2L, 4L, 2),</span><br><span class="line">  Edge(3L, 2L, 4),</span><br><span class="line">  Edge(3L, 6L, 3),</span><br><span class="line">  Edge(4L, 1L, 1),</span><br><span class="line">  Edge(5L, 2L, 2),</span><br><span class="line">  Edge(5L, 3L, 8),</span><br><span class="line">  Edge(5L, 6L, 3))</span><br><span class="line"></span><br><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val graph: Graph[(String, Int), Int] = Graph(vertexRDD, edgeRDD)</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="MLlib"><a href="#MLlib" class="headerlink" title="MLlib"></a>MLlib</h3><hr>
-<h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><p>SparkR provides a distributed data frame implementation that supports operations like selection, filtering, aggregation etc.</p>
-<p>SparkR also supports distributed machine learning using MLlib.</p>
-<hr>
-<h3 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h3><p>There are two deploy modes that can be used to launch Spark applications on YARN.</p>
-<p><strong>In cluster mode</strong>, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. </p>
-<p><strong>In client mode</strong>, the driver runs in the client process, and the application master is only used for requesting resources from YARN.</p>
-<p>In YARN mode the ResourceManager’s address is picked up from the Hadoop configuration. Thus, the <code>--master</code> parameter is yarn.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/spark-submit --class path.to.your.Class --master yarn --deploy-mode cluster [options] &lt;app jar&gt; [app options]</span><br></pre></td></tr></table></figure>
-<p><strong>Config</strong></p>
-<p><strong>Application Properties</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spark.app.name</td>
-<td>The name of your application.</td>
-</tr>
-<tr>
-<td>spark.driver.cores</td>
-<td>Number of cores to use for the driver process (only cluster mode).</td>
-</tr>
-<tr>
-<td>spark.driver.maxResultSize</td>
-<td>Limit of total size of serialized results of all partitions for each Spark action.</td>
-</tr>
-<tr>
-<td>spark.driver.memory</td>
-<td>Memory to use for the driver process</td>
-</tr>
-<tr>
-<td>spark.executor.memory</td>
-<td>Memory to use per executor process</td>
-</tr>
-<tr>
-<td>spark.extraListeners</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.local.dir</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.logConf</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.master</td>
-<td>The cluster manager to connect </td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spark.yarn.am.memory</td>
-<td>Amount of memory to use for the YARN Application Master in client mode</td>
-</tr>
-<tr>
-<td>spark.driver.cores</td>
-<td>Number of cores used by the driver in YARN cluster mode.</td>
-</tr>
-<tr>
-<td>spark.yarn.am.cores</td>
-<td>Number of cores to use for the YARN Application Master in client mode.</td>
-</tr>
-<tr>
-<td>spark.yarn.am.waitTime</td>
-<td>In cluster mode, time for the YARN Application Master to wait for the SparkContext to be initialized. In client mode, time for the YARN Application Master to wait for the driver to connect to it.</td>
-</tr>
-<tr>
-<td>spark.yarn.submit.file.replication</td>
-<td>HDFS replication level for the files uploaded into HDFS. </td>
-</tr>
-<tr>
-<td>spark.yarn.preserve.staging.files</td>
-<td>Set to true to preserve the staged files at the end of the job.</td>
-</tr>
-<tr>
-<td>spark.yarn.scheduler.heartbeat.interval-ms</td>
-<td>Spark application master heartbeats into the YARN ResourceManager interval.</td>
-</tr>
-<tr>
-<td>spark.yarn.scheduler.initial-allocation.interval</td>
-<td>The initial interval in which the Spark application master eagerly heartbeats to the YARN ResourceManager when there are pending container allocation requests. </td>
-</tr>
-<tr>
-<td>spark.yarn.max.executor.failures</td>
-<td>The maximum number of executor failures before failing the application.</td>
-</tr>
-<tr>
-<td>spark.yarn.historyServer.address</td>
-<td>The address of the Spark history server</td>
-</tr>
-<tr>
-<td>spark.yarn.dist.archives</td>
-<td>Comma separated list of archives to be extracted into the working directory of each executor.</td>
-</tr>
-<tr>
-<td>spark.yarn.dist.files</td>
-<td>Comma-separated list of files to be placed in the working directory of each executor.</td>
-</tr>
-<tr>
-<td>spark.executor.instances</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.executor.memoryOverhead</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.driver.memoryOverhead</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.memoryOverhead</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.port</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.queue</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.jar</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.access.namenodes</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.appMasterEnv.[EnvironmentVariableName]</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.containerLauncherMaxThreads</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.extraJavaOptions</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.extraLibraryPath</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.maxAppAttempts</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.attemptFailuresValidityInterval</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.submit.waitAppCompletion</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.am.nodeLabelExpression</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.executor.nodeLabelExpression</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.tags</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.keytab</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.principal</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.config.gatewayPath</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.config.replacementPath</td>
-<td></td>
-</tr>
-<tr>
-<td>spark.yarn.security.tokens.${service}.enabled</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Shuffle Behavior</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spark.reducer.maxSizeInFlight</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Spark UI</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Compression and Serialization</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Memory Management</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Execution Behavior</strong></p>
-<table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><img src="resource/spark//spark_on_yarn.jpg" alt="spark_on_yarn"></p>
-<hr>
-<h3 id="PySpark"><a href="#PySpark" class="headerlink" title="PySpark"></a>PySpark</h3><h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><table>
-<thead>
-<tr>
-<th>Property Name</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>spark.app.name</td>
-<td>The name of your application. </td>
-</tr>
-<tr>
-<td>spark.driver.cores</td>
-<td>Number of cores to use for the driver process, only in cluster mode.</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><p>Spark applications run as independent sets of processes on a cluster,coordinated by the SparkContext (<code>driver program</code>).</p>
-<p>SparkContext can connect to several types of cluster managers.</p>
-<p><img src="resource/spark/cluster-overview.png" alt="architecture"></p>
-<table>
-<thead>
-<tr>
-<th>Term</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Application</td>
-<td>User program built on Spark.</td>
-</tr>
-<tr>
-<td>Driver program</td>
-<td>The process running the main() function of the application and creating the SparkContext</td>
-</tr>
-<tr>
-<td>Cluster manager</td>
-<td>An external service for acquiring resources on the cluster</td>
-</tr>
-<tr>
-<td>Deploy mode</td>
-<td>Distinguishes where the driver process runs.</td>
-</tr>
-<tr>
-<td>Worker node</td>
-<td>Any node that can run application code in the cluster</td>
-</tr>
-<tr>
-<td>Executor</td>
-<td>A process that runs tasks and keeps data in memory or disk storage.</td>
-</tr>
-<tr>
-<td>Task</td>
-<td>A unit of work that will be sent to one executor</td>
-</tr>
-<tr>
-<td>Job</td>
-<td>A parallel computation consisting of multiple tasks</td>
-</tr>
-<tr>
-<td>Stage</td>
-<td>Each job gets divided into smaller sets of tasks</td>
-</tr>
-</tbody>
-</table>
-<p>Reference:</p>
-<ol>
-<li><a href="http://www.infoq.com/cn/articles/2015-Review-Spark" target="_blank" rel="external">解读2015之Spark篇：新生态系统的形成</a></li>
-<li><a href="http://www.infoq.com/cn/presentations/gc-tuning-of-spark-application?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=presentations_link&amp;utm_content=link_text" target="_blank" rel="external">Spark应用的GC调优</a></li>
-<li><a href="http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html" target="_blank" rel="external">The RDD API By Example</a></li>
-<li><a href="https://databricks.com/blog" target="_blank" rel="external">Databricks Blog</a></li>
-<li><a href="https://databricks.gitbooks.io/databricks-spark-reference-applications/content/index.html" target="_blank" rel="external">databricks.gitbooks.io</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402777570&amp;idx=1&amp;sn=b06881f5d374cc181784cd8ba31893ad&amp;scene=23&amp;srcid=0318eIjnKdNTXNnQxbXTVpyp#rd" target="_blank" rel="external">一个SparkSQL作业的一生</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402803628&amp;idx=1&amp;sn=bd72f7e43ddefb0946121778ac161ab5&amp;scene=23&amp;srcid=0318z3Rle2LCaZomw5S45p9D#rd" target="_blank" rel="external">Spark生态顶级项目汇总</a></li>
-<li><a href="http://ampcamp.berkeley.edu/big-data-mini-course/graph-analytics-with-graphx.html" target="_blank" rel="external">graph analytics with graphx</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=2650713520&amp;idx=1&amp;sn=9e27441611ac6411eca5c13b489a6d37&amp;scene=23&amp;srcid=0421d2KxIwEnxywTxa2W06TT#rd" target="_blank" rel="external">Spark会把数据都载入到内存么</a></li>
+<li><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95#.E5.AE.9E.E4.BE.8B" target="_blank" rel="external">Wiki Paxos算法</a></li>
 </ol>
 
       
@@ -1178,6 +439,8 @@
   
     <a href="/page/2/" class="alignleft prev">Vorherige Seite</a>
   
+  
+    <a href="/page/4/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
