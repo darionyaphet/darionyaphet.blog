@@ -50,55 +50,24 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/java/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/java/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Java</p>
-<p>####Class Loader</p>
-<p>####Collection</p>
-<p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
-<p><code>ConcurrentHashMap</code> 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。</p>
-<p>JMM由一些规则组成，这些规则确定线程对内存访问如何排序以及何时可以确保它们对线程是可见的。</p>
-<p><code>ConcurrentHashMap</code> 类中包含两个静态内部类 HashEntry 和 Segment。</p>
-<p><code>HashEntry</code> 用来封装映射表的键值对；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">static final class HashEntry&lt;K,V&gt; &#123; </span><br><span class="line">        final K key;                </span><br><span class="line">        final int hash;             </span><br><span class="line">        volatile V value;           </span><br><span class="line">        final HashEntry&lt;K,V&gt; next;  </span><br><span class="line"></span><br><span class="line">        HashEntry(K key, int hash, HashEntry&lt;K,V&gt; next, V value) &#123; </span><br><span class="line">            this.key = key; </span><br><span class="line">            this.hash = hash; </span><br><span class="line">            this.next = next; </span><br><span class="line">            this.value = value; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p><code>Segment</code> 用来充当锁的角色，每个 Segment 对象守护整个散列映射表的若干个桶。每个桶是由若干个 HashEntry 对象链接起来的链表。一个 ConcurrentHashMap 实例中包含由若干个 Segment 对象组成的数组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable &#123; </span><br><span class="line">        /** </span><br><span class="line">         * 在本 segment 范围内，包含的 HashEntry 元素的个数</span><br><span class="line">         * 该变量被声明为 volatile 型</span><br><span class="line">         */ </span><br><span class="line">        transient volatile int count; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 被更新的次数</span><br><span class="line">         */ </span><br><span class="line">        transient int modCount; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 当 table 中包含的 HashEntry 元素的个数超过本变量值时，触发 table 的再散列</span><br><span class="line">         */ </span><br><span class="line">        transient int threshold; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 是由 HashEntry 对象组成的数组</span><br><span class="line">         * 如果散列时发生碰撞，碰撞的 HashEntry 对象就以链表的形式链接成一个链表</span><br><span class="line">         * table 数组的数组成员代表散列映射表的一个桶</span><br><span class="line">         * 每个 table 守护整个 ConcurrentHashMap 包含桶总数的一部分</span><br><span class="line">         * 如果并发级别为 16，table 则守护 ConcurrentHashMap 包含的桶总数的 1/16 </span><br><span class="line">         */ </span><br><span class="line">        transient volatile HashEntry&lt;K,V&gt;[] table; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 装载因子</span><br><span class="line">         */ </span><br><span class="line">        final float loadFactor; </span><br><span class="line"></span><br><span class="line">        Segment(int initialCapacity, float lf) &#123; </span><br><span class="line">            loadFactor = lf; </span><br><span class="line">            setTable(HashEntry.&lt;K,V&gt;newArray(initialCapacity)); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 设置 table 引用到这个新生成的 HashEntry 数组</span><br><span class="line">         * 只能在持有锁或构造函数中调用本方法</span><br><span class="line">         */ </span><br><span class="line">        void setTable(HashEntry&lt;K,V&gt;[] newTable) &#123; </span><br><span class="line">            // 计算临界阀值为新数组的长度与装载因子的乘积</span><br><span class="line">            threshold = (int)(newTable.length * loadFactor); </span><br><span class="line">            table = newTable; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 根据 key 的散列值，找到 table 中对应的那个桶（table 数组的某个数组成员）</span><br><span class="line">         */ </span><br><span class="line">        HashEntry&lt;K,V&gt; getFirst(int hash) &#123; </span><br><span class="line">            HashEntry&lt;K,V&gt;[] tab = table; </span><br><span class="line">            // 把散列值与 table 数组长度减 1 的值相“与”，</span><br><span class="line">           	 // 得到散列值对应的 table 数组的下标</span><br><span class="line">            // 然后返回 table 数组中此下标对应的 HashEntry 元素</span><br><span class="line">            return tab[hash &amp; (tab.length - 1)]; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>HashMap的工作原理</strong></p>
-<p>HashMap基于hashing原理。</p>
-<p>将键值对传递给<code>put()</code>时，调用键对象的hashCode()方法来计算hashcode，让后找到bucket位置来储存值对象。当<code>get()</code>时，通过键对象的equals()方法找到正确的键值对，然后返回值对象。</p>
-<p>HashMap使用<code>链表</code>来解决碰撞问题，当发生碰撞了，对象将会储存在链表的下一个节点中。 HashMap在每个链表节点中储存键值对对象。</p>
-<p>当两个不同的键对象的<code>hashcode相同</code>时会发生什么？ 它们会储存在同一个bucket位置的链表中。键对象的equals()方法用来找到键值对。</p>
-<p><code>HashTable</code>是synchronized的,但<code>ConcurrentHashMap</code>同步性能更好,因为它仅仅根据同步级别对map的一部分进行上锁。</p>
-<hr>
-<p><strong>HashMap和Hashtable的区别</strong></p>
-<p><code>HashMap</code>和<code>HashTable</code>都实现了Map接口</p>
-<p>主要的区别有：线程安全性，同步以及速度。</p>
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
 <ol>
-<li>HashMap是非synchronized  HashTable是synchronized2. </li>
-<li>HashMap可以接受null</li>
-<li>HashMap的Iterator是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构，将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。</li>
-<li>HashMap不能保证随着时间的推移Map中的元素次序是不变的。</li>
-<li>单线程HashMap性能优于HashTable。</li>
+<li>#<code>runtime metaprogramming</code></li>
 </ol>
-<hr>
-<p><strong>HashMap和HashSet的区别</strong></p>
-<p><code>HashSet</code>实现了Set接口，它不允许集合中有重复的值</p>
-<p>首先要确保对象重写equals()和hashCode()方法，以确保set中没有储存相等的对象。</p>
-<p><code>HashMap</code>实现了Map接口，Map中不允许重复的键。</p>
-<p>Map接口有两个基本的实现，HashMap和TreeMap。</p>
-<p><code>TreeMap</code>保存了对象的排列次序，而HashMap则不能。</p>
-<p><code>HashMap</code>允许键和值为null。HashMap是非synchronized的。</p>
-<hr>
-<p>####Concurrent</p>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
 
       
     </div>
@@ -121,11 +90,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
   
 
     </header>
@@ -153,19 +122,50 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Scala</p>
-<p>###trait</p>
+        <p>###Golang</p>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -854,122 +854,56 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/java/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/java/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Golang</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
+        <p>###Java</p>
+<p>####Class Loader</p>
+<p>####Collection</p>
+<p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
+<p><code>ConcurrentHashMap</code> 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。</p>
+<p>JMM由一些规则组成，这些规则确定线程对内存访问如何排序以及何时可以确保它们对线程是可见的。</p>
+<p><code>ConcurrentHashMap</code> 类中包含两个静态内部类 HashEntry 和 Segment。</p>
+<p><code>HashEntry</code> 用来封装映射表的键值对；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">static final class HashEntry&lt;K,V&gt; &#123; </span><br><span class="line">        final K key;                </span><br><span class="line">        final int hash;             </span><br><span class="line">        volatile V value;           </span><br><span class="line">        final HashEntry&lt;K,V&gt; next;  </span><br><span class="line"></span><br><span class="line">        HashEntry(K key, int hash, HashEntry&lt;K,V&gt; next, V value) &#123; </span><br><span class="line">            this.key = key; </span><br><span class="line">            this.hash = hash; </span><br><span class="line">            this.next = next; </span><br><span class="line">            this.value = value; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>Segment</code> 用来充当锁的角色，每个 Segment 对象守护整个散列映射表的若干个桶。每个桶是由若干个 HashEntry 对象链接起来的链表。一个 ConcurrentHashMap 实例中包含由若干个 Segment 对象组成的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable &#123; </span><br><span class="line">        /** </span><br><span class="line">         * 在本 segment 范围内，包含的 HashEntry 元素的个数</span><br><span class="line">         * 该变量被声明为 volatile 型</span><br><span class="line">         */ </span><br><span class="line">        transient volatile int count; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 被更新的次数</span><br><span class="line">         */ </span><br><span class="line">        transient int modCount; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 当 table 中包含的 HashEntry 元素的个数超过本变量值时，触发 table 的再散列</span><br><span class="line">         */ </span><br><span class="line">        transient int threshold; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 是由 HashEntry 对象组成的数组</span><br><span class="line">         * 如果散列时发生碰撞，碰撞的 HashEntry 对象就以链表的形式链接成一个链表</span><br><span class="line">         * table 数组的数组成员代表散列映射表的一个桶</span><br><span class="line">         * 每个 table 守护整个 ConcurrentHashMap 包含桶总数的一部分</span><br><span class="line">         * 如果并发级别为 16，table 则守护 ConcurrentHashMap 包含的桶总数的 1/16 </span><br><span class="line">         */ </span><br><span class="line">        transient volatile HashEntry&lt;K,V&gt;[] table; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 装载因子</span><br><span class="line">         */ </span><br><span class="line">        final float loadFactor; </span><br><span class="line"></span><br><span class="line">        Segment(int initialCapacity, float lf) &#123; </span><br><span class="line">            loadFactor = lf; </span><br><span class="line">            setTable(HashEntry.&lt;K,V&gt;newArray(initialCapacity)); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 设置 table 引用到这个新生成的 HashEntry 数组</span><br><span class="line">         * 只能在持有锁或构造函数中调用本方法</span><br><span class="line">         */ </span><br><span class="line">        void setTable(HashEntry&lt;K,V&gt;[] newTable) &#123; </span><br><span class="line">            // 计算临界阀值为新数组的长度与装载因子的乘积</span><br><span class="line">            threshold = (int)(newTable.length * loadFactor); </span><br><span class="line">            table = newTable; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 根据 key 的散列值，找到 table 中对应的那个桶（table 数组的某个数组成员）</span><br><span class="line">         */ </span><br><span class="line">        HashEntry&lt;K,V&gt; getFirst(int hash) &#123; </span><br><span class="line">            HashEntry&lt;K,V&gt;[] tab = table; </span><br><span class="line">            // 把散列值与 table 数组长度减 1 的值相“与”，</span><br><span class="line">           	 // 得到散列值对应的 table 数组的下标</span><br><span class="line">            // 然后返回 table 数组中此下标对应的 HashEntry 元素</span><br><span class="line">            return tab[hash &amp; (tab.length - 1)]; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>HashMap的工作原理</strong></p>
+<p>HashMap基于hashing原理。</p>
+<p>将键值对传递给<code>put()</code>时，调用键对象的hashCode()方法来计算hashcode，让后找到bucket位置来储存值对象。当<code>get()</code>时，通过键对象的equals()方法找到正确的键值对，然后返回值对象。</p>
+<p>HashMap使用<code>链表</code>来解决碰撞问题，当发生碰撞了，对象将会储存在链表的下一个节点中。 HashMap在每个链表节点中储存键值对对象。</p>
+<p>当两个不同的键对象的<code>hashcode相同</code>时会发生什么？ 它们会储存在同一个bucket位置的链表中。键对象的equals()方法用来找到键值对。</p>
+<p><code>HashTable</code>是synchronized的,但<code>ConcurrentHashMap</code>同步性能更好,因为它仅仅根据同步级别对map的一部分进行上锁。</p>
+<hr>
+<p><strong>HashMap和Hashtable的区别</strong></p>
+<p><code>HashMap</code>和<code>HashTable</code>都实现了Map接口</p>
+<p>主要的区别有：线程安全性，同步以及速度。</p>
 <ol>
-<li>#<code>runtime metaprogramming</code></li>
+<li>HashMap是非synchronized  HashTable是synchronized2. </li>
+<li>HashMap可以接受null</li>
+<li>HashMap的Iterator是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构，将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。</li>
+<li>HashMap不能保证随着时间的推移Map中的元素次序是不变的。</li>
+<li>单线程HashMap性能优于HashTable。</li>
 </ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
-</ol>
+<hr>
+<p><strong>HashMap和HashSet的区别</strong></p>
+<p><code>HashSet</code>实现了Set接口，它不允许集合中有重复的值</p>
+<p>首先要确保对象重写equals()和hashCode()方法，以确保set中没有储存相等的对象。</p>
+<p><code>HashMap</code>实现了Map接口，Map中不允许重复的键。</p>
+<p>Map接口有两个基本的实现，HashMap和TreeMap。</p>
+<p><code>TreeMap</code>保存了对象的排列次序，而HashMap则不能。</p>
+<p><code>HashMap</code>允许键和值为null。HashMap是非synchronized的。</p>
+<hr>
+<p>####Concurrent</p>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
       
     </div>
     <footer>
@@ -1009,6 +943,72 @@
 <li><a href="http://www.snarky.ca/why-print-became-a-function-in-python-3" target="_blank" rel="external">Why <code>print</code> became a function in Python 3</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Scala</p>
+<p>###trait</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
