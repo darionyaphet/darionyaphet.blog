@@ -1,0 +1,589 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="Actor ModleThe Actor Model takes a different approach to solving the problem of concurrency,by avoiding the issues caused by threads and locks. In the">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-23T12:45:20.000Z"><a href="/2016/04/23/distribution/akka/">2016-04-23</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Actor-Modle"><a href="#Actor-Modle" class="headerlink" title="Actor Modle"></a>Actor Modle</h3><p>The Actor Model takes a different approach to solving the problem of concurrency,<br>by avoiding the issues caused by threads and locks. In the Actor Model, all objects<br>are modeled as independent, computational entities that only respond to the<br>messages received. </p>
+<p>Actors change their state only when they receive a stimulus in the form of a message. </p>
+<p>The Actor Model is based on the following principles:</p>
+<ol>
+<li>The immutable messages are used to communicate between actors. </li>
+<li>Each actor has a queue attached where the incoming messages are enqueued. </li>
+<li>Messages are passed between actors asynchronously. </li>
+<li>Communication between the sender and receiver is decoupled and<br>asynchronous, allowing them to execute in different threads. </li>
+</ol>
+<p>Actors can change their state and behavior based on the message passed. </p>
+<p>The connection wire between the sender sending a<br>message and the receiver actor receiving the message is called the mailbox. </p>
+<h3 id="Akka"><a href="#Akka" class="headerlink" title="Akka"></a>Akka</h3><p>The Akka framework has taken the “Actor Model” concept to build an<br>event-driven, middleware framework that allows the building of concurrent,<br>scalable, and distributed systems. </p>
+<p>The Akka framework provides the following features:</p>
+<ol>
+<li><p><code>Concurrency</code>: The Akka Actor Model abstracts concurrency handling and<br>allows the programmer to focus on the business logic</p>
+</li>
+<li><p><code>Scalability</code>: The Akka Actor Model’s asynchronous message passing allows<br>applications to scale up on multicore servers</p>
+</li>
+<li><p><code>Fault tolerance</code>: Akka borrows the concepts and techniques from Erlang to<br>build the “Let It Crash”, fault tolerance model</p>
+</li>
+<li><p><code>Event-driven architecture</code>: Akka provides an asynchronous messaging<br>platform for building event-driven architectures</p>
+</li>
+<li><p><code>Transaction support</code>: Akka implements transactors that combine the actors<br>and software transactional memory (STM) into transactional actors</p>
+</li>
+<li><p><code>Location transparency</code>: Akka provides a unified programming model for<br>multicore and distributed computing needs</p>
+</li>
+<li><p><code>Scala/Java APIs</code>: Akka supports both Java and Scala APIs for<br>building applications</p>
+</li>
+</ol>
+<h4 id="Akka-Use-Case"><a href="#Akka-Use-Case" class="headerlink" title="Akka Use Case"></a>Akka Use Case</h4><ul>
+<li>Transaction processing</li>
+<li>Service providers</li>
+<li>Batch processing</li>
+<li>Data mining/analytics/Business Intelligence</li>
+<li>Service gateways/hubs</li>
+<li>Apps requiring concurrency/parallelism</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">akka.protocol://system@host:1234/user/my/actor/hierarchy/path</span><br></pre></td></tr></table></figure>
+<p>Actors can change their state and behavior based on the message passed.</p>
+<p>Behavior is nothing but the computation logic that needs to be executed in response<br>to the message received.</p>
+<h3 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h3><p>(!)</p>
+<p>Akka provides hooks such as preStart that allow the actor’s state and behavior to be initialized. </p>
+<p>When the actor is stopped, Akka disables the message queuing for the actor before<br>PostStop is invoked. In the postStop hook, any persistence of the state or clean up<br>of any hold-up resources can be done</p>
+<p>An actor’s lifecycle consists of three phases :</p>
+<ul>
+<li>Actor is initialized and started</li>
+<li>Actor receives and processes messages by executing a specific behavior</li>
+<li>Actor stops itself when it receives a termination message</li>
+</ul>
+<p><code>preStart()</code> and <code>postStop()</code> can be implemented to <code>initialize/clean</code> any resources used by the actor to process the messages.</p>
+<p><code>preRestart()</code> and <code>postRestart()</code> allow the actor to manage the state in case an exception has been raised and Supervisor actor restarts the actor.</p>
+<h3 id="Defining-an-actor"><a href="#Defining-an-actor" class="headerlink" title="Defining an actor"></a>Defining an actor</h3><p>All actors are created in the <code>context</code> of an actor system or another actor. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActorSystem _system = ActorSystem.create(&quot;MyActorSystem&quot;);</span><br><span class="line">ActorRef myActor = _system.actorOf(new Props(MyActor.class),&quot;myActor&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val system = ActorSystem(&quot;MyActorSystem&quot;)</span><br><span class="line">val myActor = system.actorOf(Props[MyActor], name = &quot;myActor&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="Stopping-actor"><a href="#Stopping-actor" class="headerlink" title="Stopping actor"></a>Stopping actor</h4><h4 id="Killing-actor"><a href="#Killing-actor" class="headerlink" title="Killing actor"></a>Killing actor</h4><p>An actor can be killed when a kill() message is sent to it. </p>
+<p><code>PoisonPill</code> is an asynchronous way to shut down the actor. <code>kill()</code>  is a synchronous way.</p>
+<h4 id="HotSwap"><a href="#HotSwap" class="headerlink" title="HotSwap"></a>HotSwap</h4><h3 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h3><p>This actor hierarchy forms the basis of the Akka’s <code>&quot;Let It Crash&quot;</code> fault-tolerance<br>model. </p>
+<p>Akka’s fault-tolerance model is built using the <code>actor hierarchy</code> and <code>supervisor model</code>. </p>
+<h3 id="Location-transparency"><a href="#Location-transparency" class="headerlink" title="Location transparency"></a>Location transparency</h3><p>Akka uses the same philosophy of the WWW to identify and locate resources on the Web.</p>
+<p>Akka uses the similar URL convention to locate the actors. The default values are <code>akka://hostname/</code> or <code>akka://hostname:2552/</code></p>
+<h3 id="Actor-System"><a href="#Actor-System" class="headerlink" title="Actor System"></a>Actor System</h3><hr>
+<p>Akka uses the Actor Model together with Software Transactional Memory to raise the abstraction level and provide a better platform to build correct concurrent and scalable applications.</p>
+<p>For fault-tolerance Akka adopts the “Let it crash”, also called “Embrace failure”, model which have been used with great success in the telecom industry to build applications that self-heals, systems that never stop.</p>
+<hr>
+<blockquote>
+<p>The <code>actor</code> model in computer science is a mathematical model of concurrent computation that treats “actors” as the universal primitives of concurrent computation</p>
+</blockquote>
+<p>Actors can be created:</p>
+<ul>
+<li>Extending the ‘Actor’ class and implementing the ‘receive’ method.</li>
+<li>Create an anonymous Actor using one of the ‘actor’ methods.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class MyActor extends Actor &#123;</span><br><span class="line">  def receive = &#123;</span><br><span class="line">    case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">    case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val myActor = new MyActor</span><br><span class="line">myActor.start</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val myActor = actor &#123; </span><br><span class="line">  case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">  case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Akka’s approach to fault-tolerance; the “let it crash” model, is implemented by linking Actors.</p>
+<h4 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h4><p>An actor can change another actor’s state only by sending it a message. Actors communicate with other actors using the <code>address</code> of the target actor’s mailbox. Communication between actors is completely asynchronous and non-blocking; actors only react to the messages being sent to them.</p>
+<h6 id="Typed-Actor"><a href="#Typed-Actor" class="headerlink" title="Typed Actor"></a>Typed Actor</h6><p>In Akka, <code>typed actors</code> have been implemented using the Active Object pattern. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The Active Object Design pattern decouples method execution from method invocation, which reside in their own threads of control. </span><br><span class="line"></span><br><span class="line">The goal is to introduce concurrency and fault tolerance, by using asynchronous method invocation and a scheduler for handling requests.</span><br><span class="line"></span><br><span class="line">The key objective of the Active Object pattern is to decouple the method execution</span><br><span class="line">from the method invocation.</span><br></pre></td></tr></table></figure>
+<p><code>Active Object pattern</code> decouples the method invocation from method execution :</p>
+<ol>
+<li>The client calls the proxy object and invokes the method</li>
+<li>The proxy in passes the method calls as method requests to a scheduler or invocation handler that intercepts the call</li>
+<li>Scheduler or invocation handler enqueues the method requests on a queue</li>
+<li>The scheduler continuously monitors the queue and determines which method request(s) have become runnable</li>
+<li>Scheduler or invocation handler dispatches the requests to the implementation object</li>
+<li>The implementation object, running on the same thread as the scheduler, processes the request and returns any value to the client as Future</li>
+</ol>
+<p><code>Proxy instance</code> has an associated invocation handler. </p>
+<p><code>Method invocation</code> is dispatched to the invoke method of the instance’s invocation handler. </p>
+<p>Actors are entities that change their state by processing the incoming messages and generating other messages in response.</p>
+<p>Use <code>typed actors</code> sparingly and avoid blocking behavior by writing methods that either return Unit or Future.</p>
+<p>Typed Actor Model is communication via method calls. The parameter values are the messages and these need to be <code>immutable</code>. </p>
+<p>Messages can be passed to an actor in two modes:</p>
+<ol>
+<li>Fire and forget (the caller of the method does not expect any reply)</li>
+<li>Send and receive (the caller of the method expects a reply from the implementation class and will wait for that reply)</li>
+</ol>
+<p><strong>Actor lifecycle monitoring</strong></p>
+<p><code>TypedActor.PreStart</code> and <code>TypedActor.PostStop</code> interfaces, we can add the required functionality before the actor starts responding to the method calls</p>
+<p><code>TypedActor.PreRestart</code> and <code>TypedActor.PostRestart</code> interfaces to add functionality on actor restart as part of the supervision</p>
+<p><strong>Receiving messages</strong></p>
+<p>Typed actors can implement the <code>akka.actor.TypedActor.Receiver</code> interface in<br>order to process messages coming to them.</p>
+<p><strong>Supervisor strategy</strong></p>
+<p>Akka’s “Let It Crash” model is implemented by linking actors in a hierarchy. </p>
+<p><strong>Using dispatchers</strong><br>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
+<p><strong>Using routers</strong></p>
+<p>A router is also a type of actor, which routes the incoming messages to the outbound actors. </p>
+<hr>
+<p>Dispatchers are the heart of the Akka application and this is what makes it<br>humming.</p>
+<p>Routers on the other hand, route incoming messages to outbound actors. </p>
+<h4 id="Dispatchers"><a href="#Dispatchers" class="headerlink" title="Dispatchers"></a>Dispatchers</h4><p>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
+<p>The dispatchers run on their threads &amp; dispatch the actors and messages from the attached mailbox and allocate on heap to the executor threads. </p>
+<p>The executor threads are configured and tuned to the underlying processor cores that available for processing the messages.</p>
+<p>In Akka, a router is also a type of actor, which <code>routes the incoming messages to the outbound actors</code>. </p>
+<p>Dispatchers are used to control the <code>flow of execution</code>. Based on the dispatching policy, dispatchers will <code>route the incoming message or request to the business process</code>. </p>
+<ul>
+<li>Centralized control</li>
+<li>Application partitioning</li>
+<li>Reduced inter-dependencies<br>less contention on the same resources,leading to a scalable model.</li>
+</ul>
+<p><code>Types of dispatchers</code></p>
+<p>There are 4 different types of message dispatchers</p>
+<ol>
+<li>Dispatcher</li>
+<li>PinnedDispatcher</li>
+<li>Balancing dispatcher</li>
+<li>Calling thread dispatcher</li>
+</ol>
+<p>And  there are four default mailbox implementations provided as follows:</p>
+<ol>
+<li>Unbounded mailbox</li>
+<li>Bounded mailbox</li>
+<li>Unbounded priority mailbox</li>
+<li>Bounded priority mailbox</li>
+</ol>
+<p>An event-based dispatcher that binds a set of actors to a thread pool backed up by a BlockingQueue method.</p>
+<ol>
+<li>Every actor is backed by its own mailbox</li>
+<li>The dispatcher can be shared with any number of actors</li>
+<li>The dispatcher can be backed by either thread pool or fork join pool</li>
+<li>The dispatcher is optimized for non-blocking code</li>
+</ol>
+<p><code>Pinned dispatcher</code> ( single, dedicated thread for each actor)</p>
+<p>This dispatcher is useful when the actors are doing I/O operations or performing long-running calculations. The dispatcher will deallocate the thread attached to the actor after a configurable period of inactivity.</p>
+<ol>
+<li>Every actor is backed by its own mailbox.</li>
+<li>A dedicated thread for each actor implies that this dispatcher cannot be shared with any other actors.</li>
+<li>The dispatcher is backed by the thread pool executor.</li>
+<li>The dispatcher is optimized for blocking operations. </li>
+</ol>
+<p><code>Balancing dispatcher</code> ( event-based dispatcher that tries to redistribute work from busy actors and allocate it to idle ones)</p>
+<p>Redistribution of tasks can only work if all actors are of the same type </p>
+<p>The dispatcher looks for actors that are idle and dispatches the message to them for processing.</p>
+<ol>
+<li>There is only one mailbox for all actors</li>
+<li>The dispatcher can be shared only with actors of the same type</li>
+<li>The dispatcher can be backed by a either thread pool or fork join pool</li>
+</ol>
+<p><code>Calling thread dispatcher</code> ( runs the task execution on the current thread only)</p>
+<p><strong>Types of mailboxes</strong></p>
+<ol>
+<li>Blocking queue means a queue that waits for space to become available before putting in an element and similarly waits for the queue to become non-empty before retrieving an element</li>
+<li>Bounded queue means a queue that limits the size of the queue; meaning you cannot add more elements than the specified size</li>
+</ol>
+<p><strong>Types of Executor</strong></p>
+<ol>
+<li>Thread pool executor ( Tasks are assigned to the pool using a queue. )</li>
+<li>Fork join executor ( Based on the premise of divide-and-conquer)</li>
+</ol>
+<p><code>Fork join executor</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> # Configuration for the fork join pool</span><br><span class="line"> fork-join-executor &#123;</span><br><span class="line"> </span><br><span class="line">    # Min number of threads</span><br><span class="line">    parallelism-min = 2</span><br><span class="line">    </span><br><span class="line">    # available processors * factor</span><br><span class="line">    parallelism-factor = 2.0</span><br><span class="line">    </span><br><span class="line">    # Max number of threads</span><br><span class="line">    parallelism-max = 10</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = Dispatcher</span><br><span class="line">    executor = &quot;fork-join-executor&quot;</span><br><span class="line">    </span><br><span class="line">    fork-join-executor &#123;</span><br><span class="line">       parallelism-min = 2</span><br><span class="line">       parallelism-factor = 2.0</span><br><span class="line">       parallelism-max = 10</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type = &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = PinnedDispatcher</span><br><span class="line"></span><br><span class="line">        executor = &quot;thread-pool-executor&quot;</span><br><span class="line">        thread-pool-executor &#123;</span><br><span class="line">        core-pool-size-min = 2</span><br><span class="line">        core-pool-size-factor = 2.0</span><br><span class="line">        core-pool-size-max = 10</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type =&quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Routers"><a href="#Routers" class="headerlink" title="Routers"></a>Routers</h3><p>An entity that directs the message from the source to the destination actor. </p>
+<p>Routers route incoming messages to outbound actors.</p>
+<p>Router is also a type of actor, which routes the incoming messages to the outbound actors.</p>
+<p>For the router, the outbound actors are also called routees. </p>
+<p>Akka router supports the following :</p>
+<ol>
+<li>Round robin router ( routes the incoming messages in a circular order to all its routees)</li>
+<li>Random router ( randomly selects a routee and routes the message to the same)</li>
+<li>Smallest mailbox router ( identifies the actor with the least number of messages in its mailbox and routes the message to the same)</li>
+<li>Broadcast router ( forwards the same message to all the routees)</li>
+<li>Scatter gather first completed router ( forwards the message to all its routees as a future, then whichever routee actor responds back, it takes the results and sends them back to the caller)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyRouterExample&#123;</span><br><span class="line">    akka.actor.deployment &#123;</span><br><span class="line">        /myRandomRouterActor &#123;</span><br><span class="line">            router = random</span><br><span class="line">            nr-of-instances = 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Dynamically resizing routers</strong></p>
+<p>To handle the variability of the incoming message traffic, it might be important to increase the number of actors available to handle the load at runtime. </p>
+<p>For this, routers provide a construct called resize, which allows us to define the range bound in terms of minimum and maximum instances.</p>
+<hr>
+<h4 id="Supervision-and-Monitoring"><a href="#Supervision-and-Monitoring" class="headerlink" title="Supervision and Monitoring"></a>Supervision and Monitoring</h4><p><code>When an actor crashes or throws an exception, who is responsible to catch
+the exception?</code></p>
+<h4 id="Actor-hierarchy"><a href="#Actor-hierarchy" class="headerlink" title="Actor hierarchy"></a>Actor hierarchy</h4><p>The design idea of the Actor Model is to break down the large task into smaller tasks to the point where the task is granular and structured enough to be performed by one specialized actor.</p>
+<h4 id="Supervision"><a href="#Supervision" class="headerlink" title="Supervision"></a>Supervision</h4><h4 id="Supervision-strategies"><a href="#Supervision-strategies" class="headerlink" title="Supervision strategies"></a>Supervision strategies</h4><p>Akka provides two supervision strategies:</p>
+<ul>
+<li><code>One-For-One strategy</code> the supervision strategy is applied only to the failed child. (default)</li>
+<li><code>All-For-One strategy</code> the supervision strategy is applied to all the actor siblings.</li>
+</ul>
+<h4 id="Software-Transactional-Memory"><a href="#Software-Transactional-Memory" class="headerlink" title="Software Transactional Memory"></a>Software Transactional Memory</h4><p>Transactions provide a mechanism to manage the application access to data in a multiuser environment</p>
+<p><img src="resource/akka/supervision_strategies.jpg" alt="supervision_strategies"></p>
+<hr>
+<h4 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h4><p>Akka Cluster provides a fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.</p>
+<p>A cluster is made up of a set of member nodes. The identifier for each node is a <code>hostname:port:uid</code> tuple.</p>
+<p><strong>Gossip</strong></p>
+<p><strong>Vector Clocks</strong></p>
+<p><strong>Gossip Convergence</strong></p>
+<p><strong>Failure Detector</strong></p>
+<p><strong>Leader</strong></p>
+<p><strong>Seed Nodes</strong></p>
+<p><strong>Gossip Protocol</strong></p>
+<p><strong>Membership Lifecycle</strong></p>
+<p><img src="resource/akka/member-states-weakly-up.png" alt="member-states-weakly-up"></p>
+<p><img src="resource/akka/member-states.png" alt="member-states"></p>
+<p><strong>Member States</strong></p>
+<table>
+<thead>
+<tr>
+<th>Terms</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>joining</td>
+<td>transient state when joining a cluster</td>
+</tr>
+<tr>
+<td>weakly up</td>
+<td>transient state while network split</td>
+</tr>
+<tr>
+<td>up</td>
+<td>normal operating state</td>
+</tr>
+<tr>
+<td>leaving / exiting</td>
+<td>states during graceful removal</td>
+</tr>
+<tr>
+<td>down</td>
+<td>marked as down</td>
+</tr>
+<tr>
+<td>removed</td>
+<td>tombstone state </td>
+</tr>
+</tbody>
+</table>
+<p><strong>User Actions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Terms</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>join</td>
+<td>join a single node to a cluster</td>
+</tr>
+<tr>
+<td>leave</td>
+<td>tell a node to leave the cluster gracefully</td>
+</tr>
+<tr>
+<td>down</td>
+<td>mark a node as down</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><p><strong>Core concepts</strong></p>
+<table>
+<thead>
+<tr>
+<th>Terms</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stream</td>
+<td></td>
+</tr>
+<tr>
+<td>Element</td>
+<td></td>
+</tr>
+<tr>
+<td>Back-pressure</td>
+<td></td>
+</tr>
+<tr>
+<td>Non-Blocking</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph</td>
+<td></td>
+</tr>
+<tr>
+<td>Processing Stage</td>
+<td></td>
+</tr>
+<tr>
+<td>Source</td>
+<td></td>
+</tr>
+<tr>
+<td>Sink</td>
+<td></td>
+</tr>
+<tr>
+<td>Flow</td>
+<td></td>
+</tr>
+<tr>
+<td>RunnableGraph</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<ol>
+<li><code>node</code> : A logical member of a cluster. There could be multiple nodes on a physical machine. Defined by a hostname:port:uid tuple.</li>
+<li><code>cluster</code> : A set of nodes joined together through the membership service.</li>
+<li><code>leader</code> : A single node in the cluster that acts as the leader. Managing cluster convergence and membership state transitions.</li>
+</ol>
+<hr>
+<h3 id="Managing-application-configuration"><a href="#Managing-application-configuration" class="headerlink" title="Managing application configuration"></a>Managing application configuration</h3><p>Akka provides a powerful mechanism called extensions. </p>
+<p>Extensions are loaded in a static way with only one instance per ActorSystem. </p>
+<p>Extensions are implemented as a factory pattern. </p>
+<p>Akka extensions are comprised of two parts, given as follows:</p>
+<ol>
+<li>Extension ( Extension is the interface that needs to be implemented by the class and registered with ActorSystem, and ActorSystem will register the class and make the result available.)</li>
+<li>ExtensionId (It is the unique ID of the extension that is used to identify the<br>extension within ActorSystem.)</li>
+</ol>
+<p><strong>Trace</strong></p>
+<p>Tracing is disabled by default, so we need to enable it for the specific actor systems that need to be monitored</p>
+<p>Define the node property for each node in the system, as this is used to identify and tag the multiple actor systems that are running</p>
+<p>Define the MongoDB name and URL, specifying the location of MongoDB</p>
+<p><strong>Analyze</strong></p>
+<p>A span is the path between two trace events, and the duration between these events is the data that captures the essence of the availability and scalability of the application.</p>
+<p><strong>Query</strong></p>
+<p><strong>JMX</strong></p>
+<p><strong>Durable mailboxes</strong></p>
+<p><strong>Actors and web applications</strong></p>
+<p><strong>Integrating actors with ZeroMQ</strong></p>
+<hr>
+<p><strong>Persistence</strong></p>
+<p>Akka persistence is that only changes to an actor’s internal state are persisted but never its current state directly.</p>
+<ol>
+<li><p>PersistentActor <code>When a persistent actor is started or restarted, journaled messages are replayed to that actor so that it can recover internal state from these messages.</code></p>
+</li>
+<li><p>PersistentView <code>A view itself does not journal new messages, it updates internal state only from a persistent actor&#39;s replicated message stream.</code></p>
+</li>
+<li><p>AtLeastOnceDelivery <code>in case of sender and receiver JVM crashes</code></p>
+</li>
+<li><p>AsyncWriteJournal <code>A journal stores the sequence of messages sent to a persistent actor.Journal maintains highestSequenceNr that is increased on each message.The persistence extension comes with a &quot;leveldb&quot; journal plugin, which writes to the local filesystem.</code></p>
+</li>
+<li><p>Snapshot store <code>Snapshots are used for optimizing recovery times.The persistence extension comes with a &quot;local&quot; snapshot storage plugin, which writes to the local filesystem.</code></p>
+</li>
+</ol>
+<p><strong>Event sourcing</strong></p>
+<p>Akka persistence supports event sourcing with the <code>PersistentActor</code> trait.</p>
+<p>An actor that extends this trait uses the <code>persist</code> method to persist and handle events.</p>
+<p><strong>Identifiers</strong></p>
+<p>A persistent actor must have an identifier that doesn’t change across different actor incarnations. </p>
+<p>The identifier must be defined with the persistenceId method.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">override def persistenceId = &quot;my-persistence-id&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>Recovery</strong></p>
+<p><strong>Atomic writes</strong></p>
+<p><strong>Batch writes</strong></p>
+<p><strong>Message deletion</strong></p>
+<p><strong>Persistence status handling</strong></p>
+<p><strong>Safely shutting down persistent actors</strong></p>
+<p><strong><em>Persistent Views</em></strong></p>
+<p><strong>At-Least-Once Delivery</strong></p>
+<p><strong>Relationship between deliver and confirmDelivery</strong></p>
+<p><strong>Event Adapters</strong></p>
+<p><strong>Persistent FSM</strong></p>
+<p><strong>Storage plugins</strong></p>
+<p><strong>Multiple persistence plugin configurations</strong></p>
+<hr>
+<h3 id="Actor-DSL"><a href="#Actor-DSL" class="headerlink" title="Actor DSL"></a>Actor DSL</h3><p>Actor can be created more concisely using the Act trait.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import akka.actor.ActorDSL._</span><br><span class="line">import akka.actor.ActorSystem</span><br><span class="line"></span><br><span class="line">implicit val system = ActorSystem(&quot;demo&quot;)</span><br></pre></td></tr></table></figure>
+<p>To define a simple actor: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a = actor(new Act &#123;</span><br><span class="line">  become &#123;</span><br><span class="line">    case &quot;hello&quot; ⇒ sender() ! &quot;hi&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><strong>Life-cycle management</strong></p>
+<p>Life-cycle hooks are also exposed as DSL elements</p>
+<p><strong>Finite State Machine</strong></p>
+<p>Finite State Machine can be described as a set of relations:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">State(S) x Event(E) -&gt; Actions (A), State(S&apos;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference :"></a>Reference :</h4><ol>
+<li><a href="https://dzone.com/articles/introducing-akka-%E2%80%93-simpler" target="_blank" rel="external">Introducing Akka – Simpler Scalability, Fault-Tolerance, Concurrency &amp; Remoting Through Actors</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Actor_model" target="_blank" rel="external">Actor model</a></li>
+<li>Akka Essentials</li>
+<li><a href="http://doc.akka.io/docs/akka/2.4.1/java.html" target="_blank" rel="external">Java Documentation</a></li>
+<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/reflection/proxy.html" target="_blank" rel="external">Implementation of Dynamic Proxy classes in JDK</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.1.2/project/migration-guide-2.0.x-2.1.x.html" target="_blank" rel="external">Migration Guide 2.0.x to 2.1.x</a></li>
+<li><a href="https://www.typesafe.com/blog/typesafe-announces-akka-streams" target="_blank" rel="external">Typesafe announces Akka Streams, a part of the Reactive Streams Initiative</a></li>
+<li><a href="https://github.com/functional-streams-for-scala/fs2" target="_blank" rel="external">Compositional, streaming I/O library for Scala</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/persistence.html" target="_blank" rel="external">persistence</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/actordsl.html" target="_blank" rel="external">Actor DSL</a></li>
+<li><a href="http://www.infoq.com/cn/presentations/akka-cluster-realization/" target="_blank" rel="external">Akka下分片集群的实现</a></li>
+<li><a href="http://erlang.org/documentation/doc-4.8.2/doc/design_principles/fsm.html" target="_blank" rel="external">Erlang design principles</a></li>
+<li><a href="http://letitcrash.com/post/30165507578/shutdown-patterns-in-akka-2" target="_blank" rel="external">Shutdown Patterns in Akka 2</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comentarios</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/04/23/distribution/akka/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categorías</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/dis/">dis</a><small>1</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Etiquetas</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
