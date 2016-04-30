@@ -104,7 +104,37 @@ JMM由一些">
 <p><code>TreeMap</code>保存了对象的排列次序，而HashMap则不能。</p>
 <p><code>HashMap</code>允许键和值为null。HashMap是非synchronized的。</p>
 <hr>
-<p>####Concurrent</p>
+<p>####Java Memory Module</p>
+<p>在并发编程中需要处理两个关键问题：</p>
+<ol>
+<li>线程之间如何通信</li>
+<li>线程之间如何同步</li>
+</ol>
+<p>在命令式编程中，线程之间的通信机制有两种：<code>共享内存和消息传递</code>。</p>
+<p><code>共享内存</code>并发模型线程之间共享程序的公共状态，线程之间通过写-读内存中的公共状态来隐式进行通信。</p>
+<p><code>消息传递</code>并发模型线程之间没有公共状态，线程之间必须通过明确的发送消息来显式进行通信。</p>
+<p><code>同步</code>是指程序用于控制不同线程之间操作发生相对顺序的机制。在共享内存并发模型里，同步是显式进行的。程序员必须显式指定某个方法或某段代码需要在线程之间互斥执行。在消息传递的并发模型里，由于消息的发送必须在消息的接收之前，因此同步是隐式进行的。Java的并发采用的是<code>共享内存模型</code>，Java线程之间的通信总是隐式进行，整个通信过程对程序员完全透明。</p>
+<p>Java线程之间的通信由<code>Java内存模型</code>控制，<code>JMM决定一个线程对共享变量的写入何时对另一个线程可见</code>。</p>
+<p>从抽象的角度来看，JMM定义了线程和主内存之间的抽象关系：<code>线程之间的共享变量存储在主内存中，每个线程都有一个私有的本地内存，本地内存中存储了该线程以读/写共享变量的副本。</code></p>
+<p>本地内存是JMM的一个抽象概念，并不真实存在。它涵盖了缓存，写缓冲区，寄存器以及其他的硬件和编译器优化。</p>
+<p><img src="resource/java/main_local_memory.png" alt="main_local_memory"></p>
+<p>初始时三个内存x都为0。线程A更新后x值存放在本地内存A中。线程A和线程B需要通信时，线程A首先把自己本地内存中x值刷新到主内存中，主内存中x值变为1。随后，线程B到主内存中去读取线程A更新后x值，此时线程B本地内存x值也变为1。</p>
+<p><img src="resource/java/memory_exchange.png" alt="main_local_memory"></p>
+<p><strong>重排序</strong></p>
+<p>为了提高性能，编译器和处理器常常会对指令做重排序。重排序分三种类型:</p>
+<ol>
+<li><code>编译器优化的重排序。</code>编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。</li>
+<li><code>指令级并行的重排序。</code>现代处理器采用了指令级并行技术来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。</li>
+<li><code>内存系统的重排序。</code>由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。</li>
+</ol>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.infoq.com/cn/articles/java-memory-model-1" target="_blank" rel="external">深入理解Java内存模型（一）——基础</a></li>
+<li><a href="http://www.infoq.com/cn/articles/java-memory-model-2" target="_blank" rel="external">深入理解Java内存模型（二）——重排序</a></li>
+<li><a href="http://www.infoq.com/cn/articles/java-memory-model-3" target="_blank" rel="external">深入理解Java内存模型（三）——顺序一致性</a></li>
+<li><a href="http://www.infoq.com/cn/articles/java-memory-model-4" target="_blank" rel="external">深入理解Java内存模型（四）——volatile</a></li>
+</ol>
 
       
     </div>
@@ -138,7 +168,7 @@ JMM由一些">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Comentarios</h1>
 
   
       <div id="fb-root"></div>
@@ -161,14 +191,14 @@ JMM由一些">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
     <li><a href="/categories/dis/">dis</a><small>1</small></li>
@@ -181,7 +211,7 @@ JMM由一些">
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
