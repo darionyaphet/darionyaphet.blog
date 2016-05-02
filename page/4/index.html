@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 4 | darion.johannes.yaphet</title>
+  <title>Page 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,17 +50,21 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/sort/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/list/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/sort/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/list/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&amp;mid=2652549143&amp;idx=1&amp;sn=c32136d795aa30b55e412ed7c579c13f&amp;scene=23&amp;srcid=0426T0W75iKpSewMxeA6iL8b#rd" target="_blank" rel="external">三种链表及其哨兵</a></li>
+</ol>
+
       
     </div>
     <footer>
@@ -259,6 +263,96 @@
 <p><code>希腊：Frappe咖啡</code> 冰饮咖啡，用速溶咖啡、糖、加水威士忌制成。</p>
 <p><code>澳大利亚：Kaisermelange咖啡</code> 皇帝特饮（Emperor’s Blend） 咖啡里加入蛋黄、糖和干邑白兰地</p>
 <hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Flume</p>
+<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
+<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
+<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
+<p>#####Channel</p>
+<p>#####Sink</p>
+<p>#####Exceptions Collection</p>
+<ol>
+<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Gearpump</p>
+<p>#####Basic Concepts</p>
+<ol>
+<li><p>System timestamp and Application timestamp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
+<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
+<p>Gearpump natively supports Streaming Application types</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
+<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
+<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
+<p>#####Command Line Interface</p>
 
       
     </div>
@@ -569,96 +663,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Flume</p>
-<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
-<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
-<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
-<p>#####Channel</p>
-<p>#####Sink</p>
-<p>#####Exceptions Collection</p>
-<ol>
-<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/yarn/">2016-01-21</a></time>
       
       
@@ -813,24 +817,24 @@
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Anterior</a>
+    <a href="/page/3/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/5/" class="alignright next">Siguiente</a>
+    <a href="/page/5/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/dis/">dis</a><small>1</small></li>
@@ -843,7 +847,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
