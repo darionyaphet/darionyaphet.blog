@@ -265,11 +265,15 @@ the exception?</code></p>
 <h4 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h4><p>Akka Cluster provides a fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.</p>
 <p>A cluster is made up of a set of member nodes. The identifier for each node is a <code>hostname:port:uid</code> tuple.</p>
 <p><strong>Gossip</strong></p>
+<p>In <code>push-pull gossip</code> a digest is sent representing current versions but not actual values; the recipient of the gossip can then send back any values for which it has newer versions and also request values for which it has outdated versions. Akka uses a single shared state with a vector clock for versioning, so the variant of push-pull gossip used in Akka makes use of this version to only push the actual state as needed.</p>
+<p>Each node chooses another random node to initiate a round of gossip with.</p>
+<p>The gossip messages are serialized with <code>protobuf</code> and also <code>gzipped</code> to reduce payload size.</p>
 <p><strong>Vector Clocks</strong></p>
 <p><strong>Gossip Convergence</strong></p>
 <p><strong>Failure Detector</strong></p>
 <p><strong>Leader</strong></p>
 <p><strong>Seed Nodes</strong></p>
+<p>When a new node is started it sends a message to all seed nodes and then sends a join command to the seed node that answers first.</p>
 <p><strong>Gossip Protocol</strong></p>
 <p><strong>Membership Lifecycle</strong></p>
 <p><img src="resource/akka/member-states-weakly-up.png" alt="member-states-weakly-up"></p>
@@ -332,6 +336,11 @@ the exception?</code></p>
 </tr>
 </tbody>
 </table>
+<p><strong>Distributed Publish Subscribe in Cluster</strong></p>
+<p><strong>Cluster Client</strong></p>
+<p>Communication from an actor system that is not part of the cluster to actors running somewhere in the cluster. </p>
+<p>The client does not have to know on which node the destination actor is running.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote.port=9999 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><p><strong>Core concepts</strong></p>
 <table>
@@ -470,6 +479,7 @@ the exception?</code></p>
 <li><a href="http://www.infoq.com/cn/presentations/akka-cluster-realization/" target="_blank" rel="external">Akka下分片集群的实现</a></li>
 <li><a href="http://erlang.org/documentation/doc-4.8.2/doc/design_principles/fsm.html" target="_blank" rel="external">Erlang design principles</a></li>
 <li><a href="http://letitcrash.com/post/30165507578/shutdown-patterns-in-akka-2" target="_blank" rel="external">Shutdown Patterns in Akka 2</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.4.4/scala.html" target="_blank" rel="external">Akka Scala Documentation</a></li>
 </ol>
 
       
