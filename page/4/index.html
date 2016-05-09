@@ -50,11 +50,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/string/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/search/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/string/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/search/"></a></h1>
   
 
     </header>
@@ -82,29 +82,62 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/binary-tree/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/paxos/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/binary-tree/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/paxos/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Binary Tree</p>
-<p>####Traverse<br>遍历操作分为递归与非递归两种，递归操作一般需要借助辅助数据结构。</p>
+        <p>###Paxos </p>
+<p>角色分为proposers，acceptors，和learners（允许身兼数职）。</p>
+<p><code>proposers</code>提出提案，提案信息包括提案编号和提议的value；<code>acceptor</code>收到提案后可以接受（accept）提案，若提案获得多数acceptors的接受，则称该提案被批准（chosen）；<code>learners</code>只能“学习”被批准的提案。划分角色后，就可以更精确的定义问题：</p>
 <ol>
-<li><p>Pre-Order</p>
+<li>决议（value）只有在被proposers提出后才能被批准（未经批准的决议称为“提案（proposal）”）</li>
+<li>在一次Paxos算法的执行实例中，只批准（chosen）一个value</li>
+<li>learners只能获得被批准（chosen）的value</li>
+</ol>
+<p>批准value的过程中，首先proposers将value发送给acceptors，之后acceptors对value进行接受（accept）。</p>
+<p>为了满足只批准一个value的约束，要求经“多数派（majority）”接受的value成为正式的决议（称为“批准”决议）。这是因为无论是按照人数还是按照权重划分，两组“多数派”至少有一个公共的acceptor，如果每个acceptor只能接受一个value，约束2就能保证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1：一个acceptor必须接受（accept）第一次收到的提案。</span><br></pre></td></tr></table></figure>
+<p>如果恰好一半acceptor接受的提案具有value A，另一半接受的提案具有value B，那么就无法形成多数派，无法批准任何一个value。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2a：一旦一个具有value v的提案被批准（chosen），那么之后任何acceptor再次接受（accept）的提案必须具有value v。</span><br></pre></td></tr></table></figure>
+<p>由于通信是异步的，P2a和P1会发生冲突。如果一个value被批准后，一个proposer和一个acceptor从休眠中苏醒，前者提出一个具有新的value的提案。根据P1，后者应当接受，根据P2a，则不应当接受，这中场景下P2a和P1有矛盾。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2b：一旦一个具有value v的提案被批准（chosen），那么以后任何proposer提出的提案必须具有value v。</span><br></pre></td></tr></table></figure>
+<p>由于acceptor能接受的提案都必须由proposer提出，所以P2b蕴涵了P2a，是一个更强的约束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2c：如果一个编号为n的提案具有value v，那么存在一个多数派，要么他们中所有人都没有接受（accept）编号小于n </span><br><span class="line">的任何提案，要么他们已经接受（accept）的所有编号小于n的提案中编号最大的那个提案具有value v。</span><br></pre></td></tr></table></figure>
+<p><strong><code>数学归纳法</code>证明P2c蕴涵P2b：</strong></p>
+<p>假设具有value v的提案m获得批准，当n=m+1时，采用反证法，假如提案n不具有value v，而是具有value w，根据P2c，则存在一个多数派S1，要么他们中没有人接受过编号小于n的任何提案，要么他们已经接受的所有编号小于n的提案中编号最大的那个提案是value w。由于S1和通过提案m时的多数派C之间至少有一个公共的acceptor，所以以上两个条件都不成立，导出矛盾从而推翻假设，证明了提案n必须具有value v；</p>
+<p>若（m+1）..（N-1）所有提案都具有value v，采用反证法，假如新提案N不具有value v，而是具有value w’,根据P2c，则存在一个多数派S2，要么他们没有接受过m..（N-1）中的任何提案，要么他们已经接受的所有编号小于N的提案中编号最大的那个提案是value w’。由于S2和通过m的多数派C之间至少有一个公共的acceptor，所以至少有一个acceptor曾经接受了m，从而也可以推出S2中已接受的所有编号小于n的提案中编号最大的那个提案的编号范围在m..（N-1）之间，而根据初始假设，m..（N-1）之间的所有提案都具有value v，所以S2中已接受的所有编号小于n的提案中编号最大的那个提案肯定具有value v，导出矛盾从而推翻新提案n不具有value v的假设。根据数学归纳法，我们证明了若满足P2c，则P2b一定满足。</p>
+<p>P2c是可以通过消息传递模型实现的。另外，引入了P2c后，也解决了前文提到的P1不完备的问题。</p>
+<p>如果一个没有chosen过任何proposer提案的acceptor在prepare过程中回答了一个proposer针对提案n的问题，但是在开始对n进行投票前，又接受（accept）了编号小于n的另一个提案（例如n-1），如果n-1和n具有不同的value，这个投票就会违背P2c。因此在prepare过程中，acceptor进行的回答同时也应包含承诺：不会再接受（accept）编号小于n的提案。这是对P1的加强：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1a：当且仅当acceptor没有回应过编号大于n的prepare请求时，acceptor接受（accept）编号为n的提案。</span><br></pre></td></tr></table></figure>
+<p><strong>通过一个决议分为两个阶段：</strong></p>
+<ol>
+<li><p>prepare阶段:</p>
+<ul>
+<li>proposer选择一个提案编号n并将prepare请求发送给acceptors中的一个多数派</li>
+<li>acceptor收到prepare消息后，如果提案的编号大于它已经回复的所有prepare消息，则acceptor将自己上次接受的提案回复给proposer，并承诺不再回复小于n的提案；</li>
+</ul>
 </li>
-<li><p>In-Order</p>
+<li><p>批准阶段：</p>
+<ul>
+<li><p>当一个proposer收到了多数acceptors对prepare的回复后，就进入批准阶段。</p>
+<p>它要向回复prepare请求的acceptors发送accept请求，包括编号n和根据P2c决定的value（如果根据P2c没有已经接受的value，那么它可以自由决定value）。</p>
 </li>
-<li><p>Post-Order</p>
+<li><p>在不违背自己向其他proposer的承诺的前提下，acceptor收到accept请求后即接受这个请求。</p>
 </li>
-<li><p>Level</p>
+</ul>
 </li>
 </ol>
-<p>####求二叉树第K层的节点个数</p>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95#.E5.AE.9E.E4.BE.8B" target="_blank" rel="external">Wiki Paxos算法</a></li>
+</ol>
 
       
     </div>
@@ -127,18 +160,27 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/dynamic-programming/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/red-black-tree/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/dynamic-programming/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/red-black-tree/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Dynamic Programming</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">把多阶段过程转化为一系列单阶段问题，利用各阶段之间的关系，逐个求解</span><br><span class="line">创立了解决这类过程优化问题的新方法——动态规划</span><br></pre></td></tr></table></figure>
+        <p>###Red Black Tree</p>
+<p>Red Black Tree由Rudolf Bayer发明的，当时被称为平衡二叉B树。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。</p>
+<p>红黑树每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了额外要求:</p>
+<ol>
+<li>节点是红色或黑色</li>
+<li>根节点是黑色</li>
+<li>每个叶节点是黑色的</li>
+<li>每个红色节点的两个子节点都是黑色</li>
+<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
+</ol>
+
       
     </div>
     <footer>
@@ -202,6 +244,38 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/game/">2016-04-19</a></time>
       
       
@@ -227,38 +301,6 @@
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzI2NjA3NTc4Ng==&amp;mid=2652077912&amp;idx=1&amp;sn=43d9cf785a9470c278c5d011fce9733b&amp;scene=23&amp;srcid=0429cBdkTUxrcr21zeU7L9i7#rd" target="_blank" rel="external">16个让你烧脑让你晕的悖论</a></li>
 </ol>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
       
     </div>
     <footer>
@@ -353,6 +395,163 @@
 <p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
 <p>   Task is the minimum unit of parallelism.<br>   ``` </p>
 <p>#####Command Line Interface</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/yarn/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/yarn/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Yarn</p>
+<p>###Architecture Overview</p>
+<p><code>Yarn</code> (Yet Another Resource Negotiator) 是一种通用资源管理系统，可为上层应用提供统一资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大提升。</p>
+<p>The fundamental idea of Yarn is to split up the two major functionalities of the <code>JobTracker</code>, resource management and job scheduling/monitoring into separate daemons. </p>
+<p>The idea is to have a global ResourceManager and per-application ApplicationMaster. </p>
+<p>The <code>ResourceManager</code> and per-node slave, the <code>NodeManager</code>, form the data-computation framework. </p>
+<p>The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system.</p>
+<p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p>
+<p>The ResourceManager has two main components: Scheduler and ApplicationsManager.</p>
+<p>The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The Scheduler is pure scheduler in the sense that it performs no monitoring or tracking of status for the application. Also, it offers no guarantees about restarting failed tasks either due to application failure or hardware failures. The Scheduler performs its scheduling function based the resource requirements of the applications; it does so based on the abstract notion of a resource Container which incorporates elements such as memory, cpu, disk, network etc. In the first version, only memory is supported.</p>
+<p>The Scheduler has a pluggable policy plug-in, which is responsible for partitioning the cluster resources among the various queues, applications etc. The current Map-Reduce schedulers such as the CapacityScheduler and the FairScheduler would be some examples of the plug-in.</p>
+<p>The CapacityScheduler supports hierarchical queues to allow for more predictable sharing of cluster resources</p>
+<p>The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.</p>
+<p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
+<p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
+<p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
+<p>###ResourceManager<br>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
+<p>###NodeManager</p>
+<p>###ApplicationsManager</p>
+<p>###Commands</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
+<p><code>yarn application [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-appStates <states></states></td>
+<td style="text-align:left">filter applications based on input comma-separated list of application states.</td>
+</tr>
+<tr>
+<td style="text-align:left">-appTypes <types></types></td>
+<td style="text-align:left">filter applications based on input comma-separated list of application types.</td>
+</tr>
+<tr>
+<td style="text-align:left">-list</td>
+<td style="text-align:left">Lists applications from the RM. </td>
+</tr>
+<tr>
+<td style="text-align:left">-kill <applicationid></applicationid></td>
+<td style="text-align:left">Kills the application.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <applicationid></applicationid></td>
+<td style="text-align:left">Prints the status of the application.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn applicationattempt [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-list <applicationid></applicationid></td>
+<td style="text-align:left">Lists applications attempts for the given application.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <application attempt="" id=""></application></td>
+<td style="text-align:left">Prints the status of the application attempt.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn classpath</code></p>
+<p>Prints the class path needed to get the Hadoop jar and the required libraries</p>
+<p><code>yarn container [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-list <application attempt="" id=""></application></td>
+<td style="text-align:left">Lists containers for the application attempt.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <containerid></containerid></td>
+<td style="text-align:left">Prints the status of the container.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn jar &lt;jar&gt; [mainClass] args...</code></p>
+<p>Runs a jar file. </p>
+<p><code>yarn logs -applicationId &lt;application ID&gt; [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-applicationId <application id=""></application></td>
+<td style="text-align:left">Specifies an application id</td>
+</tr>
+<tr>
+<td style="text-align:left">appOwner <appowner></appowner></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">-containerId <containerid></containerid></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">-nodeAddress <nodeaddress></nodeaddress></td>
+<td style="text-align:left">nodename:port</td>
+</tr>
+</tbody>
+</table>
+<p>####ResourceManager</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">####NodeManager</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">####Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
+<p>```</p>
 
       
     </div>
@@ -640,48 +839,6 @@
 <p>Reference :</p>
 <ol>
 <li><a href="https://flink.apache.org/news/2015/02/09/streaming-example.html" target="_blank" rel="external">Introducing Flink Streaming</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Flume</p>
-<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
-<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
-<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
-<p>#####Channel</p>
-<p>#####Sink</p>
-<p>#####Exceptions Collection</p>
-<ol>
-<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
 </ol>
 
       
