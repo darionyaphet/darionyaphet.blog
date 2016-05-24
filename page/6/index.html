@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 6 | darion.johannes.yaphet</title>
+  <title>Strona 6 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -87,7 +87,15 @@
 </ol>
 <p><strong>Shuffle的本质是什么 ? </strong></p>
 <hr>
-<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p>Spark SQL is a Spark module for structured data processing. </p>
+<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p><code>Spark SQL</code>核心是把已有RDD，带上Schema信息，注册成类似SQL里的<code>Table</code>，对其进行SQL查询。这里面主要分两部分，一是生成SchemaRD，二是执行查询。</p>
+<p>传统数据库先将读入的SQL语句进行解析，分辨出SQL语句中哪些词是关键字，哪些是表达式，哪些是Projection，哪些是Data Source等等。</p>
+<p>进一步判断SQL语句是否规范，不规范就报错，规范则按照下一步过程绑定。</p>
+<p>过程绑定是将SQL语句和数据库的数据字典(列，表，视图等）进行绑定，如果相关的Projection、Data Source等都存在，就表示这个SQL语句是可以执行的。</p>
+<p>在执行过程中，有时候甚至不需要读取物理表就可以返回结果，比如重新运行刚运行过的SQL语句，直接从数据库的缓冲池中获取返回结果。</p>
+<p>在数据库解析的过程中SQL语句时，将会把SQL语句转化成一个树形结构来进行处理，会形成一个或含有多个节点的Tree，然后再后续的处理政对该Tree进行一系列的操作。</p>
+<p>Spark SQL对SQL语句的处理和关系数据库对SQL语句的解析采用了类似的方法，首先会将SQL语句进行解析，然后形成一个Tree，后续如绑定、优化等处理过程都是对Tree的操作，而操作方法是采用Rule，通过模式匹配，对不同类型的节点采用不同的操作。SparkSQL有两个分支，SQLContext和HiveContext。</p>
+<p>SQLContext现在只支持SQL语法解析器（Catalyst)，HiveContext支持SQL语法和HiveContext语法解析器。</p>
+<p>Spark SQL is a Spark module for structured data processing. </p>
 <p>It provides a programming abstraction called DataFrames and can also act as distributed SQL query engine.</p>
 <ol>
 <li>DataFrame: a distributed collection of data organized into named columns.</li>
@@ -118,6 +126,27 @@
 <p><strong>In client mode</strong>, the driver runs in the client process, and the application master is only used for requesting resources from YARN.</p>
 <p>In YARN mode the ResourceManager’s address is picked up from the Hadoop configuration. Thus, the <code>--master</code> parameter is yarn.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/spark-submit --class path.to.your.Class --master yarn --deploy-mode cluster [options] &lt;app jar&gt; [app options]</span><br></pre></td></tr></table></figure>
+<p><code>客户端进行操作</code></p>
+<ol>
+<li>根据yarnConf来初始化yarnClient，并启动yarnClient</li>
+<li>创建客户端Application，并获取Application的ID，进一步判断集群中的资源是否满足executor和ApplicationMaster申请的资源，如果不满足则抛出IllegalArgumentException</li>
+<li>设置资源、环境变量：其中包括了设置Application的Staging目录、准备本地资源、设置Application其中的环境变量、创建Container启动的Context等</li>
+<li>设置Application提交的Context，包括设置应用的名字、队列、AM的申请的Container、标记该作业的类型为Spark</li>
+<li>申请Memory，并最终通过yarnClient.submitApplication向ResourceManager提交该Application</li>
+</ol>
+<p><code>提交到YARN集群</code></p>
+<ol>
+<li>运行ApplicationMaster的run方法</li>
+<li>设置好相关的环境变量</li>
+<li>创建amClient，并启动</li>
+<li>在Spark UI启动之前设置Spark UI的AmIpFilter</li>
+<li>在startUserClass函数专门启动了一个线程来启动用户提交的Application，也就是启动了Driver。在Driver中将会初始化SparkContext</li>
+<li>等待SparkContext初始化完成，最多等待spark.yarn.applicationMaster.waitTries次数，如果等待了的次数超过了配置的，程序将会退出；否则用SparkContext初始化yarnAllocator</li>
+<li>当SparkContext、Driver初始化完成的时候，通过amClient向ResourceManager注册ApplicationMaster</li>
+<li>分配并启动Executeors。在启动Executeors之前，先要通过yarnAllocator获取到numExecutors个Container，然后在Container中启动Executeors</li>
+<li>最后，Task将在oarseGrainedExecutorBackend里面运行，然后运行状况会通过Akka通知CoarseGrainedScheduler，直到作业运行完成</li>
+</ol>
+<hr>
 <p><strong>Config</strong></p>
 <p><strong>Application Properties</strong></p>
 <table>
@@ -457,7 +486,9 @@
 </tr>
 </tbody>
 </table>
-<p>Reference:</p>
+<p><code>Spark Driver 是执行main()方法的进程</code></p>
+<p><code>执行器节点</code></p>
+<h3 id="DataFrame-amp-DataSet"><a href="#DataFrame-amp-DataSet" class="headerlink" title="DataFrame &amp; DataSet"></a>DataFrame &amp; DataSet</h3><p>Reference:</p>
 <ol>
 <li><a href="http://www.infoq.com/cn/articles/2015-Review-Spark" target="_blank" rel="external">解读2015之Spark篇：新生态系统的形成</a></li>
 <li><a href="http://www.infoq.com/cn/presentations/gc-tuning-of-spark-application?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=presentations_link&amp;utm_content=link_text" target="_blank" rel="external">Spark应用的GC调优</a></li>
@@ -471,6 +502,7 @@
 <li><a href="http://www.kancloud.cn/kancloud/spark-programming-guide/51557" target="_blank" rel="external">GraphX编程指南</a></li>
 <li><a href="https://snap.stanford.edu/data/" target="_blank" rel="external">Stanford Large Network Dataset Collection</a></li>
 <li><a href="https://github.com/lw-lin/CoolplaySpark" target="_blank" rel="external">酷玩 Spark</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA3OTAxMDQzNQ==&amp;mid=2650607874&amp;idx=1&amp;sn=3626d0d3d16be6236cfc9922eb0cd295&amp;scene=23&amp;srcid=0524320Jr36VjpcvuRJsenht#rd" target="_blank" rel="external">Spark知识体系完整解读</a></li>
 </ol>
 
       
@@ -491,7 +523,7 @@
 
 <nav id="pagination">
   
-    <a href="/page/5/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/5/" class="alignleft prev">Poprzednia</a>
   
   
   <div class="clearfix"></div>
@@ -499,14 +531,14 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Szukaj">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Kategorie</h3>
   <ul class="entry">
   
     <li><a href="/categories/dis/">dis</a><small>1</small></li>
@@ -519,7 +551,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Tagi</h3>
   <ul class="entry">
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
