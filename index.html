@@ -50,6 +50,55 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-05-25T02:28:16.000Z"><a href="/2016/05/25/distribution/alluxio/">2016-05-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/25/distribution/alluxio/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Alluxio"><a href="#Alluxio" class="headerlink" title="Alluxio"></a>Alluxio</h3><p>Alluxio统一了数据访问的方式，为上层计算框架和底层存储系统构建了桥梁。 应用只需要连接Alluxio即可访问存储在底层任意存储系统中的数据。<br>Alluxio以内存为中心的架构使得数据的访问速度能比现有常规方案快几个数量级。</p>
+<p><code>灵活的文件API</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alluxio的本地API类似于java.io.File类，提供了InputStream和OutputStream的接口和对内存映射I/O的高效支持。</span><br><span class="line">我们推荐使用这套API以获得Alluxio的最好性能。 </span><br><span class="line">另外，Alluxio提供兼容Hadoop的文件系统接口，Hadoop MapReduce和Spark可以使用Alluxio代替HDFS。</span><br></pre></td></tr></table></figure>
+<p><code>可插拔的底层存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
+<p><code>层次化存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过分层存储，Alluxio不仅可以管理内存，也可以管理SSD 和HDD,能够让更大的数据集存储在Alluxio上。</span><br><span class="line">数据在不同层之间自动被管理，保证热数据在更快的存储层上。</span><br><span class="line">自定义策略可以方便地加入Alluxio，而且pin的概念允许用户直接控制数据的存放位置。</span><br></pre></td></tr></table></figure>
+<p><code>统一命名空间</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alluxio通过挂载功能在不同的存储系统之间实现高效的数据管理。</span><br><span class="line">并且透明命名在持久化这些对象到底层存储系统时可以保留这些对象的文件名和目录层次结构。</span><br></pre></td></tr></table></figure>
+<p><code>世系(Lineage)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过世系(Lineage)，Alluxio可以不受容错的限制实现高吞吐的写入， 丢失的输出可以通过重新执行创建这一输出的任务来恢复。</span><br><span class="line">应用将输出写入内存，Alluxio以异步方式定期备份数据到底层文件系统。</span><br><span class="line">写入失败时，Alluxio启动任务重执行恢复丢失的文件。</span><br></pre></td></tr></table></figure>
+<p><code>网页UI &amp; 命令行</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用户可以通过网页UI浏览文件系统。</span><br><span class="line">在调试模式下，管理员可以查看每一个文件的详细信息，包括存放位置，检查点路径等等。</span><br><span class="line">用户也可以通过./bin/alluxio fs与Alluxio交互，例如：将数据从文件系统拷入拷出。</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://alluxio.org/documentation/v1.0.1/cn/" target="_blank" rel="external">alluxio官网</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-18T15:23:08.000Z"><a href="/2016/05/18/algorithms/machine-learning/">2016-05-18</a></time>
       
       
@@ -72,6 +121,197 @@
 <li><a href="http://baike.baidu.com/link?url=oTHkWqi7IGEWOjAZI5RvN_-NorTWagwIaqgSl5E01LldfdgJQimAmH0Bf_Ik5bhwHqrIGOQ6WKDrsMUBNDtlkK" target="_blank" rel="external">无监督学习</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/rocksdb/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/rocksdb/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###RocksDB</p>
+<p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
+<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
+<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
+<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
+<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
+<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
+<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
+<hr>
+<p><strong> Static Sorted Table (Static Sorted Table) </strong></p>
+<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
+<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
+<p>Format :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
+<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
+<p>ReadOnly Mode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Java</strong></p>
+<p><strong>FAQ</strong></p>
+<ol>
+<li><p>If my process crashes, can it corrupt the database?</p>
+<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
+</li>
+<li><p>a</p>
+<p>``</p>
+</li>
+<li><p>Does RocksDB throw exceptions?</p>
+<p><code>No, RocksDB returns rocksdb::Status to indicate any error.</code></p>
+</li>
+<li><p>How to know the number of keys stored in a RocksDB database?</p>
+<p>``</p>
+</li>
+</ol>
+<p><em><br>*</em></p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
+<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -144,75 +384,6 @@
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
 </ol>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
       
     </div>
     <footer>
@@ -403,184 +574,25 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Redis</p>
-<p>####Benchmarks</p>
-<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
-<p>####Cluster</p>
-<p>####Hyperloglog</p>
-<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
-<hr>
-<p>####FAQ</p>
-<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
-<hr>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/rocksdb/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/rocksdb/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###RocksDB</p>
-<p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
-<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
-<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
-<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
-<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
-<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
-<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
-<hr>
-<p><strong> Static Sorted Table (Static Sorted Table) </strong></p>
-<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
-<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
-<p>Format :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
-<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
-<p>ReadOnly Mode</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Java</strong></p>
-<p><strong>FAQ</strong></p>
-<ol>
-<li><p>If my process crashes, can it corrupt the database?</p>
-<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
-</li>
-<li><p>a</p>
-<p>``</p>
-</li>
-<li><p>Does RocksDB throw exceptions?</p>
-<p><code>No, RocksDB returns rocksdb::Status to indicate any error.</code></p>
-</li>
-<li><p>How to know the number of keys stored in a RocksDB database?</p>
-<p>``</p>
-</li>
-</ol>
-<p><em><br>*</em></p>
-<p>Reference :</p>
-<ol>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
-<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-06T15:28:48.000Z"><a href="/2016/05/06/algorithms/hidden-markov-model/">2016-05-06</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/06/algorithms/hidden-markov-model/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Hidden-Markov-Model"><a href="#Hidden-Markov-Model" class="headerlink" title="Hidden Markov Model"></a>Hidden Markov Model</h3><p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzI2NjA3NTc4Ng==&amp;mid=2652077944&amp;idx=1&amp;sn=d17758f0aed8670ba0f5f41e481f0205&amp;scene=23&amp;srcid=0506YCgtc3T5Bwj2Bwrn2fn7#rd" target="_blank" rel="external">如何用简单易懂的例子解释隐马尔可夫模型</a></li>
-<li></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
   
-    <a href="/page/2/" class="alignright next">Następna</a>
+    <a href="/page/2/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Szukaj">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorie</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/dis/">dis</a><small>1</small></li>
@@ -593,7 +605,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tagi</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
