@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>Alluxio | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   <meta name="description" content="AlluxioAlluxio统一了数据访问的方式，为上层计算框架和底层存储系统构建了桥梁。 应用只需要连接Alluxio即可访问存储在底层任意存储系统中的数据。Alluxio以内存为中心的架构使得数据的访问速度能比现有常规方案快几个数量级。
@@ -13,7 +13,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Alluxio"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -53,11 +53,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-25T02:28:16.000Z"><a href="/2016/05/25/distribution/alluxio/">2016-05-25</a></time>
+        <time datetime="2016-05-14T16:00:00.000Z"><a href="/2016/05/15/distribution/alluxio/">2016-05-15</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">Alluxio</h1>
   
 
     </header>
@@ -66,6 +66,67 @@
         <h3 id="Alluxio"><a href="#Alluxio" class="headerlink" title="Alluxio"></a>Alluxio</h3><p>Alluxio统一了数据访问的方式，为上层计算框架和底层存储系统构建了桥梁。 应用只需要连接Alluxio即可访问存储在底层任意存储系统中的数据。<br>Alluxio以内存为中心的架构使得数据的访问速度能比现有常规方案快几个数量级。</p>
 <p><code>灵活的文件API</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alluxio的本地API类似于java.io.File类，提供了InputStream和OutputStream的接口和对内存映射I/O的高效支持。</span><br><span class="line">我们推荐使用这套API以获得Alluxio的最好性能。 </span><br><span class="line">另外，Alluxio提供兼容Hadoop的文件系统接口，Hadoop MapReduce和Spark可以使用Alluxio代替HDFS。</span><br></pre></td></tr></table></figure>
+<p><strong>IO选项</strong></p>
+<table>
+<thead>
+<tr>
+<th>读类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_PROMOTE</td>
+<td>如果读取的数据在Worker上时，该数据被移动到Worker的最高层。如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。这是默认的读类型。</td>
+</tr>
+<tr>
+<td>CACHE</td>
+<td>如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。</td>
+</tr>
+<tr>
+<td>NO_CACHE</td>
+<td>不会创建副本。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>写类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker和底层存储系统。</td>
+</tr>
+<tr>
+<td>MUST_CACHE</td>
+<td>数据被同步地写入到Alluxio的Worker。但不会被写入到底层存储系统。这是默认写类型。</td>
+</tr>
+<tr>
+<td>THROUGH</td>
+<td>数据被同步地写入到底层存储系统。但不会被写入到Alluxio的Worker。</td>
+</tr>
+<tr>
+<td>ASYNC_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker，并异步地写入到底层存储系统。处于实验阶段。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>键值存储</strong> </p>
+<p>Alluxio 还在文件系统之上提供Key-Value Store , Key-Value 放入存储后是不可变的。</p>
+<p>Key Value Store 可以用AlluxioURI来表示路径，比如alluxio://path/my-kvstore。</p>
+<p>单个Key Value Store可能有一个以上的分区，分区是由Alluxio内部来管理，对用户透明。</p>
+<p>获取一个 Key Value Store Client :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeyValueSystem kvs = KeyValueSystem.Factory().create();</span><br></pre></td></tr></table></figure>
+<p><strong>创建一个新的 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreWriter writer = kvs.createStore(new AlluxioURI(&quot;alluxio://path/my-kvstore&quot;));</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;100&quot;, &quot;foo&quot;)</span><br><span class="line">writer.put(&quot;100&quot;, &quot;foo&quot;);</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;200&quot;, &quot;bar&quot;)</span><br><span class="line">writer.put(&quot;200&quot;, &quot;bar&quot;);</span><br><span class="line"></span><br><span class="line">// Close and complete the store</span><br><span class="line">writer.close();</span><br></pre></td></tr></table></figure>
+<p><strong>通过迭代器遍历 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreReader reader = kvs.openStore(new AlluxioURI(&quot;alluxio://path/kvstore/&quot;));</span><br><span class="line">KeyValueIterator iterator = reader.iterator();</span><br><span class="line"></span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">  KeyValuePair pair = iterator.next();</span><br><span class="line">  ByteBuffer key = pair.getkKey();</span><br><span class="line">  ByteBuffer value = pair.getValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Close the reader on the store</span><br><span class="line">reader.close()</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce InputFormat</strong> </p>
+<hr>
 <p><code>可插拔的底层存储</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
 <p><code>层次化存储</code></p>
@@ -86,7 +147,17 @@
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Distributed/">Distributed</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/Alluxio/">Alluxio</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -113,7 +184,7 @@
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Kommentare</h1>
 
   
       <div id="fb-root"></div>
@@ -127,7 +198,7 @@
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/05/25/distribution/alluxio/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/05/15/distribution/alluxio/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
@@ -136,17 +207,17 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/dis/">dis</a><small>1</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>2</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -158,6 +229,8 @@
 <div class="widget tag">
   <h3 class="title">Tags</h3>
   <ul class="entry">
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   
