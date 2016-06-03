@@ -50,6 +50,122 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Cassandra </p>
+<p>###Introduction</p>
+<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
+<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
+<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
+<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
+<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
+<p>###gossip: Internode communications</p>
+<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
+<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
+<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
+<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
+<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
+<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
+<p>###Virtual nodes</p>
+<p>###Write </p>
+<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
+<ol>
+<li>Logging data in the commit log</li>
+<li>Writing data to the memtable</li>
+<li>Flushing data from the memtable</li>
+<li>Storing data on disk in SSTables</li>
+<li>Compaction</li>
+</ol>
+<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
+<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
+<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
+<p>###Read </p>
+<p>###Delete</p>
+<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
+<p>###Compaction</p>
+<p>###Hinted Handoff</p>
+<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
+<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
+<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
+<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
+<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
+<p>###SSTable</p>
+<p>SSTables have 3 separate files created per column-family.</p>
+<ol>
+<li>Bloom Filter</li>
+<li>Index</li>
+<li>Data</li>
+</ol>
+<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
+<p>###Memtable</p>
+<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
+<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
+<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
+<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
+<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
+<p>column_definition is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
+<p>partition_key is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
+<p>collection_type is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
+<p><code>CREATE TYPE</code>  Create a user-defined type</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
+<p>Example :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
+<p>###Cassandra tools</p>
+<p>The nodetool utility is a command line interface for managing a cluster.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
+<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
+<p>###Architecture</p>
+<p>###Authentication</p>
+<p>To Configure Cassandra to use internal authentication,</p>
+<p>###Virtual Nodes</p>
+<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
+<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
+<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
+<p>####JVM Turning</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
+<p>####Inner Cassandra </p>
+<p>#####StartUp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-06T15:28:48.000Z"><a href="/2016/05/06/algorithms/hidden-markov-model/">2016-05-06</a></time>
       
       
@@ -65,6 +181,61 @@
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzI2NjA3NTc4Ng==&amp;mid=2652077944&amp;idx=1&amp;sn=d17758f0aed8670ba0f5f41e481f0205&amp;scene=23&amp;srcid=0506YCgtc3T5Bwj2Bwrn2fn7#rd" target="_blank" rel="external">如何用简单易懂的例子解释隐马尔可夫模型</a></li>
 <li></li>
 </ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/storage/hbase/">2016-05-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/01/storage/hbase/">HBase</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
+<p>一个实例作为Master使用，其他作为backup。</p>
+<h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
+<h4 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h4><p>Zookeeper 中存储-ROOT-表，.META.表</p>
+<p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
+<p>AssignmentManager 管理&amp;负责Region分配</p>
+<p>TableLockManager  管理分布式表级锁</p>
+<p>RegionStates  在内存中存储Region状态  在AssignmentManager中跟踪Region状态</p>
+<p>HRegionInfo  含有Region信息  Region包含一个完整键空间</p>
+<p>RegionName含有：</p>
+<p>tableName   : The name of the table</p>
+<p>startKey    : The startKey for the region.</p>
+<p>regionId    : A timestamp when the region is created.</p>
+<p>replicaId   : An id starting from 0 to differentiate replicas of the same region range but hosted in separated servers. The same region range can be hosted in multiple locations.</p>
+<p>createRegionName </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
+<p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
+<h4 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
+<h4 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h4><p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>进入master cluster shell 中 执行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -626,6 +797,38 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
       
       
@@ -682,11 +885,11 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
   
 
     </header>
@@ -769,183 +972,6 @@ the exception?</code></p>
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:41.000Z"><a href="/2016/04/22/other/calcite/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/calcite/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Calcite</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">First, we define a schema based on a schema factory class in a model file. </span><br><span class="line"></span><br><span class="line">Then the schema factory creates a schema, and the schema creates several tables, each of which knows how to get data by scanning a CSV file. </span><br><span class="line"></span><br><span class="line">Last, after Calcite has parsed the query and planned it to use those tables, Calcite invokes the tables to read the data as the query is being executed.</span><br></pre></td></tr></table></figure>
-<p>Here is a JSON Modle:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  version: &apos;1.0&apos;,</span><br><span class="line">  defaultSchema: &apos;SALES&apos;,</span><br><span class="line">  schemas: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: &apos;SALES&apos;,</span><br><span class="line">      type: &apos;custom&apos;,</span><br><span class="line">      factory: &apos;org.apache.calcite.adapter.csv.CsvSchemaFactory&apos;,</span><br><span class="line">      operand: &#123;</span><br><span class="line">        directory: &apos;target/test-classes/sales&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Driven by the model, the schema factory instantiates a single schema <code>SALES</code></p>
-<p>A schema’s job is to produce a list of tables. </p>
-<p>The tables implement Calcite’s <code>Table</code> interface.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line">package org.darion.yaphet.calcite;</span><br><span class="line"></span><br><span class="line">import org.apache.calcite.adapter.jdbc.JdbcSchema;</span><br><span class="line">import org.apache.calcite.schema.SchemaPlus;</span><br><span class="line">import org.apache.calcite.sql.SqlBasicCall;</span><br><span class="line">import org.apache.calcite.sql.SqlDelete;</span><br><span class="line">import org.apache.calcite.sql.SqlInsert;</span><br><span class="line">import org.apache.calcite.sql.SqlNode;</span><br><span class="line">import org.apache.calcite.sql.SqlUpdate;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParseException;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParser;</span><br><span class="line">import org.apache.calcite.tools.FrameworkConfig;</span><br><span class="line">import org.apache.calcite.tools.Frameworks;</span><br><span class="line">import org.apache.calcite.tools.Planner;</span><br><span class="line">import org.apache.calcite.tools.RelConversionException;</span><br><span class="line">import org.apache.calcite.tools.ValidationException;</span><br><span class="line"></span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by darion.johannes.yaphet on 16/3/8.</span><br><span class="line"> */</span><br><span class="line">public class ParseSQL &#123;</span><br><span class="line"></span><br><span class="line">    private static final String[] SQLArray = &#123;</span><br><span class="line">            &quot;INSERT INTO TABLE0(ID,NAME) VALUES(0,&apos;darion&apos;)&quot;,</span><br><span class="line">            &quot;UPDATE TABLE0 SET NAME = &apos;darion.yaphet&apos; WHERE ID = 1&quot;,</span><br><span class="line">            &quot;DELETE FROM TABLE0 WHERE ID = 1 &quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws ClassNotFoundException, SqlParseException, ValidationException, RelConversionException &#123;</span><br><span class="line">        String sDriverName = &quot;com.mysql.jdbc.Driver&quot;;</span><br><span class="line">        Class.forName(sDriverName);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; operand = new HashMap&lt;&gt;();</span><br><span class="line">        operand.put(&quot;jdbcDriver&quot;, sDriverName);</span><br><span class="line">        operand.put(&quot;jdbcUrl&quot;, &quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">        operand.put(&quot;jdbcUser&quot;, &quot;root&quot;);</span><br><span class="line">        operand.put(&quot;jdbcPassword&quot;, &quot;&quot;);</span><br><span class="line">        operand.put(&quot;Lex&quot;, &quot;MYSQL_ANSI&quot;);</span><br><span class="line"></span><br><span class="line">        SchemaPlus rootSchema = Frameworks.createRootSchema(true);</span><br><span class="line">        org.apache.calcite.schema.Schema schema = new JdbcSchema.Factory().create(rootSchema, &quot;TABLE0&quot;, operand);</span><br><span class="line">        rootSchema = rootSchema.add(&quot;TABLE0&quot;, schema);</span><br><span class="line"></span><br><span class="line">        Frameworks.ConfigBuilder configBuilder = Frameworks.newConfigBuilder();</span><br><span class="line">        configBuilder.defaultSchema(rootSchema);</span><br><span class="line"></span><br><span class="line">        FrameworkConfig config = Frameworks.newConfigBuilder()</span><br><span class="line">                .parserConfig(SqlParser.configBuilder()</span><br><span class="line">                        .setCaseSensitive(false)</span><br><span class="line">                        .build())</span><br><span class="line">                .defaultSchema(rootSchema)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;SELECT * FROM TABLE0 WHERE AGE &gt; 15.0&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,CONCAT(&apos;NAME&apos;,&apos;AGE&apos;))&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) SELECT ID,NAME FROM TABLE0 WHERE ID = 0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;select concat(&apos;11&apos;,&apos;22&apos;,&apos;33&apos;) FROM TABLE0&quot;;</span><br><span class="line">        //String SQL = &quot;select COUNT(*) FROM TABLE0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,&apos;darion&apos;)&quot;;</span><br><span class="line"></span><br><span class="line">        for (String SQL : SQLArray) &#123;</span><br><span class="line">            System.out.println(SQL);</span><br><span class="line">            Planner planner = Frameworks.getPlanner(config);</span><br><span class="line">            SqlNode node = planner.parse(SQL);</span><br><span class="line">            SqlNode validated = planner.validate(node);</span><br><span class="line">            System.out.println(&quot;Type : &quot; + validated.getKind());</span><br><span class="line"></span><br><span class="line">            switch (validated.getKind().toString()) &#123;</span><br><span class="line">                case &quot;INSERT&quot;:</span><br><span class="line">                    SqlInsert insertNode = (SqlInsert) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List : &quot; + insertNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Column List  : &quot; + insertNode.getTargetColumnList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Target Table : &quot; + insertNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    for (SqlNode insertToken : ((SqlBasicCall) insertNode.getSource()).getOperandList()) &#123;</span><br><span class="line">                        System.out.println(&quot;Source       : &quot; + ((SqlBasicCall) insertToken) + &quot; &quot; +</span><br><span class="line">                                ((SqlBasicCall) insertToken).getKind());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;DELETE&quot;:</span><br><span class="line">                    SqlDelete deleteNode = (SqlDelete) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + deleteNode.getOperandList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + deleteNode.getCondition() + &quot; &quot;);// where</span><br><span class="line">                    System.out.println(&quot;Target Table  : &quot; + deleteNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + deleteNode.getSourceSelect() + &quot; &quot; + deleteNode.getSourceSelect().getKind());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;UPDATE&quot;:</span><br><span class="line">                    SqlUpdate updateNode = (SqlUpdate) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + updateNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + updateNode.getSourceSelect());</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + updateNode.getCondition());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                default:</span><br><span class="line">                    System.out.println(&quot;Unknow Type : &quot; + validated.getKind());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //RelNode relationalExpression = planner.rel(validated).rel;</span><br><span class="line">            System.out.println(&quot;-----------------------------------&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //System.out.println(relationalExpression.getRowType());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getQualifiedName());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getCollationList());</span><br><span class="line"></span><br><span class="line">        //JavaTypeFactory typeFactory = new JavaTypeFactoryImpl(</span><br><span class="line">        //        RelDataTypeSystem.DEFAULT);</span><br><span class="line"></span><br><span class="line">        //RelToSqlConverter converter = new RelToSqlConverter(SqlDialect.CALCITE);</span><br><span class="line">        //SqlImplementor.Result result = converter.visitChild(0, relationalExpression);</span><br><span class="line"></span><br><span class="line">        // select</span><br><span class="line">        //SqlNode sqlNode = converter.visitChild(0, relationalExpression).asQuery();</span><br><span class="line">        //System.out.println(sqlNode.getKind());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getSelectList());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getFrom());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getWhere());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getGroup());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getHaving());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getOrderList());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // insert</span><br><span class="line">        //System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:19.000Z"><a href="/2016/04/22/other/git/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/git/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h4 id="Git-the-stupid-content-tracker"><a href="#Git-the-stupid-content-tracker" class="headerlink" title="Git - the stupid content tracker"></a>Git - the stupid content tracker</h4><p><code>Git</code> is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
-<p>Git 会把<code>每次提交的文件的全部内容</code>都会记录下来</p>
-<hr>
-<p><strong>Config</strong></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">λ ~/ git</span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c name=value]</span><br><span class="line">           [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">           [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">           &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">These are common Git commands used in various situations:</span><br><span class="line"></span><br><span class="line">start a working area (see also: git help tutorial)</span><br><span class="line">   clone      Clone a repository into a new directory</span><br><span class="line">   init       Create an empty Git repository or reinitialize an existing one</span><br><span class="line"></span><br><span class="line">work on the current change (see also: git help everyday)</span><br><span class="line">   add        Add file contents to the index</span><br><span class="line">   mv         Move or rename a file, a directory, or a symlink</span><br><span class="line">   reset      Reset current HEAD to the specified state</span><br><span class="line">   rm         Remove files from the working tree and from the index</span><br><span class="line"></span><br><span class="line">examine the history and state (see also: git help revisions)</span><br><span class="line">   bisect     Use binary search to find the commit that introduced a bug</span><br><span class="line">   grep       Print lines matching a pattern</span><br><span class="line">   log        Show commit logs</span><br><span class="line">   show       Show various types of objects</span><br><span class="line">   status     Show the working tree status</span><br><span class="line"></span><br><span class="line">grow, mark and tweak your common history</span><br><span class="line">   branch     List, create, or delete branches</span><br><span class="line">   checkout   Switch branches or restore working tree files</span><br><span class="line">   commit     Record changes to the repository</span><br><span class="line">   diff       Show changes between commits, commit and working tree, etc</span><br><span class="line">   merge      Join two or more development histories together</span><br><span class="line">   rebase     Forward-port local commits to the updated upstream head</span><br><span class="line">   tag        Create, list, delete or verify a tag object signed with GPG</span><br><span class="line"></span><br><span class="line">collaborate (see also: git help workflows)</span><br><span class="line">   fetch      Download objects and refs from another repository</span><br><span class="line">   pull       Fetch from and integrate with another repository or a local branch</span><br><span class="line">   push       Update remote refs along with associated objects</span><br><span class="line"></span><br><span class="line">&apos;git help -a&apos; and &apos;git help -g&apos; list available subcommands and some</span><br><span class="line">concept guides. See &apos;git help &lt;command&gt;&apos; or &apos;git help &lt;concept&gt;&apos;</span><br><span class="line">to read about a specific subcommand or concept.</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Branch</strong></p>
-<p>使用分支意味着可以把你的工作从开发主线上分离开来，以免影响开发主线。</p>
-<p><em>Git 保存的不是文件的变化或者差异，而是一系列不同时刻的文件快照。</em></p>
-<p>在进行提交操作时，Git 会保存一个提交对象。提交对象会包含一个指向暂存内容快照的指针。 但不仅仅是这样，该提交对象还包含了作者的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针。首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象，而由多个分支合并产生的提交对象有多个父对象，</p>
-<p>暂存操作会为每一个文件计算校验和，然后会把当前版本的文件快照保存到 Git 仓库中，最终将校验和加入到暂存区域等待提交。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch  列出本地分支 当前分支前加*标记</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -r 列出远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -r</span><br><span class="line">  origin/HEAD -&gt; origin/master</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -a 列出本地分支和远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch 创建一个新的本地分支 只创建分支 不切换支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch local</span><br><span class="line">λ ~/git.learning/ master</span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">  local</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout 切换分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git checkout local</span><br><span class="line">Switched to branch &apos;local&apos;</span><br><span class="line">λ ~/git.learning/ local</span><br><span class="line">λ ~/git.learning/ local git branch</span><br><span class="line">* local</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d | -D  删除分支</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d -r  删除远程分支</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Remote</strong></p>
-<hr>
-<p><strong>Log 显示提交记录</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log [&lt;options&gt;] [&lt;revision range&gt;] [[\--] &lt;path&gt;…​]</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Alias</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.last &apos;log -1 HEAD&apos;</span><br><span class="line">git config --global alias.unstage &apos;reset HEAD --&apos;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Tag</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag 列出已有的标签</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 看到标签信息与对应的提交信息</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Bisect</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git bisect &lt;subcommand&gt; &lt;options&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git bisect start [--term-&#123;old,good&#125;=&lt;term&gt; --term-&#123;new,bad&#125;=&lt;term&gt;]</span><br><span class="line">         [--no-checkout] [&lt;bad&gt; [&lt;good&gt;...]] [--] [&lt;paths&gt;...]</span><br><span class="line">git bisect (bad|new) [&lt;rev&gt;]</span><br><span class="line">git bisect (good|old) [&lt;rev&gt;...]</span><br><span class="line">git bisect terms [--term-good | --term-bad]</span><br><span class="line">git bisect skip [(&lt;rev&gt;|&lt;range&gt;)...]</span><br><span class="line">git bisect reset [&lt;commit&gt;]</span><br><span class="line">git bisect visualize</span><br><span class="line">git bisect replay &lt;logfile&gt;</span><br><span class="line">git bisect log</span><br><span class="line">git bisect run &lt;cmd&gt;...</span><br><span class="line">git bisect help</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Blame</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<hr>
-<p><code>Tips :</code></p>
-<p><strong>Git自动补全</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash</span><br></pre></td></tr></table></figure>
-<p>在~/.bash_profile文件中添加以下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ -f ~/.git-completion.bash ]; then</span><br><span class="line">    . ~/.git-completion.bash</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>GitHub秘籍</strong></p>
-<ol>
-<li>在任意diff页面的URL后加上 <code>?w=1</code> ，可以去掉那些只是空白字符的变化，使你能更专注于代码的变化。 </li>
-<li>在diff或者file页面的URL后面加上 <code>?ts=4</code> ，这样当显示tab字符的长度时就会是4个空格的长度，不再是默认的8个空格。 ts 后面的数字还可以根据你个人的偏好进行修改。</li>
-<li>查看某个用户的所有提交历史，只需在commits页面URL后加上 <code>?author=username</code> 。</li>
-<li>Gists还可以像任何标准仓库一样被克隆。</li>
-<li><a href="https://git.io/" target="_blank" rel="external">Git.io</a> 是Github的短网址服务。</li>
-<li>代码文件地址后加上 #L52 或者单击行号52都会将第52行代码高亮显示。多行高亮也可以，比如用 #L53-L60 选择范围，或者按住 shift 键，然后再点击选择的两行。</li>
-<li>如果某个提交修复了一个Issue，当提交到master分支时，提交信息里可以使用 <code>fix/fixes/fixed</code> , <code>close/closes/closed</code> 或者 <code>resolve/resolves/resolved</code>等关键词，后面再跟上<code>Issue号</code>，这样就会关闭这个Issue。</li>
-<li>引用同一个仓库中一个Issue : <code>#</code> 加上<code>Issue号</code>，自动创建到此Issue的链接,链接到其他仓库的Issue <code>user_name/repo_name#ISSUE_NUMBER</code></li>
-<li>Github支持的完整表情符号列表详见 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">emoji-cheat-sheet.com</a> 或 <a href="https://github.com/scotch-io/All-Github-Emoji-Icons" target="_blank" rel="external">scotch-io/All-Github-Emoji-Icons </a></li>
-<li><a href="http://www.kancloud.cn/thinkphp/github-tips/37891" target="_blank" rel="external">Issues和Pull requests里可以添加复选框</a></li>
-<li>GitHub支持将 <code>.csv</code> 和 <code>.tsv</code> 格式的文件渲染成表格数据。</li>
-<li>Pull Request中的Revert按钮来撤销一个已合并的Pull Request中的commit。</li>
-<li>根目录添加一个名为 CONTRIBUTING 的文件后，贡献者在新建Issue或Pull Request时会看到这个文件的链接。</li>
-<li><a href="https://github.com/github/hub#commands" target="_blank" rel="external">Hub</a>是一个对Git进行了封装的命令行工具</li>
-<li>提交和Pull Requests里包含有Github支持的可渲染文档（比如Markdown）会提供 source 和 rendered 两个视图功能。</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://hubingforever.blog.163.com/blog/static/1710405792012587105464/" target="_blank" rel="external">Git对象模型</a> </li>
-<li><a href="http://hubingforever.blog.163.com/blog/static/17104057920125794943922/" target="_blank" rel="external">Git索引</a></li>
-<li><a href="http://git-scm.com/" target="_blank" rel="external">git Doc</a></li>
-<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></li>
-<li><a href="http://gitref.org/" target="_blank" rel="external">gitref</a></li>
-<li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
-<li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -969,7 +995,7 @@ the exception?</code></p>
   <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>2</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -983,6 +1009,8 @@ the exception?</code></p>
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

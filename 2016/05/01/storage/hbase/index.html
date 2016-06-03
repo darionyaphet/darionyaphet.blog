@@ -3,20 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>HBase | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="##HBase
-###HMasterHBase中不存在单点问题，集群中可以启动多个HMaster实例。
+  <meta name="description" content="HBaseHMasterHBase中不存在单点问题，集群中可以启动多个HMaster实例。
 一个实例作为Master使用，其他作为backup。
-###HRegionServerHRegionServer响应Client请求，完成数据读写操作。
-###ZooKeeper
-Zookeepe">
+HRegionServerHRegionServer响应Client请求，完成数据读写操作。
+ZooKeeperZookeeper 中存储-ROOT-表，">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="HBase"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -56,22 +54,20 @@ Zookeepe">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/hbase/">2016-05-10</a></time>
+        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/storage/hbase/">2016-05-01</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">HBase</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##HBase</p>
-<p>###HMaster<br>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
+        <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
 <p>一个实例作为Master使用，其他作为backup。</p>
-<p>###HRegionServer<br>HRegionServer响应Client请求，完成数据读写操作。</p>
-<p>###ZooKeeper</p>
-<p>Zookeeper 中存储-ROOT-表，.META.表</p>
+<h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
+<h4 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h4><p>Zookeeper 中存储-ROOT-表，.META.表</p>
 <p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
 <p>AssignmentManager 管理&amp;负责Region分配</p>
 <p>TableLockManager  管理分布式表级锁</p>
@@ -86,10 +82,8 @@ Zookeepe">
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
 <p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
-<p>###Split</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
-<p>###Replication</p>
-<p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
+<h4 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
+<h4 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h4><p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
 <p>进入master cluster shell 中 执行:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
@@ -99,7 +93,17 @@ Zookeepe">
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Distributed/">Distributed</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/HBase/">HBase</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -140,7 +144,7 @@ Zookeepe">
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/05/10/storage/hbase/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/05/01/storage/hbase/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
@@ -159,7 +163,7 @@ Zookeepe">
   <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>2</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -173,6 +177,8 @@ Zookeepe">
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

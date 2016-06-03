@@ -119,6 +119,7 @@
 <p>Alluxio 还在文件系统之上提供Key-Value Store , Key-Value 放入存储后是不可变的。</p>
 <p>Key Value Store 可以用AlluxioURI来表示路径，比如alluxio://path/my-kvstore。</p>
 <p>单个Key Value Store可能有一个以上的分区，分区是由Alluxio内部来管理，对用户透明。</p>
+<p>Alluxio默认配置是禁用键值存储库的，可以通过配置alluxio.keyvalue.enabled为true来启用。</p>
 <p>获取一个 Key Value Store Client :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeyValueSystem kvs = KeyValueSystem.Factory().create();</span><br></pre></td></tr></table></figure>
 <p><strong>创建一个新的 Key Value Store</strong></p>
@@ -126,11 +127,51 @@
 <p><strong>通过迭代器遍历 Key Value Store</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreReader reader = kvs.openStore(new AlluxioURI(&quot;alluxio://path/kvstore/&quot;));</span><br><span class="line">KeyValueIterator iterator = reader.iterator();</span><br><span class="line"></span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">  KeyValuePair pair = iterator.next();</span><br><span class="line">  ByteBuffer key = pair.getkKey();</span><br><span class="line">  ByteBuffer value = pair.getValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Close the reader on the store</span><br><span class="line">reader.close()</span><br></pre></td></tr></table></figure>
 <p><strong>MapReduce InputFormat</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conf.setInputFormat(KeyValueInputFormat.class);</span><br><span class="line">FileInputFormat.setInputPaths(conf, new Path(&quot;alluxio://input-store&quot;));</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce OutputFormat</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf.setOutputKeyClass(BytesWritable.class);</span><br><span class="line">conf.setOutputValueClass(BytesWritable.class);</span><br><span class="line">conf.setOutputFormat(KeyValueOutputFormat.class);</span><br><span class="line">conf.setOutputCommitter(KeyValueOutputCommitter.class);</span><br><span class="line">FileOutputFormat.setOutputPath(conf, new Path(&quot;alluxio://output-store&quot;));</span><br></pre></td></tr></table></figure>
 <hr>
 <p><code>可插拔的底层存储</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
 <p><code>层次化存储</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过分层存储，Alluxio不仅可以管理内存，也可以管理SSD 和HDD,能够让更大的数据集存储在Alluxio上。</span><br><span class="line">数据在不同层之间自动被管理，保证热数据在更快的存储层上。</span><br><span class="line">自定义策略可以方便地加入Alluxio，而且pin的概念允许用户直接控制数据的存放位置。</span><br></pre></td></tr></table></figure>
+<p>目前Alluxio支持这些存储类型：</p>
+<ol>
+<li>MEM(内存)</li>
+<li>SSD(固态硬盘)</li>
+<li>HDD(硬盘驱动器)</li>
+</ol>
+<p><strong>使用分层存储</strong></p>
+<p>Alluxio管理的数据块不只在内存，可在任何可用的存储层。<br>Alluxio使用分配策略和回收策略管理块的存放和移动。Alluxio基于I/O性能从上到下排序存储层。</p>
+<p>因此，这种典型的分层存储设置决定了最顶层是MEM，然后是SSD，最后是HDD。</p>
+<p><strong>存储目录</strong></p>
+<p><strong>写数据</strong></p>
+<p>写入新数据块时默认写在最顶层。如果顶层没有足够的空间存放数据块，回收策略会被触发释放空间给新数据块。</p>
+<p><strong>读数据</strong></p>
+<p>读取分层存储的数据块和标准Alluxio类似。Alluxio从存储位置读取数据块。如果Alluxio配置了多层存储，数据块不一定是从顶层读取，因为可能被透明地移到下层。</p>
+<p>读取存储策略为AlluxioStorageType.PROMOTE的数据会确保数据从worker读取前先被转移到顶层。通过显式将热数据移到更高层,该策略也可以作为数据管理策略使用。</p>
+<p><strong>固定文件</strong></p>
+<p>文件被固定时，数据块不会被移出。用户可以促使已固定文件的块移到顶层。</p>
+<p>固定文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(true);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p>文件可以取消固定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(false);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p><strong>分配策略</strong></p>
+<ul>
+<li>贪心分配策略 分配新数据块到首个有足够空间的存储目录。</li>
+<li>最大剩余空间分配策略 分配数据块到有最大剩余空间的存储目录。</li>
+<li>轮询调度分配策略 分配数据块到有空间的最高存储层，存储目录通过轮询调度选出。</li>
+</ul>
+<p><strong>回收策略</strong></p>
+<ul>
+<li>贪心回收策略</li>
+<li>LRU回收策略</li>
+<li>LRFU回收策略</li>
+<li>部分LRU回收策略</li>
+</ul>
+<p><strong>空间预留器</strong></p>
+<p><strong>开启和配置空间预留</strong></p>
+<hr>
 <p><code>统一命名空间</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alluxio通过挂载功能在不同的存储系统之间实现高效的数据管理。</span><br><span class="line">并且透明命名在持久化这些对象到底层存储系统时可以保留这些对象的文件名和目录层次结构。</span><br></pre></td></tr></table></figure>
 <p><code>世系(Lineage)</code></p>
@@ -217,7 +258,7 @@
   <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>2</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -231,6 +272,8 @@
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

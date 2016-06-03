@@ -50,6 +50,83 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/article/">2016-06-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/03/architecture/article/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Reference :</p>
+<ol>
+<li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
+<li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
+<li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
+<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-18T15:23:08.000Z"><a href="/2016/05/18/algorithms/machine-learning/">2016-05-18</a></time>
       
       
@@ -159,6 +236,7 @@
 <p>Alluxio 还在文件系统之上提供Key-Value Store , Key-Value 放入存储后是不可变的。</p>
 <p>Key Value Store 可以用AlluxioURI来表示路径，比如alluxio://path/my-kvstore。</p>
 <p>单个Key Value Store可能有一个以上的分区，分区是由Alluxio内部来管理，对用户透明。</p>
+<p>Alluxio默认配置是禁用键值存储库的，可以通过配置alluxio.keyvalue.enabled为true来启用。</p>
 <p>获取一个 Key Value Store Client :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeyValueSystem kvs = KeyValueSystem.Factory().create();</span><br></pre></td></tr></table></figure>
 <p><strong>创建一个新的 Key Value Store</strong></p>
@@ -166,11 +244,51 @@
 <p><strong>通过迭代器遍历 Key Value Store</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreReader reader = kvs.openStore(new AlluxioURI(&quot;alluxio://path/kvstore/&quot;));</span><br><span class="line">KeyValueIterator iterator = reader.iterator();</span><br><span class="line"></span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">  KeyValuePair pair = iterator.next();</span><br><span class="line">  ByteBuffer key = pair.getkKey();</span><br><span class="line">  ByteBuffer value = pair.getValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Close the reader on the store</span><br><span class="line">reader.close()</span><br></pre></td></tr></table></figure>
 <p><strong>MapReduce InputFormat</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conf.setInputFormat(KeyValueInputFormat.class);</span><br><span class="line">FileInputFormat.setInputPaths(conf, new Path(&quot;alluxio://input-store&quot;));</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce OutputFormat</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf.setOutputKeyClass(BytesWritable.class);</span><br><span class="line">conf.setOutputValueClass(BytesWritable.class);</span><br><span class="line">conf.setOutputFormat(KeyValueOutputFormat.class);</span><br><span class="line">conf.setOutputCommitter(KeyValueOutputCommitter.class);</span><br><span class="line">FileOutputFormat.setOutputPath(conf, new Path(&quot;alluxio://output-store&quot;));</span><br></pre></td></tr></table></figure>
 <hr>
 <p><code>可插拔的底层存储</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
 <p><code>层次化存储</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过分层存储，Alluxio不仅可以管理内存，也可以管理SSD 和HDD,能够让更大的数据集存储在Alluxio上。</span><br><span class="line">数据在不同层之间自动被管理，保证热数据在更快的存储层上。</span><br><span class="line">自定义策略可以方便地加入Alluxio，而且pin的概念允许用户直接控制数据的存放位置。</span><br></pre></td></tr></table></figure>
+<p>目前Alluxio支持这些存储类型：</p>
+<ol>
+<li>MEM(内存)</li>
+<li>SSD(固态硬盘)</li>
+<li>HDD(硬盘驱动器)</li>
+</ol>
+<p><strong>使用分层存储</strong></p>
+<p>Alluxio管理的数据块不只在内存，可在任何可用的存储层。<br>Alluxio使用分配策略和回收策略管理块的存放和移动。Alluxio基于I/O性能从上到下排序存储层。</p>
+<p>因此，这种典型的分层存储设置决定了最顶层是MEM，然后是SSD，最后是HDD。</p>
+<p><strong>存储目录</strong></p>
+<p><strong>写数据</strong></p>
+<p>写入新数据块时默认写在最顶层。如果顶层没有足够的空间存放数据块，回收策略会被触发释放空间给新数据块。</p>
+<p><strong>读数据</strong></p>
+<p>读取分层存储的数据块和标准Alluxio类似。Alluxio从存储位置读取数据块。如果Alluxio配置了多层存储，数据块不一定是从顶层读取，因为可能被透明地移到下层。</p>
+<p>读取存储策略为AlluxioStorageType.PROMOTE的数据会确保数据从worker读取前先被转移到顶层。通过显式将热数据移到更高层,该策略也可以作为数据管理策略使用。</p>
+<p><strong>固定文件</strong></p>
+<p>文件被固定时，数据块不会被移出。用户可以促使已固定文件的块移到顶层。</p>
+<p>固定文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(true);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p>文件可以取消固定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(false);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p><strong>分配策略</strong></p>
+<ul>
+<li>贪心分配策略 分配新数据块到首个有足够空间的存储目录。</li>
+<li>最大剩余空间分配策略 分配数据块到有最大剩余空间的存储目录。</li>
+<li>轮询调度分配策略 分配数据块到有空间的最高存储层，存储目录通过轮询调度选出。</li>
+</ul>
+<p><strong>回收策略</strong></p>
+<ul>
+<li>贪心回收策略</li>
+<li>LRU回收策略</li>
+<li>LRFU回收策略</li>
+<li>部分LRU回收策略</li>
+</ul>
+<p><strong>空间预留器</strong></p>
+<p><strong>开启和配置空间预留</strong></p>
+<hr>
 <p><code>统一命名空间</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alluxio通过挂载功能在不同的存储系统之间实现高效的数据管理。</span><br><span class="line">并且透明命名在持久化这些对象到底层存储系统时可以保留这些对象的文件名和目录层次结构。</span><br></pre></td></tr></table></figure>
 <p><code>世系(Lineage)</code></p>
@@ -181,105 +299,6 @@
 <ol>
 <li><a href="http://alluxio.org/documentation/v1.0.1/cn/" target="_blank" rel="external">alluxio官网</a></li>
 </ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##MySQL</p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/hbase/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/hbase/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##HBase</p>
-<p>###HMaster<br>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
-<p>一个实例作为Master使用，其他作为backup。</p>
-<p>###HRegionServer<br>HRegionServer响应Client请求，完成数据读写操作。</p>
-<p>###ZooKeeper</p>
-<p>Zookeeper 中存储-ROOT-表，.META.表</p>
-<p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
-<p>AssignmentManager 管理&amp;负责Region分配</p>
-<p>TableLockManager  管理分布式表级锁</p>
-<p>RegionStates  在内存中存储Region状态  在AssignmentManager中跟踪Region状态</p>
-<p>HRegionInfo  含有Region信息  Region包含一个完整键空间</p>
-<p>RegionName含有：</p>
-<p>tableName   : The name of the table</p>
-<p>startKey    : The startKey for the region.</p>
-<p>regionId    : A timestamp when the region is created.</p>
-<p>replicaId   : An id starting from 0 to differentiate replicas of the same region range but hosted in separated servers. The same region range can be hosted in multiple locations.</p>
-<p>createRegionName </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
-<p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
-<p>###Split</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
-<p>###Replication</p>
-<p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>进入master cluster shell 中 执行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -345,43 +364,6 @@
     <div class="entry">
       
         
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
       
     </div>
     <footer>
@@ -481,122 +463,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Cassandra </p>
-<p>###Introduction</p>
-<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
-<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
-<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
-<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
-<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
-<p>###gossip: Internode communications</p>
-<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
-<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
-<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
-<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
-<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
-<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
-<p>###Virtual nodes</p>
-<p>###Write </p>
-<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
-<ol>
-<li>Logging data in the commit log</li>
-<li>Writing data to the memtable</li>
-<li>Flushing data from the memtable</li>
-<li>Storing data on disk in SSTables</li>
-<li>Compaction</li>
-</ol>
-<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
-<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
-<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
-<p>###Read </p>
-<p>###Delete</p>
-<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
-<p>###Compaction</p>
-<p>###Hinted Handoff</p>
-<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
-<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
-<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
-<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
-<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
-<p>###SSTable</p>
-<p>SSTables have 3 separate files created per column-family.</p>
-<ol>
-<li>Bloom Filter</li>
-<li>Index</li>
-<li>Data</li>
-</ol>
-<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
-<p>###Memtable</p>
-<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
-<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
-<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
-<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
-<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
-<p>column_definition is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
-<p>partition_key is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
-<p>collection_type is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
-<p><code>CREATE TYPE</code>  Create a user-defined type</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
-<p>Example :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
-<p>###Cassandra tools</p>
-<p>The nodetool utility is a command line interface for managing a cluster.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
-<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
-<p>###Architecture</p>
-<p>###Authentication</p>
-<p>To Configure Cassandra to use internal authentication,</p>
-<p>###Virtual Nodes</p>
-<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
-<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
-<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
-<p>####JVM Turning</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
-<p>####Inner Cassandra </p>
-<p>#####StartUp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
       
       
@@ -635,6 +501,83 @@
 
 
 
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##MySQL</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
 
 <nav id="pagination">
   
@@ -656,7 +599,7 @@
   <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>2</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -670,6 +613,8 @@
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   
