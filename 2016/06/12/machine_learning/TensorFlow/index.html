@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>TensorFlow | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="Community Detection (社区发现算法)针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研">
+  <meta name="description" content="TensorFlowTensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="TensorFlow"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -51,20 +51,42 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T14:46:44.000Z"><a href="/2016/04/22/algorithms/community-detection/">2016-04-22</a></time>
+        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">TensorFlow</h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Community-Detection-社区发现算法"><a href="#Community-Detection-社区发现算法" class="headerlink" title="Community Detection (社区发现算法)"></a>Community Detection (社区发现算法)</h3><p>针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研究者所重视，而近年来随着社交网络的崛起，这一领域的关注度已大大提升。</p>
+        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
+<p><strong>Basic Concepts</strong></p>
+<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
+<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
+<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
+<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
+<p>核(<code>kernel</code>)</p>
+<p>kernel是operation在某种设备上的具体实现。</p>
+<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
+<p>边(<code>edge</code>)  </p>
+<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
+<p>特殊边，又称作控制依赖，(control dependencies) </p>
+<p>会话(<code>session</code>)</p>
+<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
+<p>在会话中添加节点和边，形成一张图，然后执行。</p>
+<p>变量(<code>variables</code>)</p>
+<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
+<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
+<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
+<hr>
+<p><strong>Implementation</strong></p>
+<hr>
 <p>Reference :</p>
 <ol>
-<li><a href="http://senseable.mit.edu/community_detection/" target="_blank" rel="external">Community Detection - MIT Senseable City Lab</a></li>
+<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
 </ol>
 
       
@@ -72,7 +94,17 @@
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/TensorFlow/">TensorFlow</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -113,7 +145,7 @@
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/04/22/algorithms/community-detection/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/06/12/machine_learning/TensorFlow/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
