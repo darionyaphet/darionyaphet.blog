@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Side 4 | darion.johannes.yaphet</title>
+  <title>Seite 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,133 +50,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/java/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/java/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Java</p>
-<p>####Class Loader</p>
-<p>####Collection</p>
-<p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
-<p><code>ConcurrentHashMap</code> 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。</p>
-<p>JMM由一些规则组成，这些规则确定线程对内存访问如何排序以及何时可以确保它们对线程是可见的。</p>
-<p><code>ConcurrentHashMap</code> 类中包含两个静态内部类 HashEntry 和 Segment。</p>
-<p><code>HashEntry</code> 用来封装映射表的键值对；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">static final class HashEntry&lt;K,V&gt; &#123; </span><br><span class="line">        final K key;                </span><br><span class="line">        final int hash;             </span><br><span class="line">        volatile V value;           </span><br><span class="line">        final HashEntry&lt;K,V&gt; next;  </span><br><span class="line"></span><br><span class="line">        HashEntry(K key, int hash, HashEntry&lt;K,V&gt; next, V value) &#123; </span><br><span class="line">            this.key = key; </span><br><span class="line">            this.hash = hash; </span><br><span class="line">            this.next = next; </span><br><span class="line">            this.value = value; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p><code>Segment</code> 用来充当锁的角色，每个 Segment 对象守护整个散列映射表的若干个桶。每个桶是由若干个 HashEntry 对象链接起来的链表。一个 ConcurrentHashMap 实例中包含由若干个 Segment 对象组成的数组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">static final class Segment&lt;K,V&gt; extends ReentrantLock implements Serializable &#123; </span><br><span class="line">        /** </span><br><span class="line">         * 在本 segment 范围内，包含的 HashEntry 元素的个数</span><br><span class="line">         * 该变量被声明为 volatile 型</span><br><span class="line">         */ </span><br><span class="line">        transient volatile int count; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 被更新的次数</span><br><span class="line">         */ </span><br><span class="line">        transient int modCount; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 当 table 中包含的 HashEntry 元素的个数超过本变量值时，触发 table 的再散列</span><br><span class="line">         */ </span><br><span class="line">        transient int threshold; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * table 是由 HashEntry 对象组成的数组</span><br><span class="line">         * 如果散列时发生碰撞，碰撞的 HashEntry 对象就以链表的形式链接成一个链表</span><br><span class="line">         * table 数组的数组成员代表散列映射表的一个桶</span><br><span class="line">         * 每个 table 守护整个 ConcurrentHashMap 包含桶总数的一部分</span><br><span class="line">         * 如果并发级别为 16，table 则守护 ConcurrentHashMap 包含的桶总数的 1/16 </span><br><span class="line">         */ </span><br><span class="line">        transient volatile HashEntry&lt;K,V&gt;[] table; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 装载因子</span><br><span class="line">         */ </span><br><span class="line">        final float loadFactor; </span><br><span class="line"></span><br><span class="line">        Segment(int initialCapacity, float lf) &#123; </span><br><span class="line">            loadFactor = lf; </span><br><span class="line">            setTable(HashEntry.&lt;K,V&gt;newArray(initialCapacity)); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 设置 table 引用到这个新生成的 HashEntry 数组</span><br><span class="line">         * 只能在持有锁或构造函数中调用本方法</span><br><span class="line">         */ </span><br><span class="line">        void setTable(HashEntry&lt;K,V&gt;[] newTable) &#123; </span><br><span class="line">            // 计算临界阀值为新数组的长度与装载因子的乘积</span><br><span class="line">            threshold = (int)(newTable.length * loadFactor); </span><br><span class="line">            table = newTable; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        /** </span><br><span class="line">         * 根据 key 的散列值，找到 table 中对应的那个桶（table 数组的某个数组成员）</span><br><span class="line">         */ </span><br><span class="line">        HashEntry&lt;K,V&gt; getFirst(int hash) &#123; </span><br><span class="line">            HashEntry&lt;K,V&gt;[] tab = table; </span><br><span class="line">            // 把散列值与 table 数组长度减 1 的值相“与”，</span><br><span class="line">           	 // 得到散列值对应的 table 数组的下标</span><br><span class="line">            // 然后返回 table 数组中此下标对应的 HashEntry 元素</span><br><span class="line">            return tab[hash &amp; (tab.length - 1)]; </span><br><span class="line">        &#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>HashMap的工作原理</strong></p>
-<p>HashMap基于hashing原理。</p>
-<p>将键值对传递给<code>put()</code>时，调用键对象的hashCode()方法来计算hashcode，让后找到bucket位置来储存值对象。当<code>get()</code>时，通过键对象的equals()方法找到正确的键值对，然后返回值对象。</p>
-<p>HashMap使用<code>链表</code>来解决碰撞问题，当发生碰撞了，对象将会储存在链表的下一个节点中。 HashMap在每个链表节点中储存键值对对象。</p>
-<p>当两个不同的键对象的<code>hashcode相同</code>时会发生什么？ 它们会储存在同一个bucket位置的链表中。键对象的equals()方法用来找到键值对。</p>
-<p><code>HashTable</code>是synchronized的,但<code>ConcurrentHashMap</code>同步性能更好,因为它仅仅根据同步级别对map的一部分进行上锁。</p>
-<hr>
-<p><strong>HashMap和Hashtable的区别</strong></p>
-<p><code>HashMap</code>和<code>HashTable</code>都实现了Map接口</p>
-<p>主要的区别有：线程安全性，同步以及速度。</p>
-<ol>
-<li>HashMap是非synchronized  HashTable是synchronized2. </li>
-<li>HashMap可以接受null</li>
-<li>HashMap的Iterator是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的。所以当有其它线程改变了HashMap的结构，将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。</li>
-<li>HashMap不能保证随着时间的推移Map中的元素次序是不变的。</li>
-<li>单线程HashMap性能优于HashTable。</li>
-</ol>
-<hr>
-<p><strong>HashMap和HashSet的区别</strong></p>
-<p><code>HashSet</code>实现了Set接口，它不允许集合中有重复的值</p>
-<p>首先要确保对象重写equals()和hashCode()方法，以确保set中没有储存相等的对象。</p>
-<p><code>HashMap</code>实现了Map接口，Map中不允许重复的键。</p>
-<p>Map接口有两个基本的实现，HashMap和TreeMap。</p>
-<p><code>TreeMap</code>保存了对象的排列次序，而HashMap则不能。</p>
-<p><code>HashMap</code>允许键和值为null。HashMap是非synchronized的。</p>
-<hr>
-<p>####Java Memory Module</p>
-<p>在并发编程中需要处理两个关键问题：</p>
-<ol>
-<li>线程之间如何通信</li>
-<li>线程之间如何同步</li>
-</ol>
-<p>在命令式编程中，线程之间的通信机制有两种：<code>共享内存和消息传递</code>。</p>
-<p><code>共享内存</code>并发模型线程之间共享程序的公共状态，线程之间通过写-读内存中的公共状态来隐式进行通信。</p>
-<p><code>消息传递</code>并发模型线程之间没有公共状态，线程之间必须通过明确的发送消息来显式进行通信。</p>
-<p><code>同步</code>是指程序用于控制不同线程之间操作发生相对顺序的机制。在共享内存并发模型里，同步是显式进行的。程序员必须显式指定某个方法或某段代码需要在线程之间互斥执行。在消息传递的并发模型里，由于消息的发送必须在消息的接收之前，因此同步是隐式进行的。Java的并发采用的是<code>共享内存模型</code>，Java线程之间的通信总是隐式进行，整个通信过程对程序员完全透明。</p>
-<p>Java线程之间的通信由<code>Java内存模型</code>控制，<code>JMM决定一个线程对共享变量的写入何时对另一个线程可见</code>。</p>
-<p>从抽象的角度来看，JMM定义了线程和主内存之间的抽象关系：<code>线程之间的共享变量存储在主内存中，每个线程都有一个私有的本地内存，本地内存中存储了该线程以读/写共享变量的副本。</code></p>
-<p>本地内存是JMM的一个抽象概念，并不真实存在。它涵盖了缓存，写缓冲区，寄存器以及其他的硬件和编译器优化。</p>
-<p><img src="resource/java/main_local_memory.png" alt="main_local_memory"></p>
-<p>初始时三个内存x都为0。线程A更新后x值存放在本地内存A中。线程A和线程B需要通信时，线程A首先把自己本地内存中x值刷新到主内存中，主内存中x值变为1。随后，线程B到主内存中去读取线程A更新后x值，此时线程B本地内存x值也变为1。</p>
-<p><img src="resource/java/memory_exchange.png" alt="main_local_memory"></p>
-<p><strong>重排序</strong></p>
-<p>为了提高性能，编译器和处理器常常会对指令做重排序。重排序分三种类型:</p>
-<ol>
-<li><code>编译器优化的重排序。</code>编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。</li>
-<li><code>指令级并行的重排序。</code>现代处理器采用了指令级并行技术来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。</li>
-<li><code>内存系统的重排序。</code>由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上去可能是在乱序执行。</li>
-</ol>
-<p><img src="resource/java/reordered.png" alt="reordered"></p>
-<p><strong>数据竞争与顺序一致性保证</strong></p>
-<p><strong>volatile的特性</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class VolatileFeaturesExample &#123;</span><br><span class="line">    volatile long vl = 0L;  //使用volatile声明64位的long型变量</span><br><span class="line"></span><br><span class="line">    public void set(long l) &#123;</span><br><span class="line">        vl = l;   //单个volatile变量的写</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void getAndIncrement () &#123;</span><br><span class="line">        vl++;    //复合（多个）volatile变量的读/写</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public long get() &#123;</span><br><span class="line">        return vl;   //单个volatile变量的读</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class VolatileFeaturesExample &#123;</span><br><span class="line">    long vl = 0L;               // 64位的long型普通变量</span><br><span class="line"></span><br><span class="line">    public synchronized void set(long l) &#123;     //对单个的普通 变量的写用同一个监视器同步</span><br><span class="line">        vl = l;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void getAndIncrement () &#123; //普通方法调用</span><br><span class="line">        long temp = get();           //调用已同步的读方法</span><br><span class="line">        temp += 1L;                  //普通写操作</span><br><span class="line">        set(temp);                   //调用已同步的写方法</span><br><span class="line">    &#125;</span><br><span class="line">    public synchronized long get() &#123; </span><br><span class="line">    //对单个的普通变量的读用同一个监视器同步</span><br><span class="line">        return vl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="resource/java/volatile_happens_before.png" alt="volatile_happens_before"></p>
-<p><img src="resource/java/volatile_order.png" alt="volatile_order"></p>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://www.infoq.com/cn/articles/java-memory-model-1" target="_blank" rel="external">深入理解Java内存模型（一）——基础</a></li>
-<li><a href="http://www.infoq.com/cn/articles/java-memory-model-2" target="_blank" rel="external">深入理解Java内存模型（二）——重排序</a></li>
-<li><a href="http://www.infoq.com/cn/articles/java-memory-model-3" target="_blank" rel="external">深入理解Java内存模型（三）——顺序一致性</a></li>
-<li><a href="http://www.infoq.com/cn/articles/java-memory-model-4" target="_blank" rel="external">深入理解Java内存模型（四）——volatile</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwNjY4NTQ4MA==&amp;mid=402750371&amp;idx=1&amp;sn=2b621e0b884a7792065fa18c5b767a54&amp;scene=23&amp;srcid=05013sIrNNsBkrCSfGDzPQNu#rd" target="_blank" rel="external">Twitter工程师谈JVM调优</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
-<ol>
-<li>#<code>runtime metaprogramming</code></li>
-</ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
-</ol>
+        <p>###Golang</p>
 
       
     </div>
@@ -238,38 +122,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
       
       
@@ -309,650 +161,122 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/jvm/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/jvm/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Java Virtual Machine</p>
-<p>###Introduction</p>
-<p>###Command Line Tools </p>
-<p>jstat -gc 106607</p>
-<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
 
-2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
-</code></pre><table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Value</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>S0C</td>
-<td>3584.0</td>
-<td>S0容量</td>
-</tr>
-<tr>
-<td>S1C</td>
-<td>2048.0</td>
-</tr>
-<tr>
-<td>S0U</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
-<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-AllowUserSignalHandlers</td>
-<td>Do not complain if the application installs signal handlers.</td>
-</tr>
-<tr>
-<td>-XX:AltStackSize=16384</td>
-<td>Alternate signal stack size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:-DisableExplicitGC</td>
-<td>Disable calls to System.gc().</td>
-</tr>
-<tr>
-<td>-XX:+FailOverToOldVerifier</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:+HandlePromotionFailure</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><code>Garbage First Garbage Collection Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+UseG1GC</td>
-<td>Use the Garbage First Collector</td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=n</td>
-<td>Sets a target for the maximum GC pause time.</td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=n</td>
-<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=n</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=n</td>
-<td>Ratio of eden/survivor space size.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Maximum value for tenuring threshold.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td>Number of threads concurrent garbage collectors will use.</td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=n</td>
-<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
-</tr>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Performance Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+AggressiveOpts</td>
-<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
-</tr>
-<tr>
-<td>-XX:CompileThreshold=10000</td>
-<td>Number of method invocations/branches before compiling</td>
-</tr>
-<tr>
-<td>-XX:LargePageSizeInBytes=4m</td>
-<td>Sets the large page size used for the Java heap.</td>
-</tr>
-<tr>
-<td>-XX:MaxHeapFreeRatio=70</td>
-<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
-</tr>
-<tr>
-<td>-XX:MaxNewSize=size</td>
-<td>Maximum size of new generation (in bytes).</td>
-</tr>
-<tr>
-<td>-XX:MaxPermSize=64m</td>
-<td>Size of the Permanent Generation.</td>
-</tr>
-<tr>
-<td>-XX:MinHeapFreeRatio=40</td>
-<td>Minimum percentage of heap free after GC to avoid expansion.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=2</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:NewSize=2m</td>
-<td>Default size of new generation (in bytes)</td>
-</tr>
-<tr>
-<td>-XX:ReservedCodeCacheSize=32m</td>
-<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=8</td>
-<td>Ratio of eden/survivor space size</td>
-</tr>
-<tr>
-<td>-XX:TargetSurvivorRatio=50</td>
-<td>Desired percentage of survivor space used after scavenge.</td>
-</tr>
-<tr>
-<td>-XX:ThreadStackSize=512</td>
-<td>Thread Stack Size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:+UseBiasedLocking</td>
-<td>Enable biased locking. For more details, see this tuning example.</td>
-</tr>
-<tr>
-<td>-XX:+UseFastAccessorMethods</td>
-<td>Use optimized versions of Get Primitive Field.</td>
-</tr>
-<tr>
-<td>-XX:-UseISM</td>
-<td>Use Intimate Shared Memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseLargePages</td>
-<td>Use large page memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseMPSS</td>
-<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
-</tr>
-<tr>
-<td>-XX:+UseStringCache</td>
-<td>Enables caching of commonly allocated strings.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchLines=1</td>
-<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchStyle=1</td>
-<td>Generated code style for prefetch instructions.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedStrings</td>
-<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
-</tr>
-<tr>
-<td>-XX:+OptimizeStringConcat</td>
-<td>Optimize String concatenation operations where possible.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Debugging Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-CITime</td>
-<td>Prints time spent in JIT Compiler.</td>
-</tr>
-<tr>
-<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
-<td>Save the error data to this file.</td>
-</tr>
-<tr>
-<td>-XX:-ExtendedDTraceProbes</td>
-<td>Enable performance-impacting dtrace probes.</td>
-</tr>
-<tr>
-<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
-<td>Path to directory or filename for heap dump.</td>
-</tr>
-<tr>
-<td>-XX:-HeapDumpOnOutOfMemoryError</td>
-<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
-</tr>
-<tr>
-<td>-XX:OnError=”cmd args;cmd args”</td>
-<td>Run user-defined commands on fatal error.</td>
-</tr>
-<tr>
-<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
-<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
-</tr>
-<tr>
-<td>-XX:-PrintClassHistogram</td>
-<td>Print a histogram of class instances on Ctrl-Break.</td>
-</tr>
-<tr>
-<td>-XX:-PrintConcurrentLocks</td>
-<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCommandLineFlags</td>
-<td>Print flags that appeared on the command line.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCompilation</td>
-<td>Print message when a method is compiled.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGC</td>
-<td>Print messages at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCDetails</td>
-<td>Print more details at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCTimeStamps</td>
-<td>Print timestamps at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintTenuringDistribution</td>
-<td>Print tenuring age information.</td>
-</tr>
-<tr>
-<td>-XX:-PrintAdaptiveSizePolicy</td>
-<td>Enables printing of information about adaptive generation sizing.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoading</td>
-<td>Trace loading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoadingPreorder</td>
-<td>Trace all classes loaded in order referenced</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassResolution</td>
-<td>Trace constant pool resolutions.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassUnloading</td>
-<td>Trace unloading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceLoaderConstraints</td>
-<td>Trace recording of loader constraints.</td>
-</tr>
-<tr>
-<td>-XX:+PerfDataSaveToFile</td>
-<td>Saves jvmstat binary data on exit.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedOops</td>
-<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
-</tr>
-<tr>
-<td>-XX:+AlwaysPreTouch</td>
-<td>Pre-touch the Java heap during JVM initialization.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchDistance=n</td>
-<td>Sets the prefetch distance for object allocation.</td>
-</tr>
-<tr>
-<td>-XX:InlineSmallCode=n</td>
-<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
-</tr>
-<tr>
-<td>-XX:MaxInlineSize=35</td>
-<td>Maximum bytecode size of a method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:FreqInlineSize=n</td>
-<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:LoopUnrollLimit=n</td>
-<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
-</tr>
-<tr>
-<td>-XX:InitialTenuringThreshold=7</td>
-<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
-</tr>
-<tr>
-<td>-Xloggc:<filename></filename></td>
-<td>Log GC verbose output to specified file.</td>
-</tr>
-<tr>
-<td>-XX:-UseGCLogFileRotation</td>
-<td>Enabled GC log rotation, requires -Xloggc.</td>
-</tr>
-<tr>
-<td>-XX:NumberOfGClogFiles=1</td>
-<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
-</tr>
-<tr>
-<td>-XX:GCLogFileSize=8K</td>
-<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
-</tr>
-</tbody>
-</table>
-<p>#####GC</p>
-<p>Garbage Collector is a memory management tool.</p>
-<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
-<p><code>Major GC vs Full GC</code></p>
-<p>#####Garbage First Garbage Collector</p>
-<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
-<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=200</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1NewSizePercent=5</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MaxNewSizePercent=60</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=45</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1HeapWastePercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCCountTarget=8</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=10</td>
-</tr>
-</tbody>
-</table>
-<p><code>How to Unlock Experimental VM Flags</code></p>
-<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
-<p><strong>Recommendations</strong>:</p>
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Domain-specific language</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/red-black-tree/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/red-black-tree/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Red Black Tree</p>
+<p>Red Black Tree由Rudolf Bayer发明的，当时被称为平衡二叉B树。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。</p>
+<p>红黑树每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了额外要求:</p>
 <ol>
-<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
-<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
-<li>Taming Mixed Garbage Collections : </li>
-</ol>
-<p>###JShell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
-<p>参考资料:</p>
-<ol>
-<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
-<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
-<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
-<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
+<li>节点是红色或黑色</li>
+<li>根节点是黑色</li>
+<li>每个叶节点是黑色的</li>
+<li>每个红色节点的两个子节点都是黑色</li>
+<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
 </ol>
 
       
@@ -976,63 +300,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/paxos/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/divide-and-conquer/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/paxos/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/divide-and-conquer/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Paxos </p>
-<p>角色分为proposers，acceptors，和learners（允许身兼数职）。</p>
-<p><code>proposers</code>提出提案，提案信息包括提案编号和提议的value；<code>acceptor</code>收到提案后可以接受（accept）提案，若提案获得多数acceptors的接受，则称该提案被批准（chosen）；<code>learners</code>只能“学习”被批准的提案。划分角色后，就可以更精确的定义问题：</p>
-<ol>
-<li>决议（value）只有在被proposers提出后才能被批准（未经批准的决议称为“提案（proposal）”）</li>
-<li>在一次Paxos算法的执行实例中，只批准（chosen）一个value</li>
-<li>learners只能获得被批准（chosen）的value</li>
-</ol>
-<p>批准value的过程中，首先proposers将value发送给acceptors，之后acceptors对value进行接受（accept）。</p>
-<p>为了满足只批准一个value的约束，要求经“多数派（majority）”接受的value成为正式的决议（称为“批准”决议）。这是因为无论是按照人数还是按照权重划分，两组“多数派”至少有一个公共的acceptor，如果每个acceptor只能接受一个value，约束2就能保证。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1：一个acceptor必须接受（accept）第一次收到的提案。</span><br></pre></td></tr></table></figure>
-<p>如果恰好一半acceptor接受的提案具有value A，另一半接受的提案具有value B，那么就无法形成多数派，无法批准任何一个value。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2a：一旦一个具有value v的提案被批准（chosen），那么之后任何acceptor再次接受（accept）的提案必须具有value v。</span><br></pre></td></tr></table></figure>
-<p>由于通信是异步的，P2a和P1会发生冲突。如果一个value被批准后，一个proposer和一个acceptor从休眠中苏醒，前者提出一个具有新的value的提案。根据P1，后者应当接受，根据P2a，则不应当接受，这中场景下P2a和P1有矛盾。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2b：一旦一个具有value v的提案被批准（chosen），那么以后任何proposer提出的提案必须具有value v。</span><br></pre></td></tr></table></figure>
-<p>由于acceptor能接受的提案都必须由proposer提出，所以P2b蕴涵了P2a，是一个更强的约束。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2c：如果一个编号为n的提案具有value v，那么存在一个多数派，要么他们中所有人都没有接受（accept）编号小于n </span><br><span class="line">的任何提案，要么他们已经接受（accept）的所有编号小于n的提案中编号最大的那个提案具有value v。</span><br></pre></td></tr></table></figure>
-<p><strong><code>数学归纳法</code>证明P2c蕴涵P2b：</strong></p>
-<p>假设具有value v的提案m获得批准，当n=m+1时，采用反证法，假如提案n不具有value v，而是具有value w，根据P2c，则存在一个多数派S1，要么他们中没有人接受过编号小于n的任何提案，要么他们已经接受的所有编号小于n的提案中编号最大的那个提案是value w。由于S1和通过提案m时的多数派C之间至少有一个公共的acceptor，所以以上两个条件都不成立，导出矛盾从而推翻假设，证明了提案n必须具有value v；</p>
-<p>若（m+1）..（N-1）所有提案都具有value v，采用反证法，假如新提案N不具有value v，而是具有value w’,根据P2c，则存在一个多数派S2，要么他们没有接受过m..（N-1）中的任何提案，要么他们已经接受的所有编号小于N的提案中编号最大的那个提案是value w’。由于S2和通过m的多数派C之间至少有一个公共的acceptor，所以至少有一个acceptor曾经接受了m，从而也可以推出S2中已接受的所有编号小于n的提案中编号最大的那个提案的编号范围在m..（N-1）之间，而根据初始假设，m..（N-1）之间的所有提案都具有value v，所以S2中已接受的所有编号小于n的提案中编号最大的那个提案肯定具有value v，导出矛盾从而推翻新提案n不具有value v的假设。根据数学归纳法，我们证明了若满足P2c，则P2b一定满足。</p>
-<p>P2c是可以通过消息传递模型实现的。另外，引入了P2c后，也解决了前文提到的P1不完备的问题。</p>
-<p>如果一个没有chosen过任何proposer提案的acceptor在prepare过程中回答了一个proposer针对提案n的问题，但是在开始对n进行投票前，又接受（accept）了编号小于n的另一个提案（例如n-1），如果n-1和n具有不同的value，这个投票就会违背P2c。因此在prepare过程中，acceptor进行的回答同时也应包含承诺：不会再接受（accept）编号小于n的提案。这是对P1的加强：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1a：当且仅当acceptor没有回应过编号大于n的prepare请求时，acceptor接受（accept）编号为n的提案。</span><br></pre></td></tr></table></figure>
-<p><strong>通过一个决议分为两个阶段：</strong></p>
-<ol>
-<li><p>prepare阶段:</p>
-<ul>
-<li>proposer选择一个提案编号n并将prepare请求发送给acceptors中的一个多数派</li>
-<li>acceptor收到prepare消息后，如果提案的编号大于它已经回复的所有prepare消息，则acceptor将自己上次接受的提案回复给proposer，并承诺不再回复小于n的提案；</li>
-</ul>
-</li>
-<li><p>批准阶段：</p>
-<ul>
-<li><p>当一个proposer收到了多数acceptors对prepare的回复后，就进入批准阶段。</p>
-<p>它要向回复prepare请求的acceptors发送accept请求，包括编号n和根据P2c决定的value（如果根据P2c没有已经接受的value，那么它可以自由决定value）。</p>
-</li>
-<li><p>在不违背自己向其他proposer的承诺的前提下，acceptor收到accept请求后即接受这个请求。</p>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95#.E5.AE.9E.E4.BE.8B" target="_blank" rel="external">Wiki Paxos算法</a></li>
-</ol>
-
+        
       
     </div>
     <footer>
@@ -1054,28 +332,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/binary-tree/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/stack/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/binary-tree/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/stack/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Binary-Tree"><a href="#Binary-Tree" class="headerlink" title="Binary Tree"></a>Binary Tree</h3><h4 id="Traverse"><a href="#Traverse" class="headerlink" title="Traverse"></a>Traverse</h4><p>遍历操作分为递归与非递归两种，递归操作一般需要借助辅助数据结构。</p>
-<ol>
-<li><p>Pre-Order</p>
-</li>
-<li><p>In-Order</p>
-</li>
-<li><p>Post-Order</p>
-</li>
-<li><p>Level</p>
-</li>
-</ol>
-<h4 id="求二叉树第K层的节点个数"><a href="#求二叉树第K层的节点个数" class="headerlink" title="求二叉树第K层的节点个数"></a>求二叉树第K层的节点个数</h4>
+        
       
     </div>
     <footer>
@@ -1097,54 +364,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/list/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/string/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/algorithms/list/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&amp;mid=2652549143&amp;idx=1&amp;sn=c32136d795aa30b55e412ed7c579c13f&amp;scene=23&amp;srcid=0426T0W75iKpSewMxeA6iL8b#rd" target="_blank" rel="external">三种链表及其哨兵</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/dynamic-programming/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/dynamic-programming/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/string/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Dynamic Programming</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">把多阶段过程转化为一系列单阶段问题，利用各阶段之间的关系，逐个求解</span><br><span class="line">创立了解决这类过程优化问题的新方法——动态规划</span><br></pre></td></tr></table></figure>
+        
       
     </div>
     <footer>
@@ -1163,29 +393,31 @@
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Forrige</a>
+    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
   
   
-    <a href="/page/5/" class="alignright next">Neste</a>
+    <a href="/page/5/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Søk">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorier</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -1201,6 +433,8 @@
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
   
