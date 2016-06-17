@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 3 | darion.johannes.yaphet</title>
+  <title>Side 3 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -381,11 +381,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
   
 
     </header>
@@ -413,11 +413,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
   
 
     </header>
@@ -478,651 +478,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/jvm/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/jvm/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Java Virtual Machine</p>
-<p>###Introduction</p>
-<p>###Command Line Tools </p>
-<p>jstat -gc 106607</p>
-<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
-
-2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
-</code></pre><table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Value</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>S0C</td>
-<td>3584.0</td>
-<td>S0容量</td>
-</tr>
-<tr>
-<td>S1C</td>
-<td>2048.0</td>
-</tr>
-<tr>
-<td>S0U</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
-<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-AllowUserSignalHandlers</td>
-<td>Do not complain if the application installs signal handlers.</td>
-</tr>
-<tr>
-<td>-XX:AltStackSize=16384</td>
-<td>Alternate signal stack size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:-DisableExplicitGC</td>
-<td>Disable calls to System.gc().</td>
-</tr>
-<tr>
-<td>-XX:+FailOverToOldVerifier</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:+HandlePromotionFailure</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><code>Garbage First Garbage Collection Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+UseG1GC</td>
-<td>Use the Garbage First Collector</td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=n</td>
-<td>Sets a target for the maximum GC pause time.</td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=n</td>
-<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=n</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=n</td>
-<td>Ratio of eden/survivor space size.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Maximum value for tenuring threshold.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td>Number of threads concurrent garbage collectors will use.</td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=n</td>
-<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
-</tr>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Performance Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+AggressiveOpts</td>
-<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
-</tr>
-<tr>
-<td>-XX:CompileThreshold=10000</td>
-<td>Number of method invocations/branches before compiling</td>
-</tr>
-<tr>
-<td>-XX:LargePageSizeInBytes=4m</td>
-<td>Sets the large page size used for the Java heap.</td>
-</tr>
-<tr>
-<td>-XX:MaxHeapFreeRatio=70</td>
-<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
-</tr>
-<tr>
-<td>-XX:MaxNewSize=size</td>
-<td>Maximum size of new generation (in bytes).</td>
-</tr>
-<tr>
-<td>-XX:MaxPermSize=64m</td>
-<td>Size of the Permanent Generation.</td>
-</tr>
-<tr>
-<td>-XX:MinHeapFreeRatio=40</td>
-<td>Minimum percentage of heap free after GC to avoid expansion.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=2</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:NewSize=2m</td>
-<td>Default size of new generation (in bytes)</td>
-</tr>
-<tr>
-<td>-XX:ReservedCodeCacheSize=32m</td>
-<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=8</td>
-<td>Ratio of eden/survivor space size</td>
-</tr>
-<tr>
-<td>-XX:TargetSurvivorRatio=50</td>
-<td>Desired percentage of survivor space used after scavenge.</td>
-</tr>
-<tr>
-<td>-XX:ThreadStackSize=512</td>
-<td>Thread Stack Size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:+UseBiasedLocking</td>
-<td>Enable biased locking. For more details, see this tuning example.</td>
-</tr>
-<tr>
-<td>-XX:+UseFastAccessorMethods</td>
-<td>Use optimized versions of Get Primitive Field.</td>
-</tr>
-<tr>
-<td>-XX:-UseISM</td>
-<td>Use Intimate Shared Memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseLargePages</td>
-<td>Use large page memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseMPSS</td>
-<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
-</tr>
-<tr>
-<td>-XX:+UseStringCache</td>
-<td>Enables caching of commonly allocated strings.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchLines=1</td>
-<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchStyle=1</td>
-<td>Generated code style for prefetch instructions.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedStrings</td>
-<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
-</tr>
-<tr>
-<td>-XX:+OptimizeStringConcat</td>
-<td>Optimize String concatenation operations where possible.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Debugging Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-CITime</td>
-<td>Prints time spent in JIT Compiler.</td>
-</tr>
-<tr>
-<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
-<td>Save the error data to this file.</td>
-</tr>
-<tr>
-<td>-XX:-ExtendedDTraceProbes</td>
-<td>Enable performance-impacting dtrace probes.</td>
-</tr>
-<tr>
-<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
-<td>Path to directory or filename for heap dump.</td>
-</tr>
-<tr>
-<td>-XX:-HeapDumpOnOutOfMemoryError</td>
-<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
-</tr>
-<tr>
-<td>-XX:OnError=”cmd args;cmd args”</td>
-<td>Run user-defined commands on fatal error.</td>
-</tr>
-<tr>
-<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
-<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
-</tr>
-<tr>
-<td>-XX:-PrintClassHistogram</td>
-<td>Print a histogram of class instances on Ctrl-Break.</td>
-</tr>
-<tr>
-<td>-XX:-PrintConcurrentLocks</td>
-<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCommandLineFlags</td>
-<td>Print flags that appeared on the command line.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCompilation</td>
-<td>Print message when a method is compiled.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGC</td>
-<td>Print messages at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCDetails</td>
-<td>Print more details at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCTimeStamps</td>
-<td>Print timestamps at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintTenuringDistribution</td>
-<td>Print tenuring age information.</td>
-</tr>
-<tr>
-<td>-XX:-PrintAdaptiveSizePolicy</td>
-<td>Enables printing of information about adaptive generation sizing.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoading</td>
-<td>Trace loading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoadingPreorder</td>
-<td>Trace all classes loaded in order referenced</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassResolution</td>
-<td>Trace constant pool resolutions.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassUnloading</td>
-<td>Trace unloading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceLoaderConstraints</td>
-<td>Trace recording of loader constraints.</td>
-</tr>
-<tr>
-<td>-XX:+PerfDataSaveToFile</td>
-<td>Saves jvmstat binary data on exit.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedOops</td>
-<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
-</tr>
-<tr>
-<td>-XX:+AlwaysPreTouch</td>
-<td>Pre-touch the Java heap during JVM initialization.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchDistance=n</td>
-<td>Sets the prefetch distance for object allocation.</td>
-</tr>
-<tr>
-<td>-XX:InlineSmallCode=n</td>
-<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
-</tr>
-<tr>
-<td>-XX:MaxInlineSize=35</td>
-<td>Maximum bytecode size of a method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:FreqInlineSize=n</td>
-<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:LoopUnrollLimit=n</td>
-<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
-</tr>
-<tr>
-<td>-XX:InitialTenuringThreshold=7</td>
-<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
-</tr>
-<tr>
-<td>-Xloggc:<filename></filename></td>
-<td>Log GC verbose output to specified file.</td>
-</tr>
-<tr>
-<td>-XX:-UseGCLogFileRotation</td>
-<td>Enabled GC log rotation, requires -Xloggc.</td>
-</tr>
-<tr>
-<td>-XX:NumberOfGClogFiles=1</td>
-<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
-</tr>
-<tr>
-<td>-XX:GCLogFileSize=8K</td>
-<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
-</tr>
-</tbody>
-</table>
-<p>#####GC</p>
-<p>Garbage Collector is a memory management tool.</p>
-<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
-<p><code>Major GC vs Full GC</code></p>
-<p>#####Garbage First Garbage Collector</p>
-<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
-<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=200</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1NewSizePercent=5</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MaxNewSizePercent=60</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=45</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1HeapWastePercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCCountTarget=8</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=10</td>
-</tr>
-</tbody>
-</table>
-<p><code>How to Unlock Experimental VM Flags</code></p>
-<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
-<p><strong>Recommendations</strong>:</p>
-<ol>
-<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
-<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
-<li>Taming Mixed Garbage Collections : </li>
-</ol>
-<p>###JShell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
-<p>参考资料:</p>
-<ol>
-<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
-<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
-<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
-<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
-</ol>
+        <p>###Golang</p>
 
       
     </div>
@@ -1142,24 +508,24 @@
 
 <nav id="pagination">
   
-    <a href="/page/2/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/2/" class="alignleft prev">Forrige</a>
   
   
-    <a href="/page/4/" class="alignright next">Nächste Seite</a>
+    <a href="/page/4/" class="alignright next">Neste</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Søk">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Kategorier</h3>
   <ul class="entry">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
