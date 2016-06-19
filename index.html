@@ -50,6 +50,877 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm/">2016-06-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/18/language/jvm/">Java Virtual Machine</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Java-Virtual-Machine"><a href="#Java-Virtual-Machine" class="headerlink" title="Java Virtual Machine"></a>Java Virtual Machine</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><h3 id="Command-Line-Tools"><a href="#Command-Line-Tools" class="headerlink" title="Command Line Tools"></a>Command Line Tools</h3><p>jstat -gc 106607</p>
+<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
+
+2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
+</code></pre><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0C</td>
+<td>3584.0</td>
+<td>S0容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>2048.0</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
+<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:-AllowUserSignalHandlers</td>
+<td>Do not complain if the application installs signal handlers.</td>
+</tr>
+<tr>
+<td>-XX:AltStackSize=16384</td>
+<td>Alternate signal stack size (in Kbytes).</td>
+</tr>
+<tr>
+<td>-XX:-DisableExplicitGC</td>
+<td>Disable calls to System.gc().</td>
+</tr>
+<tr>
+<td>-XX:+FailOverToOldVerifier</td>
+<td>Fail over to old verifier when the new type checker fails.</td>
+</tr>
+<tr>
+<td>-XX:+HandlePromotionFailure</td>
+<td>The youngest generation collection does not require a guarantee of full promotion of all live objects.</td>
+</tr>
+<tr>
+<td>-XX:+MaxFDLimit</td>
+<td>Bump the number of file descriptors to max.</td>
+</tr>
+<tr>
+<td>-XX:PreBlockSpin=10</td>
+<td>Spin count variable for use with -XX:+UseSpinning.</td>
+</tr>
+<tr>
+<td>-XX:-RelaxAccessControlCheck</td>
+<td>Relax the access control checks in the verifier.</td>
+</tr>
+<tr>
+<td>-XX:+ScavengeBeforeFullGC</td>
+<td>Do young generation GC prior to a full GC.</td>
+</tr>
+<tr>
+<td>-XX:+UseAltSigs</td>
+<td>Use alternate signals instead of SIGUSR1 and SIGUSR2 for VM internal signals.</td>
+</tr>
+<tr>
+<td>-XX:+UseBoundThreads</td>
+<td>Bind user level threads to kernel threads.</td>
+</tr>
+<tr>
+<td>-XX:-UseConcMarkSweepGC</td>
+<td>Use concurrent mark-sweep collection for the old generation.</td>
+</tr>
+<tr>
+<td>-XX:+UseGCOverheadLimit</td>
+<td>Use a policy that limits the proportion of the VM’s time that is spent in GC before an OutOfMemory error is thrown.</td>
+</tr>
+<tr>
+<td>-XX:+UseLWPSynchronization</td>
+<td>Use LWP-based instead of thread based synchronization.</td>
+</tr>
+<tr>
+<td>-XX:-UseParallelGC</td>
+<td>Use parallel garbage collection for scavenges.</td>
+</tr>
+<tr>
+<td>-XX:-UseParallelOldGC</td>
+<td>Use parallel garbage collection for the full collections. Enabling this option automatically sets -XX:+UseParallelGC.</td>
+</tr>
+<tr>
+<td>-XX:-UseSerialGC</td>
+<td>Use serial garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-UseSpinning</td>
+<td>Enable naive spinning on Java monitor before entering operating system thread synchronizaton code.</td>
+</tr>
+<tr>
+<td>-XX:+UseTLAB</td>
+<td>Use thread-local object allocation</td>
+</tr>
+<tr>
+<td>-XX:+UseSplitVerifier</td>
+<td>Use the new type checker with StackMapTable attributes.</td>
+</tr>
+<tr>
+<td>-XX:+UseThreadPriorities</td>
+<td>Use native thread priorities.</td>
+</tr>
+<tr>
+<td>-XX:+UseVMInterruptibleIO</td>
+<td>Thread interrupt before or with EINTR for I/O operations results in OS_INTRPT.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Garbage First Garbage Collection Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>Use the Garbage First Collector</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=n</td>
+<td>Sets a target for the maximum GC pause time.</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=n</td>
+<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
+</tr>
+<tr>
+<td>-XX:NewRatio=n</td>
+<td>Ratio of old/new generation sizes.</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio=n</td>
+<td>Ratio of eden/survivor space size.</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=n</td>
+<td>Maximum value for tenuring threshold.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
+</tr>
+<tr>
+<td>-XX:ConcGCThreads=n</td>
+<td>Number of threads concurrent garbage collectors will use.</td>
+</tr>
+<tr>
+<td>-XX:G1ReservePercent=n</td>
+<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
+</tr>
+<tr>
+<td>-XX:G1HeapRegionSize=n</td>
+<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Performance Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+AggressiveOpts</td>
+<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
+</tr>
+<tr>
+<td>-XX:CompileThreshold=10000</td>
+<td>Number of method invocations/branches before compiling</td>
+</tr>
+<tr>
+<td>-XX:LargePageSizeInBytes=4m</td>
+<td>Sets the large page size used for the Java heap.</td>
+</tr>
+<tr>
+<td>-XX:MaxHeapFreeRatio=70</td>
+<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
+</tr>
+<tr>
+<td>-XX:MaxNewSize=size</td>
+<td>Maximum size of new generation (in bytes).</td>
+</tr>
+<tr>
+<td>-XX:MaxPermSize=64m</td>
+<td>Size of the Permanent Generation.</td>
+</tr>
+<tr>
+<td>-XX:MinHeapFreeRatio=40</td>
+<td>Minimum percentage of heap free after GC to avoid expansion.</td>
+</tr>
+<tr>
+<td>-XX:NewRatio=2</td>
+<td>Ratio of old/new generation sizes.</td>
+</tr>
+<tr>
+<td>-XX:NewSize=2m</td>
+<td>Default size of new generation (in bytes)</td>
+</tr>
+<tr>
+<td>-XX:ReservedCodeCacheSize=32m</td>
+<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio=8</td>
+<td>Ratio of eden/survivor space size</td>
+</tr>
+<tr>
+<td>-XX:TargetSurvivorRatio=50</td>
+<td>Desired percentage of survivor space used after scavenge.</td>
+</tr>
+<tr>
+<td>-XX:ThreadStackSize=512</td>
+<td>Thread Stack Size (in Kbytes).</td>
+</tr>
+<tr>
+<td>-XX:+UseBiasedLocking</td>
+<td>Enable biased locking. For more details, see this tuning example.</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td>Use optimized versions of Get Primitive Field.</td>
+</tr>
+<tr>
+<td>-XX:-UseISM</td>
+<td>Use Intimate Shared Memory.</td>
+</tr>
+<tr>
+<td>-XX:+UseLargePages</td>
+<td>Use large page memory.</td>
+</tr>
+<tr>
+<td>-XX:+UseMPSS</td>
+<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
+</tr>
+<tr>
+<td>-XX:+UseStringCache</td>
+<td>Enables caching of commonly allocated strings.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchLines=1</td>
+<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchStyle=1</td>
+<td>Generated code style for prefetch instructions.</td>
+</tr>
+<tr>
+<td>-XX:+UseCompressedStrings</td>
+<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
+</tr>
+<tr>
+<td>-XX:+OptimizeStringConcat</td>
+<td>Optimize String concatenation operations where possible.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Debugging Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:-CITime</td>
+<td>Prints time spent in JIT Compiler.</td>
+</tr>
+<tr>
+<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
+<td>Save the error data to this file.</td>
+</tr>
+<tr>
+<td>-XX:-ExtendedDTraceProbes</td>
+<td>Enable performance-impacting dtrace probes.</td>
+</tr>
+<tr>
+<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
+<td>Path to directory or filename for heap dump.</td>
+</tr>
+<tr>
+<td>-XX:-HeapDumpOnOutOfMemoryError</td>
+<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
+</tr>
+<tr>
+<td>-XX:OnError=”cmd args;cmd args”</td>
+<td>Run user-defined commands on fatal error.</td>
+</tr>
+<tr>
+<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
+<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
+</tr>
+<tr>
+<td>-XX:-PrintClassHistogram</td>
+<td>Print a histogram of class instances on Ctrl-Break.</td>
+</tr>
+<tr>
+<td>-XX:-PrintConcurrentLocks</td>
+<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
+</tr>
+<tr>
+<td>-XX:-PrintCommandLineFlags</td>
+<td>Print flags that appeared on the command line.</td>
+</tr>
+<tr>
+<td>-XX:-PrintCompilation</td>
+<td>Print message when a method is compiled.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGC</td>
+<td>Print messages at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGCDetails</td>
+<td>Print more details at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGCTimeStamps</td>
+<td>Print timestamps at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintTenuringDistribution</td>
+<td>Print tenuring age information.</td>
+</tr>
+<tr>
+<td>-XX:-PrintAdaptiveSizePolicy</td>
+<td>Enables printing of information about adaptive generation sizing.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassLoading</td>
+<td>Trace loading of classes.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassLoadingPreorder</td>
+<td>Trace all classes loaded in order referenced</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassResolution</td>
+<td>Trace constant pool resolutions.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassUnloading</td>
+<td>Trace unloading of classes.</td>
+</tr>
+<tr>
+<td>-XX:-TraceLoaderConstraints</td>
+<td>Trace recording of loader constraints.</td>
+</tr>
+<tr>
+<td>-XX:+PerfDataSaveToFile</td>
+<td>Saves jvmstat binary data on exit.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
+</tr>
+<tr>
+<td>-XX:+UseCompressedOops</td>
+<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
+</tr>
+<tr>
+<td>-XX:+AlwaysPreTouch</td>
+<td>Pre-touch the Java heap during JVM initialization.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchDistance=n</td>
+<td>Sets the prefetch distance for object allocation.</td>
+</tr>
+<tr>
+<td>-XX:InlineSmallCode=n</td>
+<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
+</tr>
+<tr>
+<td>-XX:MaxInlineSize=35</td>
+<td>Maximum bytecode size of a method to be inlined.</td>
+</tr>
+<tr>
+<td>-XX:FreqInlineSize=n</td>
+<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
+</tr>
+<tr>
+<td>-XX:LoopUnrollLimit=n</td>
+<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
+</tr>
+<tr>
+<td>-XX:InitialTenuringThreshold=7</td>
+<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=n</td>
+<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
+</tr>
+<tr>
+<td>-Xloggc:<filename></filename></td>
+<td>Log GC verbose output to specified file.</td>
+</tr>
+<tr>
+<td>-XX:-UseGCLogFileRotation</td>
+<td>Enabled GC log rotation, requires -Xloggc.</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGClogFiles=1</td>
+<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=8K</td>
+<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
+</tr>
+</tbody>
+</table>
+<p>#####GC</p>
+<p>Garbage Collector is a memory management tool.</p>
+<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
+<p><code>Major GC vs Full GC</code></p>
+<p>#####Garbage First Garbage Collector</p>
+<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
+<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:G1HeapRegionSize=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=200</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1NewSizePercent=5</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MaxNewSizePercent=60</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:ConcGCThreads=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=45</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1HeapWastePercent=10</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=8</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1ReservePercent=10</td>
+</tr>
+</tbody>
+</table>
+<p><code>How to Unlock Experimental VM Flags</code></p>
+<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
+<p><strong>Recommendations</strong>:</p>
+<ol>
+<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
+<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
+<li>Taming Mixed Garbage Collections : </li>
+</ol>
+<p>###JShell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>内存区域</strong></p>
+<p>Java虚拟机在执行Java程序过程中会把他所管理的内存划分为若干个不同的数据区域。</p>
+<p>分为以下几个运行时数据区：程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区。</p>
+<p><strong>程序计数器（Program Counter Register）</strong></p>
+<p><em>当前线程所执行的字节码的行号指示器</em></p>
+<p><code>字节码解释器</code>工作时通过改变该计数器的值来选择下一条需要执行的字节码指令。</p>
+<p>每条线程都有一个独立的的程序计数器，各线程间的计数器互不影响，该区域是线程私有的。</p>
+<p>当线程在执行一个Java方法时，该计数器记录的是正在执行的虚拟机字节码指令的地址，当线程在执行的是Native方法时，该计数器的值为空。</p>
+<p><strong>Java虚拟机栈（Java Virtual Machine Stacks）</strong></p>
+<p><code>虚拟机栈</code>描述的是Java方法执行的内存模型：每个方法被执行的时候都会同时创建一个栈帧，栈它是用于支持续虚拟机进行方法调用和方法执行的数据结构。</p>
+<p>活动线程中，只有栈顶的栈帧是有效的，称为当前栈帧，这个栈帧所关联的方法称为当前方法。</p>
+<p>栈帧用于存储局部变量表、操作数栈、动态链接、方法返回地址和一些额外的附加信息。</p>
+<p>一个栈帧需要分配多少内存，不会受到程序运行期变量数据的影响，而仅仅取决于具体的虚拟机实现。</p>
+<p><code>局部变量表</code></p>
+<p>局部变量表是一组变量值存储空间，用于存放方法参数和方法内部定义的局部变量，其中存放的数据的类型是编译期可知的各种基本数据类型、对象引用和returnAddress类型。</p>
+<p>局部变量表所需的内存空间编译期间完成分配，即在Java程序被编译成Class文件时，就确定了所需分配的最大局部变量表的容量。</p>
+<p>当进入一个方法时，这个方法需要在栈中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。</p>
+<p>局部变量表的容量以变量槽（Slot）为最小单位。一个Slot可以存放一个32位以内的数据类型，64位的数据类型，虚拟机会以高位在前的方式为其分配两个连续的Slot空间。</p>
+<p>虚拟机使用<code>局部变量表</code>来完成参数值到参数变量列表的传递过程的</p>
+<p>如果是实例方法，则局部变量表中的第0位索引的Slot默认是用于传递方法所属对象实例的引用，在方法中可以通过关键字“this”来访问这个隐含的参数。</p>
+<p>其余参数则按照参数表的顺序来排列，占用从1开始的局部变量Slot，参数表分配完毕后，再根据方法体内部定义的变量顺序和作用域分配其余的Slot。</p>
+<p>局部变量表中的Slot是可重用的，方法体中定义的变量，作用域并不一定会覆盖整个方法体</p>
+<p>如果当前字节码PC计数器的值已经超过了某个变量的作用域，那么这个变量对应的Slot就可以交给其他变量使用。</p>
+<p><code>操作数栈</code></p>
+<p>操作数栈又常被称为操作栈，操作数栈的最大深度也是在编译的时候就确定了。</p>
+<p>Java虚拟机的解释执行引擎称为“基于栈的执行引擎”，其中所指的“栈”就是操作数栈。</p>
+<p>也称Java虚拟机是基于栈的，这点不同于Android虚拟机，Android虚拟机是基于寄存器的。</p>
+<p>基于栈的指令集最主要的优点是可移植性强，主要的缺点是执行速度相对会慢些。</p>
+<p>而由于寄存器由硬件直接提供，所以基于寄存器指令集最主要的优点是执行速度快，主要的缺点是可移植性差。</p>
+<p><code>动态连接</code></p>
+<p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。</p>
+<p>一部分会在类加载阶段或第一次使用的时候转化为直接引用，称为静态解析。</p>
+<p>另一部分将在每一次的运行期间转化为直接引用，这部分称为动态连接。</p>
+<p><code>方法返回地址</code></p>
+<p><strong>本地方法栈（Native Method Stacks）</strong></p>
+<p>本地方法栈则为使用到的本地操作系统方法服务。</p>
+<p><strong>Java堆（Java Heap）</strong></p>
+<p>Java堆是所有线程共享的一块内存区域。</p>
+<p>几乎所有的对象实例和数组都在这类分配内存。</p>
+<p>Java堆可以处在物理上不连续的内存空间中，只要逻辑上是连续的即可。</p>
+<p>如果在堆中没有内存可分配时，并且堆也无法扩展时，将会抛出OutOfMemoryError异常。</p>
+<p><strong>方法区（Method Area）</strong></p>
+<p>方法区也是各个线程共享的内存区域，它用于存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
+<p>Java虚拟机规范把方法区描述为Java堆的一个逻辑部分，而且它和Java Heap一样不需要连续的内存，可以选择固定大小或可扩展，另外，虚拟机规范允许该区域可以选择不实现垃圾回收。</p>
+<p>运行时常量池相对于Class文件常量池的另一个重要特征是具备动态性，Java语言并不要求常量一定只能在编译期产生，也就是并非预置入Class文件中的常量池的内容才能进入方法区的运行时常量池，运行期间也可能将新的常量放入池中。</p>
+<p><strong>直接内存（Direct Memory）</strong></p>
+<p>直接内存直接从操作系统中分配，因此不受Java堆大小的限制，但是会受到本机总内存的大小及处理器寻址空间的限制。</p>
+<p>这样能在一些场景中提高性能，因为避免了在Java堆和Native堆中来回复制数据。</p>
+<p><strong>内存溢出</strong></p>
+<p>内存泄露是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制，因而造成了资源的浪费。</p>
+<p>内存溢出是指程序所需要的内存超出了系统所能分配的内存的上限。</p>
+<hr>
+<p><strong>Class类文件结构</strong></p>
+<p>Java是与平台无关的语言，这得益于Java源代码编译后生成的Class文件。</p>
+<p>Class文件是一组以8位字节为基础单位的二进制流。</p>
+<p>Java虚拟机规范规定，Class文件格式采用一种类似于C语言结构体的伪结构来存储，这种伪结构中只有两种数据类型：无符号数和表。</p>
+<p>无符号数属于基本数据类型，以u1、u2、u4、u8来分别代表1、2、4、8个字节的无符号数。</p>
+<p>表是由多个无符号数或其他表作为数据项构成的符合数据类型，所有的表都习惯性地以“_info”结尾。</p>
+<p>整个Class文件本质上就是一张表。</p>
+<p><code>magic与version</code></p>
+<p>每个Class文件的头4个字节称为魔数，它的唯一作用是判断该文件是否为一个能被虚拟机接受的Class文件。</p>
+<p>它的值固定为0xCAFEBABE。</p>
+<p>紧接着magic的4个字节存储的是Class文件的次版本号和主版本号，高版本的JDK能向下兼容低版本的Class文件，但不能运行更高版本的Class文件。</p>
+<p><code>constant_pool</code></p>
+<p>major_version之后是常量池入口，它是Class文件中与其他项目关联最多的数据类型，也是占用Class文件空间最大的数据项目之一。</p>
+<p><code>access_flag</code></p>
+<p>这个标志用于识别一些类或接口层次的访问信息，包括：这个Class是类还是接口，是否定义为public类型，abstract类型，如果是类的话，是否声明为final，等等。</p>
+<p>每种访问信息都由一个十六进制的标志值表示，如果同时具有多种访问信息，则得到的标志值为这几种访问信息的标志值的逻辑或。</p>
+<p><code>this_class、super_class、interfaces</code></p>
+<p><code>fields</code></p>
+<p><code>methods</code></p>
+<p><code>attributes</code></p>
+<p><em>Code属性</em></p>
+<p><em>Exception属性</em></p>
+<p><em>LineNumberTable属性</em></p>
+<p>描述Java源码行号与字节码行号之间的对应关系。</p>
+<p><em>LocalVariableTable属性</em></p>
+<p>描述栈帧中局部变量表中的变量与Java源码中定义的变量之间的对应关系。</p>
+<p><em>SourceFile属性</em></p>
+<p>用于记录生成这个Class文件的源码文件名称。</p>
+<p><em>ConstantValue属性</em></p>
+<p>通知虚拟机自动为静态变量赋值，只有被static修饰的变量才可以使用这项属性。</p>
+<p><em>InnerClasses属性</em></p>
+<p>用于记录内部类与宿主类之间的关联。</p>
+<p><em>Deprecated属性和Synthetic属性</em></p>
+<p>用于表示某个类、字段和方法，已经被程序作者定为不再推荐使用。</p>
+<p><em>Synthetic属性</em></p>
+<p>代表此字段或方法并不是Java源代码直接生成的，而是由编译器自行添加的，如this字段和实例构造器、类构造器等。</p>
+<hr>
+<p><strong>类初始化</strong></p>
+<hr>
+<p><strong>类加载机制</strong></p>
+<hr>
+<p>参考资料:</p>
+<ol>
+<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
+<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
+<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477210&amp;idx=2&amp;sn=57955ff79f6c930a54b6ed52b9b30e70&amp;scene=21#wechat_redirect" target="_blank" rel="external">Java内存区域与内存溢出</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477221&amp;idx=2&amp;sn=2217ce137006e6dbe790733e074b9ba9&amp;scene=21#wechat_redirect" target="_blank" rel="external">Class类文件结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477246&amp;idx=3&amp;sn=f6e706408197d24791dc317ff666b256&amp;scene=21#wechat_redirect" target="_blank" rel="external">类初始化</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477252&amp;idx=2&amp;sn=6af2ebda31862bd1cbe131a42634955d&amp;scene=23&amp;srcid=0617RCitd6RZndjA53mZPwUJ#rd" target="_blank" rel="external">类加载机制</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/16/storage/rocksdb/">RocksDB</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="RocksDB"><a href="#RocksDB" class="headerlink" title="RocksDB"></a>RocksDB</h3><p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
+<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
+<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
+<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
+<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
+<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
+<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
+<hr>
+<p><strong>Structures</strong></p>
+<p><code>Options</code> define how RocksDB behaves and performs. </p>
+<p>options specific to the whole RocksDB instance will be defined in <code>DBOptions</code> .</p>
+<p>Column Families are handled and referenced with a <code>ColumnFamilyHandle</code> .</p>
+<p><code>Options</code> is inheriting both <code>ColumnFamilyOptions</code> and <code>DBOptions</code>, which means you can still use it to define all the options for a DB instance with a single (default) column family.</p>
+<hr>
+<p><strong>Static Sorted Table (Static Sorted Table)</strong></p>
+<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
+<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
+<p>Format :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
+<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
+<p>ReadOnly Mode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Column Families</strong></p>
+<p>Each key-value pair in RocksDB is associated with exactly one Column Family. </p>
+<p>If there is no Column Family specified, key-value pair is associated with Column Family “default”.</p>
+<p>Column Families provide a way to logically partition the database.</p>
+<ul>
+<li>Atomic writes across Column Families are supported.</li>
+<li>Consistent view of the database across Column Families.</li>
+<li>Ability to configure different Column Families independently.</li>
+<li>On-the-fly adding new Column Families and dropping them.</li>
+</ul>
+<p>The main idea behind Column Families is that they share the write-ahead log and don’t share memtables and table files. </p>
+<p>By sharing write-ahead logs we get awesome benefit of atomic writes. </p>
+<p>By separating memtables and table files, we are able to configure column families independently and delete them quickly.</p>
+<p>Every time a single Column Family is flushed, we create a new WAL . </p>
+<p>We can delete the old WAL only when all Column Families have been flushed and all data contained in that WAL persisted in table files.</p>
+<p><code>Options::max_total_wal_size</code> which can be configured such that stale column families are automatically flushed.</p>
+<hr>
+<p><strong>Memory usage</strong> </p>
+<p>There are a couple of components in RocksDB that contribute to memory usage:</p>
+<ol>
+<li>Block cache</li>
+<li>Indexes and bloom filters</li>
+<li>Memtables</li>
+<li>Blocks pinned by iterators</li>
+</ol>
+<p><strong>Block cache</strong></p>
+<p>Block cache is where RocksDB caches uncompressed data blocks.</p>
+<p>RocksDB’s cache is two-tiered: <code>block cache</code> and <code>page cache</code>.</p>
+<p>If the data block is not found in block cache, RocksDB reads it from file using buffered IO. </p>
+<p><strong>Indexes and filter blocks</strong></p>
+<p><strong>Memtable</strong></p>
+<p>Memtables ,in-memory write buffers.</p>
+<p>Each new key-value pair is first written to the memtable. </p>
+<p>Memtable size is controlled by the option <code>write_buffer_size</code>.</p>
+<p>However, memtable size is inversely proportional to write amplification </p>
+<p><code>The more memory you give to the memtable, the less the write amplification is.</code></p>
+<p>If you increase your memtable size, be sure to also increase your L1 size!</p>
+<p>L1 size is controlled by the option <code>max_bytes_for_level_base</code>.</p>
+<p><strong>Blocks pinned by iterators</strong></p>
+<p>Each iterator pins exactly one data block for each L0 file plus one data block for each L1+ level.</p>
+<p>So the total memory usage from pinned blocks is approximately <code>num_iterators * block_size * ((num_levels-1) + num_l0_files)</code></p>
+<hr>
+<p><strong>Java</strong></p>
+<hr>
+<p><strong>MANIFEST</strong></p>
+<p><strong>Terminology</strong></p>
+<p><code>MANIFEST</code> refers to the system that keeps track of RocksDB state changes in a transactional log</p>
+<p><code>Manifest log</code> refers to an individual log file that contains RocksDB state snapshot/edits</p>
+<p><code>CURRENT</code> refers to the latest manifest log</p>
+<p><strong>Version Edit</strong></p>
+<p>A certain state of RocksDB at any given time is referred to as a <code>version</code>.</p>
+<p>Any modification to the version is considered a version edit. </p>
+<p>A version is constructed by joining a sequence of version-edits.</p>
+<p><code>A manifest log file is a sequence of version edits.</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">version-edit      = Any RocksDB state change</span><br><span class="line">version           = &#123; version-edit* &#125;</span><br><span class="line">manifest-log-file = &#123; version, version-edit* &#125;</span><br><span class="line">                  = &#123; version-edit* &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit</strong></p>
+<p><strong>Data Types</strong></p>
+<p><code>Simple data types</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VarX   - Variable character encoding of intX</span><br><span class="line">FixedX - Fixed character encoding of intX</span><br></pre></td></tr></table></figure>
+<p><code>Complex data types</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String - Length prefixed string data</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">| size (n)  | content of string  |</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">|&lt;- Var32 -&gt;|&lt;-- n            --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit Record Format</strong></p>
+<p>Version edit records have the following format. </p>
+<p>The decoder identifies the record type using the record identification number.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------ ......... ----------+</span><br><span class="line">| Record ID   | Variable size record data |</span><br><span class="line">+-------------+------ .......... ---------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- varies by type       --&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit Record Types and Layout</strong></p>
+<p><strong>Comparator edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Captures the comparator name</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kComparator | data           |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Log number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Lates WAL log file number</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kLogNumber  | log number     |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Previous File Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Previous manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kPrevFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Next File Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Next manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kNextFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Last Sequence Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Last sequence number of RocksDB</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kLastSequence    | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Max Column Family edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Adjust the maximum number of family columns allowed.</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kMaxColumnFamily    | log number     |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Deleted File edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mark a file as deleted from database.</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">| kDeletedFile    | level       | file number  |</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">&lt;-- Var32     ---&gt;|&lt;-- Var32 --&gt;|&lt;-- Var64  --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record with compaction information</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile4    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br><span class="line"></span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">|kPathID ---| Path size(n)  | path  | kNeedCompaction  | 1     | value (0/1)  |</span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">&lt;- var32  -&gt;|&lt;-- var32   --&gt;|&lt;- n -&gt;|&lt;-- var32      --&gt;|&lt;- 1 -&gt;|&lt;-- 1      --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record backward compatible</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile2    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">&lt;-- var32   --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record with path information</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile3    | level       | file number  | Path ID     | file size   | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64 --&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family status edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Note the status of column family feature (enabled/disabled)</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kColumnFamily    | 0/1            |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family add edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Add a column family</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kColumnFamilyAdd    | cf name        |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family drop edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drop all column family</span><br><span class="line">+---------------------+</span><br><span class="line">| kColumnFamilyDrop   |</span><br><span class="line">+---------------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Transactions</strong></p>
+<p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
+<p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
+<p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
+<hr>
+<p><strong>FAQ</strong></p>
+<ol>
+<li><p>If my process crashes, can it corrupt the database?</p>
+<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
+</li>
+<li><p>a</p>
+<p>``</p>
+</li>
+<li><p>Does RocksDB throw exceptions?</p>
+<p><code>No, RocksDB returns rocksdb::Status to indicate any error.</code></p>
+</li>
+<li><p>How to know the number of keys stored in a RocksDB database?</p>
+<p>``</p>
+</li>
+</ol>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
+<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
       
       
@@ -109,21 +980,22 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/article/">2016-06-03</a></time>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/06/03/architecture/article/"></a></h1>
+    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>Reference :</p>
+        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
+<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
+<p>Reference :</p>
 <ol>
-<li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
-<li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
-<li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
+<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
 </ol>
 
       
@@ -147,22 +1019,21 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/article/">2016-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
+    <h1 class="title"><a href="/2016/06/03/architecture/article/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
-<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
-<p>Reference :</p>
+        <p>Reference :</p>
 <ol>
-<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
+<li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
+<li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
+<li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
 </ol>
 
       
@@ -380,154 +1251,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Cassandra </p>
-<p>###Introduction</p>
-<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
-<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
-<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
-<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
-<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
-<p>###gossip: Internode communications</p>
-<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
-<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
-<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
-<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
-<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
-<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
-<p>###Virtual nodes</p>
-<p>###Write </p>
-<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
-<ol>
-<li>Logging data in the commit log</li>
-<li>Writing data to the memtable</li>
-<li>Flushing data from the memtable</li>
-<li>Storing data on disk in SSTables</li>
-<li>Compaction</li>
-</ol>
-<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
-<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
-<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
-<p>###Read </p>
-<p>###Delete</p>
-<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
-<p>###Compaction</p>
-<p>###Hinted Handoff</p>
-<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
-<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
-<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
-<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
-<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
-<p>###SSTable</p>
-<p>SSTables have 3 separate files created per column-family.</p>
-<ol>
-<li>Bloom Filter</li>
-<li>Index</li>
-<li>Data</li>
-</ol>
-<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
-<p>###Memtable</p>
-<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
-<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
-<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
-<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
-<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
-<p>column_definition is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
-<p>partition_key is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
-<p>collection_type is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
-<p><code>CREATE TYPE</code>  Create a user-defined type</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
-<p>Example :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
-<p>###Cassandra tools</p>
-<p>The nodetool utility is a command line interface for managing a cluster.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
-<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
-<p>###Architecture</p>
-<p>###Authentication</p>
-<p>To Configure Cassandra to use internal authentication,</p>
-<p>###Virtual Nodes</p>
-<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
-<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
-<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
-<p>####JVM Turning</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
-<p>####Inner Cassandra </p>
-<p>#####StartUp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
       
       
@@ -560,25 +1283,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##MySQL</p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
-</ol>
-
+        
       
     </div>
     <footer>
@@ -661,6 +1376,8 @@
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
+    <li><a href="/categories/Language/">Language</a><small>1</small></li>
+  
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
@@ -679,6 +1396,8 @@
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

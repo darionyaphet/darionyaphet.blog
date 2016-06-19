@@ -52,7 +52,7 @@ RocksDB organizes all data in sorted order and the co">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/storage/rocksdb/">2016-05-01</a></time>
+        <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
       
       
   
@@ -180,6 +180,11 @@ RocksDB organizes all data in sorted order and the co">
 <p><strong>Column family drop edit record:</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drop all column family</span><br><span class="line">+---------------------+</span><br><span class="line">| kColumnFamilyDrop   |</span><br><span class="line">+---------------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|</span><br></pre></td></tr></table></figure>
 <hr>
+<p><strong>Transactions</strong></p>
+<p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
+<p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
+<p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
+<hr>
 <p><strong>FAQ</strong></p>
 <ol>
 <li><p>If my process crashes, can it corrupt the database?</p>
@@ -262,7 +267,7 @@ RocksDB organizes all data in sorted order and the co">
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/05/01/storage/rocksdb/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/06/16/storage/rocksdb/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
@@ -283,6 +288,8 @@ RocksDB organizes all data in sorted order and the co">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
+    <li><a href="/categories/Language/">Language</a><small>1</small></li>
+  
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
@@ -301,6 +308,8 @@ RocksDB organizes all data in sorted order and the co">
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   
