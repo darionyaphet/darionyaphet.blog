@@ -129,6 +129,73 @@ RocksDB organizes all data in sorted order and the co">
 <p>Each iterator pins exactly one data block for each L0 file plus one data block for each L1+ level.</p>
 <p>So the total memory usage from pinned blocks is approximately <code>num_iterators * block_size * ((num_levels-1) + num_l0_files)</code></p>
 <hr>
+<p><strong>WriteBatch</strong></p>
+<p>The <code>WriteBatch</code> holds a sequence of edits to be made to the database, and these edits within the batch are applied in order. </p>
+<p><code>WriteBatch</code> may also be used to speed up bulk updates by placing lots of individual mutations into the same batch.</p>
+<p><strong>Synchronous Writes</strong></p>
+<p>By default, each write to leveldb is asynchronous: it returns after pushing the write from the process into the operating system. </p>
+<p>The transfer from operating system memory to the underlying persistent storage happens asynchronously.</p>
+<p>The <code>sync</code> flag can be turned on for a particular write to make the write operation not return until the data being written has been pushed all the way to persistent storage. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WriteOptions writeOptions = new WriteOptions();</span><br><span class="line">writeOptions.setSync(true);</span><br><span class="line">writeOptions.sync();</span><br></pre></td></tr></table></figure>
+<p><strong>Asynchronous Writes</strong></p>
+<p><code>WriteBatch</code> provides an alternative to asynchronous writes.</p>
+<p>Multiple updates may be placed in the same <code>WriteBatch</code> and applied together using a synchronous write. </p>
+<p>You can disable syncing of data files by</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setDisableDataSync(true);</span><br></pre></td></tr></table></figure>
+<p>Once the operation is finished, you can manually call sync() to flush all dirty buffers to stable storage.</p>
+<p>RocksDB by default uses faster fdatasync() to sync files. </p>
+<p>If you want to use fsync(), you can set Options::use_fsync to true.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setUseFsync(true);</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Merge operators</strong></p>
+<hr>
+<p><strong>Iteration</strong></p>
+<p>The following example demonstrates how to print all key,value pairs in a database.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RocksIterator iterator = client.newIterator();</span><br><span class="line">try &#123;</span><br><span class="line">    for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) &#123;</span><br><span class="line">        String key = new String(iterator.key());</span><br><span class="line">        String value = new String(iterator.value());</span><br><span class="line">        System.out.println(key + &quot; --&gt; &quot; + value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">    client.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The following variation shows how to process just the keys in the range [start,limit) .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (iterator.seek(&quot;yid&quot;.getBytes()); iterator.isValid(); iterator.prev()) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Snapshots</strong></p>
+<hr>
+<p><strong>Slice</strong></p>
+<hr>
+<p><strong>Write buffer</strong></p>
+<hr>
+<p><strong>Compaction</strong></p>
+<p>The options that impact behavior of Compactions :</p>
+<ul>
+<li>compaction_style</li>
+<li>disable_auto_compactions</li>
+<li>compaction_filter</li>
+<li>compaction_filter_factory</li>
+</ul>
+<p>The options impacting performance of compactions : </p>
+<ul>
+<li>access_hint_on_compaction_start</li>
+<li>level0_file_num_compaction_trigger</li>
+<li>max_mem_compaction_level</li>
+<li>target_file_size_base</li>
+<li>target_file_size_multiplier</li>
+<li>expanded_compaction_factor</li>
+<li>source_compaction_factor</li>
+<li>max_grandparent_overlap_factor</li>
+<li>disable_seek_compaction</li>
+<li>max_background_compactions</li>
+</ul>
+<hr>
+<p><strong>Thread pools</strong></p>
+<hr>
+<p><strong>Purging WAL files</strong></p>
+<p>Old write-ahead logs are deleted automatically when application doesn’t need them anymore.</p>
+<p>There are options (<code>WAL_ttl_seconds</code> and <code>WAL_size_limit_MB</code>) that enable the user to archive the logs and then delete them lazily, either in TTL fashion or based on size limit.</p>
+<ul>
+<li>If both set to 0, logs will be deleted asap and will never get into the archive.</li>
+<li>If <code>WAL_ttl_seconds</code> is 0 and <code>WAL_size_limit_MB</code> is not 0, WAL files will be checked every 10 min and if total size is greater then</li>
+<li>If <code>WAL_ttl_seconds</code> is not 0 and <code>WAL_size_limit_MB</code> is 0, then WAL files will be checked every <code>WAL_ttl_seconds</code> / 2 and those that are older than <code>WAL_ttl_seconds</code> will be deleted.</li>
+<li>If both are not 0, WAL files will be checked every 10 min and both checks will be performed with ttl being first.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Options options = new Options()</span><br><span class="line">        .setCreateIfMissing(true)</span><br><span class="line">        .setWalDir(&quot;/tmp/basic.wal&quot;)</span><br><span class="line">        .setWalSizeLimitMB(32)</span><br><span class="line">        .setWalTtlSeconds(30);</span><br></pre></td></tr></table></figure>
+<hr>
 <p><strong>Java</strong></p>
 <hr>
 <p><strong>MANIFEST</strong></p>
@@ -184,6 +251,35 @@ RocksDB organizes all data in sorted order and the co">
 <p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
 <p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
 <p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
+<hr>
+<p><strong>Indexing SST Files for Better Lookup Performance</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">                                         file 1                                          file 2</span><br><span class="line">                                      +----------+                                    +----------+</span><br><span class="line">level 1:                              | 100, 200 |                                    | 300, 400 |</span><br><span class="line">                                      +----------+                                    +----------+</span><br><span class="line">           file 1     file 2      file 3      file 4       file 5       file 6       file 7       file 8</span><br><span class="line">         +--------+ +--------+ +---------+ +----------+ +----------+ +----------+ +----------+ +----------+</span><br><span class="line">level 2: | 40, 50 | | 60, 70 | | 95, 110 | | 150, 160 | | 210, 230 | | 290, 300 | | 310, 320 | | 410, 450 |</span><br><span class="line">         +--------+ +--------+ +---------+ +----------+ +----------+ +----------+ +----------+ +----------+</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Performance</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Index</th>
+<th style="text-align:center">Key Size</th>
+<th style="text-align:center">Disable WAL</th>
+<th style="text-align:center">Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:center">1024 <em> 1024 </em> 64</td>
+<td style="text-align:center">false</td>
+<td style="text-align:center">198,285</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:center">1024 <em> 1024 </em> 64</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">178,082</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <p><strong>FAQ</strong></p>
 <ol>
@@ -288,7 +384,7 @@ RocksDB organizes all data in sorted order and the co">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>1</small></li>
+    <li><a href="/categories/Language/">Language</a><small>2</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
@@ -308,6 +404,8 @@ RocksDB organizes all data in sorted order and the co">
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
