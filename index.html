@@ -972,7 +972,25 @@
 <p>The following variation shows how to process just the keys in the range [start,limit) .</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (iterator.seek(&quot;yid&quot;.getBytes()); iterator.isValid(); iterator.prev()) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
+<p><strong>Checksums</strong></p>
+<p><code>Rocksdb</code> associates checksums with all data it stores in the File System. </p>
+<p>There are two separate controls provided over how aggressively these checksums are verified:</p>
+<ul>
+<li><p><code>verify_checksums</code> forces checksum verification of all data that is read from the file system on. <em>This is on by default.</em></p>
+</li>
+<li><p><code>paranoid_checks</code> may be set to true before opening a database to make the database implementation raise an error as soon as it detects an internal corruption. </p>
+</li>
+</ul>
+<hr>
+<p><strong>Key Layout</strong></p>
+<p>Adjacent keys will usually be placed in the same block.</p>
+<p>The application can improve its performance by <code>placing keys that are accessed together near each other</code> and <code>placing infrequently used keys in a separate region of the key space</code>.</p>
+<hr>
+<p><strong>Filters</strong></p>
+<p><code>FilterPolicy</code> mechanism can be used to reduce the number of disk reads substantially.</p>
+<hr>
 <p><strong>Snapshots</strong></p>
+<p>Snapshots provide consistent read-only views over the entire state of the key-value store.</p>
 <hr>
 <p><strong>Slice</strong></p>
 <hr>
@@ -1070,7 +1088,11 @@
 <p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
 <hr>
 <p><strong>Indexing SST Files for Better Lookup Performance</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">                                         file 1                                          file 2</span><br><span class="line">                                      +----------+                                    +----------+</span><br><span class="line">level 1:                              | 100, 200 |                                    | 300, 400 |</span><br><span class="line">                                      +----------+                                    +----------+</span><br><span class="line">           file 1     file 2      file 3      file 4       file 5       file 6       file 7       file 8</span><br><span class="line">         +--------+ +--------+ +---------+ +----------+ +----------+ +----------+ +----------+ +----------+</span><br><span class="line">level 2: | 40, 50 | | 60, 70 | | 95, 110 | | 150, 160 | | 210, 230 | | 290, 300 | | 310, 320 | | 410, 450 |</span><br><span class="line">         +--------+ +--------+ +---------+ +----------+ +----------+ +----------+ +----------+ +----------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">                                file 1                              file 2</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">level 1:                     | 100, 200 |                        | 300, 400 |</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">                                </span><br><span class="line">           file 1   file 2    file 3    file 4     file 5     file 6     file 7     file 8</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">level 2: | 40, 50 | 60, 70 | 95, 110 | 150, 160 | 210, 230 | 290, 300 | 310, 320 | 410, 450 |</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">```         </span><br><span class="line"></span><br><span class="line">***</span><br><span class="line"></span><br><span class="line">**Merge Operator Implementation**</span><br><span class="line"></span><br><span class="line">*RocksDB Data Model*</span><br><span class="line"></span><br><span class="line">RocksDB is a versioned key-value store.</span><br><span class="line"></span><br><span class="line">Every change to the db is globally ordered and assigned a monotonically increasing sequence number.</span><br><span class="line"></span><br><span class="line">For each key, RocksDB keeps the history of operations.</span><br><span class="line"></span><br><span class="line">A key (K) that experienced n changes, looks like this logically</span><br></pre></td></tr></table></figure>
+<p>K:   OP1   OP2   OP3   …   OPn<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">*Get*</span><br><span class="line"></span><br><span class="line">Get returns the state of a key at a specific time.</span><br></pre></td></tr></table></figure></p>
+<p>K:   OP1    OP2   OP3   ….   OPk  …. OPn<br>                            ^<br>                            |<br>                         Get.seq<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Suppose `OPk` is the most recent operation that&apos;s visible to Get</span><br></pre></td></tr></table></figure></p>
+<p>k = max(i) {seq(OPi) &lt;= Get.seq}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>K:   OP1    OP2   OP3   ….    OPk  …. OPn<br>            Put  Merge  Merge  Merge<br>                                 ^<br>                                 |<br>                              Get.seq<br>             ——————–&gt;<br>```             </p>
 <hr>
 <p><strong>Performance</strong></p>
 <table>
@@ -1103,14 +1125,48 @@
 <li><p>If my process crashes, can it corrupt the database?</p>
 <p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
 </li>
-<li><p>a</p>
-<p>``</p>
-</li>
 <li><p>Does RocksDB throw exceptions?</p>
-<p><code>No, RocksDB returns rocksdb::Status to indicate any error.</code></p>
+<p><code>No, RocksDB returns Status to indicate any error.</code></p>
 </li>
 <li><p>How to know the number of keys stored in a RocksDB database?</p>
-<p>``</p>
+<p><code>Use GetIntProperty to obtain an estimated number of keys stored in a column family, or use GetAggregatedIntProperty to obtain an estimated number of keys stored in the whole RocksDB database.</code></p>
+</li>
+<li><p>Can I write to RocksDB using multiple processes?</p>
+<p><code>No RocksDB support multi-process read only process without writing the database.</code></p>
+</li>
+<li><p>What’s the maximum key and value sizes supported?</p>
+<p><code>RocksDB is not designed for large keys. The maximum recommended sizes for key and value are 8MB and 3GB respectively.</code> </p>
+</li>
+<li><p>What’s the fastest way to load data into RocksDB?</p>
+<p><code>A fast way to direct insert data to the DB</code> </p>
+<ul>
+<li>using single writer thread and insert in sorted order</li>
+<li>batch hundreds of keys into one write batch</li>
+<li>use vector memtable</li>
+<li>make sure options.max_background_flushes is at least 4</li>
+<li>before inserting the data, disable automatic compaction</li>
+</ul>
+</li>
+<li><p>Is block_size before compression , or after?</p>
+<p><code>block_size is for size before compression.</code></p>
+</li>
+<li><p>Is it safe to directly copy an open RocksDB instance?</p>
+<p><code>No, unless the RocksDB instance is opened in read-only mode.</code></p>
+</li>
+<li><p>Can I open RocksDB with a different compression type and still read old data?    </p>
+<p><code>Rocksdb stored the compression information in each SST file and performs decompression accordingly, you can change the compression and the db will still be able to read existing files.</code> </p>
+</li>
+<li><p>If I delete a column family, and I didn’t yet delete the column family handle, can I still use it to access the data?</p>
+<p><code>DropColumnFamily only marks the specified column family as dropped, and it will not be dropped until its reference count goes to zero and marked as dropped.</code></p>
+</li>
+<li><p>Does RocksDB support replication?</p>
+<p><code>RocksDB does not directly support replication.</code></p>
+</li>
+<li><p>How much resource does an iterator hold and when will these resource be released?</p>
+<p><code>Iterators hold both data blocks and memtables in memory.</code></p>
+</li>
+<li><p>Are bloom filter blocks of SST files always loaded to memory, or can they be loaded from disk?</p>
+<p><code>When cache_index_and_filter_blocks is set to true, then bloom filters and index block will be loaded into a LRU cache only when related Get() requests are issued. In the other case , then RocksDB will try to keep the index block and bloom filter in memory up to max_open_files number of SST files.</code></p>
 </li>
 </ol>
 <hr>
@@ -1341,7 +1397,7 @@
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>2</small></li>
+    <li><a href="/categories/Language/">Language</a><small>3</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
@@ -1359,6 +1415,8 @@
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   

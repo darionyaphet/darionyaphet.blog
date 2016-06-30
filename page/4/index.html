@@ -50,40 +50,92 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/maven/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/other/gradle/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/maven/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Gradle</p>
-<p>###Build Script Basic<br>任何一个Gradle构建都是由一个或多个 projects 组成.</p>
-<p>每个project包括许多可构建组成部分. 这完全取决于你要构建些什么.</p>
-<p>举个栗子.每个project或许是一个jar包或者一个web应用, 它也可以是一个由许多其他项目中产生的jar构成的zip压缩包.一个project不必描述它只能进行构建操作. </p>
-<p>它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大.<br>Gradle的build-by-convention可以让您来具体定义一个project到底该做什么.</p>
-<p>每个project都由多个tasks组成.每个task都代表了构建执行过程中的一个原子性操作.如编译,打包,生成javadoc,发布到某个仓库等操作</p>
-<p>你可以通过在命令行运行gradle命令来执行构建, gradle命令会从当前目录下寻找 build.gradle 文件来执行构建.</p>
-<p>我们称 build.gradle 文件为构建脚本. 严格来说这其实是一个构建配置脚本</p>
-<p>build.gradle</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println &apos;Hello World !&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &apos;Hello World&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doFirst &#123;</span><br><span class="line">    println &apos;Before&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doLast &#123;</span><br><span class="line">   println &apos;After&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task &lt;&lt; &#123;</span><br><span class="line">    println &apos;Last&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>doFirst 和 doLast 可以进行多次调用. 分别被添加在任务的开头和结尾.</p>
-<p>当任务开始执行时这些动作会按照既定顺序进行.其中 &lt;&lt; 操作符 是 doLast 的简写方式.</p>
-<p><code>增加自定义属性</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task myTask &#123;</span><br><span class="line">    ext.name = &apos;darion.yaphet&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task printName &#123;</span><br><span class="line">    println myTask.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>默认任务</code></p>
-<p>Gradle允许在脚本中定义多个默认任务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks &apos;clean&apos; ,&apos;run&apos;</span><br><span class="line"></span><br><span class="line">task clean &lt;&lt; &#123;</span><br><span class="line">    println &apos;default clean&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task  run &lt;&lt; &#123;</span><br><span class="line">    println &apos;default run&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>###Java Plugin<br>大部分Java项目基本流程都是相似的:编译源文件,进行单元测试,创建Jar包.<br>使用Gradle做这些工作不必为每个工程都编写代码.<br>Gradle已经提供了完美的插件来解决这些问题. </p>
-<p>插件就是Gradle的扩展,简而言之就是为你添加一些非常有用的默认配置.<br>Gradle自带了很多插件,并且你也可以很容易的编写和分享自己的插件.<br>Java plugin作为其中之一,为你提供了诸如编译,测试,打包等一些功能.</p>
-<p>Java插件为工程定义了许多默认值,如Java源文件位置.<br>如果你遵循这些默认规则,那么你无需在你的脚本文件中书写太多代码.<br>当然,Gradle也允许你自定义项目中的一些规则.<br>实际上,由于对Java工程的构建是基于插件的,那么你也可以完全不用插件自己编写代码来进行构建.</p>
-<p><code>一个基本Java项目</code></p>
-<p>###Web Plugin</p>
+        <p>###Maven</p>
+<p>###Commands</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">mvn -h</span><br><span class="line"></span><br><span class="line">usage: mvn [options] [&lt;goal(s)&gt;] [&lt;phase(s)&gt;]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"> -am,--also-make                        If project list is specified, also</span><br><span class="line">                                        build projects required by the</span><br><span class="line">                                        list</span><br><span class="line"> -amd,--also-make-dependents            If project list is specified, also</span><br><span class="line">                                        build projects that depend on</span><br><span class="line">                                        projects on the list</span><br><span class="line"> -B,--batch-mode                        Run in non-interactive (batch)</span><br><span class="line">                                        mode</span><br><span class="line"> -b,--builder &lt;arg&gt;                     The id of the build strategy to</span><br><span class="line">                                        use.</span><br><span class="line"> -C,--strict-checksums                  Fail the build if checksums don&apos;t</span><br><span class="line">                                        match</span><br><span class="line"> -c,--lax-checksums                     Warn if checksums don&apos;t match</span><br><span class="line"> -cpu,--check-plugin-updates            Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -D,--define &lt;arg&gt;                      Define a system property</span><br><span class="line"> -e,--errors                            Produce execution error messages</span><br><span class="line"> -emp,--encrypt-master-password &lt;arg&gt;   Encrypt master security password</span><br><span class="line"> -ep,--encrypt-password &lt;arg&gt;           Encrypt server password</span><br><span class="line"> -f,--file &lt;arg&gt;                        Force the use of an alternate POM</span><br><span class="line">                                        file (or directory with pom.xml).</span><br><span class="line"> -fae,--fail-at-end                     Only fail the build afterwards;</span><br><span class="line">                                        allow all non-impacted builds to</span><br><span class="line">                                        continue</span><br><span class="line"> -ff,--fail-fast                        Stop at first failure in</span><br><span class="line">                                        reactorized builds</span><br><span class="line"> -fn,--fail-never                       NEVER fail the build, regardless</span><br><span class="line">                                        of project result</span><br><span class="line"> -gs,--global-settings &lt;arg&gt;            Alternate path for the global</span><br><span class="line">                                        settings file</span><br><span class="line"> -gt,--global-toolchains &lt;arg&gt;          Alternate path for the global</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -h,--help                              Display help information</span><br><span class="line"> -l,--log-file &lt;arg&gt;                    Log file where all build output</span><br><span class="line">                                        will go.</span><br><span class="line"> -llr,--legacy-local-repository         Use Maven 2 Legacy Local</span><br><span class="line">                                        Repository behaviour, ie no use of</span><br><span class="line">                                        _remote.repositories. Can also be</span><br><span class="line">                                        activated by using</span><br><span class="line">                                        -Dmaven.legacyLocalRepo=true</span><br><span class="line"> -N,--non-recursive                     Do not recurse into sub-projects</span><br><span class="line"> -npr,--no-plugin-registry              Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -npu,--no-plugin-updates               Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -nsu,--no-snapshot-updates             Suppress SNAPSHOT updates</span><br><span class="line"> -o,--offline                           Work offline</span><br><span class="line"> -P,--activate-profiles &lt;arg&gt;           Comma-delimited list of profiles</span><br><span class="line">                                        to activate</span><br><span class="line"> -pl,--projects &lt;arg&gt;                   Comma-delimited list of specified</span><br><span class="line">                                        reactor projects to build instead</span><br><span class="line">                                        of all projects. A project can be</span><br><span class="line">                                        specified by [groupId]:artifactId</span><br><span class="line">                                        or by its relative path.</span><br><span class="line"> -q,--quiet                             Quiet output - only show errors</span><br><span class="line"> -rf,--resume-from &lt;arg&gt;                Resume reactor from specified</span><br><span class="line">                                        project</span><br><span class="line"> -s,--settings &lt;arg&gt;                    Alternate path for the user</span><br><span class="line">                                        settings file</span><br><span class="line"> -T,--threads &lt;arg&gt;                     Thread count, for instance 2.0C</span><br><span class="line">                                        where C is core multiplied</span><br><span class="line"> -t,--toolchains &lt;arg&gt;                  Alternate path for the user</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -U,--update-snapshots                  Forces a check for missing</span><br><span class="line">                                        releases and updated snapshots on</span><br><span class="line">                                        remote repositories</span><br><span class="line"> -up,--update-plugins                   Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -V,--show-version                      Display version information</span><br><span class="line">                                        WITHOUT stopping build</span><br><span class="line"> -v,--version                           Display version information</span><br><span class="line"> -X,--debug                             Produce execution debug output</span><br></pre></td></tr></table></figure>
+<p>###Configuring</p>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Scala</p>
+<p>###trait</p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
+<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -116,6 +168,46 @@
     <div class="entry">
       
         <p>###Golang</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
+<ol>
+<li>#<code>runtime metaprogramming</code></li>
+</ol>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
 
       
     </div>
@@ -247,24 +339,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
-<ol>
-<li>#<code>runtime metaprogramming</code></li>
-</ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
-</ol>
+        <p>###Domain-specific language</p>
 
       
     </div>
@@ -287,50 +372,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Scala</p>
-<p>###trait</p>
-<p>Reference :</p>
-<ol>
-<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
-<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/node/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
   
 
     </header>
@@ -397,82 +443,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/divide-and-conquer/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/clojure/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/clojure/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/algorithms/divide-and-conquer/"></a></h1>
   
 
     </header>
     <div class="entry">
       
         
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Domain-specific language</p>
-
       
     </div>
     <footer>
@@ -513,7 +494,7 @@
   
     <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>2</small></li>
+    <li><a href="/categories/Language/">Language</a><small>3</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
@@ -531,6 +512,8 @@
   <ul class="entry">
   
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
   
     <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
   
