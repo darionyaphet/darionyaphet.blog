@@ -50,6 +50,55 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-27T10:55:35.000Z"><a href="/2016/04/27/distribution/mesos/">2016-04-27</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/27/distribution/mesos/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h3><p>Mesos 被定义为一个<code>分布式系统内核</code>。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。</p>
+<p>Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。</p>
+<p><img src="resource/mesos/architecture.jpg" alt="Architect"></p>
+<p>Mesos采用了<code>master/slave</code>结构，master做得尽可能地轻量级，其上面所有的元数据可通过各个slave重新注册而进行重构，故很容易通过zookeeper解决该单点故障问题。</p>
+<p>Mesos 基本术语：</p>
+<ol>
+<li>Mesos Master主要负责管理各个framework和slave，并将slave上的资源分配给各个framework.</li>
+<li>Mesos Slave负责管理本节点上的各个mesos-task，比如：为各个executor分配资源</li>
+<li>Framework Hadoop，Spark等计算框架,通过MesosSchedulerDiver接入Mesos.</li>
+<li>Executor 执行器 Mesos Slave上，用于启动计算框架中的task</li>
+</ol>
+<p>Mesos Master是系统核心，负责管理接入各个framework和 slave 并将slave资源分配给framework.Mesos Slave负责接收并执行来自Mesos Master命令,管理节点上的Mesos Task</p>
+<h4 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h4><p>Reference :</p>
+<ol>
+<li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-23T12:45:20.000Z"><a href="/2016/04/23/distribution/akka/">2016-04-23</a></time>
       
       
@@ -844,40 +893,6 @@ the exception?</code></p>
 <li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
 <li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
 </ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Simple Build Tool</p>
-<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
 
       
     </div>
