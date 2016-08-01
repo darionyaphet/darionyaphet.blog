@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 7 | darion.johannes.yaphet</title>
+  <title>Page 7 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,6 +50,482 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/distribution/spark/">2016-01-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/01/distribution/spark/">spark</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h3><p>Apache Spark is a fast and general-purpose cluster computing system. </p>
+<p>It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs. </p>
+<p>It also supports a rich set of higher-level tools including Spark SQL for SQL and structured data processing, MLlib for machine learning, GraphX for graph processing, and Spark Streaming.</p>
+<p>Spark’s primary abstraction is a distributed collection of items called a Resilient Distributed Dataset (RDD). RDDs can be created from Hadoop InputFormats or by transforming other RDDs. </p>
+<p>RDDs have actions, which return values, and transformations, which return pointers to new RDDs.</p>
+<p><img src="resource/spark/architecture.jpg" alt="architecture"></p>
+<h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><p>One of the strongest features of Spark is its shell. </p>
+<p>The Spark-Shell allows users to type and execute commands in a Unix-Terminal-like fashion. </p>
+<ol>
+<li><p>To adjust the amount of memory that Spark may use for executing queries you have to set the following environment prior to starting the shell <code>export SPARK_MEM =1 g</code></p>
+</li>
+<li><p>To  controls the number of worker threads that Spark uses <code>export SPARK_WORKER_INSTANCES =4</code> If you run Spark in local mode you can also set the number of worker threads in one setting as follows: <code>export MASTER = local [32]</code></p>
+</li>
+</ol>
+<hr>
+<h3 id="RDD-API"><a href="#RDD-API" class="headerlink" title="RDD API"></a>RDD API</h3><p>RDD is short for Resilient Distributed Dataset. RDDs are the workhorse of the Spark<br>system. As a user, one can consider a RDD as a handle for a collection of individual data partitions which are the result of some computation.</p>
+<p>RDDs have <strong>actions</strong>, which return values, and <strong>transformations</strong>, which return pointers to new RDDs.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">λ ~/service/spark-1.6.0/ bin/spark-shell</span><br><span class="line">log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).</span><br><span class="line">log4j:WARN Please initialize the log4j system properly.</span><br><span class="line">log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.</span><br><span class="line">Using Spark&apos;s repl log4j profile: org/apache/spark/log4j-defaults-repl.properties</span><br><span class="line">To adjust logging level use sc.setLogLevel(&quot;INFO&quot;)</span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  &apos;_/</span><br><span class="line">   /___/ .__/\_,_/_/ /_/\_\   version 1.6.0</span><br><span class="line">      /_/</span><br><span class="line"></span><br><span class="line">Using Scala version 2.10.5 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_40)</span><br><span class="line">Type in expressions to have them evaluated.</span><br><span class="line">Type :help for more information.</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Your hostname, localhost resolves to a loopback address: 127.0.0.1; using 192.168.1.142 instead (on interface en0)</span><br><span class="line">16/01/24 21:53:16 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address</span><br><span class="line">Spark context available as sc.</span><br><span class="line">SQL context available as sqlContext.</span><br><span class="line"></span><br><span class="line">scala&gt; val list = sc.parallelize(List(1,2,3,4,5,6), 2)</span><br><span class="line">list: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:27</span><br></pre></td></tr></table></figure>
+<p><strong>Spark会把数据都载入到内存么 ? </strong></p>
+<p><em>如果没有主动对RDD进行Cache/Persist等相关操作，RDD不过是一个概念上存在的虚拟数据集</em></p>
+<p>一个 RDD 本质上是一个函数，RDD变换不过是函数嵌套。 RDD有两类：</p>
+<ol>
+<li>输入RDD,典型如KafkaRDD，JdbcRDD以及HadoopRDD等</li>
+<li>转换RDD，如MapPartitionsRDD</li>
+</ol>
+<p><strong>Shuffle的本质是什么 ? </strong></p>
+<hr>
+<h3 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h3><p><code>Spark SQL</code>核心是把已有RDD，带上Schema信息，注册成类似SQL里的<code>Table</code>，对其进行SQL查询。这里面主要分两部分，一是生成SchemaRD，二是执行查询。</p>
+<p>传统数据库先将读入的SQL语句进行解析，分辨出SQL语句中哪些词是关键字，哪些是表达式，哪些是Projection，哪些是Data Source等等。</p>
+<p>进一步判断SQL语句是否规范，不规范就报错，规范则按照下一步过程绑定。</p>
+<p>过程绑定是将SQL语句和数据库的数据字典(列，表，视图等）进行绑定，如果相关的Projection、Data Source等都存在，就表示这个SQL语句是可以执行的。</p>
+<p>在执行过程中，有时候甚至不需要读取物理表就可以返回结果，比如重新运行刚运行过的SQL语句，直接从数据库的缓冲池中获取返回结果。</p>
+<p>在数据库解析的过程中SQL语句时，将会把SQL语句转化成一个树形结构来进行处理，会形成一个或含有多个节点的Tree，然后再后续的处理政对该Tree进行一系列的操作。</p>
+<p>Spark SQL对SQL语句的处理和关系数据库对SQL语句的解析采用了类似的方法，首先会将SQL语句进行解析，然后形成一个Tree，后续如绑定、优化等处理过程都是对Tree的操作，而操作方法是采用Rule，通过模式匹配，对不同类型的节点采用不同的操作。SparkSQL有两个分支，SQLContext和HiveContext。</p>
+<p>SQLContext现在只支持SQL语法解析器（Catalyst)，HiveContext支持SQL语法和HiveContext语法解析器。</p>
+<p>Spark SQL is a Spark module for structured data processing. </p>
+<p>It provides a programming abstraction called DataFrames and can also act as distributed SQL query engine.</p>
+<ol>
+<li>DataFrame: a distributed collection of data organized into named columns.</li>
+</ol>
+<hr>
+<h3 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h3><p>Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like map, reduce, join and window. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark’s machine learning and graph processing algorithms on data streams.</p>
+<p>Spark Streaming provides a high-level abstraction called discretized stream or DStream, which represents a continuous stream of data.</p>
+<p>Internally, a DStream is represented as a sequence of RDDs.</p>
+<p><img src="resource/spark/streaming-dstream-window.png" alt="streaming-dstream-window"></p>
+<p><img src="resource/spark/words-dstream.png" alt="streaming-dstream-window"></p>
+<p><img src="resource/spark/lines-dstream.png" alt="streaming-dstream-window"></p>
+<hr>
+<h3 id="GraphX"><a href="#GraphX" class="headerlink" title="GraphX"></a>GraphX</h3><p>GraphX是一个新的 Spark API，它用于图和并行图计算。GraphX通过引入<code>Resilient Distributed Property Graph</code> (带有顶点和边属性有向多重图)，来扩展Spark RDD。为了支持图计算，GraphX公开一组基本的功能操作以及Pregel API的优化。</p>
+<p>从社交网络到语言建模，不断增长的规模和图形数据的重要性已经推动了许多新的graph-parallel系统（如Giraph和GraphLab）的发展。通过限制可表达的计算类型和引入新的技术来划分和分配图，这些系统可以高效地执行复杂的图形算法，比一般的data-parallel系统快很多。</p>
+<p><img src="resource/spark/GraphX.png" alt="GraphX"></p>
+<p><code>属性图</code>是一个有向多重图，它带有连接到每个顶点和边的用户定义的对象。有向多重图中多个并行(parallel)的边共享相同的源和目的地顶点。</p>
+<p>支持并行边的能力简化了建模场景，这个场景中，相同的顶点存在多种关系。每个顶点由一个唯一的64位长的标识符（VertexID）作为key。GraphX并没有对顶点标识强加任何排序。</p>
+<p>同样，顶点拥有相应的源和目的顶点标识符。</p>
+<p>属性图通过vertex(VD)和edge(ED)类型参数化，这些类型是分别与每个顶点和边相关联的对象的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val vertexArray = Array(</span><br><span class="line">  (1L, (&quot;Alice&quot;, 28)),</span><br><span class="line">  (2L, (&quot;Bob&quot;, 27)),</span><br><span class="line">  (3L, (&quot;Charlie&quot;, 65)),</span><br><span class="line">  (4L, (&quot;David&quot;, 42)),</span><br><span class="line">  (5L, (&quot;Ed&quot;, 55)),</span><br><span class="line">  (6L, (&quot;Fran&quot;, 50)))</span><br><span class="line">  </span><br><span class="line">val edgeArray = Array(</span><br><span class="line">  Edge(2L, 1L, 7),</span><br><span class="line">  Edge(2L, 4L, 2),</span><br><span class="line">  Edge(3L, 2L, 4),</span><br><span class="line">  Edge(3L, 6L, 3),</span><br><span class="line">  Edge(4L, 1L, 1),</span><br><span class="line">  Edge(5L, 2L, 2),</span><br><span class="line">  Edge(5L, 3L, 8),</span><br><span class="line">  Edge(5L, 6L, 3))</span><br><span class="line"></span><br><span class="line">val vertexRDD: RDD[(Long, (String, Int))] = sc.parallelize(vertexArray)</span><br><span class="line">val edgeRDD: RDD[Edge[Int]] = sc.parallelize(edgeArray)</span><br><span class="line"></span><br><span class="line">val graph: Graph[(String, Int), Int] = Graph(vertexRDD, edgeRDD)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="MLlib"><a href="#MLlib" class="headerlink" title="MLlib"></a>MLlib</h3><hr>
+<h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><p>SparkR provides a distributed data frame implementation that supports operations like selection, filtering, aggregation etc.</p>
+<p>SparkR also supports distributed machine learning using MLlib.</p>
+<hr>
+<h3 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h3><p>There are two deploy modes that can be used to launch Spark applications on YARN.</p>
+<p><strong>In cluster mode</strong>, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. </p>
+<p><strong>In client mode</strong>, the driver runs in the client process, and the application master is only used for requesting resources from YARN.</p>
+<p>In YARN mode the ResourceManager’s address is picked up from the Hadoop configuration. Thus, the <code>--master</code> parameter is yarn.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/spark-submit --class path.to.your.Class --master yarn --deploy-mode cluster [options] &lt;app jar&gt; [app options]</span><br></pre></td></tr></table></figure>
+<p><code>客户端进行操作</code></p>
+<ol>
+<li>根据yarnConf来初始化yarnClient，并启动yarnClient</li>
+<li>创建客户端Application，并获取Application的ID，进一步判断集群中的资源是否满足executor和ApplicationMaster申请的资源，如果不满足则抛出IllegalArgumentException</li>
+<li>设置资源、环境变量：其中包括了设置Application的Staging目录、准备本地资源、设置Application其中的环境变量、创建Container启动的Context等</li>
+<li>设置Application提交的Context，包括设置应用的名字、队列、AM的申请的Container、标记该作业的类型为Spark</li>
+<li>申请Memory，并最终通过yarnClient.submitApplication向ResourceManager提交该Application</li>
+</ol>
+<p><code>提交到YARN集群</code></p>
+<ol>
+<li>运行ApplicationMaster的run方法</li>
+<li>设置好相关的环境变量</li>
+<li>创建amClient，并启动</li>
+<li>在Spark UI启动之前设置Spark UI的AmIpFilter</li>
+<li>在startUserClass函数专门启动了一个线程来启动用户提交的Application，也就是启动了Driver。在Driver中将会初始化SparkContext</li>
+<li>等待SparkContext初始化完成，最多等待spark.yarn.applicationMaster.waitTries次数，如果等待了的次数超过了配置的，程序将会退出；否则用SparkContext初始化yarnAllocator</li>
+<li>当SparkContext、Driver初始化完成的时候，通过amClient向ResourceManager注册ApplicationMaster</li>
+<li>分配并启动Executeors。在启动Executeors之前，先要通过yarnAllocator获取到numExecutors个Container，然后在Container中启动Executeors</li>
+<li>最后，Task将在oarseGrainedExecutorBackend里面运行，然后运行状况会通过Akka通知CoarseGrainedScheduler，直到作业运行完成</li>
+</ol>
+<hr>
+<p><strong>Config</strong></p>
+<p><strong>Application Properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spark.app.name</td>
+<td>The name of your application.</td>
+</tr>
+<tr>
+<td>spark.driver.cores</td>
+<td>Number of cores to use for the driver process (only cluster mode).</td>
+</tr>
+<tr>
+<td>spark.driver.maxResultSize</td>
+<td>Limit of total size of serialized results of all partitions for each Spark action.</td>
+</tr>
+<tr>
+<td>spark.driver.memory</td>
+<td>Memory to use for the driver process</td>
+</tr>
+<tr>
+<td>spark.executor.memory</td>
+<td>Memory to use per executor process</td>
+</tr>
+<tr>
+<td>spark.extraListeners</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.local.dir</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.logConf</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.master</td>
+<td>The cluster manager to connect </td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spark.yarn.am.memory</td>
+<td>Amount of memory to use for the YARN Application Master in client mode</td>
+</tr>
+<tr>
+<td>spark.driver.cores</td>
+<td>Number of cores used by the driver in YARN cluster mode.</td>
+</tr>
+<tr>
+<td>spark.yarn.am.cores</td>
+<td>Number of cores to use for the YARN Application Master in client mode.</td>
+</tr>
+<tr>
+<td>spark.yarn.am.waitTime</td>
+<td>In cluster mode, time for the YARN Application Master to wait for the SparkContext to be initialized. In client mode, time for the YARN Application Master to wait for the driver to connect to it.</td>
+</tr>
+<tr>
+<td>spark.yarn.submit.file.replication</td>
+<td>HDFS replication level for the files uploaded into HDFS. </td>
+</tr>
+<tr>
+<td>spark.yarn.preserve.staging.files</td>
+<td>Set to true to preserve the staged files at the end of the job.</td>
+</tr>
+<tr>
+<td>spark.yarn.scheduler.heartbeat.interval-ms</td>
+<td>Spark application master heartbeats into the YARN ResourceManager interval.</td>
+</tr>
+<tr>
+<td>spark.yarn.scheduler.initial-allocation.interval</td>
+<td>The initial interval in which the Spark application master eagerly heartbeats to the YARN ResourceManager when there are pending container allocation requests. </td>
+</tr>
+<tr>
+<td>spark.yarn.max.executor.failures</td>
+<td>The maximum number of executor failures before failing the application.</td>
+</tr>
+<tr>
+<td>spark.yarn.historyServer.address</td>
+<td>The address of the Spark history server</td>
+</tr>
+<tr>
+<td>spark.yarn.dist.archives</td>
+<td>Comma separated list of archives to be extracted into the working directory of each executor.</td>
+</tr>
+<tr>
+<td>spark.yarn.dist.files</td>
+<td>Comma-separated list of files to be placed in the working directory of each executor.</td>
+</tr>
+<tr>
+<td>spark.executor.instances</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.executor.memoryOverhead</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.driver.memoryOverhead</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.memoryOverhead</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.port</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.queue</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.jar</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.access.namenodes</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.appMasterEnv.[EnvironmentVariableName]</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.containerLauncherMaxThreads</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.extraJavaOptions</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.extraLibraryPath</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.maxAppAttempts</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.attemptFailuresValidityInterval</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.submit.waitAppCompletion</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.am.nodeLabelExpression</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.executor.nodeLabelExpression</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.tags</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.keytab</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.principal</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.config.gatewayPath</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.config.replacementPath</td>
+<td></td>
+</tr>
+<tr>
+<td>spark.yarn.security.tokens.${service}.enabled</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Shuffle Behavior</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spark.reducer.maxSizeInFlight</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Spark UI</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Compression and Serialization</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory Management</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Execution Behavior</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><img src="resource/spark//spark_on_yarn.jpg" alt="spark_on_yarn"></p>
+<hr>
+<h3 id="PySpark"><a href="#PySpark" class="headerlink" title="PySpark"></a>PySpark</h3><h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><table>
+<thead>
+<tr>
+<th>Property Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spark.app.name</td>
+<td>The name of your application. </td>
+</tr>
+<tr>
+<td>spark.driver.cores</td>
+<td>Number of cores to use for the driver process, only in cluster mode.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h3><p>Spark applications run as independent sets of processes on a cluster,coordinated by the SparkContext (<code>driver program</code>).</p>
+<p>SparkContext can connect to several types of cluster managers.</p>
+<p><img src="resource/spark/cluster-overview.png" alt="architecture"></p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application</td>
+<td>User program built on Spark.</td>
+</tr>
+<tr>
+<td>Driver program</td>
+<td>The process running the main() function of the application and creating the SparkContext</td>
+</tr>
+<tr>
+<td>Cluster manager</td>
+<td>An external service for acquiring resources on the cluster</td>
+</tr>
+<tr>
+<td>Deploy mode</td>
+<td>Distinguishes where the driver process runs.</td>
+</tr>
+<tr>
+<td>Worker node</td>
+<td>Any node that can run application code in the cluster</td>
+</tr>
+<tr>
+<td>Executor</td>
+<td>A process that runs tasks and keeps data in memory or disk storage.</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>A unit of work that will be sent to one executor</td>
+</tr>
+<tr>
+<td>Job</td>
+<td>A parallel computation consisting of multiple tasks</td>
+</tr>
+<tr>
+<td>Stage</td>
+<td>Each job gets divided into smaller sets of tasks</td>
+</tr>
+</tbody>
+</table>
+<p><code>Spark Driver 是执行main()方法的进程</code></p>
+<p><code>执行器节点</code></p>
+<h3 id="DataFrame-amp-DataSet"><a href="#DataFrame-amp-DataSet" class="headerlink" title="DataFrame &amp; DataSet"></a>DataFrame &amp; DataSet</h3><p>Reference:</p>
+<ol>
+<li><a href="http://www.infoq.com/cn/articles/2015-Review-Spark" target="_blank" rel="external">解读2015之Spark篇：新生态系统的形成</a></li>
+<li><a href="http://www.infoq.com/cn/presentations/gc-tuning-of-spark-application?utm_campaign=rightbar_v2&amp;utm_source=infoq&amp;utm_medium=presentations_link&amp;utm_content=link_text" target="_blank" rel="external">Spark应用的GC调优</a></li>
+<li><a href="http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html" target="_blank" rel="external">The RDD API By Example</a></li>
+<li><a href="https://databricks.com/blog" target="_blank" rel="external">Databricks Blog</a></li>
+<li><a href="https://databricks.gitbooks.io/databricks-spark-reference-applications/content/index.html" target="_blank" rel="external">databricks.gitbooks.io</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402777570&amp;idx=1&amp;sn=b06881f5d374cc181784cd8ba31893ad&amp;scene=23&amp;srcid=0318eIjnKdNTXNnQxbXTVpyp#rd" target="_blank" rel="external">一个SparkSQL作业的一生</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=402803628&amp;idx=1&amp;sn=bd72f7e43ddefb0946121778ac161ab5&amp;scene=23&amp;srcid=0318z3Rle2LCaZomw5S45p9D#rd" target="_blank" rel="external">Spark生态顶级项目汇总</a></li>
+<li><a href="http://ampcamp.berkeley.edu/big-data-mini-course/graph-analytics-with-graphx.html" target="_blank" rel="external">graph analytics with graphx</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MTc0NTMwNQ==&amp;mid=2650713520&amp;idx=1&amp;sn=9e27441611ac6411eca5c13b489a6d37&amp;scene=23&amp;srcid=0421d2KxIwEnxywTxa2W06TT#rd" target="_blank" rel="external">Spark会把数据都载入到内存么</a></li>
+<li><a href="http://www.kancloud.cn/kancloud/spark-programming-guide/51557" target="_blank" rel="external">GraphX编程指南</a></li>
+<li><a href="https://snap.stanford.edu/data/" target="_blank" rel="external">Stanford Large Network Dataset Collection</a></li>
+<li><a href="https://github.com/lw-lin/CoolplaySpark" target="_blank" rel="external">酷玩 Spark</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA3OTAxMDQzNQ==&amp;mid=2650607874&amp;idx=1&amp;sn=3626d0d3d16be6236cfc9922eb0cd295&amp;scene=23&amp;srcid=0524320Jr36VjpcvuRJsenht#rd" target="_blank" rel="external">Spark知识体系完整解读</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
       
       
@@ -79,7 +555,7 @@
 
 <nav id="pagination">
   
-    <a href="/page/6/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/6/" class="alignleft prev">Prev</a>
   
   
   <div class="clearfix"></div>
@@ -87,17 +563,17 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>4</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>3</small></li>
   
@@ -135,6 +611,8 @@
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   
     <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/hadoop/">hadoop</a><small>1</small></li>
   
     <li><a href="/tags/spark/">spark</a><small>1</small></li>
   

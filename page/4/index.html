@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 4 | darion.johannes.yaphet</title>
+  <title>Page 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,112 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:19.000Z"><a href="/2016/04/22/other/git/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/git/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h4 id="Git-the-stupid-content-tracker"><a href="#Git-the-stupid-content-tracker" class="headerlink" title="Git - the stupid content tracker"></a>Git - the stupid content tracker</h4><p><code>Git</code> is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
+<p>Git 会把<code>每次提交的文件的全部内容</code>都会记录下来</p>
+<hr>
+<p><strong>Config</strong></p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">λ ~/ git</span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c name=value]</span><br><span class="line">           [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">           [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">           &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">These are common Git commands used in various situations:</span><br><span class="line"></span><br><span class="line">start a working area (see also: git help tutorial)</span><br><span class="line">   clone      Clone a repository into a new directory</span><br><span class="line">   init       Create an empty Git repository or reinitialize an existing one</span><br><span class="line"></span><br><span class="line">work on the current change (see also: git help everyday)</span><br><span class="line">   add        Add file contents to the index</span><br><span class="line">   mv         Move or rename a file, a directory, or a symlink</span><br><span class="line">   reset      Reset current HEAD to the specified state</span><br><span class="line">   rm         Remove files from the working tree and from the index</span><br><span class="line"></span><br><span class="line">examine the history and state (see also: git help revisions)</span><br><span class="line">   bisect     Use binary search to find the commit that introduced a bug</span><br><span class="line">   grep       Print lines matching a pattern</span><br><span class="line">   log        Show commit logs</span><br><span class="line">   show       Show various types of objects</span><br><span class="line">   status     Show the working tree status</span><br><span class="line"></span><br><span class="line">grow, mark and tweak your common history</span><br><span class="line">   branch     List, create, or delete branches</span><br><span class="line">   checkout   Switch branches or restore working tree files</span><br><span class="line">   commit     Record changes to the repository</span><br><span class="line">   diff       Show changes between commits, commit and working tree, etc</span><br><span class="line">   merge      Join two or more development histories together</span><br><span class="line">   rebase     Forward-port local commits to the updated upstream head</span><br><span class="line">   tag        Create, list, delete or verify a tag object signed with GPG</span><br><span class="line"></span><br><span class="line">collaborate (see also: git help workflows)</span><br><span class="line">   fetch      Download objects and refs from another repository</span><br><span class="line">   pull       Fetch from and integrate with another repository or a local branch</span><br><span class="line">   push       Update remote refs along with associated objects</span><br><span class="line"></span><br><span class="line">&apos;git help -a&apos; and &apos;git help -g&apos; list available subcommands and some</span><br><span class="line">concept guides. See &apos;git help &lt;command&gt;&apos; or &apos;git help &lt;concept&gt;&apos;</span><br><span class="line">to read about a specific subcommand or concept.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Branch</strong></p>
+<p>使用分支意味着可以把你的工作从开发主线上分离开来，以免影响开发主线。</p>
+<p><em>Git 保存的不是文件的变化或者差异，而是一系列不同时刻的文件快照。</em></p>
+<p>在进行提交操作时，Git 会保存一个提交对象。提交对象会包含一个指向暂存内容快照的指针。 但不仅仅是这样，该提交对象还包含了作者的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针。首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象，而由多个分支合并产生的提交对象有多个父对象，</p>
+<p>暂存操作会为每一个文件计算校验和，然后会把当前版本的文件快照保存到 Git 仓库中，最终将校验和加入到暂存区域等待提交。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch  列出本地分支 当前分支前加*标记</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -r 列出远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -r</span><br><span class="line">  origin/HEAD -&gt; origin/master</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -a 列出本地分支和远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch 创建一个新的本地分支 只创建分支 不切换支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch local</span><br><span class="line">λ ~/git.learning/ master</span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">  local</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout 切换分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git checkout local</span><br><span class="line">Switched to branch &apos;local&apos;</span><br><span class="line">λ ~/git.learning/ local</span><br><span class="line">λ ~/git.learning/ local git branch</span><br><span class="line">* local</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d | -D  删除分支</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d -r  删除远程分支</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Remote</strong></p>
+<hr>
+<p><strong>Log 显示提交记录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log [&lt;options&gt;] [&lt;revision range&gt;] [[\--] &lt;path&gt;…​]</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Alias</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.last &apos;log -1 HEAD&apos;</span><br><span class="line">git config --global alias.unstage &apos;reset HEAD --&apos;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Tag</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag 列出已有的标签</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 看到标签信息与对应的提交信息</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Bisect</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git bisect &lt;subcommand&gt; &lt;options&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git bisect start [--term-&#123;old,good&#125;=&lt;term&gt; --term-&#123;new,bad&#125;=&lt;term&gt;]</span><br><span class="line">         [--no-checkout] [&lt;bad&gt; [&lt;good&gt;...]] [--] [&lt;paths&gt;...]</span><br><span class="line">git bisect (bad|new) [&lt;rev&gt;]</span><br><span class="line">git bisect (good|old) [&lt;rev&gt;...]</span><br><span class="line">git bisect terms [--term-good | --term-bad]</span><br><span class="line">git bisect skip [(&lt;rev&gt;|&lt;range&gt;)...]</span><br><span class="line">git bisect reset [&lt;commit&gt;]</span><br><span class="line">git bisect visualize</span><br><span class="line">git bisect replay &lt;logfile&gt;</span><br><span class="line">git bisect log</span><br><span class="line">git bisect run &lt;cmd&gt;...</span><br><span class="line">git bisect help</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Blame</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>Tips :</code></p>
+<p><strong>Git自动补全</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash</span><br></pre></td></tr></table></figure>
+<p>在~/.bash_profile文件中添加以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ -f ~/.git-completion.bash ]; then</span><br><span class="line">    . ~/.git-completion.bash</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>GitHub秘籍</strong></p>
+<ol>
+<li>在任意diff页面的URL后加上 <code>?w=1</code> ，可以去掉那些只是空白字符的变化，使你能更专注于代码的变化。 </li>
+<li>在diff或者file页面的URL后面加上 <code>?ts=4</code> ，这样当显示tab字符的长度时就会是4个空格的长度，不再是默认的8个空格。 ts 后面的数字还可以根据你个人的偏好进行修改。</li>
+<li>查看某个用户的所有提交历史，只需在commits页面URL后加上 <code>?author=username</code> 。</li>
+<li>Gists还可以像任何标准仓库一样被克隆。</li>
+<li><a href="https://git.io/" target="_blank" rel="external">Git.io</a> 是Github的短网址服务。</li>
+<li>代码文件地址后加上 #L52 或者单击行号52都会将第52行代码高亮显示。多行高亮也可以，比如用 #L53-L60 选择范围，或者按住 shift 键，然后再点击选择的两行。</li>
+<li>如果某个提交修复了一个Issue，当提交到master分支时，提交信息里可以使用 <code>fix/fixes/fixed</code> , <code>close/closes/closed</code> 或者 <code>resolve/resolves/resolved</code>等关键词，后面再跟上<code>Issue号</code>，这样就会关闭这个Issue。</li>
+<li>引用同一个仓库中一个Issue : <code>#</code> 加上<code>Issue号</code>，自动创建到此Issue的链接,链接到其他仓库的Issue <code>user_name/repo_name#ISSUE_NUMBER</code></li>
+<li>Github支持的完整表情符号列表详见 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">emoji-cheat-sheet.com</a> 或 <a href="https://github.com/scotch-io/All-Github-Emoji-Icons" target="_blank" rel="external">scotch-io/All-Github-Emoji-Icons </a></li>
+<li><a href="http://www.kancloud.cn/thinkphp/github-tips/37891" target="_blank" rel="external">Issues和Pull requests里可以添加复选框</a></li>
+<li>GitHub支持将 <code>.csv</code> 和 <code>.tsv</code> 格式的文件渲染成表格数据。</li>
+<li>Pull Request中的Revert按钮来撤销一个已合并的Pull Request中的commit。</li>
+<li>根目录添加一个名为 CONTRIBUTING 的文件后，贡献者在新建Issue或Pull Request时会看到这个文件的链接。</li>
+<li><a href="https://github.com/github/hub#commands" target="_blank" rel="external">Hub</a>是一个对Git进行了封装的命令行工具</li>
+<li>提交和Pull Requests里包含有Github支持的可渲染文档（比如Markdown）会提供 source 和 rendered 两个视图功能。</li>
+</ol>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://hubingforever.blog.163.com/blog/static/1710405792012587105464/" target="_blank" rel="external">Git对象模型</a> </li>
+<li><a href="http://hubingforever.blog.163.com/blog/static/17104057920125794943922/" target="_blank" rel="external">Git索引</a></li>
+<li><a href="http://git-scm.com/" target="_blank" rel="external">git Doc</a></li>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></li>
+<li><a href="http://gitref.org/" target="_blank" rel="external">gitref</a></li>
+<li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
+<li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -175,23 +281,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/scala/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/scala/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Scala</p>
-<p>###trait</p>
-<p>Reference :</p>
-<ol>
-<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
-<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
-</ol>
+        <p>###Domain-specific language</p>
 
       
     </div>
@@ -214,17 +314,89 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Domain-specific language</p>
+        <p>###Golang</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
+<ol>
+<li>#<code>runtime metaprogramming</code></li>
+</ol>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
 
       
     </div>
@@ -356,77 +528,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/python/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/python/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Python</p>
-<p>####Debugger framework</p>
-<p>####Python Debugger</p>
-<p>Reference:</p>
-<ol>
-<li><a href="http://www.snarky.ca/why-print-became-a-function-in-python-3" target="_blank" rel="external">Why <code>print</code> became a function in Python 3</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/node/">2016-04-21</a></time>
       
       
@@ -453,63 +554,30 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Golang</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/3/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/5/" class="alignright next">Nächste Seite</a>
+    <a href="/page/5/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>3</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>4</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>3</small></li>
   
@@ -547,6 +615,8 @@
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   
     <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/hadoop/">hadoop</a><small>1</small></li>
   
     <li><a href="/tags/spark/">spark</a><small>1</small></li>
   
