@@ -50,6 +50,65 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
+<p><strong>Basic Concepts</strong></p>
+<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
+<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
+<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
+<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
+<p>核(<code>kernel</code>)</p>
+<p>kernel是operation在某种设备上的具体实现。</p>
+<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
+<p>边(<code>edge</code>)  </p>
+<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
+<p>特殊边，又称作控制依赖，(control dependencies) </p>
+<p>会话(<code>session</code>)</p>
+<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
+<p>在会话中添加节点和边，形成一张图，然后执行。</p>
+<p>变量(<code>variables</code>)</p>
+<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
+<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
+<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
+<hr>
+<p><strong>Implementation</strong></p>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
       
       
@@ -104,6 +163,45 @@
 <li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
 <li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
 <li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-02T16:00:00.000Z"><a href="/2016/06/03/language/scala/">2016-06-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/03/language/scala/">Scala</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Scala</p>
+<p>###trait</p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
+<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
 </ol>
 
       
@@ -321,110 +419,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##MySQL</p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
       
       
@@ -616,6 +610,46 @@
 
 
 
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##MySQL</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
 
 <nav id="pagination">
   
@@ -639,9 +673,9 @@
   <h3 class="title">Categories</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>4</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>6</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>3</small></li>
+    <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
@@ -662,13 +696,15 @@
   
     <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
   
-    <li><a href="/tags/HBase/">HBase</a><small>1</small></li>
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>4</small></li>
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
   
@@ -677,8 +713,6 @@
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   
     <li><a href="/tags/game/">game</a><small>1</small></li>
-  
-    <li><a href="/tags/hadoop/">hadoop</a><small>1</small></li>
   
     <li><a href="/tags/spark/">spark</a><small>1</small></li>
   
