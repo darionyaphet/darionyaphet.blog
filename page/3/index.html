@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 3 | darion.johannes.yaphet</title>
+  <title>Seite 3 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,17 +50,22 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
       
     </div>
     <footer>
@@ -747,38 +752,6 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
       
       
@@ -835,46 +808,49 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/log4j/">2016-04-22</a></time>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/other/log4j/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Loj4J</p>
-<p>#####Basic<br>Log4j由三个重要的组件构成：日志信息的优先级，日志信息的输出目的地，日志信息的输出格式。</p>
-<p><code>日志信息优先级</code>从高到低有ERROR、WARN、 INFO、DEBUG，分别用来指定这条日志信息的重要程度；<br><code>日志信息的输出目的地</code>指定了日志将打印到控制台还是文件中；<br><code>日志输出格式</code>则控制了日志信息的显示内容。</p>
-<p>#####定义配置文件<br>Log4j支持两种配置文件格式，一种是XML文件，一种是Java Properties文件。</p>
-<ol>
-<li><p>配置根Logger语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger = [ level ] , appenderName, appenderName, …</span><br></pre></td></tr></table></figure>
-<p>level 是日志记录的优先级，分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL或者您定义的级别。</p>
-<p>Log4j建议只使用四个级别，优 先级从高到低分别是ERROR、WARN、INFO、DEBUG。通过在这里定义的级别，可以控制到应用程序中相应级别的日志信息的开关。</p>
-</li>
-<li><p>配置日志信息输出目的地Appender语法为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName = fully.qualified.name.of.appender.class  </span><br><span class="line">log4j.appender.appenderName.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.optionN = valueN</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>   Log4j提供的appender有以下几种：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.ConsoleAppender（控制台）</span><br><span class="line">org.apache.log4j.FileAppender（文件）</span><br><span class="line">org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件）</span><br><span class="line">org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件）</span><br><span class="line">org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>配置日志信息的格式（布局）语法为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName.layout = fully.qualified.name.of.layout.class  </span><br><span class="line">log4j.appender.appenderName.layout.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.layout.optionN = valueN</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>   Log4j提供的layout有已下几种：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.HTMLLayout（以HTML表格形式布局） </span><br><span class="line">org.apache.log4j.PatternLayout（可以灵活地指定布局模式）</span><br><span class="line">org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串）</span><br><span class="line">org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</span><br></pre></td></tr></table></figure>
-<p>   Log4J采用类似C语言中的printf函数的打印格式格式化日志信息，打印参数如下：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL  </span><br><span class="line">%r 输出自应用启动到输出该log信息耗费的毫秒数  </span><br><span class="line">%c 输出所属的类目，通常就是所在类的全名  </span><br><span class="line">%t 输出产生该日志事件的线程名  </span><br><span class="line">%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”  </span><br><span class="line">%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d&#123;yyy MMM dd HH:mm:ss,SSS&#125;，输出类似：2002年10月18日 22：10：28，921  </span><br><span class="line">%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)</span><br></pre></td></tr></table></figure>
-<p>参考：</p>
-<ol>
-<li><a href="http://www.codeceo.com/article/log4j-usage.html" target="_blank" rel="external">最详细的Log4j使用教程</a></li>
-</ol>
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
 
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -893,24 +869,24 @@ the exception?</code></p>
 
 <nav id="pagination">
   
-    <a href="/page/2/" class="alignleft prev">Prev</a>
+    <a href="/page/2/" class="alignleft prev">Vorherige Seite</a>
   
   
-    <a href="/page/4/" class="alignright next">Next</a>
+    <a href="/page/4/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>6</small></li>

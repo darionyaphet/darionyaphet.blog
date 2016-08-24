@@ -84,6 +84,292 @@ set hive.mapred.mode=nonstrict; (default value / 默认">
 <p>length 是内建函数，也可以指定其他的函数或这使用自定义函数。</p>
 <p>Cluster By<br>cluster by 除了具有 distribute by 的功能外还兼具 sort by 的功能。 </p>
 <p>但是排序只能是倒序排序，不能指定排序规则为asc 或者desc。</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hive.exec.stagingdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.exec.scratchdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.query.length</td>
+<td>The maximum size of a query string .</td>
+<td>100 KB</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.in.clause</td>
+<td>The maximum number of values in a IN clause. Once exceeded, it will be broken into multiple OR separated IN clauses.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.values.clause</td>
+<td>The maximum number of values in a VALUES clause for INSERT statement.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.table.parameters.default</td>
+<td>Default property values for newly created tables</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.id</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.silent</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.session.history.enabled</td>
+<td>Whether to log Hive query, query plan, runtime statistics etc.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.query.string</td>
+<td>Query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.query.id</td>
+<td>ID for query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.jobname.length</td>
+<td>max jobname length</td>
+<td>50</td>
+</tr>
+<tr>
+<td>hive.alias</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>hive.map.aggr</td>
+<td>Whether to use map-side aggregation in Hive Group By queries</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.skewindata</td>
+<td>Whether there is skew in data to optimize group by queries</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.join.emit.interval</td>
+<td>How many rows in the right-most join operand Hive should buffer before emitting the join result.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.join.cache.size</td>
+<td>How many rows in the joining tables (except the streaming table) should be cached in memory.</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>hive.mapjoin.bucket.cache.size</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>hive.mapjoin.optimized.hashtable</td>
+<td>Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez and Spark, because memory-optimized hashtable cannot be serialized.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.mapaggr.checkinterval</td>
+<td>Number of rows after which size of the grouping keys/aggregation classes is performed</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>hive.mapjoin.followby.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table, when this group by is followed by map join</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.heartbeat.interval</td>
+<td>Send a heartbeat after this interval - used by mapjoin and filter operators</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.limit.row.max.size</td>
+<td>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.limit.file</td>
+<td>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</td>
+<td>10</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.enable</td>
+<td>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</td>
+<td>false</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -127,7 +413,7 @@ set hive.mapred.mode=nonstrict; (default value / 默认">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Kommentare</h1>
 
   
       <div id="fb-root"></div>
@@ -150,14 +436,14 @@ set hive.mapred.mode=nonstrict; (default value / 默认">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Distributed/">Distributed</a><small>6</small></li>
