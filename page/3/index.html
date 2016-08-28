@@ -50,6 +50,166 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Cassandra </p>
+<p>###Introduction</p>
+<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
+<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
+<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
+<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
+<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
+<p>###gossip: Internode communications</p>
+<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
+<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
+<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
+<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
+<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
+<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
+<p>###Virtual nodes</p>
+<p>###Write </p>
+<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
+<ol>
+<li>Logging data in the commit log</li>
+<li>Writing data to the memtable</li>
+<li>Flushing data from the memtable</li>
+<li>Storing data on disk in SSTables</li>
+<li>Compaction</li>
+</ol>
+<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
+<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
+<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
+<p>###Read </p>
+<p>###Delete</p>
+<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
+<p>###Compaction</p>
+<p>###Hinted Handoff</p>
+<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
+<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
+<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
+<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
+<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
+<p>###SSTable</p>
+<p>SSTables have 3 separate files created per column-family.</p>
+<ol>
+<li>Bloom Filter</li>
+<li>Index</li>
+<li>Data</li>
+</ol>
+<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
+<p>###Memtable</p>
+<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
+<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
+<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
+<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
+<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
+<p>column_definition is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
+<p>partition_key is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
+<p>collection_type is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
+<p><code>CREATE TYPE</code>  Create a user-defined type</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
+<p>Example :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
+<p>###Cassandra tools</p>
+<p>The nodetool utility is a command line interface for managing a cluster.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
+<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
+<p>###Architecture</p>
+<p>###Authentication</p>
+<p>To Configure Cassandra to use internal authentication,</p>
+<p>###Virtual Nodes</p>
+<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
+<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
+<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
+<p>####JVM Turning</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
+<p>####Inner Cassandra </p>
+<p>#####StartUp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
       
       
@@ -87,11 +247,51 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##MySQL</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
   
 
     </header>
@@ -746,126 +946,6 @@ the exception?</code></p>
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/web/django/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Django</p>
-<p>projects和apps的区别:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app是专注于做某件事的web应用，比如用户认证系统，公开投票系统；</span><br><span class="line">project则是一个web站点，可能包括许多app和一些配置。</span><br><span class="line">一个project可以包含许多app，一个app可以用于许多project中。</span><br></pre></td></tr></table></figure>
-<hr>
-<p><code>django_learning/settings.py</code> 对项目进行一定配置，比如时区，数据库连接，app添加、删除等</p>
-<p><code>python manage.py migrate</code> 生成相应的数据库表</p>
-<p>默认情况下，项目配置文件<code>settings.py</code>里面已经配置有Django自带的应用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p><code>python manage.py runserver</code> 开启Django自带的开发环境web服务</p>
-<p><code>python manage.py createsuperuser</code> 添加后台管理员账号 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="external">http://127.0.0.1:8000/admin/</a> 进入管理员登录页面</p>
-<p><code>python manage.py test examples</code> </p>
-<p><code>python manage.py shell</code> 使用python解释器的交互模式</p>
-<p>Django提供了models方便设计数据库，因此我们的questions/models.py看起来可能是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">λ ~/django_learning/ master* python manage.py help</span><br><span class="line"></span><br><span class="line">Type &apos;manage.py help &lt;subcommand&gt;&apos; for help on a specific subcommand.</span><br><span class="line"></span><br><span class="line">Available subcommands:</span><br><span class="line"></span><br><span class="line">[auth]</span><br><span class="line">    changepassword</span><br><span class="line">    createsuperuser</span><br><span class="line"></span><br><span class="line">[django]</span><br><span class="line">    check</span><br><span class="line">    compilemessages</span><br><span class="line">    createcachetable</span><br><span class="line">    dbshell</span><br><span class="line">    diffsettings</span><br><span class="line">    dumpdata</span><br><span class="line">    flush</span><br><span class="line">    inspectdb</span><br><span class="line">    loaddata</span><br><span class="line">    makemessages</span><br><span class="line">    makemigrations</span><br><span class="line">    migrate</span><br><span class="line">    sendtestemail</span><br><span class="line">    shell</span><br><span class="line">    showmigrations</span><br><span class="line">    sqlflush</span><br><span class="line">    sqlmigrate</span><br><span class="line">    sqlsequencereset</span><br><span class="line">    squashmigrations</span><br><span class="line">    startapp</span><br><span class="line">    startproject</span><br><span class="line">    test</span><br><span class="line">    testserver</span><br><span class="line"></span><br><span class="line">[sessions]</span><br><span class="line">    clearsessions</span><br><span class="line"></span><br><span class="line">[staticfiles]</span><br><span class="line">    collectstatic</span><br><span class="line">    findstatic</span><br><span class="line">    runserver</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py</span><br><span class="line">cleanup           -- remove old data from the database</span><br><span class="line">compilemessages   -- compile .po files to .mo for use with gettext</span><br><span class="line">createcachetable  -- creates table for SQL cache backend</span><br><span class="line">createsuperuser   -- create a superuser</span><br><span class="line">dbshell           -- run command-line client for the current database</span><br><span class="line">diffsettings      -- display differences between the current settings and Django defaults</span><br><span class="line">dumpdata          -- output contents of database as a fixture</span><br><span class="line">flush             -- execute &apos;sqlflush&apos; on the current database</span><br><span class="line">inspectdb         -- output Django model module for tables in database</span><br><span class="line">loaddata          -- install the named fixture(s) in the database</span><br><span class="line">makemessages      -- pull out all strings marked for translation</span><br><span class="line">reset             -- executes &apos;sqlreset&apos; for the given app(s)</span><br><span class="line">runfcgi           -- run this project as a fastcgi</span><br><span class="line">runserver         -- start a lightweight web server for development</span><br><span class="line">shell             -- run a Python interactive interpreter. Tries to use IPython, if it&apos;s available</span><br><span class="line">sql               -- print the CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlall            -- print the CREATE TABLE, CREATE INDEX and custom statements for the given app(s)</span><br><span class="line">sqlclear          -- print the DROP TABLE statements for the given app(s)</span><br><span class="line">sqlcustom         -- print the custom table-modifying SQL statements for the given app(s)</span><br><span class="line">sqlflush          -- print the SQL statements required to return all tables to installation state</span><br><span class="line">sqlindexes        -- print the CREATE INDEX statements for the given app(s)</span><br><span class="line">sqlreset          -- print the DROP TABLE and CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlsequencereset  -- print the SQL statements for resetting sequences for the given app(s)</span><br><span class="line">startapp          -- create Django app directory in this project&apos;s directory</span><br><span class="line">syncdb            -- create database tables for apps in INSTALLED_APPS where required</span><br><span class="line">test              -- run the test suite for the specified app, or the entire site</span><br><span class="line">testserver        -- run a development server with data from the given fixture(s)</span><br><span class="line">validate          -- validate all installed modules</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py changepassword --help</span><br><span class="line">usage: manage.py changepassword [-h] [--version] [-v &#123;0,1,2,3&#125;]</span><br><span class="line">                                [--settings SETTINGS]</span><br><span class="line">                                [--pythonpath PYTHONPATH] [--traceback]</span><br><span class="line">                                [--no-color] [--database DATABASE]</span><br><span class="line">                                [username]</span><br><span class="line"></span><br><span class="line">Change a user&apos;s password for django.contrib.auth.</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  username              Username to change password for; by default, it&apos;s the</span><br><span class="line">                        current username.</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  -v &#123;0,1,2,3&#125;, --verbosity &#123;0,1,2,3&#125;</span><br><span class="line">                        Verbosity level; 0=minimal output, 1=normal output,</span><br><span class="line">                        2=verbose output, 3=very verbose output</span><br><span class="line">  --settings SETTINGS   The Python path to a settings module, e.g.</span><br><span class="line">                        &quot;myproject.settings.main&quot;. If this isn&apos;t provided, the</span><br><span class="line">                        DJANGO_SETTINGS_MODULE environment variable will be</span><br><span class="line">                        used.</span><br><span class="line">  --pythonpath PYTHONPATH</span><br><span class="line">                        A directory to add to the Python path, e.g.</span><br><span class="line">                        &quot;/home/djangoprojects/myproject&quot;.</span><br><span class="line">  --traceback           Raise on CommandError exceptions</span><br><span class="line">  --no-color            Don&apos;t colorize the command output.</span><br><span class="line">  --database DATABASE   Specifies the database to use. Default is &quot;default&quot;.</span><br></pre></td></tr></table></figure>
-<hr>
-<p>参考:</p>
-<ol>
-<li><p><a href="http://segmentfault.com/a/1190000002447511" target="_blank" rel="external">两篇文章帮你入门Django(上)</a></p>
-</li>
-<li><p><a href="http://segmentfault.com/a/1190000002479013" target="_blank" rel="external">两篇文章帮你入门Django(下)</a></p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -889,7 +969,9 @@ the exception?</code></p>
   <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>6</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
@@ -908,11 +990,13 @@ the exception?</code></p>
   <h3 class="title">Tags</h3>
   <ul class="entry">
   
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
     <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
   
     <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
   
-    <li><a href="/tags/Hadoop/">Hadoop</a><small>4</small></li>
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
