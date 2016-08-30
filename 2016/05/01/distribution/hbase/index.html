@@ -89,6 +89,102 @@ ZooKeeperZookeeper 中存储-ROOT-表，">
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="Bucket-Cache"><a href="#Bucket-Cache" class="headerlink" title="Bucket Cache"></a>Bucket Cache</h4><p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
+<h4 id="HBase-ZooKeeper-ZNode"><a href="#HBase-ZooKeeper-ZNode" class="headerlink" title="HBase ZooKeeper ZNode"></a>HBase ZooKeeper ZNode</h4><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/hbase (zookeeper.znode.parent)</td>
+<td>The root znode that will contain all the znodes created/used by HBase</td>
+</tr>
+<tr>
+<td>/hbase/hbaseid (zookeeper.znode.clusterId)</td>
+<td>Initialized by the Master with the UUID that identifies the cluster.The ID is also stored on HDFS in hdfs:/<namenode>:<port>/hbase/hbase.id.</port></namenode></td>
+</tr>
+<tr>
+<td>/hbase/root-region-server (zookeeper.znode.rootserver)</td>
+<td>Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations.</td>
+</tr>
+<tr>
+<td>/hbase/rs (zookeeper.znode.rs)</td>
+<td>On startup each RegionServer will create a sub-znode that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
+</tr>
+<tr>
+<td>/hbase/unassigned (zookeeper.znode.unassigned)</td>
+<td>Contains a sub-znode for each unassigned region . This znode is used by the Assignment Manager to discover the regions to assign.</td>
+</tr>
+<tr>
+<td>/hbase/master (zookeeper.znode.master)</td>
+<td>The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
+</tr>
+<tr>
+<td>/hbase/backup-masters (zookeeper.znode.backup.masters)</td>
+<td>Each inactive Master will register itself as backup Master by creating a sub-znode. This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
+</tr>
+<tr>
+<td>/hbase/shutdown (zookeeper.znode.state)</td>
+<td>Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
+</tr>
+<tr>
+<td>/hbase/draining (zookeeper.znode.draining.rs)</td>
+<td>Used to decommission more than one RegionServer at a time by creating sub-znodes with the form serverName,port,startCode .</td>
+</tr>
+<tr>
+<td>/hbase/table (zookeeper.znode.masterTableEnableDisable)</td>
+<td>Used by the master to track the table state during assignments .</td>
+</tr>
+<tr>
+<td>/hbase/splitlog (zookeeper.znode.splitlog)</td>
+<td>Used by the log splitter to track the pending log to replay and its assignment.</td>
+</tr>
+<tr>
+<td>/hbase/acl (zookeeper.znode.acl.parent)</td>
+<td>The acl znode is used for synchronizing the changes made to the <em>acl</em> table by the grant/revoke commands.</td>
+</tr>
+<tr>
+<td>/hbase/tokenauth (zookeeper.znode.tokenauth.parent)</td>
+<td>The token provider is usually used to allow a MapReduce job to access the HBase cluster.</td>
+</tr>
+<tr>
+<td>/hbase/replication (zookeeper.znode.replication)</td>
+<td>Root znode that contains all HBase replication state information</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers (zookeeper.znode.replication.peers)</td>
+<td>Each peer will have a sub-znode containing the ZK ensemble’s addresses that allows the peer to be contacted.</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers/<clusterid>/peer-state (zookeeper.znode.replication.peers.state)</clusterid></td>
+<td>Mirror of the /hbase/replication/peers znode, but here each sub-znode will track the peer enabled/disabled state.</td>
+</tr>
+<tr>
+<td>/hbase/replication/state (zookeeper.znode.replication.state)</td>
+<td>Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell.</td>
+</tr>
+<tr>
+<td>/hbase/replication/rs (zookeeper.znode.replication.rs)</td>
+<td>Contains the list of RegionServers in the main cluster .</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/acquired</td>
+<td>The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/reached</td>
+<td>Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot telling each RegionServer that it is time to finalize/commit the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/abort</td>
+<td>If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
+</tr>
+</tbody>
+</table>
+<p>Reference :</p>
+<p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
 
       
     </div>

@@ -50,29 +50,54 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Redis</p>
-<p>####Benchmarks</p>
-<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
-<p>####Cluster</p>
-<p>####Hyperloglog</p>
-<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
-<hr>
-<p>####FAQ</p>
-<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
-<hr>
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -210,43 +235,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
       
       
@@ -287,17 +275,29 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
+
       
     </div>
     <footer>
@@ -391,6 +391,102 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="Bucket-Cache"><a href="#Bucket-Cache" class="headerlink" title="Bucket Cache"></a>Bucket Cache</h4><p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
+<h4 id="HBase-ZooKeeper-ZNode"><a href="#HBase-ZooKeeper-ZNode" class="headerlink" title="HBase ZooKeeper ZNode"></a>HBase ZooKeeper ZNode</h4><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/hbase (zookeeper.znode.parent)</td>
+<td>The root znode that will contain all the znodes created/used by HBase</td>
+</tr>
+<tr>
+<td>/hbase/hbaseid (zookeeper.znode.clusterId)</td>
+<td>Initialized by the Master with the UUID that identifies the cluster.The ID is also stored on HDFS in hdfs:/<namenode>:<port>/hbase/hbase.id.</port></namenode></td>
+</tr>
+<tr>
+<td>/hbase/root-region-server (zookeeper.znode.rootserver)</td>
+<td>Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations.</td>
+</tr>
+<tr>
+<td>/hbase/rs (zookeeper.znode.rs)</td>
+<td>On startup each RegionServer will create a sub-znode that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
+</tr>
+<tr>
+<td>/hbase/unassigned (zookeeper.znode.unassigned)</td>
+<td>Contains a sub-znode for each unassigned region . This znode is used by the Assignment Manager to discover the regions to assign.</td>
+</tr>
+<tr>
+<td>/hbase/master (zookeeper.znode.master)</td>
+<td>The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
+</tr>
+<tr>
+<td>/hbase/backup-masters (zookeeper.znode.backup.masters)</td>
+<td>Each inactive Master will register itself as backup Master by creating a sub-znode. This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
+</tr>
+<tr>
+<td>/hbase/shutdown (zookeeper.znode.state)</td>
+<td>Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
+</tr>
+<tr>
+<td>/hbase/draining (zookeeper.znode.draining.rs)</td>
+<td>Used to decommission more than one RegionServer at a time by creating sub-znodes with the form serverName,port,startCode .</td>
+</tr>
+<tr>
+<td>/hbase/table (zookeeper.znode.masterTableEnableDisable)</td>
+<td>Used by the master to track the table state during assignments .</td>
+</tr>
+<tr>
+<td>/hbase/splitlog (zookeeper.znode.splitlog)</td>
+<td>Used by the log splitter to track the pending log to replay and its assignment.</td>
+</tr>
+<tr>
+<td>/hbase/acl (zookeeper.znode.acl.parent)</td>
+<td>The acl znode is used for synchronizing the changes made to the <em>acl</em> table by the grant/revoke commands.</td>
+</tr>
+<tr>
+<td>/hbase/tokenauth (zookeeper.znode.tokenauth.parent)</td>
+<td>The token provider is usually used to allow a MapReduce job to access the HBase cluster.</td>
+</tr>
+<tr>
+<td>/hbase/replication (zookeeper.znode.replication)</td>
+<td>Root znode that contains all HBase replication state information</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers (zookeeper.znode.replication.peers)</td>
+<td>Each peer will have a sub-znode containing the ZK ensemble’s addresses that allows the peer to be contacted.</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers/<clusterid>/peer-state (zookeeper.znode.replication.peers.state)</clusterid></td>
+<td>Mirror of the /hbase/replication/peers znode, but here each sub-znode will track the peer enabled/disabled state.</td>
+</tr>
+<tr>
+<td>/hbase/replication/state (zookeeper.znode.replication.state)</td>
+<td>Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell.</td>
+</tr>
+<tr>
+<td>/hbase/replication/rs (zookeeper.znode.replication.rs)</td>
+<td>Contains the list of RegionServers in the main cluster .</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/acquired</td>
+<td>The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/reached</td>
+<td>Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot telling each RegionServer that it is time to finalize/commit the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/abort</td>
+<td>If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
+</tr>
+</tbody>
+</table>
+<p>Reference :</p>
+<p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
 
       
     </div>
