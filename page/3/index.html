@@ -50,6 +50,342 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-05-14T16:00:00.000Z"><a href="/2016/05/15/distribution/alluxio/">2016-05-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/15/distribution/alluxio/">Alluxio</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Alluxio"><a href="#Alluxio" class="headerlink" title="Alluxio"></a>Alluxio</h3><p>Alluxio统一了数据访问的方式，为上层计算框架和底层存储系统构建了桥梁。 应用只需要连接Alluxio即可访问存储在底层任意存储系统中的数据。<br>Alluxio以内存为中心的架构使得数据的访问速度能比现有常规方案快几个数量级。</p>
+<p><code>灵活的文件API</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alluxio的本地API类似于java.io.File类，提供了InputStream和OutputStream的接口和对内存映射I/O的高效支持。</span><br><span class="line">我们推荐使用这套API以获得Alluxio的最好性能。 </span><br><span class="line">另外，Alluxio提供兼容Hadoop的文件系统接口，Hadoop MapReduce和Spark可以使用Alluxio代替HDFS。</span><br></pre></td></tr></table></figure>
+<p><strong>IO选项</strong></p>
+<table>
+<thead>
+<tr>
+<th>读类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_PROMOTE</td>
+<td>如果读取的数据在Worker上时，该数据被移动到Worker的最高层。如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。这是默认的读类型。</td>
+</tr>
+<tr>
+<td>CACHE</td>
+<td>如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。</td>
+</tr>
+<tr>
+<td>NO_CACHE</td>
+<td>不会创建副本。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>写类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker和底层存储系统。</td>
+</tr>
+<tr>
+<td>MUST_CACHE</td>
+<td>数据被同步地写入到Alluxio的Worker。但不会被写入到底层存储系统。这是默认写类型。</td>
+</tr>
+<tr>
+<td>THROUGH</td>
+<td>数据被同步地写入到底层存储系统。但不会被写入到Alluxio的Worker。</td>
+</tr>
+<tr>
+<td>ASYNC_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker，并异步地写入到底层存储系统。处于实验阶段。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>键值存储</strong> </p>
+<p>Alluxio 还在文件系统之上提供Key-Value Store , Key-Value 放入存储后是不可变的。</p>
+<p>Key Value Store 可以用AlluxioURI来表示路径，比如alluxio://path/my-kvstore。</p>
+<p>单个Key Value Store可能有一个以上的分区，分区是由Alluxio内部来管理，对用户透明。</p>
+<p>Alluxio默认配置是禁用键值存储库的，可以通过配置alluxio.keyvalue.enabled为true来启用。</p>
+<p>获取一个 Key Value Store Client :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeyValueSystem kvs = KeyValueSystem.Factory().create();</span><br></pre></td></tr></table></figure>
+<p><strong>创建一个新的 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreWriter writer = kvs.createStore(new AlluxioURI(&quot;alluxio://path/my-kvstore&quot;));</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;100&quot;, &quot;foo&quot;)</span><br><span class="line">writer.put(&quot;100&quot;, &quot;foo&quot;);</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;200&quot;, &quot;bar&quot;)</span><br><span class="line">writer.put(&quot;200&quot;, &quot;bar&quot;);</span><br><span class="line"></span><br><span class="line">// Close and complete the store</span><br><span class="line">writer.close();</span><br></pre></td></tr></table></figure>
+<p><strong>通过迭代器遍历 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreReader reader = kvs.openStore(new AlluxioURI(&quot;alluxio://path/kvstore/&quot;));</span><br><span class="line">KeyValueIterator iterator = reader.iterator();</span><br><span class="line"></span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">  KeyValuePair pair = iterator.next();</span><br><span class="line">  ByteBuffer key = pair.getkKey();</span><br><span class="line">  ByteBuffer value = pair.getValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Close the reader on the store</span><br><span class="line">reader.close()</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce InputFormat</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conf.setInputFormat(KeyValueInputFormat.class);</span><br><span class="line">FileInputFormat.setInputPaths(conf, new Path(&quot;alluxio://input-store&quot;));</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce OutputFormat</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf.setOutputKeyClass(BytesWritable.class);</span><br><span class="line">conf.setOutputValueClass(BytesWritable.class);</span><br><span class="line">conf.setOutputFormat(KeyValueOutputFormat.class);</span><br><span class="line">conf.setOutputCommitter(KeyValueOutputCommitter.class);</span><br><span class="line">FileOutputFormat.setOutputPath(conf, new Path(&quot;alluxio://output-store&quot;));</span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>可插拔的底层存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
+<p><code>层次化存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过分层存储，Alluxio不仅可以管理内存，也可以管理SSD 和HDD,能够让更大的数据集存储在Alluxio上。</span><br><span class="line">数据在不同层之间自动被管理，保证热数据在更快的存储层上。</span><br><span class="line">自定义策略可以方便地加入Alluxio，而且pin的概念允许用户直接控制数据的存放位置。</span><br></pre></td></tr></table></figure>
+<p>目前Alluxio支持这些存储类型：</p>
+<ol>
+<li>MEM(内存)</li>
+<li>SSD(固态硬盘)</li>
+<li>HDD(硬盘驱动器)</li>
+</ol>
+<p><strong>使用分层存储</strong></p>
+<p>Alluxio管理的数据块不只在内存，可在任何可用的存储层。<br>Alluxio使用分配策略和回收策略管理块的存放和移动。Alluxio基于I/O性能从上到下排序存储层。</p>
+<p>因此，这种典型的分层存储设置决定了最顶层是MEM，然后是SSD，最后是HDD。</p>
+<p><strong>存储目录</strong></p>
+<p><strong>写数据</strong></p>
+<p>写入新数据块时默认写在最顶层。如果顶层没有足够的空间存放数据块，回收策略会被触发释放空间给新数据块。</p>
+<p><strong>读数据</strong></p>
+<p>读取分层存储的数据块和标准Alluxio类似。Alluxio从存储位置读取数据块。如果Alluxio配置了多层存储，数据块不一定是从顶层读取，因为可能被透明地移到下层。</p>
+<p>读取存储策略为AlluxioStorageType.PROMOTE的数据会确保数据从worker读取前先被转移到顶层。通过显式将热数据移到更高层,该策略也可以作为数据管理策略使用。</p>
+<p><strong>固定文件</strong></p>
+<p>文件被固定时，数据块不会被移出。用户可以促使已固定文件的块移到顶层。</p>
+<p>固定文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(true);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p>文件可以取消固定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(false);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p><strong>分配策略</strong></p>
+<ul>
+<li>贪心分配策略 分配新数据块到首个有足够空间的存储目录。</li>
+<li>最大剩余空间分配策略 分配数据块到有最大剩余空间的存储目录。</li>
+<li>轮询调度分配策略 分配数据块到有空间的最高存储层，存储目录通过轮询调度选出。</li>
+</ul>
+<p><strong>回收策略</strong></p>
+<ul>
+<li>贪心回收策略</li>
+<li>LRU回收策略</li>
+<li>LRFU回收策略</li>
+<li>部分LRU回收策略</li>
+</ul>
+<p><strong>空间预留器</strong></p>
+<p><strong>开启和配置空间预留</strong></p>
+<hr>
+<p><code>统一命名空间</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alluxio通过挂载功能在不同的存储系统之间实现高效的数据管理。</span><br><span class="line">并且透明命名在持久化这些对象到底层存储系统时可以保留这些对象的文件名和目录层次结构。</span><br></pre></td></tr></table></figure>
+<p><code>世系(Lineage)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过世系(Lineage)，Alluxio可以不受容错的限制实现高吞吐的写入， 丢失的输出可以通过重新执行创建这一输出的任务来恢复。</span><br><span class="line">应用将输出写入内存，Alluxio以异步方式定期备份数据到底层文件系统。</span><br><span class="line">写入失败时，Alluxio启动任务重执行恢复丢失的文件。</span><br></pre></td></tr></table></figure>
+<p><code>网页UI &amp; 命令行</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用户可以通过网页UI浏览文件系统。</span><br><span class="line">在调试模式下，管理员可以查看每一个文件的详细信息，包括存放位置，检查点路径等等。</span><br><span class="line">用户也可以通过./bin/alluxio fs与Alluxio交互，例如：将数据从文件系统拷入拷出。</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://alluxio.org/documentation/v1.0.1/cn/" target="_blank" rel="external">alluxio官网</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##MySQL</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
       
       
@@ -145,159 +481,6 @@
 <p>#####StartUp</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##MySQL</p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Redis</p>
-<p>####Benchmarks</p>
-<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
-<p>####Cluster</p>
-<p>####Hyperloglog</p>
-<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
-<hr>
-<p>####FAQ</p>
-<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
-<hr>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
       
     </div>
     <footer>
@@ -535,496 +718,6 @@
 <ol>
 <li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-23T12:45:20.000Z"><a href="/2016/04/23/distribution/akka/">2016-04-23</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/23/distribution/akka/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Actor-Modle"><a href="#Actor-Modle" class="headerlink" title="Actor Modle"></a>Actor Modle</h3><p>The Actor Model takes a different approach to solving the problem of concurrency,<br>by avoiding the issues caused by threads and locks. In the Actor Model, all objects<br>are modeled as independent, computational entities that only respond to the<br>messages received. </p>
-<p>Actors change their state only when they receive a stimulus in the form of a message. </p>
-<p>The Actor Model is based on the following principles:</p>
-<ol>
-<li>The immutable messages are used to communicate between actors. </li>
-<li>Each actor has a queue attached where the incoming messages are enqueued. </li>
-<li>Messages are passed between actors asynchronously. </li>
-<li>Communication between the sender and receiver is decoupled and<br>asynchronous, allowing them to execute in different threads. </li>
-</ol>
-<p>Actors can change their state and behavior based on the message passed. </p>
-<p>The connection wire between the sender sending a<br>message and the receiver actor receiving the message is called the mailbox. </p>
-<h3 id="Akka"><a href="#Akka" class="headerlink" title="Akka"></a>Akka</h3><p>The Akka framework has taken the “Actor Model” concept to build an<br>event-driven, middleware framework that allows the building of concurrent,<br>scalable, and distributed systems. </p>
-<p>The Akka framework provides the following features:</p>
-<ol>
-<li><p><code>Concurrency</code>: The Akka Actor Model abstracts concurrency handling and<br>allows the programmer to focus on the business logic</p>
-</li>
-<li><p><code>Scalability</code>: The Akka Actor Model’s asynchronous message passing allows<br>applications to scale up on multicore servers</p>
-</li>
-<li><p><code>Fault tolerance</code>: Akka borrows the concepts and techniques from Erlang to<br>build the “Let It Crash”, fault tolerance model</p>
-</li>
-<li><p><code>Event-driven architecture</code>: Akka provides an asynchronous messaging<br>platform for building event-driven architectures</p>
-</li>
-<li><p><code>Transaction support</code>: Akka implements transactors that combine the actors<br>and software transactional memory (STM) into transactional actors</p>
-</li>
-<li><p><code>Location transparency</code>: Akka provides a unified programming model for<br>multicore and distributed computing needs</p>
-</li>
-<li><p><code>Scala/Java APIs</code>: Akka supports both Java and Scala APIs for<br>building applications</p>
-</li>
-</ol>
-<h4 id="Akka-Use-Case"><a href="#Akka-Use-Case" class="headerlink" title="Akka Use Case"></a>Akka Use Case</h4><ul>
-<li>Transaction processing</li>
-<li>Service providers</li>
-<li>Batch processing</li>
-<li>Data mining/analytics/Business Intelligence</li>
-<li>Service gateways/hubs</li>
-<li>Apps requiring concurrency/parallelism</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">akka.protocol://system@host:1234/user/my/actor/hierarchy/path</span><br></pre></td></tr></table></figure>
-<p>Actors can change their state and behavior based on the message passed.</p>
-<p>Behavior is nothing but the computation logic that needs to be executed in response<br>to the message received.</p>
-<h3 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h3><p>(!)</p>
-<p>Akka provides hooks such as preStart that allow the actor’s state and behavior to be initialized. </p>
-<p>When the actor is stopped, Akka disables the message queuing for the actor before<br>PostStop is invoked. In the postStop hook, any persistence of the state or clean up<br>of any hold-up resources can be done</p>
-<p>An actor’s lifecycle consists of three phases :</p>
-<ul>
-<li>Actor is initialized and started</li>
-<li>Actor receives and processes messages by executing a specific behavior</li>
-<li>Actor stops itself when it receives a termination message</li>
-</ul>
-<p><code>preStart()</code> and <code>postStop()</code> can be implemented to <code>initialize/clean</code> any resources used by the actor to process the messages.</p>
-<p><code>preRestart()</code> and <code>postRestart()</code> allow the actor to manage the state in case an exception has been raised and Supervisor actor restarts the actor.</p>
-<h3 id="Defining-an-actor"><a href="#Defining-an-actor" class="headerlink" title="Defining an actor"></a>Defining an actor</h3><p>All actors are created in the <code>context</code> of an actor system or another actor. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActorSystem _system = ActorSystem.create(&quot;MyActorSystem&quot;);</span><br><span class="line">ActorRef myActor = _system.actorOf(new Props(MyActor.class),&quot;myActor&quot;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val system = ActorSystem(&quot;MyActorSystem&quot;)</span><br><span class="line">val myActor = system.actorOf(Props[MyActor], name = &quot;myActor&quot;)</span><br></pre></td></tr></table></figure>
-<h4 id="Stopping-actor"><a href="#Stopping-actor" class="headerlink" title="Stopping actor"></a>Stopping actor</h4><h4 id="Killing-actor"><a href="#Killing-actor" class="headerlink" title="Killing actor"></a>Killing actor</h4><p>An actor can be killed when a kill() message is sent to it. </p>
-<p><code>PoisonPill</code> is an asynchronous way to shut down the actor. <code>kill()</code>  is a synchronous way.</p>
-<h4 id="HotSwap"><a href="#HotSwap" class="headerlink" title="HotSwap"></a>HotSwap</h4><h3 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h3><p>This actor hierarchy forms the basis of the Akka’s <code>&quot;Let It Crash&quot;</code> fault-tolerance<br>model. </p>
-<p>Akka’s fault-tolerance model is built using the <code>actor hierarchy</code> and <code>supervisor model</code>. </p>
-<h3 id="Location-transparency"><a href="#Location-transparency" class="headerlink" title="Location transparency"></a>Location transparency</h3><p>Akka uses the same philosophy of the WWW to identify and locate resources on the Web.</p>
-<p>Akka uses the similar URL convention to locate the actors. The default values are <code>akka://hostname/</code> or <code>akka://hostname:2552/</code></p>
-<h3 id="Actor-System"><a href="#Actor-System" class="headerlink" title="Actor System"></a>Actor System</h3><hr>
-<p>Akka uses the Actor Model together with Software Transactional Memory to raise the abstraction level and provide a better platform to build correct concurrent and scalable applications.</p>
-<p>For fault-tolerance Akka adopts the “Let it crash”, also called “Embrace failure”, model which have been used with great success in the telecom industry to build applications that self-heals, systems that never stop.</p>
-<hr>
-<blockquote>
-<p>The <code>actor</code> model in computer science is a mathematical model of concurrent computation that treats “actors” as the universal primitives of concurrent computation</p>
-</blockquote>
-<p>Actors can be created:</p>
-<ul>
-<li>Extending the ‘Actor’ class and implementing the ‘receive’ method.</li>
-<li>Create an anonymous Actor using one of the ‘actor’ methods.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class MyActor extends Actor &#123;</span><br><span class="line">  def receive = &#123;</span><br><span class="line">    case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">    case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val myActor = new MyActor</span><br><span class="line">myActor.start</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val myActor = actor &#123; </span><br><span class="line">  case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">  case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Akka’s approach to fault-tolerance; the “let it crash” model, is implemented by linking Actors.</p>
-<h4 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h4><p>An actor can change another actor’s state only by sending it a message. Actors communicate with other actors using the <code>address</code> of the target actor’s mailbox. Communication between actors is completely asynchronous and non-blocking; actors only react to the messages being sent to them.</p>
-<h6 id="Typed-Actor"><a href="#Typed-Actor" class="headerlink" title="Typed Actor"></a>Typed Actor</h6><p>In Akka, <code>typed actors</code> have been implemented using the Active Object pattern. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The Active Object Design pattern decouples method execution from method invocation, which reside in their own threads of control. </span><br><span class="line"></span><br><span class="line">The goal is to introduce concurrency and fault tolerance, by using asynchronous method invocation and a scheduler for handling requests.</span><br><span class="line"></span><br><span class="line">The key objective of the Active Object pattern is to decouple the method execution</span><br><span class="line">from the method invocation.</span><br></pre></td></tr></table></figure>
-<p><code>Active Object pattern</code> decouples the method invocation from method execution :</p>
-<ol>
-<li>The client calls the proxy object and invokes the method</li>
-<li>The proxy in passes the method calls as method requests to a scheduler or invocation handler that intercepts the call</li>
-<li>Scheduler or invocation handler enqueues the method requests on a queue</li>
-<li>The scheduler continuously monitors the queue and determines which method request(s) have become runnable</li>
-<li>Scheduler or invocation handler dispatches the requests to the implementation object</li>
-<li>The implementation object, running on the same thread as the scheduler, processes the request and returns any value to the client as Future</li>
-</ol>
-<p><code>Proxy instance</code> has an associated invocation handler. </p>
-<p><code>Method invocation</code> is dispatched to the invoke method of the instance’s invocation handler. </p>
-<p>Actors are entities that change their state by processing the incoming messages and generating other messages in response.</p>
-<p>Use <code>typed actors</code> sparingly and avoid blocking behavior by writing methods that either return Unit or Future.</p>
-<p>Typed Actor Model is communication via method calls. The parameter values are the messages and these need to be <code>immutable</code>. </p>
-<p>Messages can be passed to an actor in two modes:</p>
-<ol>
-<li>Fire and forget (the caller of the method does not expect any reply)</li>
-<li>Send and receive (the caller of the method expects a reply from the implementation class and will wait for that reply)</li>
-</ol>
-<p><strong>Actor lifecycle monitoring</strong></p>
-<p><code>TypedActor.PreStart</code> and <code>TypedActor.PostStop</code> interfaces, we can add the required functionality before the actor starts responding to the method calls</p>
-<p><code>TypedActor.PreRestart</code> and <code>TypedActor.PostRestart</code> interfaces to add functionality on actor restart as part of the supervision</p>
-<p><strong>Receiving messages</strong></p>
-<p>Typed actors can implement the <code>akka.actor.TypedActor.Receiver</code> interface in<br>order to process messages coming to them.</p>
-<p><strong>Supervisor strategy</strong></p>
-<p>Akka’s “Let It Crash” model is implemented by linking actors in a hierarchy. </p>
-<p><strong>Using dispatchers</strong><br>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p><strong>Using routers</strong></p>
-<p>A router is also a type of actor, which routes the incoming messages to the outbound actors. </p>
-<hr>
-<p>Dispatchers are the heart of the Akka application and this is what makes it<br>humming.</p>
-<p>Routers on the other hand, route incoming messages to outbound actors. </p>
-<h4 id="Dispatchers"><a href="#Dispatchers" class="headerlink" title="Dispatchers"></a>Dispatchers</h4><p>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p>The dispatchers run on their threads &amp; dispatch the actors and messages from the attached mailbox and allocate on heap to the executor threads. </p>
-<p>The executor threads are configured and tuned to the underlying processor cores that available for processing the messages.</p>
-<p>In Akka, a router is also a type of actor, which <code>routes the incoming messages to the outbound actors</code>. </p>
-<p>Dispatchers are used to control the <code>flow of execution</code>. Based on the dispatching policy, dispatchers will <code>route the incoming message or request to the business process</code>. </p>
-<ul>
-<li>Centralized control</li>
-<li>Application partitioning</li>
-<li>Reduced inter-dependencies<br>less contention on the same resources,leading to a scalable model.</li>
-</ul>
-<p><code>Types of dispatchers</code></p>
-<p>There are 4 different types of message dispatchers</p>
-<ol>
-<li>Dispatcher</li>
-<li>PinnedDispatcher</li>
-<li>Balancing dispatcher</li>
-<li>Calling thread dispatcher</li>
-</ol>
-<p>And  there are four default mailbox implementations provided as follows:</p>
-<ol>
-<li>Unbounded mailbox</li>
-<li>Bounded mailbox</li>
-<li>Unbounded priority mailbox</li>
-<li>Bounded priority mailbox</li>
-</ol>
-<p>An event-based dispatcher that binds a set of actors to a thread pool backed up by a BlockingQueue method.</p>
-<ol>
-<li>Every actor is backed by its own mailbox</li>
-<li>The dispatcher can be shared with any number of actors</li>
-<li>The dispatcher can be backed by either thread pool or fork join pool</li>
-<li>The dispatcher is optimized for non-blocking code</li>
-</ol>
-<p><code>Pinned dispatcher</code> ( single, dedicated thread for each actor)</p>
-<p>This dispatcher is useful when the actors are doing I/O operations or performing long-running calculations. The dispatcher will deallocate the thread attached to the actor after a configurable period of inactivity.</p>
-<ol>
-<li>Every actor is backed by its own mailbox.</li>
-<li>A dedicated thread for each actor implies that this dispatcher cannot be shared with any other actors.</li>
-<li>The dispatcher is backed by the thread pool executor.</li>
-<li>The dispatcher is optimized for blocking operations. </li>
-</ol>
-<p><code>Balancing dispatcher</code> ( event-based dispatcher that tries to redistribute work from busy actors and allocate it to idle ones)</p>
-<p>Redistribution of tasks can only work if all actors are of the same type </p>
-<p>The dispatcher looks for actors that are idle and dispatches the message to them for processing.</p>
-<ol>
-<li>There is only one mailbox for all actors</li>
-<li>The dispatcher can be shared only with actors of the same type</li>
-<li>The dispatcher can be backed by a either thread pool or fork join pool</li>
-</ol>
-<p><code>Calling thread dispatcher</code> ( runs the task execution on the current thread only)</p>
-<p><strong>Types of mailboxes</strong></p>
-<ol>
-<li>Blocking queue means a queue that waits for space to become available before putting in an element and similarly waits for the queue to become non-empty before retrieving an element</li>
-<li>Bounded queue means a queue that limits the size of the queue; meaning you cannot add more elements than the specified size</li>
-</ol>
-<p><strong>Types of Executor</strong></p>
-<ol>
-<li>Thread pool executor ( Tasks are assigned to the pool using a queue. )</li>
-<li>Fork join executor ( Based on the premise of divide-and-conquer)</li>
-</ol>
-<p><code>Fork join executor</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> # Configuration for the fork join pool</span><br><span class="line"> fork-join-executor &#123;</span><br><span class="line"> </span><br><span class="line">    # Min number of threads</span><br><span class="line">    parallelism-min = 2</span><br><span class="line">    </span><br><span class="line">    # available processors * factor</span><br><span class="line">    parallelism-factor = 2.0</span><br><span class="line">    </span><br><span class="line">    # Max number of threads</span><br><span class="line">    parallelism-max = 10</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = Dispatcher</span><br><span class="line">    executor = &quot;fork-join-executor&quot;</span><br><span class="line">    </span><br><span class="line">    fork-join-executor &#123;</span><br><span class="line">       parallelism-min = 2</span><br><span class="line">       parallelism-factor = 2.0</span><br><span class="line">       parallelism-max = 10</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type = &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = PinnedDispatcher</span><br><span class="line"></span><br><span class="line">        executor = &quot;thread-pool-executor&quot;</span><br><span class="line">        thread-pool-executor &#123;</span><br><span class="line">        core-pool-size-min = 2</span><br><span class="line">        core-pool-size-factor = 2.0</span><br><span class="line">        core-pool-size-max = 10</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type =&quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Routers"><a href="#Routers" class="headerlink" title="Routers"></a>Routers</h3><p>An entity that directs the message from the source to the destination actor. </p>
-<p>Routers route incoming messages to outbound actors.</p>
-<p>Router is also a type of actor, which routes the incoming messages to the outbound actors.</p>
-<p>For the router, the outbound actors are also called routees. </p>
-<p>Akka router supports the following :</p>
-<ol>
-<li>Round robin router ( routes the incoming messages in a circular order to all its routees)</li>
-<li>Random router ( randomly selects a routee and routes the message to the same)</li>
-<li>Smallest mailbox router ( identifies the actor with the least number of messages in its mailbox and routes the message to the same)</li>
-<li>Broadcast router ( forwards the same message to all the routees)</li>
-<li>Scatter gather first completed router ( forwards the message to all its routees as a future, then whichever routee actor responds back, it takes the results and sends them back to the caller)</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyRouterExample&#123;</span><br><span class="line">    akka.actor.deployment &#123;</span><br><span class="line">        /myRandomRouterActor &#123;</span><br><span class="line">            router = random</span><br><span class="line">            nr-of-instances = 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Dynamically resizing routers</strong></p>
-<p>To handle the variability of the incoming message traffic, it might be important to increase the number of actors available to handle the load at runtime. </p>
-<p>For this, routers provide a construct called resize, which allows us to define the range bound in terms of minimum and maximum instances.</p>
-<hr>
-<h4 id="Supervision-and-Monitoring"><a href="#Supervision-and-Monitoring" class="headerlink" title="Supervision and Monitoring"></a>Supervision and Monitoring</h4><p><code>When an actor crashes or throws an exception, who is responsible to catch
-the exception?</code></p>
-<h4 id="Actor-hierarchy"><a href="#Actor-hierarchy" class="headerlink" title="Actor hierarchy"></a>Actor hierarchy</h4><p>The design idea of the Actor Model is to break down the large task into smaller tasks to the point where the task is granular and structured enough to be performed by one specialized actor.</p>
-<h4 id="Supervision"><a href="#Supervision" class="headerlink" title="Supervision"></a>Supervision</h4><h4 id="Supervision-strategies"><a href="#Supervision-strategies" class="headerlink" title="Supervision strategies"></a>Supervision strategies</h4><p>Akka provides two supervision strategies:</p>
-<ul>
-<li><code>One-For-One strategy</code> the supervision strategy is applied only to the failed child. (default)</li>
-<li><code>All-For-One strategy</code> the supervision strategy is applied to all the actor siblings.</li>
-</ul>
-<h4 id="Software-Transactional-Memory"><a href="#Software-Transactional-Memory" class="headerlink" title="Software Transactional Memory"></a>Software Transactional Memory</h4><p>Transactions provide a mechanism to manage the application access to data in a multiuser environment</p>
-<p><img src="resource/akka/supervision_strategies.jpg" alt="supervision_strategies"></p>
-<hr>
-<h4 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h4><p>Akka Cluster provides a fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.</p>
-<p>A cluster is made up of a set of member nodes. The identifier for each node is a <code>hostname:port:uid</code> tuple.</p>
-<p><strong>Gossip</strong></p>
-<p>In <code>push-pull gossip</code> a digest is sent representing current versions but not actual values; the recipient of the gossip can then send back any values for which it has newer versions and also request values for which it has outdated versions. Akka uses a single shared state with a vector clock for versioning, so the variant of push-pull gossip used in Akka makes use of this version to only push the actual state as needed.</p>
-<p>Each node chooses another random node to initiate a round of gossip with.</p>
-<p>The gossip messages are serialized with <code>protobuf</code> and also <code>gzipped</code> to reduce payload size.</p>
-<p><strong>Vector Clocks</strong></p>
-<p><strong>Gossip Convergence</strong></p>
-<p><strong>Failure Detector</strong></p>
-<p><strong>Leader</strong></p>
-<p><strong>Seed Nodes</strong></p>
-<p>When a new node is started it sends a message to all seed nodes and then sends a join command to the seed node that answers first.</p>
-<p><strong>Gossip Protocol</strong></p>
-<p><strong>Membership Lifecycle</strong></p>
-<p><img src="resource/akka/member-states-weakly-up.png" alt="member-states-weakly-up"></p>
-<p><img src="resource/akka/member-states.png" alt="member-states"></p>
-<p><strong>Member States</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>joining</td>
-<td>transient state when joining a cluster</td>
-</tr>
-<tr>
-<td>weakly up</td>
-<td>transient state while network split</td>
-</tr>
-<tr>
-<td>up</td>
-<td>normal operating state</td>
-</tr>
-<tr>
-<td>leaving / exiting</td>
-<td>states during graceful removal</td>
-</tr>
-<tr>
-<td>down</td>
-<td>marked as down</td>
-</tr>
-<tr>
-<td>removed</td>
-<td>tombstone state </td>
-</tr>
-</tbody>
-</table>
-<p><strong>User Actions</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>join</td>
-<td>join a single node to a cluster</td>
-</tr>
-<tr>
-<td>leave</td>
-<td>tell a node to leave the cluster gracefully</td>
-</tr>
-<tr>
-<td>down</td>
-<td>mark a node as down</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Distributed Publish Subscribe in Cluster</strong></p>
-<p><strong>Cluster Client</strong></p>
-<p>Communication from an actor system that is not part of the cluster to actors running somewhere in the cluster. </p>
-<p>The client does not have to know on which node the destination actor is running.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote.port=9999 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><p><strong>Core concepts</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Stream</td>
-<td></td>
-</tr>
-<tr>
-<td>Element</td>
-<td></td>
-</tr>
-<tr>
-<td>Back-pressure</td>
-<td></td>
-</tr>
-<tr>
-<td>Non-Blocking</td>
-<td></td>
-</tr>
-<tr>
-<td>Graph</td>
-<td></td>
-</tr>
-<tr>
-<td>Processing Stage</td>
-<td></td>
-</tr>
-<tr>
-<td>Source</td>
-<td></td>
-</tr>
-<tr>
-<td>Sink</td>
-<td></td>
-</tr>
-<tr>
-<td>Flow</td>
-<td></td>
-</tr>
-<tr>
-<td>RunnableGraph</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<hr>
-<ol>
-<li><code>node</code> : A logical member of a cluster. There could be multiple nodes on a physical machine. Defined by a hostname:port:uid tuple.</li>
-<li><code>cluster</code> : A set of nodes joined together through the membership service.</li>
-<li><code>leader</code> : A single node in the cluster that acts as the leader. Managing cluster convergence and membership state transitions.</li>
-</ol>
-<hr>
-<h3 id="Managing-application-configuration"><a href="#Managing-application-configuration" class="headerlink" title="Managing application configuration"></a>Managing application configuration</h3><p>Akka provides a powerful mechanism called extensions. </p>
-<p>Extensions are loaded in a static way with only one instance per ActorSystem. </p>
-<p>Extensions are implemented as a factory pattern. </p>
-<p>Akka extensions are comprised of two parts, given as follows:</p>
-<ol>
-<li>Extension ( Extension is the interface that needs to be implemented by the class and registered with ActorSystem, and ActorSystem will register the class and make the result available.)</li>
-<li>ExtensionId (It is the unique ID of the extension that is used to identify the<br>extension within ActorSystem.)</li>
-</ol>
-<p><strong>Trace</strong></p>
-<p>Tracing is disabled by default, so we need to enable it for the specific actor systems that need to be monitored</p>
-<p>Define the node property for each node in the system, as this is used to identify and tag the multiple actor systems that are running</p>
-<p>Define the MongoDB name and URL, specifying the location of MongoDB</p>
-<p><strong>Analyze</strong></p>
-<p>A span is the path between two trace events, and the duration between these events is the data that captures the essence of the availability and scalability of the application.</p>
-<p><strong>Query</strong></p>
-<p><strong>JMX</strong></p>
-<p><strong>Durable mailboxes</strong></p>
-<p><strong>Actors and web applications</strong></p>
-<p><strong>Integrating actors with ZeroMQ</strong></p>
-<hr>
-<p><strong>Persistence</strong></p>
-<p>Akka persistence is that only changes to an actor’s internal state are persisted but never its current state directly.</p>
-<ol>
-<li><p>PersistentActor <code>When a persistent actor is started or restarted, journaled messages are replayed to that actor so that it can recover internal state from these messages.</code></p>
-</li>
-<li><p>PersistentView <code>A view itself does not journal new messages, it updates internal state only from a persistent actor&#39;s replicated message stream.</code></p>
-</li>
-<li><p>AtLeastOnceDelivery <code>in case of sender and receiver JVM crashes</code></p>
-</li>
-<li><p>AsyncWriteJournal <code>A journal stores the sequence of messages sent to a persistent actor.Journal maintains highestSequenceNr that is increased on each message.The persistence extension comes with a &quot;leveldb&quot; journal plugin, which writes to the local filesystem.</code></p>
-</li>
-<li><p>Snapshot store <code>Snapshots are used for optimizing recovery times.The persistence extension comes with a &quot;local&quot; snapshot storage plugin, which writes to the local filesystem.</code></p>
-</li>
-</ol>
-<p><strong>Event sourcing</strong></p>
-<p>Akka persistence supports event sourcing with the <code>PersistentActor</code> trait.</p>
-<p>An actor that extends this trait uses the <code>persist</code> method to persist and handle events.</p>
-<p><strong>Identifiers</strong></p>
-<p>A persistent actor must have an identifier that doesn’t change across different actor incarnations. </p>
-<p>The identifier must be defined with the persistenceId method.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">override def persistenceId = &quot;my-persistence-id&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>Recovery</strong></p>
-<p><strong>Atomic writes</strong></p>
-<p><strong>Batch writes</strong></p>
-<p><strong>Message deletion</strong></p>
-<p><strong>Persistence status handling</strong></p>
-<p><strong>Safely shutting down persistent actors</strong></p>
-<p><strong><em>Persistent Views</em></strong></p>
-<p><strong>At-Least-Once Delivery</strong></p>
-<p><strong>Relationship between deliver and confirmDelivery</strong></p>
-<p><strong>Event Adapters</strong></p>
-<p><strong>Persistent FSM</strong></p>
-<p><strong>Storage plugins</strong></p>
-<p><strong>Multiple persistence plugin configurations</strong></p>
-<hr>
-<h3 id="Actor-DSL"><a href="#Actor-DSL" class="headerlink" title="Actor DSL"></a>Actor DSL</h3><p>Actor can be created more concisely using the Act trait.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import akka.actor.ActorDSL._</span><br><span class="line">import akka.actor.ActorSystem</span><br><span class="line"></span><br><span class="line">implicit val system = ActorSystem(&quot;demo&quot;)</span><br></pre></td></tr></table></figure>
-<p>To define a simple actor: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a = actor(new Act &#123;</span><br><span class="line">  become &#123;</span><br><span class="line">    case &quot;hello&quot; ⇒ sender() ! &quot;hi&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><strong>Life-cycle management</strong></p>
-<p>Life-cycle hooks are also exposed as DSL elements</p>
-<p><strong>Finite State Machine</strong></p>
-<p>Finite State Machine can be described as a set of relations:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">State(S) x Event(E) -&gt; Actions (A), State(S&apos;)</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference :"></a>Reference :</h4><ol>
-<li><a href="https://dzone.com/articles/introducing-akka-%E2%80%93-simpler" target="_blank" rel="external">Introducing Akka – Simpler Scalability, Fault-Tolerance, Concurrency &amp; Remoting Through Actors</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Actor_model" target="_blank" rel="external">Actor model</a></li>
-<li>Akka Essentials</li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.1/java.html" target="_blank" rel="external">Java Documentation</a></li>
-<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/reflection/proxy.html" target="_blank" rel="external">Implementation of Dynamic Proxy classes in JDK</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.1.2/project/migration-guide-2.0.x-2.1.x.html" target="_blank" rel="external">Migration Guide 2.0.x to 2.1.x</a></li>
-<li><a href="https://www.typesafe.com/blog/typesafe-announces-akka-streams" target="_blank" rel="external">Typesafe announces Akka Streams, a part of the Reactive Streams Initiative</a></li>
-<li><a href="https://github.com/functional-streams-for-scala/fs2" target="_blank" rel="external">Compositional, streaming I/O library for Scala</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/persistence.html" target="_blank" rel="external">persistence</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/actordsl.html" target="_blank" rel="external">Actor DSL</a></li>
-<li><a href="http://www.infoq.com/cn/presentations/akka-cluster-realization/" target="_blank" rel="external">Akka下分片集群的实现</a></li>
-<li><a href="http://erlang.org/documentation/doc-4.8.2/doc/design_principles/fsm.html" target="_blank" rel="external">Erlang design principles</a></li>
-<li><a href="http://letitcrash.com/post/30165507578/shutdown-patterns-in-akka-2" target="_blank" rel="external">Shutdown Patterns in Akka 2</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.4/scala.html" target="_blank" rel="external">Akka Scala Documentation</a></li>
-<li><a href="https://opencredo.com/introduction-to-akka-streams-getting-started/" target="_blank" rel="external">Introduction to Akka Streams – Getting started</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T14:46:44.000Z"><a href="/2016/04/22/algorithms/community-detection/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/algorithms/community-detection/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Community-Detection-社区发现算法"><a href="#Community-Detection-社区发现算法" class="headerlink" title="Community Detection (社区发现算法)"></a>Community Detection (社区发现算法)</h3><p>针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研究者所重视，而近年来随着社交网络的崛起，这一领域的关注度已大大提升。</p>
-<p>Reference :</p>
-<ol>
-<li><a href="http://senseable.mit.edu/community_detection/" target="_blank" rel="external">Community Detection - MIT Senseable City Lab</a></li>
 </ol>
 
       
