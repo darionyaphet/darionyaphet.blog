@@ -102,6 +102,25 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <ol>
 <li>DataFrame: a distributed collection of data organized into named columns.</li>
 </ol>
+<p><code>Spark SQL</code> 对 SQL 语句的处理和关系型数据库对 SQL 语句的处理采用了类似的方法。首先会将 SQL 语句进行解析(Parse),然后形成一个 Tree,在后续的如绑定、优化等处 理过程都是对 Tree 的操作,而操作的方法是采用 Rule,通过模式匹配,对不同类型的节点 采用不同的操作。</p>
+<p><img src="resource/spark/SparkSQLOverview.png" alt="SparkSQL-Overview"></p>
+<p><code>Tree</code></p>
+<p><code>TreeNode</code> 可以细分成三种类型的 Node : </p>
+<ol>
+<li>UnaryNode 一元节点,即只有一个子节点。</li>
+<li>BinaryNode 二元节点,即有左右子节点的二叉节点。</li>
+<li>LeafNode 叶子节点,没有子节点的节点。</li>
+</ol>
+<p><code>Rule</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">         SQL Parser                          Analyer                        Optimizer</span><br><span class="line">SQL Text ----------&gt; Unresolved Logical Plan -------&gt; Resolved Logical Plan ---------&gt;</span><br><span class="line"></span><br><span class="line">                       Spark Plan                 prepare for execution                             execute</span><br><span class="line">Optimized Logical Plan ----------&gt; Physical Plan ----------------------&gt;  Executable Physical Plan --------&gt;</span><br><span class="line"></span><br><span class="line">         toRDD</span><br><span class="line">Execute -------&gt; SchemaRDD</span><br></pre></td></tr></table></figure>
+<p><code>Catalyst</code> </p>
+<ol>
+<li>SQL Parse 完成 SQL 语句语法解析功能</li>
+<li>Analyzer 主要完成绑定工作,将不同来源的 Unresolved LogicalPlan 和数据元数据进行绑定,生成 resolved LogicalPlan。</li>
+<li>Optimizer 对 Resolved LogicalPlan 进行优化,生成 Optimized LogicalPlan。</li>
+<li>Planner 将 LogicalPlan 转换成 PhysicalPlan。</li>
+<li>CostModel 主要根据过去的性能统计数据,选择最佳的物理执行计划。</li>
+</ol>
 <hr>
 <h3 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h3><p>Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like map, reduce, join and window. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark’s machine learning and graph processing algorithms on data streams.</p>
 <p>Spark Streaming provides a high-level abstraction called discretized stream or DStream, which represents a continuous stream of data.</p>
@@ -505,6 +524,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <li><a href="https://snap.stanford.edu/data/" target="_blank" rel="external">Stanford Large Network Dataset Collection</a></li>
 <li><a href="https://github.com/lw-lin/CoolplaySpark" target="_blank" rel="external">酷玩 Spark</a></li>
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA3OTAxMDQzNQ==&amp;mid=2650607874&amp;idx=1&amp;sn=3626d0d3d16be6236cfc9922eb0cd295&amp;scene=23&amp;srcid=0524320Jr36VjpcvuRJsenht#rd" target="_blank" rel="external">Spark知识体系完整解读</a></li>
+<li><a href="https://databricks.com/blog/2015/04/13/deep-dive-into-spark-sqls-catalyst-optimizer.html" target="_blank" rel="external">Deep Dive into Spark SQL’s Catalyst Optimizer</a></li>
 </ol>
 
       

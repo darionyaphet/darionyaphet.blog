@@ -164,6 +164,48 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Flume</p>
+<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
+<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
+<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
+<p>#####Channel</p>
+<p>#####Sink</p>
+<p>#####Exceptions Collection</p>
+<ol>
+<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flink/">2016-01-21</a></time>
       
       
@@ -452,48 +494,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Flume</p>
-<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
-<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
-<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
-<p>#####Channel</p>
-<p>#####Sink</p>
-<p>#####Exceptions Collection</p>
-<ol>
-<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
       
       
@@ -521,38 +521,6 @@
 <p>   Task is the minimum unit of parallelism.<br>   ``` </p>
 <p>#####Command Line Interface</p>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
       
     </div>
     <footer>
@@ -623,6 +591,25 @@
 <p>It provides a programming abstraction called DataFrames and can also act as distributed SQL query engine.</p>
 <ol>
 <li>DataFrame: a distributed collection of data organized into named columns.</li>
+</ol>
+<p><code>Spark SQL</code> 对 SQL 语句的处理和关系型数据库对 SQL 语句的处理采用了类似的方法。首先会将 SQL 语句进行解析(Parse),然后形成一个 Tree,在后续的如绑定、优化等处 理过程都是对 Tree 的操作,而操作的方法是采用 Rule,通过模式匹配,对不同类型的节点 采用不同的操作。</p>
+<p><img src="resource/spark/SparkSQLOverview.png" alt="SparkSQL-Overview"></p>
+<p><code>Tree</code></p>
+<p><code>TreeNode</code> 可以细分成三种类型的 Node : </p>
+<ol>
+<li>UnaryNode 一元节点,即只有一个子节点。</li>
+<li>BinaryNode 二元节点,即有左右子节点的二叉节点。</li>
+<li>LeafNode 叶子节点,没有子节点的节点。</li>
+</ol>
+<p><code>Rule</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">         SQL Parser                          Analyer                        Optimizer</span><br><span class="line">SQL Text ----------&gt; Unresolved Logical Plan -------&gt; Resolved Logical Plan ---------&gt;</span><br><span class="line"></span><br><span class="line">                       Spark Plan                 prepare for execution                             execute</span><br><span class="line">Optimized Logical Plan ----------&gt; Physical Plan ----------------------&gt;  Executable Physical Plan --------&gt;</span><br><span class="line"></span><br><span class="line">         toRDD</span><br><span class="line">Execute -------&gt; SchemaRDD</span><br></pre></td></tr></table></figure>
+<p><code>Catalyst</code> </p>
+<ol>
+<li>SQL Parse 完成 SQL 语句语法解析功能</li>
+<li>Analyzer 主要完成绑定工作,将不同来源的 Unresolved LogicalPlan 和数据元数据进行绑定,生成 resolved LogicalPlan。</li>
+<li>Optimizer 对 Resolved LogicalPlan 进行优化,生成 Optimized LogicalPlan。</li>
+<li>Planner 将 LogicalPlan 转换成 PhysicalPlan。</li>
+<li>CostModel 主要根据过去的性能统计数据,选择最佳的物理执行计划。</li>
 </ol>
 <hr>
 <h3 id="Streaming"><a href="#Streaming" class="headerlink" title="Streaming"></a>Streaming</h3><p>Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Flume, Twitter, ZeroMQ, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like map, reduce, join and window. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark’s machine learning and graph processing algorithms on data streams.</p>
@@ -1027,8 +1014,41 @@
 <li><a href="https://snap.stanford.edu/data/" target="_blank" rel="external">Stanford Large Network Dataset Collection</a></li>
 <li><a href="https://github.com/lw-lin/CoolplaySpark" target="_blank" rel="external">酷玩 Spark</a></li>
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA3OTAxMDQzNQ==&amp;mid=2650607874&amp;idx=1&amp;sn=3626d0d3d16be6236cfc9922eb0cd295&amp;scene=23&amp;srcid=0524320Jr36VjpcvuRJsenht#rd" target="_blank" rel="external">Spark知识体系完整解读</a></li>
+<li><a href="https://databricks.com/blog/2015/04/13/deep-dive-into-spark-sqls-catalyst-optimizer.html" target="_blank" rel="external">Deep Dive into Spark SQL’s Catalyst Optimizer</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
       
     </div>
     <footer>
