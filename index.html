@@ -50,6 +50,38 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-09-15T02:49:36.000Z"><a href="/2016/09/15/other/antlr/">2016-09-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/09/15/other/antlr/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-09-03T14:32:16.000Z"><a href="/2016/09/03/machine_learning/RidgeRegression/">2016-09-03</a></time>
       
       
@@ -331,68 +363,6 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">####NodeManager</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">####Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
 <p>```</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>明确几个概念</strong></p>
-<ol>
-<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
-<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
-<li></li>
-</ol>
-<hr>
-<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
-<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
-<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
-<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
-<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
-<p>结点按照被访问的顺序存入栈中。</p>
-<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
-<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
-<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
-<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
-<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
-<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
-<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
-<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
-<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
-<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
-</ol>
 
       
     </div>
@@ -1043,6 +1013,68 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>明确几个概念</strong></p>
+<ol>
+<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
+<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
+<li></li>
+</ol>
+<hr>
+<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
+<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
+<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
+<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
+<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
+<p>结点按照被访问的顺序存入栈中。</p>
+<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
+<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
+<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
+<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
+<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
+<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
+<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
+<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
+<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
+<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-07-24T16:00:00.000Z"><a href="/2016/07/25/distribution/hive/">2016-07-25</a></time>
       
       
@@ -1424,57 +1456,25 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-20T03:43:00.000Z"><a href="/2016/06/20/statistics/ExponentialDistribution/">2016-06-20</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/20/statistics/ExponentialDistribution/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
   
-    <a href="/page/2/" class="alignright next">Nächste Seite</a>
+    <a href="/page/2/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1495,7 +1495,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
