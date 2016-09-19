@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 7 | darion.johannes.yaphet</title>
+  <title>Seite 7 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -206,6 +206,48 @@
 <hr>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">治疗咖啡因上瘾的唯一方法是提高对咖啡的品鉴能力</span><br><span class="line"></span><br><span class="line">当一个人不再单纯地沉溺于咖啡因带来的神经兴奋而能够感知鞣酸、果香、酒味、苦涩、芳醇等细致的风味时</span><br><span class="line"></span><br><span class="line">他就再也不会对咖啡因上瘾了—— 他会对咖啡本身的味道上瘾</span><br></pre></td></tr></table></figure>
 <hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Flume</p>
+<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
+<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
+<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
+<p>#####Channel</p>
+<p>#####Sink</p>
+<p>#####Exceptions Collection</p>
+<ol>
+<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
+</ol>
 
       
     </div>
@@ -516,48 +558,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/flume/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/flume/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Flume</p>
-<p>#####Source<br><code>Source</code> is to receive data from an external client and store it into the configured Channels. A Source can get an instance of its own ChannelProcessor to process an Event, commited within a Channel local transaction, in serial. In the case of an exception, required Channels will propagate the exception, all Channels will rollback their transaction, but events processed previously on other Channels will remain committed.</p>
-<p>Similar to the SinkRunner.PollingRunner Runnable, there’s a PollingRunner Runnable that executes on a thread created when the Flume framework calls PollableSourceRunner.start(). Each configured PollableSource is associated with its own thread that runs a PollingRunner. This thread manages the PollableSource’s lifecycle, such as starting and stopping. A PollableSource implementation must implement the start() and stop() methods that are declared in the LifecycleAware interface. The runner of a PollableSource invokes that Source‘s process() method. The process() method should check for new data and store it into the Channel as Flume Events.</p>
-<p>Note that there are actually two types of Sources. The PollableSource was already mentioned. The other is the EventDrivenSource. The EventDrivenSource, unlike the PollableSource, must have its own callback mechanism that captures the new data and stores it into the Channel. The EventDrivenSources are not each driven by their own thread like the PollableSources are. Below is an example of a custom PollableSource:</p>
-<p>#####Channel</p>
-<p>#####Sink</p>
-<p>#####Exceptions Collection</p>
-<ol>
-<li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
       
       
@@ -585,38 +585,6 @@
 <p>   Task is the minimum unit of parallelism.<br>   ``` </p>
 <p>#####Command Line Interface</p>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
       
     </div>
     <footer>
@@ -1115,9 +1083,42 @@
 <li><a href="http://mp.weixin.qq.com/s?__biz=MzA3OTAxMDQzNQ==&amp;mid=2650607874&amp;idx=1&amp;sn=3626d0d3d16be6236cfc9922eb0cd295&amp;scene=23&amp;srcid=0524320Jr36VjpcvuRJsenht#rd" target="_blank" rel="external">Spark知识体系完整解读</a></li>
 <li><a href="https://databricks.com/blog/2015/04/13/deep-dive-into-spark-sqls-catalyst-optimizer.html" target="_blank" rel="external">Deep Dive into Spark SQL’s Catalyst Optimizer</a></li>
 <li><a href="http://www.csdn.net/article/1970-01-01/2824823" target="_blank" rel="external">GC调优在Spark应用中的实践</a></li>
-<li><a href="http://people.csail.mit.edu/matei/papers/2015/sigmod_spark_sql.pdf" target="_blank" rel="external">Spark SQL: Relational Data Processing in Spark</a></li>
+<li><a href="https://cs.stanford.edu/~matei/" target="_blank" rel="external">Matei Zaharia</a></li>
+<li><a href="http://people.csail.mit.edu/matei/papers/2015/sigmod_spark_sql.pdf" target="_blank" rel="external">PDF Spark SQL: Relational Data Processing in Spark</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
       
     </div>
     <footer>
@@ -1136,7 +1137,7 @@
 
 <nav id="pagination">
   
-    <a href="/page/6/" class="alignleft prev">Anterior</a>
+    <a href="/page/6/" class="alignleft prev">Vorherige Seite</a>
   
   
   <div class="clearfix"></div>
@@ -1144,14 +1145,14 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1172,7 +1173,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
