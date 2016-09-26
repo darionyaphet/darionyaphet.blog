@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 3 | darion.johannes.yaphet</title>
+  <title>Page 3 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,45 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-02T16:00:00.000Z"><a href="/2016/06/03/language/scala/">2016-06-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/03/language/scala/">Scala</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Scala</p>
+<p>###trait</p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
+<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -313,28 +352,24 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Redis</p>
-<p>####Benchmarks</p>
-<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
-<p>####Cluster</p>
-<p>####Hyperloglog</p>
-<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
-<hr>
-<p>####FAQ</p>
-<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
-<hr>
+        <p>##MySQL</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
 
       
     </div>
@@ -505,24 +540,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/mysql/">2016-05-10</a></time>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/mysql/"></a></h1>
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##MySQL</p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><h3 id="Grant"><a href="#Grant" class="headerlink" title="Grant"></a>Grant</h3><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><h3 id="内存表"><a href="#内存表" class="headerlink" title="内存表"></a>内存表</h3><p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
-</ol>
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
 
       
     </div>
@@ -576,180 +615,27 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/distribution/hbase/">2016-05-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/01/distribution/hbase/">HBase</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
-<p>一个实例作为Master使用，其他作为backup。</p>
-<h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
-<h4 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h4><p>Zookeeper 中存储-ROOT-表，.META.表</p>
-<p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
-<p>AssignmentManager 管理&amp;负责Region分配</p>
-<p>TableLockManager  管理分布式表级锁</p>
-<p>RegionStates  在内存中存储Region状态  在AssignmentManager中跟踪Region状态</p>
-<p>HRegionInfo  含有Region信息  Region包含一个完整键空间</p>
-<p>RegionName含有：</p>
-<p>tableName   : The name of the table</p>
-<p>startKey    : The startKey for the region.</p>
-<p>regionId    : A timestamp when the region is created.</p>
-<p>replicaId   : An id starting from 0 to differentiate replicas of the same region range but hosted in separated servers. The same region range can be hosted in multiple locations.</p>
-<p>createRegionName </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
-<p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
-<h4 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
-<h4 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h4><p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>进入master cluster shell 中 执行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Bucket-Cache"><a href="#Bucket-Cache" class="headerlink" title="Bucket Cache"></a>Bucket Cache</h4><p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
-<h4 id="HBase-ZooKeeper-ZNode"><a href="#HBase-ZooKeeper-ZNode" class="headerlink" title="HBase ZooKeeper ZNode"></a>HBase ZooKeeper ZNode</h4><table>
-<thead>
-<tr>
-<th>Path</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/hbase (zookeeper.znode.parent)</td>
-<td>The root znode that will contain all the znodes created/used by HBase</td>
-</tr>
-<tr>
-<td>/hbase/hbaseid (zookeeper.znode.clusterId)</td>
-<td>Initialized by the Master with the UUID that identifies the cluster.The ID is also stored on HDFS in hdfs:/<namenode>:<port>/hbase/hbase.id.</port></namenode></td>
-</tr>
-<tr>
-<td>/hbase/root-region-server (zookeeper.znode.rootserver)</td>
-<td>Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations.</td>
-</tr>
-<tr>
-<td>/hbase/rs (zookeeper.znode.rs)</td>
-<td>On startup each RegionServer will create a sub-znode that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
-</tr>
-<tr>
-<td>/hbase/unassigned (zookeeper.znode.unassigned)</td>
-<td>Contains a sub-znode for each unassigned region . This znode is used by the Assignment Manager to discover the regions to assign.</td>
-</tr>
-<tr>
-<td>/hbase/master (zookeeper.znode.master)</td>
-<td>The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
-</tr>
-<tr>
-<td>/hbase/backup-masters (zookeeper.znode.backup.masters)</td>
-<td>Each inactive Master will register itself as backup Master by creating a sub-znode. This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
-</tr>
-<tr>
-<td>/hbase/shutdown (zookeeper.znode.state)</td>
-<td>Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
-</tr>
-<tr>
-<td>/hbase/draining (zookeeper.znode.draining.rs)</td>
-<td>Used to decommission more than one RegionServer at a time by creating sub-znodes with the form serverName,port,startCode .</td>
-</tr>
-<tr>
-<td>/hbase/table (zookeeper.znode.masterTableEnableDisable)</td>
-<td>Used by the master to track the table state during assignments .</td>
-</tr>
-<tr>
-<td>/hbase/splitlog (zookeeper.znode.splitlog)</td>
-<td>Used by the log splitter to track the pending log to replay and its assignment.</td>
-</tr>
-<tr>
-<td>/hbase/acl (zookeeper.znode.acl.parent)</td>
-<td>The acl znode is used for synchronizing the changes made to the <em>acl</em> table by the grant/revoke commands.</td>
-</tr>
-<tr>
-<td>/hbase/tokenauth (zookeeper.znode.tokenauth.parent)</td>
-<td>The token provider is usually used to allow a MapReduce job to access the HBase cluster.</td>
-</tr>
-<tr>
-<td>/hbase/replication (zookeeper.znode.replication)</td>
-<td>Root znode that contains all HBase replication state information</td>
-</tr>
-<tr>
-<td>/hbase/replication/peers (zookeeper.znode.replication.peers)</td>
-<td>Each peer will have a sub-znode containing the ZK ensemble’s addresses that allows the peer to be contacted.</td>
-</tr>
-<tr>
-<td>/hbase/replication/peers/<clusterid>/peer-state (zookeeper.znode.replication.peers.state)</clusterid></td>
-<td>Mirror of the /hbase/replication/peers znode, but here each sub-znode will track the peer enabled/disabled state.</td>
-</tr>
-<tr>
-<td>/hbase/replication/state (zookeeper.znode.replication.state)</td>
-<td>Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell.</td>
-</tr>
-<tr>
-<td>/hbase/replication/rs (zookeeper.znode.replication.rs)</td>
-<td>Contains the list of RegionServers in the main cluster .</td>
-</tr>
-<tr>
-<td>/hbase/online-snapshot/acquired</td>
-<td>The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot.</td>
-</tr>
-<tr>
-<td>/hbase/online-snapshot/reached</td>
-<td>Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot telling each RegionServer that it is time to finalize/commit the snapshot.</td>
-</tr>
-<tr>
-<td>/hbase/online-snapshot/abort</td>
-<td>If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
-</tr>
-</tbody>
-</table>
-<p>Reference :</p>
-<p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/2/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/2/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/4/" class="alignright next">Nächste Seite</a>
+    <a href="/page/4/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
@@ -763,6 +649,8 @@
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
   </ul>
 </div>
@@ -784,6 +672,8 @@
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

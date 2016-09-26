@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Machine Learning | darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="Terms激活函数（Activation Function）
+为了让神经网络能够学习复杂的决策边界（decision boundary），我们在其一些层应用一个非线性激活函数。最常用的函数包括  sigmoid、tanh、ReLU（Rectified Linear Unit 线性修正单元） 以及这些">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Machine Learning"/>
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-09-25T16:00:00.000Z"><a href="/2016/09/26/machine_learning/Terms/">2016-09-26</a></time>
+      
+      
+  
+    <h1 class="title">Machine Learning</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h3><p><code>激活函数（Activation Function）</code></p>
+<p>为了让神经网络能够学习复杂的决策边界（decision boundary），我们在其一些层应用一个非线性激活函数。最常用的函数包括  sigmoid、tanh、ReLU（Rectified Linear Unit 线性修正单元） 以及这些函数的变体。</p>
+<hr>
+<p><code>Adadelta</code></p>
+<p>Adadelta 是一个基于梯度下降的学习算法，可以随时间调整适应每个参数的学习率。它是作为 Adagrad 的改进版提出的，它比超参数（hyperparameter）更敏感而且可能会太过严重地降低学习率。Adadelta 类似于 rmsprop，而且可被用来替代 vanilla SGD。</p>
+<ul>
+<li>论文：Adadelta：一种自适应学习率方法（ADADELTA: An Adaptive Learning Rate Method）</li>
+<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>Adagrad</code></p>
+<p>Adagrad 是一种自适应学习率算法，能够随时间跟踪平方梯度并自动适应每个参数的学习率。它可被用来替代vanilla SGD (<a href="http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。" target="_blank" rel="external">http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。</a></p>
+<ul>
+<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
+<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>Adam</code></p>
+<p>Adam 是一种类似于 rmsprop 的自适应学习率算法，但它的更新是通过使用梯度的第一和第二时刻的运行平均值（running average）直接估计的，而且还包括一个偏差校正项。</p>
+<ul>
+<li>论文：Adam：一种随机优化方法（Adam: A Method for Stochastic Optimization）</li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>仿射层（Affine Layer）</code></p>
+<p>神经网络中的一个全连接层。仿射（Affine）的意思是前面一层中的每一个神经元都连接到当前层中的每一个神经元。在许多方面，这是神经网络的「标准」层。仿射层通常被加在卷积神经网络或循环神经网络做出最终预测前的输出的顶层。仿射层的一般形式为 y = f(Wx + b)，其中 x 是层输入，w 是参数，b 是一个偏差矢量，f 是一个非线性激活函数。</p>
+<hr>
+<p><code>注意机制（Attention Mechanism）</code></p>
+<p>注意机制是由人类视觉注意所启发的，是一种关注图像中特定部分的能力。注意机制可被整合到语言处理和图像识别的架构中以帮助网络学习在做出预测时应该「关注」什么。</p>
+<ul>
+<li>技术博客：深度学习和自然语言处理中的注意和记忆（<a href="http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）" target="_blank" rel="external">http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）</a></li>
+</ul>
+<hr>
+<p><code>Alexnet</code></p>
+<p>Alexnet 是一种卷积神经网络架构的名字，这种架构曾在 2012 年 ILSVRC 挑战赛中以巨大优势获胜，而且它还导致了人们对用于图像识别的卷积神经网络（CNN）的兴趣的复苏。它由 5 个卷积层组成。其中一些后面跟随着最大池化（max-pooling）层和带有最终 1000 条路径的 softmax (1000-way softmax)的 3个全连接层。Alexnet 被引入到了使用深度卷积神经网络的 ImageNet 分类中。</p>
+<hr>
+<p><code>自编码器（Autoencoder）</code></p>
+<p>自编码器是一种神经网络模型，它的目标是预测输入自身，这通常通过网络中某个地方的「瓶颈（bottleneck）」实现。通过引入瓶颈，我们迫使网络学习输入更低维度的表征，从而有效地将输入压缩成一个好的表征。自编码器和 PCA 等降维技术相关，但因为它们的非线性本质，它们可以学习更为复杂的映射。目前已有一些范围涵盖较广的自编码器存在，包括 降噪自编码器（Denoising Autoencoders）、变自编码器（Variational Autoencoders）和序列自编码器（Sequence Autoencoders）。</p>
+<ul>
+<li>降噪自编码器论文：Stacked Denoising Autoencoders: Learning Useful Representations in a Deep Network with a Local Denoising Criterion </li>
+<li>变自编码器论文：Auto-Encoding Variational Bayes</li>
+<li>序列自编码器论文：Semi-supervised Sequence Learning</li>
+</ul>
+<hr>
+<p><code>平均池化（Average-Pooling）</code></p>
+<p>平均池化是一种在卷积神经网络中用于图像识别的池化（Pooling）技术。它的工作原理是在特征的局部区域上滑动窗口，比如像素，然后再取窗口中所有值的平均。它将输入表征压缩成一种更低维度的表征。</p>
+<hr>
+<p><code>反向传播（Backpropagation）</code></p>
+<p>反向传播是一种在神经网络中用来有效地计算梯度的算法，或更一般而言，是一种前馈计算图（feedforward computational graph）。其可以归结成从网络输出开始应用分化的链式法则，然后向后传播梯度。反向传播的第一个应用可以追溯到 1960 年代的 Vapnik 等人，但论文 Learning representations by back-propagating errors常常被作为引用源。</p>
+<ul>
+<li>技术博客：计算图上的微积分学：反向传播（<a href="http://colah.github.io/posts/2015-08-Backprop/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Backprop/）</a></li>
+</ul>
+<hr>
+<p><code>通过时间的反向传播（BPTT：Backpropagation Through Time）</code></p>
+<p>通过时间的反向传播是应用于循环神经网络（RNN）的反向传播算法。BPTT 可被看作是应用于 RNN 的标准反向传播算法，其中的每一个时间步骤（time step）都代表一个计算层，而且它的参数是跨计算层共享的。因为 RNN 在所有的时间步骤中都共享了同样的参数，一个时间步骤的错误必然能「通过时间」反向到之前所有的时间步骤，该算法也因而得名。当处理长序列（数百个输入）时，为降低计算成本常常使用一种删节版的 BPTT。删节的 BPTT 会在固定数量的步骤之后停止反向传播错误。</p>
+<p>论文：Backpropagation Through Time: What It Does and How to Do It</p>
+<hr>
+<p><code>分批标准化（BN：Batch Normalization）</code></p>
+<p>分批标准化是一种按小批量的方式标准化层输入的技术。它能加速训练过程，允许使用更高的学习率，还可用作规范器（regularizer）。人们发现，分批标准化在卷积和前馈神经网络中应用时非常高效，但尚未被成功应用到循环神经网络上。</p>
+<p>论文：分批标准化：通过减少内部协变量位移（Covariate Shift）加速深度网络训练（Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift）<br>论文：使用分批标准化的循环神经网络（Batch Normalized Recurrent Neural Networks）</p>
+<p>双向循环神经网络（Bidirectional RNN）</p>
+<p>双向循环神经网络是一类包含两个方向不同的 RNN 的神经网络。其中的前向 RNN 从起点向终点读取输入序列，而反向 RNN 则从终点向起点读取。这两个 RNN 互相彼此堆叠，它们的状态通常通过附加两个矢量的方式进行组合。双向 RNN 常被用在自然语言问题中，因为在自然语言中我们需要同时考虑话语的前后上下文以做出预测。</p>
+<ul>
+<li>论文：双向循环神经网络（Bidirectional Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>Caffe</code></p>
+<p>Caffe 是由伯克利大学视觉和学习中心开发的一种深度学习框架。在视觉任务和卷积神经网络模型中，Caffe 格外受欢迎且性能优异<br>.<br>分类交叉熵损失（Categorical Cross-Entropy Loss）</p>
+<p>分类交叉熵损失也被称为负对数似然（negative log likelihood）。这是一种用于解决分类问题的流行的损失函数，可用于测量两种概率分布（通常是真实标签和预测标签）之间的相似性。它可用 L = -sum(y * log(y_prediction)) 表示，其中 y 是真实标签的概率分布（通常是一个one-hot vector），y_prediction 是预测标签的概率分布，通常来自于一个 softmax。</p>
+<hr>
+<p><code>信道（Channel）</code></p>
+<p>深度学习模型的输入数据可以有多个信道。图像就是个典型的例子，它有红、绿和蓝三个颜色信道。一个图像可以被表示成一个三维的张量（Tensor），其中的维度对应于信道、高度和宽度。自然语言数据也可以有多个信道，比如在不同类型的嵌入（embedding）形式中。</p>
+<hr>
+<p><code>卷积神经网络（CNN/ConvNet：Convolutional Neural Network）</code></p>
+<p>CNN 使用卷积连接从输入的局部区域中提取的特征。大部分 CNN 都包含了卷积层、池化层和仿射层的组合。CNN 尤其凭借其在视觉识别任务的卓越性能表现而获得了普及，它已经在该领域保持了好几年的领先。</p>
+<ul>
+<li>技术博客：斯坦福CS231n类——用于视觉识别的卷积神经网络（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：理解用于自然语言处理的卷积神经网络（<a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）" target="_blank" rel="external">http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）</a></li>
+</ul>
+<hr>
+<p><code>深度信念网络（DBN：Deep Belief Network）</code></p>
+<p>DBN 是一类以无监督的方式学习数据的分层表征的概率图形模型。DBN 由多个隐藏层组成，这些隐藏层的每一对连续层之间的神经元是相互连接的。DBN 通过彼此堆叠多个 RBN（限制波尔兹曼机）并一个接一个地训练而创建。</p>
+<ul>
+<li>论文：深度信念网络的一种快速学习算法（A fast learning algorithm for deep belief nets）</li>
+</ul>
+<hr>
+<p><code>Deep Dream</code></p>
+<p>这是谷歌发明的一种试图用来提炼深度卷积神经网络获取的知识的技术。这种技术可以生成新的图像或转换已有的图片从而给它们一种幻梦般的感觉，尤其是递归地应用时。</p>
+<p>代码：Github 上的 Deep Dream（<a href="https://github.com/google/deepdream）" target="_blank" rel="external">https://github.com/google/deepdream）</a><br>技术博客：Inceptionism：向神经网络掘进更深（<a href="https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）" target="_blank" rel="external">https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）</a></p>
+<hr>
+<p><code>Dropout</code></p>
+<p>Dropout 是一种用于神经网络防止过拟合的正则化技术。它通过在每次训练迭代中随机地设置神经元中的一小部分为 0 来阻止神经元共适应（co-adapting），Dropout 可以通过多种方式进行解读，比如从不同网络的指数数字中随机取样。Dropout 层首先通过它们在卷积神经网络中的应用而得到普及，但自那以后也被应用到了其它层上，包括输入嵌入或循环网络。</p>
+<ul>
+<li>论文：Dropout: 一种防止神经网络过拟合的简单方法（Dropout: A Simple Way to Prevent Neural Networks from Overfitting）</li>
+<li>论文：循环神经网络正则化（Recurrent Neural Network Regularization）</li>
+</ul>
+<hr>
+<p><code>嵌入（Embedding）</code></p>
+<p>一个嵌入映射到一个输入表征，比如一个词或一句话映射到一个矢量。一种流行的嵌入是词语嵌入（word embedding，国内常用的说法是：词向量），如 word2vec 或 GloVe。我们也可以嵌入句子、段落或图像。比如说，通过将图像和他们的文本描述映射到一个共同的嵌入空间中并最小化它们之间的距离，我们可以将标签和图像进行匹配。嵌入可以被明确地学习到，比如在 word2vec 中；嵌入也可作为监督任务的一部分例如情感分析（Sentiment Analysis）。通常一个网络的输入层是通过预先训练的嵌入进行初始化，然后再根据当前任务进行微调（fine-tuned）。</p>
+<p>梯度爆炸问题（Exploding Gradient Problem）</p>
+<p>梯度爆炸问题是梯度消失问题（Vanishing Gradient Problem）的对立面。在深度神经网络中，梯度可能会在反向传播过程中爆炸，导致数字溢出。解决梯度爆炸的一个常见技术是执行梯度裁剪（Gradient Clipping）。</p>
+<p>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</p>
+<hr>
+<p><code>微调（Fine-Tuning）</code></p>
+<p>Fine-Tuning 这种技术是指使用来自另一个任务（例如一个无监督训练网络）的参数初始化网络，然后再基于当前任务更新这些参数。比如，自然语言处理架构通常使用 word2vec 这样的预训练的词向量（word embeddings），然后这些词向量会在训练过程中基于特定的任务（如情感分析）进行更新。</p>
+<hr>
+<p><code>梯度裁剪（Gradient Clipping）</code></p>
+<p>梯度裁剪是一种在非常深度的网络（通常是循环神经网络）中用于防止梯度爆炸（exploding gradient）的技术。执行梯度裁剪的方法有很多，但常见的一种是当参数矢量的 L2 范数（L2 norm）超过一个特定阈值时对参数矢量的梯度进行标准化，这个特定阈值根据函数：新梯度=梯度<em>阈值/L2范数（梯度）{new_gradients = gradients </em> threshold / l2_norm(gradients)}确定。</p>
+<ul>
+<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>GloVe</code></p>
+<p>Glove 是一种为话语获取矢量表征（嵌入）的无监督学习算法。GloVe 的使用目的和 word2vec 一样，但 GloVe 具有不同的矢量表征，因为它是在共现（co-occurrence）统计数据上训练的。</p>
+<ul>
+<li>论文：GloVe：用于词汇表征（Word Representation）的全局矢量（Global Vector）（GloVe: Global Vectors for Word Representation ）</li>
+</ul>
+<hr>
+<p><code>GoogleLeNet</code></p>
+<p>GoogleLeNet 是曾赢得了 2014 年 ILSVRC 挑战赛的一种卷积神经网络架构。这种网络使用 Inception 模块（Inception Module）以减少参数和提高网络中计算资源的利用率。</p>
+<ul>
+<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
+</ul>
+<hr>
+<p><code>GRU</code></p>
+<p>GRU（Gated Recurrent Unit：门控循环单元）是一种 LSTM 单元的简化版本，拥有更少的参数。和 LSTM 细胞（LSTM cell）一样，它使用门控机制，通过防止梯度消失问题（vanishing gradient problem）让循环神经网络可以有效学习长程依赖（long-range dependency）。GRU 包含一个复位和更新门，它们可以根据当前时间步骤的新值决定旧记忆中哪些部分需要保留或更新。</p>
+<ul>
+<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
+<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
+</ul>
+<hr>
+<p><code>Highway Layer</code></p>
+<p>Highway Layer　是使用门控机制控制通过层的信息流的一种神经网络层。堆叠多个 Highway Layer 层可让训练非常深的网络成为可能。Highway Layer 的工作原理是通过学习一个选择输入的哪部分通过和哪部分通过一个变换函数（如标准的仿射层）的门控函数来进行学习。Highway Layer 的基本公式是 T <em> h(x) + (1 - T) </em> x；其中 T 是学习过的门控函数，取值在 0 到 1 之间；h(x) 是一个任意的输入变换，x 是输入。注意所有这些都必须具有相同的大小。</p>
+<ul>
+<li>论文：Highway Networks</li>
+</ul>
+<hr>
+<p><code>ICML</code></p>
+<p>即国际机器学习大会（International Conference for Machine Learning），一个顶级的机器学习会议。</p>
+<hr>
+<p><code>ILSVRC</code></p>
+<p>即 ImageNet 大型视觉识别挑战赛（ImageNet Large Scale Visual Recognition Challenge），该比赛用于评估大规模对象检测和图像分类的算法。它是计算机视觉领域最受欢迎的学术挑战赛。过去几年中，深度学习让错误率出现了显著下降，从 30% 降到了不到 5%，在许多分类任务中击败了人类。</p>
+<hr>
+<p><code>Inception模块（Inception Module）</code></p>
+<p>Inception模块被用在卷积神经网络中，通过堆叠 1×1 卷积的降维（dimensionality reduction）带来更高效的计算和更深度的网络。</p>
+<ul>
+<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
+</ul>
+<hr>
+<p><code>Keras</code></p>
+<p>Kears 是一个基于 Python 的深度学习库，其中包括许多用于深度神经网络的高层次构建模块。它可以运行在 TensorFlow 或 Theano 上。</p>
+<hr>
+<p><code>LSTM</code></p>
+<p>长短期记忆（Long Short-Term Memory）网络通过使用内存门控机制防止循环神经网络（RNN）中的梯度消失问题（vanishing gradient problem）。使用 LSTM 单元计算 RNN 中的隐藏状态可以帮助该网络有效地传播梯度和学习长程依赖（long-range dependency）。</p>
+<ul>
+<li>论文：长短期记忆（LONG SHORT-TERM MEMORY）</li>
+<li>技术博客：理解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
+<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
+</ul>
+<hr>
+<p><code>最大池化（Max-Pooling）</code></p>
+<p>池化（Pooling）操作通常被用在卷积神经网络中。一个最大池化层从一块特征中选取最大值。和卷积层一样，池化层也是通过窗口（块）大小和步幅尺寸进行参数化。比如，我们可能在一个 10×10 特征矩阵上以 2 的步幅滑动一个 2×2 的窗口，然后选取每个窗口的 4 个值中的最大值，得到一个 5×5 特征矩阵。池化层通过只保留最突出的信息来减少表征的维度；在这个图像输入的例子中，它们为转译提供了基本的不变性（即使图像偏移了几个像素，仍可选出同样的最大值）。池化层通常被安插在连续卷积层之间。</p>
+<hr>
+<p><code>MNIST</code></p>
+<p>MNIST数据集可能是最常用的一个图像识别数据集。它包含 60,000 个手写数字的训练样本和 10,000 个测试样本。每一张图像的尺寸为 28×28像素。目前最先进的模型通常能在该测试集中达到 99.5% 或更高的准确度。</p>
+<hr>
+<p><code>动量（Momentum）</code></p>
+<p>动量是梯度下降算法（Gradient Descent Algorithm）的扩展，可以加速和阻抑参数更新。在实际应用中，在梯度下降更新中包含一个动量项可在深度网络中得到更好的收敛速度（convergence rate）。</p>
+<ul>
+<li>论文：通过反向传播（back-propagating error）错误学习表征</li>
+</ul>
+<hr>
+<p><code>多层感知器（MLP：Multilayer Perceptron）</code></p>
+<p>多层感知器是一种带有多个全连接层的前馈神经网络，这些全连接层使用非线性激活函数（activation function）处理非线性可分的数据。MLP 是多层神经网络或有两层以上的深度神经网络的最基本形式。</p>
+<p>负对数似然（NLL：Negative Log Likelihood）</p>
+<p>参见分类交叉熵损失（Categorical Cross-Entropy Loss）。</p>
+<p>神经网络机器翻译（NMT：Neural Machine Translation）</p>
+<p>NMT 系统使用神经网络实现语言（如英语和法语）之间的翻译。NMT 系统可以使用双语语料库进行端到端的训练，这有别于需要手工打造特征和开发的传统机器翻译系统。NMT 系统通常使用编码器和解码器循环神经网络实现，它可以分别编码源句和生成目标句。</p>
+<ul>
+<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
+<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
+</ul>
+<hr>
+<p><code>神经图灵机（NTM：Neural Turing Machine）</code></p>
+<p>NTM 是可以从案例中推导简单算法的神经网络架构。比如，NTM 可以通过案例的输入和输出学习排序算法。NTM 通常学习记忆和注意机制的某些形式以处理程序执行过程中的状态。</p>
+<ul>
+<li>论文：神经图灵机（Neural Turing Machines）</li>
+</ul>
+<hr>
+<p><code>非线性（Nonlinearity）</code></p>
+<p>参见激活函数（Activation Function）。</p>
+<p>噪音对比估计（NCE：noise-contrastive estimation）</p>
+<p>噪音对比估计是一种通常被用于训练带有大输出词汇的分类器的采样损失（sampling loss）。在大量的可能的类上计算 softmax 是异常昂贵的。使用 NCE，我们可以将问题降低成二元分类问题，这可以通过训练分类器区别对待取样和「真实」分布以及人工生成的噪声分布来实现。</p>
+<ul>
+<li>论文：噪音对比估计：一种用于非标准化统计模型的新估计原理（Noise-contrastive estimation: A new estimation principle for unnormalized statistical models ）</li>
+<li>论文：使用噪音对比估计有效地学习词向量（Learning word embeddings efficiently with noise-contrastive estimation）</li>
+</ul>
+<hr>
+<p><code>池化</code></p>
+<p>参见最大池化（Max-Pooling）或平均池化（Average-Pooling）。</p>
+<hr>
+<p><code>受限玻尔兹曼机（RBN：Restricted Boltzmann Machine）</code></p>
+<p>RBN 是一种可被解释为一个随机人工神经网络的概率图形模型。RBN 以无监督的形式学习数据的表征。RBN 由可见层和隐藏层以及每一个这些层中的二元神经元的连接所构成。RBN 可以使用对比散度（contrastive divergence）进行有效的训练，这是梯度下降的一种近似。</p>
+<ul>
+<li>论文：受限玻尔兹曼机简介（An Introduction to Restricted Boltzmann Machines）</li>
+</ul>
+<hr>
+<p><code>循环神经网络（RNN：Recurrent Neural Network）</code></p>
+<p>RNN 模型通过隐藏状态（或称记忆）连续进行相互作用。它可以使用最多 N 个输入，并产生最多 N 个输出。比如，一个输入序列可能是一个句子，其输出为每个单词的词性标注（part-of-speech tag）（N 到 N）；一个输入可能是一个句子，其输出为该句子的情感分类（N 到 1）；一个输入可能是单个图像，其输出为描述该图像所对应一系列词语（1 到 N）。在每一个时间步骤中，RNN 会基于当前输入和之前的隐藏状态计算新的隐藏状态「记忆」。其中「循环（recurrent）」这个术语来自这个事实：在每一步中都是用了同样的参数，该网络根据不同的输入执行同样的计算。</p>
+<ul>
+<li>技术博客：了解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
+<li>技术博客：循环神经网络教程第1部分——介绍 RNN （<a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）" target="_blank" rel="external">http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）</a></li>
+</ul>
+<hr>
+<p><code>递归神经网络（Recursive Neural Network）</code></p>
+<p>递归神经网络是循环神经网络的树状结构的一种泛化（generalization）。每一次递归都使用相同的权重。就像 RNN 一样，递归神经网络可以使用向后传播（backpropagation）进行端到端的训练。尽管可以学习树结构以将其用作优化问题的一部分，但递归神经网络通常被用在已有预定义结构的问题中，如自然语言处理的解析树中。</p>
+<ul>
+<li>论文：使用递归神经网络解析自然场景和自然语言（Parsing Natural Scenes and Natural Language with Recursive Neural Networks ）</li>
+</ul>
+<hr>
+<p><code>ReLU</code></p>
+<p>即线性修正单元（Rectified Linear Unit）。ReLU 常在深度神经网络中被用作激活函数。它们的定义是 f(x) = max(0, x) 。ReLU 相对于 tanh 等函数的优势包括它们往往很稀疏（它们的活化可以很容易设置为 0），而且它们受到梯度消失问题的影响也更小。ReLU 主要被用在卷积神经网络中用作激活函数。ReLU 存在几种变体，如Leaky ReLUs、Parametric ReLU (PReLU) 或更为流畅的 softplus近似。</p>
+<ul>
+<li>论文：深入研究修正器（Rectifiers）：在 ImageNet 分类上超越人类水平的性能（Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification）</li>
+<li>论文：修正非线性改进神经网络声学模型（Rectifier Nonlinearities Improve Neural Network Acoustic Models ）</li>
+<li>论文：线性修正单元改进受限玻尔兹曼机（Rectified Linear Units Improve Restricted Boltzmann Machines  ）</li>
+</ul>
+<hr>
+<p><code>残差网络（ResNet）</code></p>
+<p>深度残差网络（Deep Residual Network）赢得了 2015 年的 ILSVRC 挑战赛。这些网络的工作方式是引入跨层堆栈的快捷连接，让优化器可以学习更「容易」的残差映射（residual mapping）而非更为复杂的原映射（original mapping）。这些快捷连接和 Highway Layer 类似，但它们与数据无关且不会引入额外的参数或训练复杂度。ResNet 在 ImageNet 测试集中实现了 3.57% 的错误率。</p>
+<ul>
+<li>论文：用于图像识别的深度残差网络（Deep Residual Learning for Image Recognition）</li>
+</ul>
+<hr>
+<p><code>RMSProp</code></p>
+<p>RMSProp 是一种基于梯度的优化算法。它与 Adagrad 类似，但引入了一个额外的衰减项抵消 Adagrad 在学习率上的快速下降。</p>
+<ul>
+<li>PPT：用于机器学习的神经网络 讲座6a</li>
+<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>序列到序列（Seq2Seq）</code></p>
+<p>序列到序列（Sequence-to-Sequence）模型读取一个序列（如一个句子）作为输入，然后产生另一个序列作为输出。它和标准的 RNN 不同；在标准的 RNN 中，输入序列会在网络开始产生任何输出之前被完整地读取。通常而言，Seq2Seq 通过两个分别作为编码器和解码器的 RNN 实现。神经网络机器翻译是一类典型的 Seq2Seq 模型。</p>
+<ul>
+<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
+</ul>
+<hr>
+<p><code>随机梯度下降（SGD：Stochastic Gradient Descent）</code></p>
+<p>随机梯度下降是一种被用在训练阶段学习网络参数的基于梯度的优化算法。梯度通常使用反向传播算法计算。在实际应用中，人们使用微小批量版本的 SGD，其中的参数更新基于批案例而非单个案例进行执行，这能增加计算效率。vanilla SGD 存在许多扩展，包括动量（Momentum）、Adagrad、rmsprop、Adadelta 或 Adam。</p>
+<ul>
+<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
+<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>Softmax</code></p>
+<p>Softmax 函数通常被用于将原始分数（raw score）的矢量转换成用于分类的神经网络的输出层上的类概率（class probability）。它通过对归一化常数（normalization constant）进行指数化和相除运算而对分数进行规范化。如果我们正在处理大量的类，例如机器翻译中的大量词汇，计算归一化常数是很昂贵的。有许多种可以让计算更高效的替代选择，包括分层 Softmax（Hierarchical Softmax）或使用基于取样的损失函数，如 NCE。</p>
+<hr>
+<p><code>TensorFlow</code></p>
+<p>TensorFlow是一个开源 C ++ / Python 软件库，用于使用数据流图的数值计算，尤其是深度神经网络。它是由谷歌创建的。在设计方面，它最类似于 Theano，但比  Caffe 或 Keras 更低级。</p>
+<hr>
+<p><code>Theano</code></p>
+<p>Theano 是一个让你可以定义、优化和评估数学表达式的 Python 库。它包含许多用于深度神经网络的构造模块。Theano 是类似于 TensorFlow 的低级别库。更高级别的库包括Keras 和 Caffe。</p>
+<hr>
+<p><code>梯度消失问题（Vanishing Gradient Problem）</code></p>
+<p>梯度消失问题出现在使用梯度很小（在 0 到 1 的范围内）的激活函数的非常深的神经网络中，通常是循环神经网络。因为这些小梯度会在反向传播中相乘，它们往往在这些层中传播时「消失」，从而让网络无法学习长程依赖。解决这一问题的常用方法是使用 ReLU 这样的不受小梯度影响的激活函数，或使用明确针对消失梯度问题的架构，如LSTM。这个问题的反面被称为梯度爆炸问题（exploding gradient problem）。</p>
+<ul>
+<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>VGG</code></p>
+<p>VGG 是在 2014 年 ImageNet 定位和分类比赛中分别斩获第一和第二位置的卷积神经网络模型。这个 VGG 模型包含 16-19 个权重层，并使用了大小为 3×3 和 1×1 的小型卷积过滤器。</p>
+<ul>
+<li>论文：用于大规模图像识别的非常深度的卷积网络（Very Deep Convolutional Networks for Large-Scale Image Recognition）</li>
+</ul>
+<hr>
+<p><code>word2vec</code></p>
+<p>word2vec 是一种试图通过预测文档中话语的上下文来学习词向量（word embedding）的算法和工具 (<a href="https://code.google.com/p/word2vec/)。最终得到的词矢量（word" target="_blank" rel="external">https://code.google.com/p/word2vec/)。最终得到的词矢量（word</a> vector）有一些有趣的性质，例如vector(‘queen’) ~= vector(‘king’) - vector(‘man’) + vector(‘woman’) （女王~=国王-男人+女人）。两个不同的目标函数可以用来学习这些嵌入：Skip-Gram 目标函数尝试预测一个词的上下文，CBOW  目标函数则尝试从词上下文预测这个词。</p>
+<ul>
+<li>论文：向量空间中词汇表征的有效评估（Efficient Estimation of Word Representations in Vector Space）</li>
+<li>论文：分布式词汇和短语表征以及他们的组合性（Distributed Representations of Words and Phrases and their Compositionality）</li>
+<li>论文：解释 word2vec 参数学习（word2vec Parameter Learning Explained）</li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/machine-learning/">machine_learning</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/09/26/machine_learning/Terms/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

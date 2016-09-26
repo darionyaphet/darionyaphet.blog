@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 7 | darion.johannes.yaphet</title>
+  <title>Page 7 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,48 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-19T15:53:43.000Z"><a href="/2016/04/19/live/chess/">2016-04-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/19/live/chess/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Chess"><a href="#Chess" class="headerlink" title="Chess"></a>Chess</h3><p><img src="resource/chess/chess.jpg" alt="Chess"></p>
+<h3 id="入门-amp-常识"><a href="#入门-amp-常识" class="headerlink" title="入门&amp;常识"></a>入门&amp;常识</h3><p>国际象棋有8*8共64个棋格，相邻的两个棋格总是黑白相间。为了方便，我们可以用A——H，和1——8这些字母和数字来标志每个格子。如下图。对局双方分为黑、白两方，各执16个棋子。这16个棋子分别是8个兵，2个车，2个马，2个象，1个王后，1个国王。只要将对方的国王吃掉就算胜利。</p>
+<ol>
+<li>国王。国王可以直行、横行、斜行，但是每次只能动一个格。国王死掉，棋局结束。</li>
+<li>王后。王后是国际象棋中最为厉害的棋子，她可以直行、横行、斜行，且行走的格数不受限制，只要前方没有其它棋子。</li>
+<li>象。只能斜行。国际象棋中有两个象，一个位于黑格，一个位于白格，着也意味着，黑格中的象永远不会出现在白格的位置。</li>
+<li>马。国际象棋中的马和中国象棋中的马的行走方法是一样的，都是走“日”字。但是国际象棋中的马没有“拌腿”一说。</li>
+<li>车。国际象棋中的车与中国象棋中的车一样，都是可以直走、横走，且走的格数不受限制。另外，车还有一种特殊的走法，叫做“王车易位”。每局中，对局双方都有一次同时移动国王和车的机会。但是王车易位有诸多限制。</li>
+<li>兵。如果兵是第一次行走，可以走一格或者两格，如果不是第一次行走，只能走一格，且只能直行，不能横行和斜行。另外，兵吃子儿的方法比较特殊，一般，兵只能吃斜前方的子儿，吃完后占据斜前方的位置，还有一种特殊的吃法，兵一次走两格，走完后在同一横线上有对方的兵时，可以将其吃掉，然后占据斜前方的位置。这叫做“吃过路兵”。如果己方的兵走到对方的底线时，这时候兵就可以升为除国王和兵以外的其它棋子，由于王后的威力最大，所以，兵经常升为王后。</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -206,6 +248,54 @@
 <hr>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">治疗咖啡因上瘾的唯一方法是提高对咖啡的品鉴能力</span><br><span class="line"></span><br><span class="line">当一个人不再单纯地沉溺于咖啡因带来的神经兴奋而能够感知鞣酸、果香、酒味、苦涩、芳醇等细致的风味时</span><br><span class="line"></span><br><span class="line">他就再也不会对咖啡因上瘾了—— 他会对咖啡本身的味道上瘾</span><br></pre></td></tr></table></figure>
 <hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Gearpump</p>
+<p>#####Basic Concepts</p>
+<ol>
+<li><p>System timestamp and Application timestamp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
+<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
+<p>Gearpump natively supports Streaming Application types</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
+<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
+<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
+<p>#####Command Line Interface</p>
 
       
     </div>
@@ -536,54 +626,6 @@
 <ol>
 <li><a href="https://flink.apache.org/news/2015/02/09/streaming-example.html" target="_blank" rel="external">Introducing Flink Streaming</a></li>
 </ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
 
       
     </div>
@@ -1137,7 +1179,7 @@
 
 <nav id="pagination">
   
-    <a href="/page/6/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/6/" class="alignleft prev">Prev</a>
   
   
   <div class="clearfix"></div>
@@ -1145,14 +1187,14 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1166,6 +1208,8 @@
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
   </ul>
 </div>
@@ -1187,6 +1231,8 @@
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

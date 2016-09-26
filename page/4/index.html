@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 4 | darion.johannes.yaphet</title>
+  <title>Page 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,159 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/distribution/hbase/">2016-05-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/01/distribution/hbase/">HBase</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
+<p>一个实例作为Master使用，其他作为backup。</p>
+<h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
+<h4 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h4><p>Zookeeper 中存储-ROOT-表，.META.表</p>
+<p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
+<p>AssignmentManager 管理&amp;负责Region分配</p>
+<p>TableLockManager  管理分布式表级锁</p>
+<p>RegionStates  在内存中存储Region状态  在AssignmentManager中跟踪Region状态</p>
+<p>HRegionInfo  含有Region信息  Region包含一个完整键空间</p>
+<p>RegionName含有：</p>
+<p>tableName   : The name of the table</p>
+<p>startKey    : The startKey for the region.</p>
+<p>regionId    : A timestamp when the region is created.</p>
+<p>replicaId   : An id starting from 0 to differentiate replicas of the same region range but hosted in separated servers. The same region range can be hosted in multiple locations.</p>
+<p>createRegionName </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
+<p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
+<h4 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
+<h4 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h4><p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>进入master cluster shell 中 执行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="Bucket-Cache"><a href="#Bucket-Cache" class="headerlink" title="Bucket Cache"></a>Bucket Cache</h4><p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
+<h4 id="HBase-ZooKeeper-ZNode"><a href="#HBase-ZooKeeper-ZNode" class="headerlink" title="HBase ZooKeeper ZNode"></a>HBase ZooKeeper ZNode</h4><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/hbase (zookeeper.znode.parent)</td>
+<td>The root znode that will contain all the znodes created/used by HBase</td>
+</tr>
+<tr>
+<td>/hbase/hbaseid (zookeeper.znode.clusterId)</td>
+<td>Initialized by the Master with the UUID that identifies the cluster.The ID is also stored on HDFS in hdfs:/<namenode>:<port>/hbase/hbase.id.</port></namenode></td>
+</tr>
+<tr>
+<td>/hbase/root-region-server (zookeeper.znode.rootserver)</td>
+<td>Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations.</td>
+</tr>
+<tr>
+<td>/hbase/rs (zookeeper.znode.rs)</td>
+<td>On startup each RegionServer will create a sub-znode that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
+</tr>
+<tr>
+<td>/hbase/unassigned (zookeeper.znode.unassigned)</td>
+<td>Contains a sub-znode for each unassigned region . This znode is used by the Assignment Manager to discover the regions to assign.</td>
+</tr>
+<tr>
+<td>/hbase/master (zookeeper.znode.master)</td>
+<td>The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
+</tr>
+<tr>
+<td>/hbase/backup-masters (zookeeper.znode.backup.masters)</td>
+<td>Each inactive Master will register itself as backup Master by creating a sub-znode. This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
+</tr>
+<tr>
+<td>/hbase/shutdown (zookeeper.znode.state)</td>
+<td>Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
+</tr>
+<tr>
+<td>/hbase/draining (zookeeper.znode.draining.rs)</td>
+<td>Used to decommission more than one RegionServer at a time by creating sub-znodes with the form serverName,port,startCode .</td>
+</tr>
+<tr>
+<td>/hbase/table (zookeeper.znode.masterTableEnableDisable)</td>
+<td>Used by the master to track the table state during assignments .</td>
+</tr>
+<tr>
+<td>/hbase/splitlog (zookeeper.znode.splitlog)</td>
+<td>Used by the log splitter to track the pending log to replay and its assignment.</td>
+</tr>
+<tr>
+<td>/hbase/acl (zookeeper.znode.acl.parent)</td>
+<td>The acl znode is used for synchronizing the changes made to the <em>acl</em> table by the grant/revoke commands.</td>
+</tr>
+<tr>
+<td>/hbase/tokenauth (zookeeper.znode.tokenauth.parent)</td>
+<td>The token provider is usually used to allow a MapReduce job to access the HBase cluster.</td>
+</tr>
+<tr>
+<td>/hbase/replication (zookeeper.znode.replication)</td>
+<td>Root znode that contains all HBase replication state information</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers (zookeeper.znode.replication.peers)</td>
+<td>Each peer will have a sub-znode containing the ZK ensemble’s addresses that allows the peer to be contacted.</td>
+</tr>
+<tr>
+<td>/hbase/replication/peers/<clusterid>/peer-state (zookeeper.znode.replication.peers.state)</clusterid></td>
+<td>Mirror of the /hbase/replication/peers znode, but here each sub-znode will track the peer enabled/disabled state.</td>
+</tr>
+<tr>
+<td>/hbase/replication/state (zookeeper.znode.replication.state)</td>
+<td>Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell.</td>
+</tr>
+<tr>
+<td>/hbase/replication/rs (zookeeper.znode.replication.rs)</td>
+<td>Contains the list of RegionServers in the main cluster .</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/acquired</td>
+<td>The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/reached</td>
+<td>Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot telling each RegionServer that it is time to finalize/commit the snapshot.</td>
+</tr>
+<tr>
+<td>/hbase/online-snapshot/abort</td>
+<td>If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
+</tr>
+</tbody>
+</table>
+<p>Reference :</p>
+<p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -677,38 +830,6 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/log4j/">2016-04-22</a></time>
       
       
@@ -749,6 +870,38 @@ the exception?</code></p>
 <li><a href="http://www.codeceo.com/article/log4j-usage.html" target="_blank" rel="external">最详细的Log4j使用教程</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -909,82 +1062,27 @@ the exception?</code></p>
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/gradle/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Gradle</p>
-<p>###Build Script Basic<br>任何一个Gradle构建都是由一个或多个 projects 组成.</p>
-<p>每个project包括许多可构建组成部分. 这完全取决于你要构建些什么.</p>
-<p>举个栗子.每个project或许是一个jar包或者一个web应用, 它也可以是一个由许多其他项目中产生的jar构成的zip压缩包.一个project不必描述它只能进行构建操作. </p>
-<p>它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大.<br>Gradle的build-by-convention可以让您来具体定义一个project到底该做什么.</p>
-<p>每个project都由多个tasks组成.每个task都代表了构建执行过程中的一个原子性操作.如编译,打包,生成javadoc,发布到某个仓库等操作</p>
-<p>你可以通过在命令行运行gradle命令来执行构建, gradle命令会从当前目录下寻找 build.gradle 文件来执行构建.</p>
-<p>我们称 build.gradle 文件为构建脚本. 严格来说这其实是一个构建配置脚本</p>
-<p>build.gradle</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println &apos;Hello World !&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &apos;Hello World&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doFirst &#123;</span><br><span class="line">    println &apos;Before&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doLast &#123;</span><br><span class="line">   println &apos;After&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task &lt;&lt; &#123;</span><br><span class="line">    println &apos;Last&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>doFirst 和 doLast 可以进行多次调用. 分别被添加在任务的开头和结尾.</p>
-<p>当任务开始执行时这些动作会按照既定顺序进行.其中 &lt;&lt; 操作符 是 doLast 的简写方式.</p>
-<p><code>增加自定义属性</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task myTask &#123;</span><br><span class="line">    ext.name = &apos;darion.yaphet&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task printName &#123;</span><br><span class="line">    println myTask.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>默认任务</code></p>
-<p>Gradle允许在脚本中定义多个默认任务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks &apos;clean&apos; ,&apos;run&apos;</span><br><span class="line"></span><br><span class="line">task clean &lt;&lt; &#123;</span><br><span class="line">    println &apos;default clean&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task  run &lt;&lt; &#123;</span><br><span class="line">    println &apos;default run&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>###Java Plugin<br>大部分Java项目基本流程都是相似的:编译源文件,进行单元测试,创建Jar包.<br>使用Gradle做这些工作不必为每个工程都编写代码.<br>Gradle已经提供了完美的插件来解决这些问题. </p>
-<p>插件就是Gradle的扩展,简而言之就是为你添加一些非常有用的默认配置.<br>Gradle自带了很多插件,并且你也可以很容易的编写和分享自己的插件.<br>Java plugin作为其中之一,为你提供了诸如编译,测试,打包等一些功能.</p>
-<p>Java插件为工程定义了许多默认值,如Java源文件位置.<br>如果你遵循这些默认规则,那么你无需在你的脚本文件中书写太多代码.<br>当然,Gradle也允许你自定义项目中的一些规则.<br>实际上,由于对Java工程的构建是基于插件的,那么你也可以完全不用插件自己编写代码来进行构建.</p>
-<p><code>一个基本Java项目</code></p>
-<p>###Web Plugin</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/3/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/5/" class="alignright next">Nächste Seite</a>
+    <a href="/page/5/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
@@ -998,6 +1096,8 @@ the exception?</code></p>
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
   </ul>
 </div>
@@ -1019,6 +1119,8 @@ the exception?</code></p>
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   
