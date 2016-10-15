@@ -50,6 +50,328 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-10-15T12:56:12.000Z"><a href="/2016/10/15/distribution/Parquet/">2016-10-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/15/distribution/Parquet/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-15T12:56:08.000Z"><a href="/2016/10/15/distribution/ORCFile/">2016-10-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/15/distribution/ORCFile/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-15T12:56:06.000Z"><a href="/2016/10/15/distribution/RCFile/">2016-10-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/15/distribution/RCFile/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-12T16:00:00.000Z"><a href="/2016/10/13/operation_system/linux/">2016-10-13</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/13/operation_system/linux/">Linux</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p><strong>CPU Load Balancing</strong></p>
+<p>所谓CPU负载均衡就是将进程从繁忙的CPU迁移到比较空闲的CPU上，目的是为了提高系统的整体效率。</p>
+<p>进程在不同CPU之间迁移通常会影响cache的命中率，例如：</p>
+<ol>
+<li><p>支持超线程技术(SMT)的CPU内部的虚CPU之间完全共享cache，在它们之间迁移进程对cache几乎没有影响，所以尽量保证它们之间的进程数均衡。</p>
+</li>
+<li><p>单个CPU的多个核有各自的L1缓存，但共享L2和L3缓存，在这些核之间迁移进程会导致L1缓存的失效，但是L2和L3缓存不受影响。</p>
+</li>
+<li><p>多CPU，每个CPU有各自独享的缓存，在这些CPU之间迁移进程会导致缓存失效。</p>
+</li>
+<li><p>多CPU，多内存节点（NUMA），不同CPU对于不同内存结点访问的效率不同，在这些CPU之间迁移进程不仅会影响缓存，而且会出现内存访问效率的问题。</p>
+</li>
+<li><p>多CPU+NUMA组成的阵列。</p>
+</li>
+</ol>
+<p>内核根据迁移进程所造成的影响情况设置了不同的调度域（sched_domain），最小一级的调度域是SMT的情况，SMT中的多个虚拟CPU位于同一调度域内；次小一级是单个CPU的多个核的情况，这些核位于同一调度域内；往上是多个CPU的情况以及多CPU+NUMA的情况，最上面就是阵列情况，自下而上所有的sched_domain形成一棵树形结构，越往上迁移进程导致的影响越大，所以越往上内核会增大迁移的阻力。</p>
+<hr>
+<p><strong>Virtual Memory</strong></p>
+<p>Linux内核对整个系统的物理内存是通过类型为struct page的数组mem_map来管理的。</p>
+<p>Linux的内核地址空间大小为1G  用户空间0~3G，内核空间3G~4G。</p>
+<p>如果把这1G线性地址空间全部拿来直接一一映射物理内存的话，在内核态的所有进程能使用的物理内存总共最多只有1G,为了能使在内核态的所有进程能使用更多的物理内存，Linux采取了一种变通的形式：<code>它将1G内核线性地址空间分为几部分，第一部分为1G的前896M，这部分内核线性空间与物理内存的0~896M一一映射，后面128M的线性空间拿来动态映射剩下的所有物理内存，由于动态映射的方法不一样，后面的128M又分成了几个部分。</code></p>
+<p>前面896M线性空间对应的物理内存就是所谓的低端物理内存，剩下的物理内存就是高端物理内存。</p>
+<p>进程中使用的所有地址都是虚地址，在linux下这个虚地址就是所谓的线性地址。Linux中进程可运行在用户态和内核态，（典型配置情况下）当进程运行在用户态时，它使用的线性地址只能位于0~3G范围内，当进程运行于内核态时，它使用的线性地址地址范围为3G~4G。</p>
+<p>为了把线性地址转化为物理地址，每个进程都有自己私有的页目录和页表。</p>
+<p>Linux在建立进程页目录时，把用户地址空间的页目录项（0~767项）清空而将内核页目录表（swapper_pg_dir）的第768项到1023项拷贝到进程的页目录表的第768项到1023项中。</p>
+<p>由于内核在初始化时也只映射了物理内存的前896M，我们可以知道内核也目录表只能保证第768项开始的224项中有有效映射。从这里我们可以知道，所有的进程都共享了其内核线性地址空间。</p>
+<p>当一个进程在内核空间发生缺页故障的时候，这主要发生在访问内核空间动态映射区线性地址，在其处理程序中，就要通过0号进程的页目录（swapper_pg_dir）来同步本进程的内核页目录，实际上就是拷贝0号进程的内核页目录到本进程中（内核页表与进程0共享，故不需要复制）。如果进程0的该地址处的内核页目录也不存在，则出错，具体代码可以参考vmalloc的实现源码。</p>
+<p>当进程运行于用户态时，若其需要申请内存空间，内核首先会在其用户线性空间中分配需要的线性地址空间，再通过伙伴分配系统分配物理内存并把分配的物理内存跟用户空间线性地址映射起来，最后再修改进程的页目录项及页表项写入这些映射关系。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-11T16:00:00.000Z"><a href="/2016/10/12/distribution/zookeeper/">2016-10-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/12/distribution/zookeeper/">ZooKeeper</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><p>Google提出了中心化组件Chubby—粗粒度锁服务，通过锁原语为其他系统实现更高级的服务，比如组成员、域名服务和leader选举等等。Chubby本身也是一个小型的cell（通常由5个chubby结点组成），cell内部采用类似于状态机副本形式实现可靠容错。</p>
+<p>Google的Chubby论文在OSDI上发表后引起了很大的反响，原因很多，主要有两个：</p>
+<p>第一，chubby很好的解决了分布式开发的一致性问题；</p>
+<p>第二，Google Chubby采用Leslie Lamport提出的paxos算法来实现可靠容错，这是业界关于paxos第一个完整可行的实现。</p>
+<hr>
+<p>和Chubby相比，ZooKeeper做了很多突破。</p>
+<p>不像Chubby的单点服务的结构，ZooKeeper采用多个server同时处理客户端的请求，异步读同步写，通过primary节点来同步数据的update，这一点大大改善了读服务的性能，当然弱化了客户端与服务器之间的一致性。</p>
+<p>另外，ZooKeeper采用block free的服务接口，采用watch机制的方式异步处理请求结果和指定数据的变更。</p>
+<p>ZooKeeper采用paxos的变种来实现消息传输的一致性。</p>
+<p>ZooKeeper开发了原子多播协议 Zab 来实现数据的一致性传输。</p>
+<p>ZooKeeper采用的是primary-backup的结构，primary节点产生non- commutative 事务，通过协议按序的广播到其他backup节点上。在节点无错的情况下，这是非常简单的事情，然而，面对复杂的网络环境，多变的软硬件条件，节点挂掉，重启，数据重复发送，这些异常很常见。Zookeeper如何做到即便是系统出现异常，也能够保证整个系统状态是一致？paxos的变种，Zookeeper的Zab协议很好的保证了这一点。</p>
+<p>Zab 协议以epoch的方式执行（相当与序列号），在每个epoch最多只有一个进程多播数据。如果某个进程执行了协议的的第一阶段，那么进程将不再接受之前还没确定提交的epoch的数据。这样一来就保证了在进程在recovery阶段不会出现丢失已提交的数据的情况。在某个epoch下，所有参加这个epoch的进程必须此epoch之前所有已经提交的数据镜像。为了保证一致性，进程在完全恢复之前必须不能广播新的事务。</p>
+<p>Zab协议的这几个特点处理了primary异常、新旧primary以及backup节点异常的情况，的确保证了primary进程原子多播的order特性。</p>
+<p>整个Zab协议的内容分成三个阶段：Discovery、Synchronization和Broadcast阶段。</p>
+<p>Discovery阶段其实是选举leader或者发现leader。</p>
+<pre><code>在这个阶段里，follower会给（可能是）leader的进程（这里的进程可以是多个）发送当前自己epoch的信息CEPOCH；
+
+如果（可能是）leader进程收到大多数的follower的CEPOCH消息，那么leader就会产生一个新epoch的消息NEWEPOCH，其中包含新的leader，并发送给follower；当follower f收到NEWEPOCH时，f会判断其中epoch是否比当前的大，如果是则反馈信息ACK-E，其中包含f所接受的最大事务编号和历史数据；leader会从这些ACK-E中选出最新的历史数据来初始化它当前的系统状态。这个阶段其实就是paxos的执行过程，由于两个大多数集合的交集肯定不为空，所以不可能一个epoch下会选出两个不同的leader。因此Discovery阶段最后的结果肯定只有一个新leader。
+
+在整个系统初始的时候，每个节点当前的epoch都为0，这样会给其它节点发送请求，这样有可能会导致paxos死锁，对此，每个zookeeper节点会通过配置获得唯一的id，并根据id的大则优先的原则来推选leader。
+</code></pre><p>Synchronization阶段其实就会状态同步，新leader会将其最新状态通知给所有的follower；follower的到leader的状态后，会和自己的进行比较，从中提前还未提交的数据T，并反馈给leader；leader收到大多数确认反馈时，则发送提交命令commit给这些follower；follower收到commit后提交T中的所有数据。</p>
+<p>Broadcast阶段和Synchronization阶段相似，只是这个阶段是对一个请求的提交而不是一个集合的提交。</p>
+<hr>
+<p>ZooKeeper Config </p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clientPort</td>
+<td>客户端连接server的端口，即对外服务端口，一般设置为2181 </td>
+</tr>
+<tr>
+<td>dataDir</td>
+<td>存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。建议同时配置参数dataLogDir, 事务日志的写性能直接影响zk性能。 </td>
+</tr>
+<tr>
+<td>tickTime</td>
+<td>ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2*tickTime。</td>
+</tr>
+<tr>
+<td>dataLogDir</td>
+<td>事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。</td>
+</tr>
+<tr>
+<td>globalOutstandingLimit</td>
+<td>最大请求堆积数。默认是1000。</td>
+</tr>
+<tr>
+<td>preAllocSize</td>
+<td>预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。</td>
+</tr>
+<tr>
+<td>snapCount</td>
+<td>每进行snapCount次事务日志输出后，触发一次快照(snapshot), 此时，ZK会生成一个snapshot文件，同时创建一个新的事务日志文件log。</td>
+</tr>
+<tr>
+<td>traceFile</td>
+<td>用于记录所有请求的log，一般调试过程中可以使用，但是生产环境不建议使用，会严重影响性能。</td>
+</tr>
+<tr>
+<td>maxClientCnxns</td>
+<td>单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。</td>
+</tr>
+<tr>
+<td>clientPortAddress</td>
+<td>对于多网卡的机器，可以为每个IP指定不同的监听端口。</td>
+</tr>
+<tr>
+<td>minSessionTimeoutmaxSessionTimeout</td>
+<td>Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。</td>
+</tr>
+<tr>
+<td>fsync.warningthresholdms</td>
+<td>事务日志输出时，如果调用fsync方法超过指定的超时时间，那么会在日志中输出警告信息。</td>
+</tr>
+<tr>
+<td>autopurge.purgeInterval</td>
+<td>ZK提供了自动清理事务日志和快照文件的功能，这个参数指定了清理频率，单位是小时，需要配置一个1或更大的整数，默认是0，表示不开启自动清理功能。</td>
+</tr>
+<tr>
+<td>autopurge.snapRetainCount</td>
+<td>需要保留的文件数目。默认是保留3个。</td>
+</tr>
+<tr>
+<td>electionAlg</td>
+<td>允许指定leader选举算法。</td>
+</tr>
+<tr>
+<td>initLimit</td>
+<td>Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在initLimit时间内完成这个工作。</td>
+</tr>
+<tr>
+<td>syncLimit</td>
+<td>如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。</td>
+</tr>
+<tr>
+<td>leaderServes</td>
+<td>Leader专注于集群中机器的协调，那么可以将这个参数设置为no，这样一来，会大大提高写操作的性能。</td>
+</tr>
+<tr>
+<td>server.x=[hostname]:nnnnn[:nnnnn]</td>
+<td>第一个端口用于F和L之间的数据同步和其它通信，第二个端口用于Leader选举过程中投票通信。</td>
+</tr>
+<tr>
+<td>group.x=nnnnn[:nnnnn]weight.x=nnnnn</td>
+<td>对机器分组和权重设置。</td>
+</tr>
+<tr>
+<td>cnxTimeout</td>
+<td>Leader选举过程中，打开一次连接的超时时间，默认是5s。</td>
+</tr>
+<tr>
+<td>zookeeper.DigestAuthenticationProvider.superDigest</td>
+<td>ZK权限设置相关。</td>
+</tr>
+<tr>
+<td>skipACL</td>
+<td>所有客户端请求都不作ACL检查。</td>
+</tr>
+<tr>
+<td>forceSync</td>
+<td>确定了是否需要在事务日志提交的时候调用FileChannel.force来保证数据完全同步到磁盘。</td>
+</tr>
+<tr>
+<td>jute.maxbuffer</td>
+<td>每个节点最大数据量，是默认是1M。</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-09-25T16:00:00.000Z"><a href="/2016/09/26/machine_learning/Terms/">2016-09-26</a></time>
       
       
@@ -346,6 +668,12 @@
 <li>论文：分布式词汇和短语表征以及他们的组合性（Distributed Representations of Words and Phrases and their Compositionality）</li>
 <li>论文：解释 word2vec 参数学习（word2vec Parameter Learning Explained）</li>
 </ul>
+<hr>
+<p><code>AUC (Area Under Curve)</code></p>
+<p>在计算广告学中，AUC经常用于统计ROC曲线的面积，用来量化评估广告的CTR质量。ROC(Receiver Operating Characteristics) graphs ROC经常被用于模式识别、分类器的结果展现和性能评测。传统的ROC曲线多用于医学检测领域，2000年以后，在机器学习、数据挖掘领域开始有使用、</p>
+<p>ROC是二维平面上的曲线，平面的横坐标是false positive rate(FPR)，纵坐标是true positive rate(TPR)，对某个待评估的数据挖掘方法而言，我们可以根据其在测试样本上的表现得到一个TPR和FPR点对。这样，分类器就可以映射成ROC平面上的一个点，这些点构成一个阶梯状的曲线，计算的AUC也就是这些阶梯下面的面积之和。</p>
+<p>在广告中，根据CTR的高低，将最有可能被用户点击的广告按顺序依次展现，根据点击反馈，可以生成ROC曲线（y方向，点击+1；x方向，未点击+1），很明显，用户点击的越多，被点击的广告排序越靠前，ROC曲线下的面积越大，即AUC越大，则表明广告投放的效果越好，也就是CTR预测越准确。</p>
+<hr>
 
       
     </div>
@@ -503,1278 +831,36 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-26T16:00:00.000Z"><a href="/2016/08/27/algorithms/Graph/">2016-08-27</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/27/algorithms/Graph/">Graph</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h3><h5 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h5><h5 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h5><hr>
-<p>Reference :</p>
-<ol>
-<li><a href=""></a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-13T16:00:00.000Z"><a href="/2016/08/14/distribution/yarn/">2016-08-14</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/14/distribution/yarn/">Yarn</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h2><h3 id="Architecture-Overview"><a href="#Architecture-Overview" class="headerlink" title="Architecture Overview"></a>Architecture Overview</h3><p><code>Yarn</code> (Yet Another Resource Negotiator) 是一种通用资源管理系统，可为上层应用提供统一资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大提升。</p>
-<p>The fundamental idea of Yarn is to split up the two major functionalities of the <code>JobTracker</code>, resource management and job scheduling/monitoring into separate daemons. </p>
-<p>The idea is to have a global ResourceManager and per-application ApplicationMaster. </p>
-<p>The <code>ResourceManager</code> and per-node slave, the <code>NodeManager</code>, form the data-computation framework. </p>
-<p>The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system.</p>
-<p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p>
-<p>The ResourceManager has two main components: Scheduler and ApplicationsManager.</p>
-<p>The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The Scheduler is pure scheduler in the sense that it performs no monitoring or tracking of status for the application. Also, it offers no guarantees about restarting failed tasks either due to application failure or hardware failures. The Scheduler performs its scheduling function based the resource requirements of the applications; it does so based on the abstract notion of a resource Container which incorporates elements such as memory, cpu, disk, network etc. In the first version, only memory is supported.</p>
-<p>The Scheduler has a pluggable policy plug-in, which is responsible for partitioning the cluster resources among the various queues, applications etc. The current Map-Reduce schedulers such as the CapacityScheduler and the FairScheduler would be some examples of the plug-in.</p>
-<p>The CapacityScheduler supports hierarchical queues to allow for more predictable sharing of cluster resources</p>
-<p>The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.</p>
-<p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
-<p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
-<p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
-<h3 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h3><p>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
-<h3 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h3><h3 id="ApplicationsManager"><a href="#ApplicationsManager" class="headerlink" title="ApplicationsManager"></a>ApplicationsManager</h3><h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
-<p><code>yarn application [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-appStates <states></states></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application states.</td>
-</tr>
-<tr>
-<td style="text-align:left">-appTypes <types></types></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application types.</td>
-</tr>
-<tr>
-<td style="text-align:left">-list</td>
-<td style="text-align:left">Lists applications from the RM. </td>
-</tr>
-<tr>
-<td style="text-align:left">-kill <applicationid></applicationid></td>
-<td style="text-align:left">Kills the application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <applicationid></applicationid></td>
-<td style="text-align:left">Prints the status of the application.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn applicationattempt [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <applicationid></applicationid></td>
-<td style="text-align:left">Lists applications attempts for the given application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <application attempt="" id=""></application></td>
-<td style="text-align:left">Prints the status of the application attempt.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn classpath</code></p>
-<p>Prints the class path needed to get the Hadoop jar and the required libraries</p>
-<p><code>yarn container [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <application attempt="" id=""></application></td>
-<td style="text-align:left">Lists containers for the application attempt.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <containerid></containerid></td>
-<td style="text-align:left">Prints the status of the container.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn jar &lt;jar&gt; [mainClass] args...</code></p>
-<p>Runs a jar file. </p>
-<p><code>yarn logs -applicationId &lt;application ID&gt; [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-applicationId <application id=""></application></td>
-<td style="text-align:left">Specifies an application id</td>
-</tr>
-<tr>
-<td style="text-align:left">appOwner <appowner></appowner></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-containerId <containerid></containerid></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-nodeAddress <nodeaddress></nodeaddress></td>
-<td style="text-align:left">nodename:port</td>
-</tr>
-</tbody>
-</table>
-<h4 id="ResourceManager-1"><a href="#ResourceManager-1" class="headerlink" title="ResourceManager"></a>ResourceManager</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">#### NodeManager</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
-<p>```</p>
-<h3 id="REST-API’s"><a href="#REST-API’s" class="headerlink" title="REST API’s"></a>REST API’s</h3><p><code>ResourceManager</code></p>
-<ol>
-<li>Cluster Information  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/info</code></li>
-<li>Cluster Metrics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/metrics</code></li>
-<li>Cluster Scheduler API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/scheduler</code></li>
-<li>Cluster Applications API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
-<li>Cluster Application Statistics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/appstatistics?states=accepted,running,finished&amp;applicationTypes=mapreduce</code></li>
-<li>Cluster Application API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id</code></li>
-<li>Cluster Application Attempts API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/appattempts</code></li>
-<li>Cluster Nodes API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes</code></li>
-<li>Cluster Node API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes/h2:1235</code></li>
-<li>Cluster New Application API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/new-application</code></li>
-<li>Cluster Applications API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
-<li>Cluster Application State API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/state</code></li>
-<li>Cluster Application Queue API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/queue</code></li>
-<li>Cluster Delegation Tokens API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/delegation-token</code></li>
-</ol>
-<p><code>NodeManager</code></p>
-<ol>
-<li>NodeManager Information API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/info</code></li>
-<li>Applications API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps</code></li>
-<li>Application API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps/application_id</code></li>
-<li>Containers API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/containers</code></li>
-<li>Container API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/nodes/containers/container_id</code></li>
-</ol>
-<p><code>Timeline Server</code></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/distribution/tez/">2016-08-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/01/distribution/tez/">Tez</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h4 id="Tez"><a href="#Tez" class="headerlink" title="Tez"></a>Tez</h4><p>A Framework for YARN-based, Data Processing Applications In Hadoop. </p>
-<p>Tez improves the MapReduce paradigm by dramatically improving its speed, while maintaining MapReduce’s ability to scale to petabytes of data. </p>
-<p>Apache Tez provides a developer API and framework to write native YARN applications that bridge the spectrum of interactive and batch workloads. It allows those data access applications to work with petabytes of data over thousands nodes. </p>
-<p>The Apache Tez component library allows developers to create Hadoop applications that integrate natively with Apache Hadoop YARN and perform well within mixed workload clusters.</p>
-<p>Since Tez is extensible and embeddable, it provides the fit-to-purpose freedom to express highly optimized data processing applications, giving them an advantage over end-user-facing engines such as MapReduce and Apache Spark. </p>
-<p>Tez also offers a customizable execution architecture that allows users to express complex computations as dataflow graphs, permitting dynamic performance optimizations based on real information about the data and the resources required to process it.</p>
-<p><img src="resource/tez/H1H2Tez.png" alt="Tez on Hadoop"></p>
-<hr>
-<p><strong>DATA PROCESSING API IN APACHE TEZ</strong></p>
-<hr>
-<p><strong>RUNTIME API IN APACHE TEZ</strong></p>
-<hr>
-<p><strong>Interface</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br></pre></td><td class="code"><pre><span class="line">public abstract class TaskScheduler implements ServicePluginLifecycle &#123;</span><br><span class="line">    /**</span><br><span class="line">     * An entry point for initialization.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void initialize() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * An entry point for starting the service.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Stop the service. This could be invoked at any point, when the service is no longer required -</span><br><span class="line">     * including in case of errors.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void shutdown() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The first step of stopping the task scheduler service. This would typically be used to stop</span><br><span class="line">     * allocating new resources. shutdown() will typically be used to unregister from external</span><br><span class="line">     * services - especially YARN for instance, so that the app is not killed</span><br><span class="line">     */</span><br><span class="line">    public void initiateStop() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the &#123;@link TaskSchedulerContext&#125; associated with this instance of the scheduler, which is</span><br><span class="line">     * used to communicate with the rest of the system</span><br><span class="line">     */</span><br><span class="line">    public final TaskSchedulerContext getContext() &#123;</span><br><span class="line">        return taskSchedulerContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the currently available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getAvailableResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the total available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getTotalResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the number of nodes available from the source</span><br><span class="line">     */</span><br><span class="line">    public abstract int getClusterNodeCount() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been blacklisted, and should not be used for subsequent</span><br><span class="line">     * allocations.</span><br><span class="line">     */</span><br><span class="line">    public abstract void blacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been un-blacklisted, and can be used from subsequent</span><br><span class="line">     * allocations</span><br><span class="line">     */</span><br><span class="line">    public abstract void unblacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, with location information</span><br><span class="line">     * optionally specified</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      String[] hosts, String[] racks, Priority priority,</span><br><span class="line">                                      Object containerSignature, Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, based on a previously used</span><br><span class="line">     * container</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      ContainerId containerId, Priority priority,</span><br><span class="line">                                      Object containerSignature,</span><br><span class="line">                                      Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to deallocate a task. This is typically a result of a task completing - with success</span><br><span class="line">     * or failure. It could also be the result of a decision to not run the task, before it is</span><br><span class="line">     * allocated or started.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Plugin writers need to de-allocate containers via the context once it&apos;s no longer required, for</span><br><span class="line">     * correct book-keeping</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean deallocateTask(Object task, boolean taskSucceeded,</span><br><span class="line">                                           TaskAttemptEndReason endReason,</span><br><span class="line">                                           @Nullable String diagnostics) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to de-allocate a previously allocated container.</span><br><span class="line">     */</span><br><span class="line">    public abstract Object deallocateContainer(ContainerId containerId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inform the scheduler that it should unregister. This is primarily valid for schedulers which</span><br><span class="line">     * require registration (YARN a.t.m)</span><br><span class="line">     */</span><br><span class="line">    public abstract void setShouldUnregister() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Checks with the scheduler whether it has unregistered.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean hasUnregistered() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indicates to the scheduler that the currently running dag has completed.</span><br><span class="line">     * This can be used to reset dag specific statistics, potentially release resources and prepare</span><br><span class="line">     * for a new DAG.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract void dagComplete() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Vertex extends Comparable&lt;Vertex&gt; &#123;</span><br><span class="line"></span><br><span class="line">    TezVertexID getVertexId();</span><br><span class="line"></span><br><span class="line">    public VertexPlan getVertexPlan();</span><br><span class="line"></span><br><span class="line">    int getDistanceFromRoot();</span><br><span class="line"></span><br><span class="line">    LinkedHashMap&lt;String, Integer&gt; getIOIndices();</span><br><span class="line"></span><br><span class="line">    String getName();</span><br><span class="line"></span><br><span class="line">    VertexState getState();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getAllCounters();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getCachedCounters();</span><br><span class="line"></span><br><span class="line">    int getMaxTaskConcurrency();</span><br><span class="line"></span><br><span class="line">    Map&lt;TezTaskID, Task&gt; getTasks();</span><br><span class="line"></span><br><span class="line">    Task getTask(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    Task getTask(int taskIndex);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; getDiagnostics();</span><br><span class="line"></span><br><span class="line">    int getTotalTasks();</span><br><span class="line"></span><br><span class="line">    int getCompletedTasks();</span><br><span class="line"></span><br><span class="line">    int getSucceededTasks();</span><br><span class="line"></span><br><span class="line">    int getRunningTasks();</span><br><span class="line"></span><br><span class="line">    float getProgress();</span><br><span class="line"></span><br><span class="line">    float getCompletedTaskProgress();</span><br><span class="line"></span><br><span class="line">    ProgressBuilder getVertexProgress();</span><br><span class="line"></span><br><span class="line">    VertexStatusBuilder getVertexStatus(Set&lt;StatusGetOpts&gt; statusOptions);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    TaskLocationHint getTaskLocationHint(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    void setParallelism(int parallelism, VertexLocationHint vertexLocationHint,</span><br><span class="line">                        Map&lt;String, EdgeManagerPluginDescriptor&gt; sourceEdgeManagers,</span><br><span class="line">                        Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate, boolean fromVertexManager)</span><br><span class="line">            throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(@Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate,</span><br><span class="line">                                  int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties,</span><br><span class="line">                                  @Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    void setVertexLocationHint(VertexLocationHint vertexLocationHint);</span><br><span class="line"></span><br><span class="line">    void vertexReconfigurationPlanned();</span><br><span class="line"></span><br><span class="line">    void doneReconfiguringVertex();</span><br><span class="line"></span><br><span class="line">    // CHANGE THESE TO LISTS AND MAINTAIN ORDER?</span><br><span class="line">    void setInputVertices(Map&lt;Vertex, Edge&gt; inVertices);</span><br><span class="line"></span><br><span class="line">    void setOutputVertices(Map&lt;Vertex, Edge&gt; outVertices);</span><br><span class="line"></span><br><span class="line">    VertexStatistics getStatistics();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getInputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getOutputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;String, OutputCommitter&gt; getOutputCommitters();</span><br><span class="line"></span><br><span class="line">    void setAdditionalInputs(List&lt;RootInputLeafOutputProto&gt; inputs);</span><br><span class="line"></span><br><span class="line">    void setAdditionalOutputs(List&lt;RootInputLeafOutputProto&gt; outputs);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;InputDescriptor, InputInitializerDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalInputs();</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;OutputDescriptor, OutputCommitterDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalOutputs();</span><br><span class="line"></span><br><span class="line">    List&lt;InputSpec&gt; getInputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;OutputSpec&gt; getOutputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;GroupInputSpec&gt; getGroupInputSpecList(int taskIndex);</span><br><span class="line"></span><br><span class="line">    void addSharedOutputs(Set&lt;String&gt; outputs);</span><br><span class="line"></span><br><span class="line">    Set&lt;String&gt; getSharedOutputs();</span><br><span class="line"></span><br><span class="line">    int getInputVerticesCount();</span><br><span class="line"></span><br><span class="line">    int getOutputVerticesCount();</span><br><span class="line"></span><br><span class="line">    void scheduleTasks(List&lt;ScheduleTaskRequest&gt; tasks);</span><br><span class="line"></span><br><span class="line">    void scheduleSpeculativeTask(TezTaskID taskId);</span><br><span class="line"></span><br><span class="line">    Resource getTaskResource();</span><br><span class="line"></span><br><span class="line">    public TaskAttemptEventInfo getTaskAttemptTezEvents(TezTaskAttemptID attemptID,</span><br><span class="line">                                                        int fromEventId, int nextPreRoutedFromEventId, int maxEvents);</span><br><span class="line"></span><br><span class="line">    void handleSpeculatorEvent(SpeculatorEvent event);</span><br><span class="line"></span><br><span class="line">    ProcessorDescriptor getProcessorDescriptor();</span><br><span class="line"></span><br><span class="line">    public DAG getDAG();</span><br><span class="line"></span><br><span class="line">    VertexTerminationCause getTerminationCause();</span><br><span class="line"></span><br><span class="line">    AppContext getAppContext();</span><br><span class="line"></span><br><span class="line">    String getLogIdentifier();</span><br><span class="line"></span><br><span class="line">    public void incrementFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public void incrementKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public Configuration getConf();</span><br><span class="line"></span><br><span class="line">    public boolean isSpeculationEnabled();</span><br><span class="line"></span><br><span class="line">    public int getTaskSchedulerIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getContainerLauncherIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getTaskCommunicatorIdentifier();</span><br><span class="line"></span><br><span class="line">    public ServicePluginInfo getServicePluginInfo();</span><br><span class="line"></span><br><span class="line">    public long getInitTime();</span><br><span class="line"></span><br><span class="line">    public long getStartTime();</span><br><span class="line"></span><br><span class="line">    public long getFinishTime();</span><br><span class="line"></span><br><span class="line">    void reportTaskStartTime(long taskStartTime);</span><br><span class="line"></span><br><span class="line">    public long getFirstTaskStartTime();</span><br><span class="line"></span><br><span class="line">    public long getLastTaskFinishTime();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Partitioner &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get partition for given key/value.</span><br><span class="line">     */</span><br><span class="line">    int getPartition(Object key, Object value, int numPartitions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Description</th>
-<th>Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>tez.dag.recovery.enabled</td>
-<td>Enable recovery of DAGs. This allows a restarted app master to recover the incomplete DAGs from the previous instance of the app master.</td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.dag.recovery.io.buffer.size</td>
-<td></td>
-<td>8192</td>
-</tr>
-<tr>
-<td>tez.dag.recovery.flush.interval.secs</td>
-<td></td>
-<td>30</td>
-</tr>
-<tr>
-<td>tez.dag.recovery.max.unflushed.events</td>
-<td></td>
-<td>100</td>
-</tr>
-<tr>
-<td>tez.task.heartbeat.timeout.check-ms</td>
-<td></td>
-<td>30000</td>
-</tr>
-<tr>
-<td>tez.task.timeout-ms</td>
-<td></td>
-<td>300000</td>
-</tr>
-<tr>
-<td>tez.am.acls.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.allow.disabled.timeline-domains</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.client.am.port-range</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.client.am.thread-count</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.am.commit-all-outputs-on-dag-success</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.containerlauncher.thread-count-limit</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.am.container.idle.release-timeout-max.millis</td>
-<td></td>
-<td>10000</td>
-</tr>
-<tr>
-<td>tez.am.container.idle.release-timeout-min.millis</td>
-<td></td>
-<td>5000</td>
-</tr>
-<tr>
-<td>tez.am.container.reuse.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.container.reuse.locality.delay-allocation-millis</td>
-<td></td>
-<td>250</td>
-</tr>
-<tr>
-<td>tez.am.container.reuse.non-local-fallback.enabled</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.container.reuse.rack-fallback.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.credentials-merge</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.dag.scheduler.class</td>
-<td></td>
-<td>org.apache.tez.dag.app.dag.impl.DAGSchedulerNaturalOrder</td>
-</tr>
-<tr>
-<td>tez.am.disable.client-version-check</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.inline.task.execution.enabled</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.inline.task.execution.max-tasks</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.am.launch.cluster-default.cmd-opts</td>
-<td></td>
-<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
-</tr>
-<tr>
-<td>tez.am.launch.cluster-default.env</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.launch.cmd-opts</td>
-<td></td>
-<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
-</tr>
-<tr>
-<td>tez.am.launch.env</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>tez.am.legacy.speculative.slowtask.threshold</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.log.level</td>
-<td></td>
-<td>INFO</td>
-</tr>
-<tr>
-<td>tez.am.max.allowed.time-sec.for-read-error</td>
-<td></td>
-<td>300</td>
-</tr>
-<tr>
-<td>tez.am.max.app.attempts</td>
-<td></td>
-<td>2</td>
-</tr>
-<tr>
-<td>tez.am.maxtaskfailures.per.node</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.am.modify-acls</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.node-blacklisting.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.node-blacklisting.ignore-threshold-node-percent</td>
-<td></td>
-<td>33</td>
-</tr>
-<tr>
-<td>tez.am.node-unhealthy-reschedule-tasks</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.preemption.heartbeats-between-preemptions</td>
-<td></td>
-<td>3</td>
-</tr>
-<tr>
-<td>tez.am.preemption.max.wait-time-ms</td>
-<td></td>
-<td>60000</td>
-</tr>
-<tr>
-<td>tez.am.preemption.percentage</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.am.resource.cpu.vcores</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.am.resource.memory.mb</td>
-<td></td>
-<td>1024</td>
-</tr>
-<tr>
-<td>tez.am.am-rm.heartbeat.interval-ms.max</td>
-<td></td>
-<td>1000</td>
-</tr>
-<tr>
-<td>tez.am.session.min.held-containers</td>
-<td></td>
-<td>0</td>
-</tr>
-<tr>
-<td>tez.am.mode.session</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.speculation.enabled</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.staging-dir</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.staging.scratch-data.auto-delete</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.task.listener.thread-count</td>
-<td></td>
-<td>30</td>
-</tr>
-<tr>
-<td>tez.am.task.max.failed.attempts</td>
-<td></td>
-<td>4</td>
-</tr>
-<tr>
-<td>tez.am.tez-ui.history-url.template</td>
-<td></td>
-<td><strong><strong>HISTORY_URL_BASE</strong>/#/tez-app/<strong>APPLICATION_ID</strong></strong></td>
-</tr>
-<tr>
-<td>tez.am.vertex.max-task-concurrency</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.am.view-acls</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.tez-ui.webservice.enable</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.application.tags</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.aux.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.cancel.delegation.tokens.on.completion</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.client.asynchronous-stop</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.client.diagnostics.wait.timeout-ms</td>
-<td></td>
-<td>3000</td>
-</tr>
-<tr>
-<td>tez.client.timeout-ms</td>
-<td></td>
-<td>30000</td>
-</tr>
-<tr>
-<td>tez.java.opts.checker.class</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.java.opts.checker.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.container.max.java.heap.fraction</td>
-<td></td>
-<td>0.8</td>
-</tr>
-<tr>
-<td>tez.counters.counter-name.max-length</td>
-<td></td>
-<td>64</td>
-</tr>
-<tr>
-<td>tez.counters.group-name.max-length</td>
-<td></td>
-<td>256</td>
-</tr>
-<tr>
-<td>tez.counters.max</td>
-<td></td>
-<td>1200</td>
-</tr>
-<tr>
-<td>tez.counters.max.groups</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.credentials.path</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.dag.status.pollinterval-ms</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.generate.debug.artifacts</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.history.logging.service.class</td>
-<td></td>
-<td>org.apache.tez.dag.history.logging.impl.SimpleHistoryLoggingService</td>
-</tr>
-<tr>
-<td>tez.tez-ui.history-url.base</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.ignore.lib.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.ipc.payload.reserved.bytes</td>
-<td></td>
-<td>5242880</td>
-</tr>
-<tr>
-<td>tez.lib.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.lib.uris.classpath</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.local.mode</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.queue.name</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.session.am.dag.submit.timeout.secs</td>
-<td></td>
-<td>300</td>
-</tr>
-<tr>
-<td>tez.session.client.timeout.secs</td>
-<td></td>
-<td>120</td>
-</tr>
-<tr>
-<td>tez.simple.history.logging.dir</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.simple.history.max.errors</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.task.am.heartbeat.counter.interval-ms.max</td>
-<td></td>
-<td>4000</td>
-</tr>
-<tr>
-<td>tez.task.am.heartbeat.interval-ms.max</td>
-<td></td>
-<td>100</td>
-</tr>
-<tr>
-<td>tez.task.generate.counters.per.io</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.get-task.sleep.interval-ms.max</td>
-<td></td>
-<td>200</td>
-</tr>
-<tr>
-<td>tez.task.initialize-processor-first</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.initialize-processor-io-serially</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.launch.cluster-default.cmd-opts</td>
-<td></td>
-<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
-</tr>
-<tr>
-<td>tez.task.launch.cluster-default.env</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.launch.cmd-opts</td>
-<td></td>
-<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
-</tr>
-<tr>
-<td>tez.task.launch.env</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>tez.task.log.level</td>
-<td></td>
-<td>INFO</td>
-</tr>
-<tr>
-<td>tez.task.max-events-per-heartbeat</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.task.max-event-backlog</td>
-<td></td>
-<td>10000</td>
-</tr>
-<tr>
-<td>tez.task.progress.stuck.interval-ms</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.task.resource.calculator.process-tree.class</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.resource.cpu.vcores</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.task.resource.memory.mb</td>
-<td></td>
-<td>1024</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.additional-reservation.fraction.max</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.additional-reservation.fraction.per-io</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.allocator.class</td>
-<td></td>
-<td>org.apache.tez.runtime.library.resources.WeightedScalingMemoryDistributor</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.reserve-fraction</td>
-<td></td>
-<td>0.3</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.ratios</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.launch.cmd-opts</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.launch.cmd-opts.list</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.log.level</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.test.minicluster.app.wait.on.shutdown.secs</td>
-<td></td>
-<td>30</td>
-</tr>
-<tr>
-<td>tez.use.cluster.hadoop-libs</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.acl.domains.auto-create</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.event.flush.timeout.millis</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.max.events.per.batch</td>
-<td></td>
-<td>5</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.max.polling.time.per.event.millis</td>
-<td></td>
-<td>10</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://zh.hortonworks.com/apache/tez/" target="_blank" rel="external">Apache Tez</a></li>
-<li><a href="http://zh.hortonworks.com/blog/apache-tez-a-new-chapter-in-hadoop-data-processing/" target="_blank" rel="external">APACHE TEZ: A NEW CHAPTER IN HADOOP DATA PROCESSING</a></li>
-<li><a href="http://tez.apache.org/releases/0.8.4/tez-api-javadocs/configs/TezConfiguration.html" target="_blank" rel="external">Tez Configuration</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>明确几个概念</strong></p>
-<ol>
-<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
-<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
-<li></li>
-</ol>
-<hr>
-<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
-<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
-<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
-<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
-<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
-<p>结点按照被访问的顺序存入栈中。</p>
-<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
-<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
-<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
-<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
-<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
-<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
-<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
-<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
-<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
-<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-24T16:00:00.000Z"><a href="/2016/07/25/distribution/hive/">2016-07-25</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/07/25/distribution/hive/">Hive</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>Hive</strong></p>
-<p>order by<br>order by 会对输入做全局排序，因此只有一个reducer（多个reducer无法保证全局有序）<br>只有一个reducer，会导致当输入规模较大时，需要较长的计算时间。</p>
-<p>set hive.mapred.mode=nonstrict; (default value / 默认值)</p>
-<p>set hive.mapred.mode=strict;</p>
-<p>order by 和数据库中的Order by 功能一致，按照某一项 &amp; 几项 排序输出。</p>
-<p>与数据库中 order by 的区别在于在hive.mapred.mode = strict 模式下 必须指定 limit 否则执行会报错。</p>
-<p>hive&gt; select * from test order by id;     </p>
-<p>FAILED: Error in semantic analysis: 1:28 In strict mode, if ORDER BY is specified, LIMIT must also be specified. Error encountered near token ‘id’</p>
-<p>原因： 在order by 状态下所有数据会到一台服务器进行reduce操作也即只有一个reduce，如果在数据量大的情况下会出现无法输出结果的情况，如果进行 limit n ，那只有  n * map number 条记录而已。只有一个reduce也可以处理过来。</p>
-<p>sort by<br>sort by不是全局排序，其在数据进入reducer前完成排序.</p>
-<p>因此，如果用sort by进行排序，并且设置mapred.reduce.tasks&gt;1， 则sort by只保证每个reducer的输出有序，不保证全局有序。</p>
-<p>sort by 不受 hive.mapred.mode 是否为strict ,nostrict 的影响</p>
-<p>sort by 的数据只能保证在同一reduce中的数据可以按指定字段排序。</p>
-<p>使用sort by 你可以指定执行的reduce 个数 （set mapred.reduce.tasks=<number>）,对输出的数据再执行归并排序，即可以得到全部结果。</number></p>
-<p>注意：可以用limit子句大大减少数据量。使用limit n后，传输到reduce端（单机）的数据记录数就减少到n* （map个数）。否则由于数据过大可能出不了结果。</p>
-<p>distribute by<br>按照指定的字段对数据进行划分到不同的输出reduce  / 文件中。</p>
-<p>insert overwrite local directory ‘/home/hadoop/out’ select * from test order by name distribute by length(name);  </p>
-<p>此方法会根据name的长度划分到不同的reduce中，最终输出到不同的文件中。 </p>
-<p>length 是内建函数，也可以指定其他的函数或这使用自定义函数。</p>
-<p>Cluster By<br>cluster by 除了具有 distribute by 的功能外还兼具 sort by 的功能。 </p>
-<p>但是排序只能是倒序排序，不能指定排序规则为asc 或者desc。</p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Description</th>
-<th>Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hive.exec.stagingdir</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.exec.scratchdir</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.query.length</td>
-<td>The maximum size of a query string .</td>
-<td>100 KB</td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.elements.in.clause</td>
-<td>The maximum number of values in a IN clause. Once exceeded, it will be broken into multiple OR separated IN clauses.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.elements.values.clause</td>
-<td>The maximum number of values in a VALUES clause for INSERT statement.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.table.parameters.default</td>
-<td>Default property values for newly created tables</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.session.id</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.session.silent</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.session.history.enabled</td>
-<td>Whether to log Hive query, query plan, runtime statistics etc.</td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.query.string</td>
-<td>Query being executed</td>
-<td></td>
-</tr>
-<tr>
-<td>hive.query.id</td>
-<td>ID for query being executed</td>
-<td></td>
-</tr>
-<tr>
-<td>hive.jobname.length</td>
-<td>max jobname length</td>
-<td>50</td>
-</tr>
-<tr>
-<td>hive.alias</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>hive.map.aggr</td>
-<td>Whether to use map-side aggregation in Hive Group By queries</td>
-<td>true</td>
-</tr>
-<tr>
-<td>hive.groupby.skewindata</td>
-<td>Whether there is skew in data to optimize group by queries</td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.join.emit.interval</td>
-<td>How many rows in the right-most join operand Hive should buffer before emitting the join result.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.join.cache.size</td>
-<td>How many rows in the joining tables (except the streaming table) should be cached in memory.</td>
-<td>25000</td>
-</tr>
-<tr>
-<td>hive.mapjoin.bucket.cache.size</td>
-<td></td>
-<td>100</td>
-</tr>
-<tr>
-<td>hive.mapjoin.optimized.hashtable</td>
-<td>Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez and Spark, because memory-optimized hashtable cannot be serialized.</td>
-<td>true</td>
-</tr>
-<tr>
-<td>hive.groupby.mapaggr.checkinterval</td>
-<td>Number of rows after which size of the grouping keys/aggregation classes is performed</td>
-<td>100000</td>
-</tr>
-<tr>
-<td>hive.map.aggr.hash.percentmemory</td>
-<td>Portion of total memory to be used by map-side group aggregation hash table</td>
-<td>0.5</td>
-</tr>
-<tr>
-<td>hive.mapjoin.followby.map.aggr.hash.percentmemory</td>
-<td>Portion of total memory to be used by map-side group aggregation hash table, when this group by is followed by map join</td>
-<td>0.3</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.heartbeat.interval</td>
-<td>Send a heartbeat after this interval - used by mapjoin and filter operators</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.limit.row.max.size</td>
-<td>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</td>
-<td>100000</td>
-</tr>
-<tr>
-<td>hive.limit.optimize.limit.file</td>
-<td>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</td>
-<td>10</td>
-</tr>
-<tr>
-<td>hive.limit.optimize.enable</td>
-<td>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</td>
-<td>false</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
   
-    <a href="/page/2/" class="alignright next">Siguiente</a>
+    <a href="/page/2/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
@@ -1788,7 +874,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1803,6 +889,8 @@
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
@@ -1810,6 +898,8 @@
     <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

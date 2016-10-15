@@ -7,11 +7,10 @@
   <meta name="author" content="Darion Yaphet">
   
   <meta name="description" content="###Python
-####Debugger framework
-####Python Debugger
-Reference:
-
-Why print became a function in Python 3">
+Python Egg
+Python 中的egg文件 就如同Java中的jar文件 是一个打包文件 用于方便安装部署。
+Python的setup.py其实是python工具包distutils的配置文件，setuptools就是基于distutils来做的。
+在setup.py中通">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -67,6 +66,17 @@ Why print became a function in Python 3">
     <div class="entry">
       
         <p>###Python</p>
+<p><strong>Python Egg</strong></p>
+<p>Python 中的egg文件 就如同Java中的jar文件 是一个打包文件 用于方便安装部署。</p>
+<p>Python的setup.py其实是python工具包distutils的配置文件，setuptools就是基于distutils来做的。</p>
+<p>在setup.py中通过setup函数来配置打包信息。</p>
+<p>首先要引入setuptools的函数setup。</p>
+<p>setuptools的setup其实就是distutils的setup函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#coding=utf8</span><br><span class="line"></span><br><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name = &quot;py-example-example&quot;,</span><br><span class="line">    version = &quot;0.1&quot;,</span><br><span class="line">    packages = find_packages(),</span><br><span class="line"></span><br><span class="line">    description = &quot;python egg example&quot;,</span><br><span class="line">    long_description = &quot;python egg example&quot;,</span><br><span class="line">    author = &quot;darion&quot;,</span><br><span class="line">    author_email = &quot;darion.yaphet@gmail.com&quot;,</span><br><span class="line"></span><br><span class="line">    license = &quot;GPL&quot;,</span><br><span class="line">    keywords = (&quot;python&quot;, &quot;egg&quot;),</span><br><span class="line">    platforms = &quot;Independant&quot;,</span><br><span class="line">    url = &quot;http://darion.yaphet.github.io&quot;, </span><br><span class="line">	</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>运行<code>python setup.py bdist_egg</code> ,生成Python egg文件。</p>
+<hr>
+<p><strong>IPython</strong></p>
+<hr>
 <p>####Debugger framework</p>
 <p>####Python Debugger</p>
 <p>Reference:</p>
@@ -106,7 +116,7 @@ Why print became a function in Python 3">
 
 
 <section id="comment">
-  <h1 class="title">Comentarios</h1>
+  <h1 class="title">Kommentare</h1>
 
   
       <div id="fb-root"></div>
@@ -129,23 +139,25 @@ Why print became a function in Python 3">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
@@ -159,7 +171,7 @@ Why print became a function in Python 3">
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -174,6 +186,8 @@ Why print became a function in Python 3">
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
@@ -181,6 +195,8 @@ Why print became a function in Python 3">
     <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

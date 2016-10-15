@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 2 | darion.johannes.yaphet</title>
+  <title>Seite 2 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,1381 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-08-26T16:00:00.000Z"><a href="/2016/08/27/algorithms/Graph/">2016-08-27</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/27/algorithms/Graph/">Graph</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h3><h5 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h5><h5 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h5><hr>
+<p>Reference :</p>
+<ol>
+<li><a href=""></a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-08-13T16:00:00.000Z"><a href="/2016/08/14/distribution/yarn/">2016-08-14</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/14/distribution/yarn/">Yarn</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h2><h3 id="Architecture-Overview"><a href="#Architecture-Overview" class="headerlink" title="Architecture Overview"></a>Architecture Overview</h3><p><code>Yarn</code> (Yet Another Resource Negotiator) 是一种通用资源管理系统，可为上层应用提供统一资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大提升。</p>
+<p>The fundamental idea of Yarn is to split up the two major functionalities of the <code>JobTracker</code>, resource management and job scheduling/monitoring into separate daemons. </p>
+<p>The idea is to have a global ResourceManager and per-application ApplicationMaster. </p>
+<p>The <code>ResourceManager</code> and per-node slave, the <code>NodeManager</code>, form the data-computation framework. </p>
+<p>The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system.</p>
+<p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p>
+<p>The ResourceManager has two main components: Scheduler and ApplicationsManager.</p>
+<p>The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The Scheduler is pure scheduler in the sense that it performs no monitoring or tracking of status for the application. Also, it offers no guarantees about restarting failed tasks either due to application failure or hardware failures. The Scheduler performs its scheduling function based the resource requirements of the applications; it does so based on the abstract notion of a resource Container which incorporates elements such as memory, cpu, disk, network etc. In the first version, only memory is supported.</p>
+<p>The Scheduler has a pluggable policy plug-in, which is responsible for partitioning the cluster resources among the various queues, applications etc. The current Map-Reduce schedulers such as the CapacityScheduler and the FairScheduler would be some examples of the plug-in.</p>
+<p>The CapacityScheduler supports hierarchical queues to allow for more predictable sharing of cluster resources</p>
+<p>The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.</p>
+<p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
+<p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
+<p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
+<h3 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h3><p>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
+<h3 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h3><h3 id="ApplicationsManager"><a href="#ApplicationsManager" class="headerlink" title="ApplicationsManager"></a>ApplicationsManager</h3><h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
+<p><code>yarn application [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-appStates <states></states></td>
+<td style="text-align:left">filter applications based on input comma-separated list of application states.</td>
+</tr>
+<tr>
+<td style="text-align:left">-appTypes <types></types></td>
+<td style="text-align:left">filter applications based on input comma-separated list of application types.</td>
+</tr>
+<tr>
+<td style="text-align:left">-list</td>
+<td style="text-align:left">Lists applications from the RM. </td>
+</tr>
+<tr>
+<td style="text-align:left">-kill <applicationid></applicationid></td>
+<td style="text-align:left">Kills the application.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <applicationid></applicationid></td>
+<td style="text-align:left">Prints the status of the application.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn applicationattempt [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-list <applicationid></applicationid></td>
+<td style="text-align:left">Lists applications attempts for the given application.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <application attempt="" id=""></application></td>
+<td style="text-align:left">Prints the status of the application attempt.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn classpath</code></p>
+<p>Prints the class path needed to get the Hadoop jar and the required libraries</p>
+<p><code>yarn container [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-list <application attempt="" id=""></application></td>
+<td style="text-align:left">Lists containers for the application attempt.</td>
+</tr>
+<tr>
+<td style="text-align:left">-status <containerid></containerid></td>
+<td style="text-align:left">Prints the status of the container.</td>
+</tr>
+</tbody>
+</table>
+<p><code>yarn jar &lt;jar&gt; [mainClass] args...</code></p>
+<p>Runs a jar file. </p>
+<p><code>yarn logs -applicationId &lt;application ID&gt; [options]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">COMMAND_OPTIONS</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-applicationId <application id=""></application></td>
+<td style="text-align:left">Specifies an application id</td>
+</tr>
+<tr>
+<td style="text-align:left">appOwner <appowner></appowner></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">-containerId <containerid></containerid></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">-nodeAddress <nodeaddress></nodeaddress></td>
+<td style="text-align:left">nodename:port</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ResourceManager-1"><a href="#ResourceManager-1" class="headerlink" title="ResourceManager"></a>ResourceManager</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">#### NodeManager</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
+<p>```</p>
+<h3 id="REST-API’s"><a href="#REST-API’s" class="headerlink" title="REST API’s"></a>REST API’s</h3><p><code>ResourceManager</code></p>
+<ol>
+<li>Cluster Information  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/info</code></li>
+<li>Cluster Metrics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/metrics</code></li>
+<li>Cluster Scheduler API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/scheduler</code></li>
+<li>Cluster Applications API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
+<li>Cluster Application Statistics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/appstatistics?states=accepted,running,finished&amp;applicationTypes=mapreduce</code></li>
+<li>Cluster Application API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id</code></li>
+<li>Cluster Application Attempts API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/appattempts</code></li>
+<li>Cluster Nodes API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes</code></li>
+<li>Cluster Node API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes/h2:1235</code></li>
+<li>Cluster New Application API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/new-application</code></li>
+<li>Cluster Applications API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
+<li>Cluster Application State API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/state</code></li>
+<li>Cluster Application Queue API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/queue</code></li>
+<li>Cluster Delegation Tokens API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/delegation-token</code></li>
+</ol>
+<p><code>NodeManager</code></p>
+<ol>
+<li>NodeManager Information API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/info</code></li>
+<li>Applications API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps</code></li>
+<li>Application API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps/application_id</code></li>
+<li>Containers API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/containers</code></li>
+<li>Container API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/nodes/containers/container_id</code></li>
+</ol>
+<p><code>Timeline Server</code></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>明确几个概念</strong></p>
+<ol>
+<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
+<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
+<li></li>
+</ol>
+<hr>
+<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
+<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
+<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
+<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
+<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
+<p>结点按照被访问的顺序存入栈中。</p>
+<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
+<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
+<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
+<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
+<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
+<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
+<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
+<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
+<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
+<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/distribution/tez/">2016-08-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/01/distribution/tez/">Tez</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h4 id="Tez"><a href="#Tez" class="headerlink" title="Tez"></a>Tez</h4><p>A Framework for YARN-based, Data Processing Applications In Hadoop. </p>
+<p>Tez improves the MapReduce paradigm by dramatically improving its speed, while maintaining MapReduce’s ability to scale to petabytes of data. </p>
+<p>Apache Tez provides a developer API and framework to write native YARN applications that bridge the spectrum of interactive and batch workloads. It allows those data access applications to work with petabytes of data over thousands nodes. </p>
+<p>The Apache Tez component library allows developers to create Hadoop applications that integrate natively with Apache Hadoop YARN and perform well within mixed workload clusters.</p>
+<p>Since Tez is extensible and embeddable, it provides the fit-to-purpose freedom to express highly optimized data processing applications, giving them an advantage over end-user-facing engines such as MapReduce and Apache Spark. </p>
+<p>Tez also offers a customizable execution architecture that allows users to express complex computations as dataflow graphs, permitting dynamic performance optimizations based on real information about the data and the resources required to process it.</p>
+<p><img src="resource/tez/H1H2Tez.png" alt="Tez on Hadoop"></p>
+<hr>
+<p><strong>DATA PROCESSING API IN APACHE TEZ</strong></p>
+<hr>
+<p><strong>RUNTIME API IN APACHE TEZ</strong></p>
+<hr>
+<p><strong>Interface</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br></pre></td><td class="code"><pre><span class="line">public abstract class TaskScheduler implements ServicePluginLifecycle &#123;</span><br><span class="line">    /**</span><br><span class="line">     * An entry point for initialization.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void initialize() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * An entry point for starting the service.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Stop the service. This could be invoked at any point, when the service is no longer required -</span><br><span class="line">     * including in case of errors.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void shutdown() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The first step of stopping the task scheduler service. This would typically be used to stop</span><br><span class="line">     * allocating new resources. shutdown() will typically be used to unregister from external</span><br><span class="line">     * services - especially YARN for instance, so that the app is not killed</span><br><span class="line">     */</span><br><span class="line">    public void initiateStop() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the &#123;@link TaskSchedulerContext&#125; associated with this instance of the scheduler, which is</span><br><span class="line">     * used to communicate with the rest of the system</span><br><span class="line">     */</span><br><span class="line">    public final TaskSchedulerContext getContext() &#123;</span><br><span class="line">        return taskSchedulerContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the currently available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getAvailableResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the total available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getTotalResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the number of nodes available from the source</span><br><span class="line">     */</span><br><span class="line">    public abstract int getClusterNodeCount() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been blacklisted, and should not be used for subsequent</span><br><span class="line">     * allocations.</span><br><span class="line">     */</span><br><span class="line">    public abstract void blacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been un-blacklisted, and can be used from subsequent</span><br><span class="line">     * allocations</span><br><span class="line">     */</span><br><span class="line">    public abstract void unblacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, with location information</span><br><span class="line">     * optionally specified</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      String[] hosts, String[] racks, Priority priority,</span><br><span class="line">                                      Object containerSignature, Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, based on a previously used</span><br><span class="line">     * container</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      ContainerId containerId, Priority priority,</span><br><span class="line">                                      Object containerSignature,</span><br><span class="line">                                      Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to deallocate a task. This is typically a result of a task completing - with success</span><br><span class="line">     * or failure. It could also be the result of a decision to not run the task, before it is</span><br><span class="line">     * allocated or started.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Plugin writers need to de-allocate containers via the context once it&apos;s no longer required, for</span><br><span class="line">     * correct book-keeping</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean deallocateTask(Object task, boolean taskSucceeded,</span><br><span class="line">                                           TaskAttemptEndReason endReason,</span><br><span class="line">                                           @Nullable String diagnostics) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to de-allocate a previously allocated container.</span><br><span class="line">     */</span><br><span class="line">    public abstract Object deallocateContainer(ContainerId containerId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inform the scheduler that it should unregister. This is primarily valid for schedulers which</span><br><span class="line">     * require registration (YARN a.t.m)</span><br><span class="line">     */</span><br><span class="line">    public abstract void setShouldUnregister() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Checks with the scheduler whether it has unregistered.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean hasUnregistered() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indicates to the scheduler that the currently running dag has completed.</span><br><span class="line">     * This can be used to reset dag specific statistics, potentially release resources and prepare</span><br><span class="line">     * for a new DAG.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract void dagComplete() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Vertex extends Comparable&lt;Vertex&gt; &#123;</span><br><span class="line"></span><br><span class="line">    TezVertexID getVertexId();</span><br><span class="line"></span><br><span class="line">    public VertexPlan getVertexPlan();</span><br><span class="line"></span><br><span class="line">    int getDistanceFromRoot();</span><br><span class="line"></span><br><span class="line">    LinkedHashMap&lt;String, Integer&gt; getIOIndices();</span><br><span class="line"></span><br><span class="line">    String getName();</span><br><span class="line"></span><br><span class="line">    VertexState getState();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getAllCounters();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getCachedCounters();</span><br><span class="line"></span><br><span class="line">    int getMaxTaskConcurrency();</span><br><span class="line"></span><br><span class="line">    Map&lt;TezTaskID, Task&gt; getTasks();</span><br><span class="line"></span><br><span class="line">    Task getTask(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    Task getTask(int taskIndex);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; getDiagnostics();</span><br><span class="line"></span><br><span class="line">    int getTotalTasks();</span><br><span class="line"></span><br><span class="line">    int getCompletedTasks();</span><br><span class="line"></span><br><span class="line">    int getSucceededTasks();</span><br><span class="line"></span><br><span class="line">    int getRunningTasks();</span><br><span class="line"></span><br><span class="line">    float getProgress();</span><br><span class="line"></span><br><span class="line">    float getCompletedTaskProgress();</span><br><span class="line"></span><br><span class="line">    ProgressBuilder getVertexProgress();</span><br><span class="line"></span><br><span class="line">    VertexStatusBuilder getVertexStatus(Set&lt;StatusGetOpts&gt; statusOptions);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    TaskLocationHint getTaskLocationHint(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    void setParallelism(int parallelism, VertexLocationHint vertexLocationHint,</span><br><span class="line">                        Map&lt;String, EdgeManagerPluginDescriptor&gt; sourceEdgeManagers,</span><br><span class="line">                        Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate, boolean fromVertexManager)</span><br><span class="line">            throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(@Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate,</span><br><span class="line">                                  int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties,</span><br><span class="line">                                  @Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    void setVertexLocationHint(VertexLocationHint vertexLocationHint);</span><br><span class="line"></span><br><span class="line">    void vertexReconfigurationPlanned();</span><br><span class="line"></span><br><span class="line">    void doneReconfiguringVertex();</span><br><span class="line"></span><br><span class="line">    // CHANGE THESE TO LISTS AND MAINTAIN ORDER?</span><br><span class="line">    void setInputVertices(Map&lt;Vertex, Edge&gt; inVertices);</span><br><span class="line"></span><br><span class="line">    void setOutputVertices(Map&lt;Vertex, Edge&gt; outVertices);</span><br><span class="line"></span><br><span class="line">    VertexStatistics getStatistics();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getInputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getOutputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;String, OutputCommitter&gt; getOutputCommitters();</span><br><span class="line"></span><br><span class="line">    void setAdditionalInputs(List&lt;RootInputLeafOutputProto&gt; inputs);</span><br><span class="line"></span><br><span class="line">    void setAdditionalOutputs(List&lt;RootInputLeafOutputProto&gt; outputs);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;InputDescriptor, InputInitializerDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalInputs();</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;OutputDescriptor, OutputCommitterDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalOutputs();</span><br><span class="line"></span><br><span class="line">    List&lt;InputSpec&gt; getInputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;OutputSpec&gt; getOutputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;GroupInputSpec&gt; getGroupInputSpecList(int taskIndex);</span><br><span class="line"></span><br><span class="line">    void addSharedOutputs(Set&lt;String&gt; outputs);</span><br><span class="line"></span><br><span class="line">    Set&lt;String&gt; getSharedOutputs();</span><br><span class="line"></span><br><span class="line">    int getInputVerticesCount();</span><br><span class="line"></span><br><span class="line">    int getOutputVerticesCount();</span><br><span class="line"></span><br><span class="line">    void scheduleTasks(List&lt;ScheduleTaskRequest&gt; tasks);</span><br><span class="line"></span><br><span class="line">    void scheduleSpeculativeTask(TezTaskID taskId);</span><br><span class="line"></span><br><span class="line">    Resource getTaskResource();</span><br><span class="line"></span><br><span class="line">    public TaskAttemptEventInfo getTaskAttemptTezEvents(TezTaskAttemptID attemptID,</span><br><span class="line">                                                        int fromEventId, int nextPreRoutedFromEventId, int maxEvents);</span><br><span class="line"></span><br><span class="line">    void handleSpeculatorEvent(SpeculatorEvent event);</span><br><span class="line"></span><br><span class="line">    ProcessorDescriptor getProcessorDescriptor();</span><br><span class="line"></span><br><span class="line">    public DAG getDAG();</span><br><span class="line"></span><br><span class="line">    VertexTerminationCause getTerminationCause();</span><br><span class="line"></span><br><span class="line">    AppContext getAppContext();</span><br><span class="line"></span><br><span class="line">    String getLogIdentifier();</span><br><span class="line"></span><br><span class="line">    public void incrementFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public void incrementKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public Configuration getConf();</span><br><span class="line"></span><br><span class="line">    public boolean isSpeculationEnabled();</span><br><span class="line"></span><br><span class="line">    public int getTaskSchedulerIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getContainerLauncherIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getTaskCommunicatorIdentifier();</span><br><span class="line"></span><br><span class="line">    public ServicePluginInfo getServicePluginInfo();</span><br><span class="line"></span><br><span class="line">    public long getInitTime();</span><br><span class="line"></span><br><span class="line">    public long getStartTime();</span><br><span class="line"></span><br><span class="line">    public long getFinishTime();</span><br><span class="line"></span><br><span class="line">    void reportTaskStartTime(long taskStartTime);</span><br><span class="line"></span><br><span class="line">    public long getFirstTaskStartTime();</span><br><span class="line"></span><br><span class="line">    public long getLastTaskFinishTime();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Partitioner &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get partition for given key/value.</span><br><span class="line">     */</span><br><span class="line">    int getPartition(Object key, Object value, int numPartitions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tez.dag.recovery.enabled</td>
+<td>Enable recovery of DAGs. This allows a restarted app master to recover the incomplete DAGs from the previous instance of the app master.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.io.buffer.size</td>
+<td></td>
+<td>8192</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.flush.interval.secs</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.max.unflushed.events</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>tez.task.heartbeat.timeout.check-ms</td>
+<td></td>
+<td>30000</td>
+</tr>
+<tr>
+<td>tez.task.timeout-ms</td>
+<td></td>
+<td>300000</td>
+</tr>
+<tr>
+<td>tez.am.acls.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.allow.disabled.timeline-domains</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.client.am.port-range</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.client.am.thread-count</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.commit-all-outputs-on-dag-success</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.containerlauncher.thread-count-limit</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.am.container.idle.release-timeout-max.millis</td>
+<td></td>
+<td>10000</td>
+</tr>
+<tr>
+<td>tez.am.container.idle.release-timeout-min.millis</td>
+<td></td>
+<td>5000</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.locality.delay-allocation-millis</td>
+<td></td>
+<td>250</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.non-local-fallback.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.rack-fallback.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.credentials-merge</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.dag.scheduler.class</td>
+<td></td>
+<td>org.apache.tez.dag.app.dag.impl.DAGSchedulerNaturalOrder</td>
+</tr>
+<tr>
+<td>tez.am.disable.client-version-check</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.inline.task.execution.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.inline.task.execution.max-tasks</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.launch.cluster-default.cmd-opts</td>
+<td></td>
+<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
+</tr>
+<tr>
+<td>tez.am.launch.cluster-default.env</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.launch.cmd-opts</td>
+<td></td>
+<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
+</tr>
+<tr>
+<td>tez.am.launch.env</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tez.am.legacy.speculative.slowtask.threshold</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.log.level</td>
+<td></td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>tez.am.max.allowed.time-sec.for-read-error</td>
+<td></td>
+<td>300</td>
+</tr>
+<tr>
+<td>tez.am.max.app.attempts</td>
+<td></td>
+<td>2</td>
+</tr>
+<tr>
+<td>tez.am.maxtaskfailures.per.node</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.am.modify-acls</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.node-blacklisting.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.node-blacklisting.ignore-threshold-node-percent</td>
+<td></td>
+<td>33</td>
+</tr>
+<tr>
+<td>tez.am.node-unhealthy-reschedule-tasks</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.preemption.heartbeats-between-preemptions</td>
+<td></td>
+<td>3</td>
+</tr>
+<tr>
+<td>tez.am.preemption.max.wait-time-ms</td>
+<td></td>
+<td>60000</td>
+</tr>
+<tr>
+<td>tez.am.preemption.percentage</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.am.resource.cpu.vcores</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.resource.memory.mb</td>
+<td></td>
+<td>1024</td>
+</tr>
+<tr>
+<td>tez.am.am-rm.heartbeat.interval-ms.max</td>
+<td></td>
+<td>1000</td>
+</tr>
+<tr>
+<td>tez.am.session.min.held-containers</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>tez.am.mode.session</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.speculation.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.staging-dir</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.staging.scratch-data.auto-delete</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.task.listener.thread-count</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.am.task.max.failed.attempts</td>
+<td></td>
+<td>4</td>
+</tr>
+<tr>
+<td>tez.am.tez-ui.history-url.template</td>
+<td></td>
+<td><strong><strong>HISTORY_URL_BASE</strong>/#/tez-app/<strong>APPLICATION_ID</strong></strong></td>
+</tr>
+<tr>
+<td>tez.am.vertex.max-task-concurrency</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.am.view-acls</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.tez-ui.webservice.enable</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.application.tags</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.aux.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.cancel.delegation.tokens.on.completion</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.client.asynchronous-stop</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.client.diagnostics.wait.timeout-ms</td>
+<td></td>
+<td>3000</td>
+</tr>
+<tr>
+<td>tez.client.timeout-ms</td>
+<td></td>
+<td>30000</td>
+</tr>
+<tr>
+<td>tez.java.opts.checker.class</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.java.opts.checker.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.container.max.java.heap.fraction</td>
+<td></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>tez.counters.counter-name.max-length</td>
+<td></td>
+<td>64</td>
+</tr>
+<tr>
+<td>tez.counters.group-name.max-length</td>
+<td></td>
+<td>256</td>
+</tr>
+<tr>
+<td>tez.counters.max</td>
+<td></td>
+<td>1200</td>
+</tr>
+<tr>
+<td>tez.counters.max.groups</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.credentials.path</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.dag.status.pollinterval-ms</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.generate.debug.artifacts</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.history.logging.service.class</td>
+<td></td>
+<td>org.apache.tez.dag.history.logging.impl.SimpleHistoryLoggingService</td>
+</tr>
+<tr>
+<td>tez.tez-ui.history-url.base</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.ignore.lib.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.ipc.payload.reserved.bytes</td>
+<td></td>
+<td>5242880</td>
+</tr>
+<tr>
+<td>tez.lib.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.lib.uris.classpath</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.local.mode</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.queue.name</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.session.am.dag.submit.timeout.secs</td>
+<td></td>
+<td>300</td>
+</tr>
+<tr>
+<td>tez.session.client.timeout.secs</td>
+<td></td>
+<td>120</td>
+</tr>
+<tr>
+<td>tez.simple.history.logging.dir</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.simple.history.max.errors</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.task.am.heartbeat.counter.interval-ms.max</td>
+<td></td>
+<td>4000</td>
+</tr>
+<tr>
+<td>tez.task.am.heartbeat.interval-ms.max</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>tez.task.generate.counters.per.io</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.get-task.sleep.interval-ms.max</td>
+<td></td>
+<td>200</td>
+</tr>
+<tr>
+<td>tez.task.initialize-processor-first</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.initialize-processor-io-serially</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.launch.cluster-default.cmd-opts</td>
+<td></td>
+<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
+</tr>
+<tr>
+<td>tez.task.launch.cluster-default.env</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.launch.cmd-opts</td>
+<td></td>
+<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
+</tr>
+<tr>
+<td>tez.task.launch.env</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tez.task.log.level</td>
+<td></td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>tez.task.max-events-per-heartbeat</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.task.max-event-backlog</td>
+<td></td>
+<td>10000</td>
+</tr>
+<tr>
+<td>tez.task.progress.stuck.interval-ms</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.task.resource.calculator.process-tree.class</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.resource.cpu.vcores</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.task.resource.memory.mb</td>
+<td></td>
+<td>1024</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.additional-reservation.fraction.max</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.additional-reservation.fraction.per-io</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.allocator.class</td>
+<td></td>
+<td>org.apache.tez.runtime.library.resources.WeightedScalingMemoryDistributor</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.reserve-fraction</td>
+<td></td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.ratios</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.launch.cmd-opts</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.launch.cmd-opts.list</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.log.level</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.test.minicluster.app.wait.on.shutdown.secs</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.use.cluster.hadoop-libs</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.acl.domains.auto-create</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.event.flush.timeout.millis</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.max.events.per.batch</td>
+<td></td>
+<td>5</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.max.polling.time.per.event.millis</td>
+<td></td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://zh.hortonworks.com/apache/tez/" target="_blank" rel="external">Apache Tez</a></li>
+<li><a href="http://zh.hortonworks.com/blog/apache-tez-a-new-chapter-in-hadoop-data-processing/" target="_blank" rel="external">APACHE TEZ: A NEW CHAPTER IN HADOOP DATA PROCESSING</a></li>
+<li><a href="http://tez.apache.org/releases/0.8.4/tez-api-javadocs/configs/TezConfiguration.html" target="_blank" rel="external">Tez Configuration</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-24T16:00:00.000Z"><a href="/2016/07/25/distribution/hive/">2016-07-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/25/distribution/hive/">Hive</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>Hive</strong></p>
+<p>order by<br>order by 会对输入做全局排序，因此只有一个reducer（多个reducer无法保证全局有序）<br>只有一个reducer，会导致当输入规模较大时，需要较长的计算时间。</p>
+<p>set hive.mapred.mode=nonstrict; (default value / 默认值)</p>
+<p>set hive.mapred.mode=strict;</p>
+<p>order by 和数据库中的Order by 功能一致，按照某一项 &amp; 几项 排序输出。</p>
+<p>与数据库中 order by 的区别在于在hive.mapred.mode = strict 模式下 必须指定 limit 否则执行会报错。</p>
+<p>hive&gt; select * from test order by id;     </p>
+<p>FAILED: Error in semantic analysis: 1:28 In strict mode, if ORDER BY is specified, LIMIT must also be specified. Error encountered near token ‘id’</p>
+<p>原因： 在order by 状态下所有数据会到一台服务器进行reduce操作也即只有一个reduce，如果在数据量大的情况下会出现无法输出结果的情况，如果进行 limit n ，那只有  n * map number 条记录而已。只有一个reduce也可以处理过来。</p>
+<p>sort by<br>sort by不是全局排序，其在数据进入reducer前完成排序.</p>
+<p>因此，如果用sort by进行排序，并且设置mapred.reduce.tasks&gt;1， 则sort by只保证每个reducer的输出有序，不保证全局有序。</p>
+<p>sort by 不受 hive.mapred.mode 是否为strict ,nostrict 的影响</p>
+<p>sort by 的数据只能保证在同一reduce中的数据可以按指定字段排序。</p>
+<p>使用sort by 你可以指定执行的reduce 个数 （set mapred.reduce.tasks=<number>）,对输出的数据再执行归并排序，即可以得到全部结果。</number></p>
+<p>注意：可以用limit子句大大减少数据量。使用limit n后，传输到reduce端（单机）的数据记录数就减少到n* （map个数）。否则由于数据过大可能出不了结果。</p>
+<p>distribute by<br>按照指定的字段对数据进行划分到不同的输出reduce  / 文件中。</p>
+<p>insert overwrite local directory ‘/home/hadoop/out’ select * from test order by name distribute by length(name);  </p>
+<p>此方法会根据name的长度划分到不同的reduce中，最终输出到不同的文件中。 </p>
+<p>length 是内建函数，也可以指定其他的函数或这使用自定义函数。</p>
+<p>Cluster By<br>cluster by 除了具有 distribute by 的功能外还兼具 sort by 的功能。 </p>
+<p>但是排序只能是倒序排序，不能指定排序规则为asc 或者desc。</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hive.exec.stagingdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.exec.scratchdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.query.length</td>
+<td>The maximum size of a query string .</td>
+<td>100 KB</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.in.clause</td>
+<td>The maximum number of values in a IN clause. Once exceeded, it will be broken into multiple OR separated IN clauses.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.values.clause</td>
+<td>The maximum number of values in a VALUES clause for INSERT statement.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.table.parameters.default</td>
+<td>Default property values for newly created tables</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.id</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.silent</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.session.history.enabled</td>
+<td>Whether to log Hive query, query plan, runtime statistics etc.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.query.string</td>
+<td>Query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.query.id</td>
+<td>ID for query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.jobname.length</td>
+<td>max jobname length</td>
+<td>50</td>
+</tr>
+<tr>
+<td>hive.alias</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>hive.map.aggr</td>
+<td>Whether to use map-side aggregation in Hive Group By queries</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.skewindata</td>
+<td>Whether there is skew in data to optimize group by queries</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.join.emit.interval</td>
+<td>How many rows in the right-most join operand Hive should buffer before emitting the join result.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.join.cache.size</td>
+<td>How many rows in the joining tables (except the streaming table) should be cached in memory.</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>hive.mapjoin.bucket.cache.size</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>hive.mapjoin.optimized.hashtable</td>
+<td>Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez and Spark, because memory-optimized hashtable cannot be serialized.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.mapaggr.checkinterval</td>
+<td>Number of rows after which size of the grouping keys/aggregation classes is performed</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>hive.mapjoin.followby.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table, when this group by is followed by map join</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.heartbeat.interval</td>
+<td>Send a heartbeat after this interval - used by mapjoin and filter operators</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.limit.row.max.size</td>
+<td>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.limit.file</td>
+<td>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</td>
+<td>10</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.enable</td>
+<td>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</td>
+<td>false</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-02T05:49:49.000Z"><a href="/2016/07/02/distribution/kafka/">2016-07-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/02/distribution/kafka/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><h4 id="Log-Compaction"><a href="#Log-Compaction" class="headerlink" title="Log Compaction"></a>Log Compaction</h4><p>A log is a data structure that maintains a timeline of things.</p>
+<p>Here is a high-level picture that shows the logical structure of a Kafka log with the offset for each message. </p>
+<p>The head of the log is identical to a traditional Kafka log.</p>
+<p>Log compaction adds an option for handling the tail of the log. </p>
+<p><code>In 0.7 the tail of the log is always deleted.</code></p>
+<p><code>In 0.8 there is a per-topic option to choose either &quot;delete&quot; or &quot;compact&quot;.</code></p>
+<p><img src="resource/kafka/Log_Compaction.png" alt="Log Compaction"></p>
+<table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>log.cleaner.enable</td>
+<td>Turn on log cleaning. This is disabled by default for now.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>log.cleaner.dedupe.buffer.size</td>
+<td>The amount of memory that can be used for log cleaning across all cleaner threads.</td>
+<td>500 MB</td>
+</tr>
+<tr>
+<td>log.cleaner.io.buffer.size</td>
+<td>The buffer used for reads and writes to the log.</td>
+<td>512K</td>
+</tr>
+<tr>
+<td>log.cleaner.delete.retention.ms</td>
+<td>The time for which delete markers are retained in the tail of the log.</td>
+<td>24 Hours</td>
+</tr>
+<tr>
+<td>log.cleaner.min.cleanable.ratio</td>
+<td>The minimum ratio of cleanable log head to total log for a log to be eligible for cleaning.</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>log.cleaner.threads</td>
+<td>The number of background threads to use for log cleaning.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>log.cleaner.max.io.bytes.per.second</td>
+<td>The maximum I/O that the log cleaning across all threads.</td>
+<td>Infinity</td>
+</tr>
+<tr>
+<td>log.cleaner.backoff.ms</td>
+<td>The time to wait in between checking if there are any cleanable logs.</td>
+<td>30 seconds</td>
+</tr>
+<tr>
+<td>log.cleanup.policy</td>
+<td>The default policy for handling log tails. Can be either delete or compact.</td>
+<td>delete</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Internals"><a href="#Internals" class="headerlink" title="Internals"></a>Internals</h4><p><code>Kafka API layer</code></p>
+<p><code>LogManager and Log</code></p>
+<p><code>ReplicaManager</code></p>
+<p><code>ZookeeperConsumerConnector</code></p>
+<p><img src="resource/kafka/kafka_broker_internals.png" alt="Internals"></p>
+<h4 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h4><table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compression.codec</td>
+<td>Controls the compression codec to be used by the producer. 0 means no compression. 1 means GZIP compression. 2 means Snappy compression</td>
+<td>0</td>
+</tr>
+<tr>
+<td>compressed.topics</td>
+<td>comma separated list of topics for which compression should be enabled.</td>
+<td>empty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.confluent.io/blog/apache-kafka-0.9-is-released" target="_blank" rel="external">Apache Kafka 0.9 is Released</a></li>
+<li><a href="http://www.confluent.io/blog/290-reasons-to-upgrade-to-apache-kafka-0.9.0.0" target="_blank" rel="external">290 Reasons to Upgrade to Apache Kafka 0.9.0.0</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Log+Compaction" target="_blank" rel="external">Log Compaction</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Client+Re-Design" target="_blank" rel="external">Consumer Client Re-Design</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Offset+Management" target="_blank" rel="external">Offset Management</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Compression" target="_blank" rel="external">Compression</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -188,1269 +1563,38 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm/">2016-06-18</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/18/language/jvm/">Java Virtual Machine</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="Java-Virtual-Machine"><a href="#Java-Virtual-Machine" class="headerlink" title="Java Virtual Machine"></a>Java Virtual Machine</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><h3 id="Command-Line-Tools"><a href="#Command-Line-Tools" class="headerlink" title="Command Line Tools"></a>Command Line Tools</h3><p>jstat -gc 106607</p>
-<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
-
-2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
-</code></pre><table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Value</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>S0C</td>
-<td>3584.0</td>
-<td>S0容量</td>
-</tr>
-<tr>
-<td>S1C</td>
-<td>2048.0</td>
-</tr>
-<tr>
-<td>S0U</td>
-<td>0.0</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
-<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-AllowUserSignalHandlers</td>
-<td>Do not complain if the application installs signal handlers.</td>
-</tr>
-<tr>
-<td>-XX:AltStackSize=16384</td>
-<td>Alternate signal stack size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:-DisableExplicitGC</td>
-<td>Disable calls to System.gc().</td>
-</tr>
-<tr>
-<td>-XX:+FailOverToOldVerifier</td>
-<td>Fail over to old verifier when the new type checker fails.</td>
-</tr>
-<tr>
-<td>-XX:+HandlePromotionFailure</td>
-<td>The youngest generation collection does not require a guarantee of full promotion of all live objects.</td>
-</tr>
-<tr>
-<td>-XX:+MaxFDLimit</td>
-<td>Bump the number of file descriptors to max.</td>
-</tr>
-<tr>
-<td>-XX:PreBlockSpin=10</td>
-<td>Spin count variable for use with -XX:+UseSpinning.</td>
-</tr>
-<tr>
-<td>-XX:-RelaxAccessControlCheck</td>
-<td>Relax the access control checks in the verifier.</td>
-</tr>
-<tr>
-<td>-XX:+ScavengeBeforeFullGC</td>
-<td>Do young generation GC prior to a full GC.</td>
-</tr>
-<tr>
-<td>-XX:+UseAltSigs</td>
-<td>Use alternate signals instead of SIGUSR1 and SIGUSR2 for VM internal signals.</td>
-</tr>
-<tr>
-<td>-XX:+UseBoundThreads</td>
-<td>Bind user level threads to kernel threads.</td>
-</tr>
-<tr>
-<td>-XX:-UseConcMarkSweepGC</td>
-<td>Use concurrent mark-sweep collection for the old generation.</td>
-</tr>
-<tr>
-<td>-XX:+UseGCOverheadLimit</td>
-<td>Use a policy that limits the proportion of the VM’s time that is spent in GC before an OutOfMemory error is thrown.</td>
-</tr>
-<tr>
-<td>-XX:+UseLWPSynchronization</td>
-<td>Use LWP-based instead of thread based synchronization.</td>
-</tr>
-<tr>
-<td>-XX:-UseParallelGC</td>
-<td>Use parallel garbage collection for scavenges.</td>
-</tr>
-<tr>
-<td>-XX:-UseParallelOldGC</td>
-<td>Use parallel garbage collection for the full collections. Enabling this option automatically sets -XX:+UseParallelGC.</td>
-</tr>
-<tr>
-<td>-XX:-UseSerialGC</td>
-<td>Use serial garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-UseSpinning</td>
-<td>Enable naive spinning on Java monitor before entering operating system thread synchronizaton code.</td>
-</tr>
-<tr>
-<td>-XX:+UseTLAB</td>
-<td>Use thread-local object allocation</td>
-</tr>
-<tr>
-<td>-XX:+UseSplitVerifier</td>
-<td>Use the new type checker with StackMapTable attributes.</td>
-</tr>
-<tr>
-<td>-XX:+UseThreadPriorities</td>
-<td>Use native thread priorities.</td>
-</tr>
-<tr>
-<td>-XX:+UseVMInterruptibleIO</td>
-<td>Thread interrupt before or with EINTR for I/O operations results in OS_INTRPT.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Garbage First Garbage Collection Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+UseG1GC</td>
-<td>Use the Garbage First Collector</td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=n</td>
-<td>Sets a target for the maximum GC pause time.</td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=n</td>
-<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=n</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=n</td>
-<td>Ratio of eden/survivor space size.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Maximum value for tenuring threshold.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td>Number of threads concurrent garbage collectors will use.</td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=n</td>
-<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
-</tr>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Performance Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:+AggressiveOpts</td>
-<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
-</tr>
-<tr>
-<td>-XX:CompileThreshold=10000</td>
-<td>Number of method invocations/branches before compiling</td>
-</tr>
-<tr>
-<td>-XX:LargePageSizeInBytes=4m</td>
-<td>Sets the large page size used for the Java heap.</td>
-</tr>
-<tr>
-<td>-XX:MaxHeapFreeRatio=70</td>
-<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
-</tr>
-<tr>
-<td>-XX:MaxNewSize=size</td>
-<td>Maximum size of new generation (in bytes).</td>
-</tr>
-<tr>
-<td>-XX:MaxPermSize=64m</td>
-<td>Size of the Permanent Generation.</td>
-</tr>
-<tr>
-<td>-XX:MinHeapFreeRatio=40</td>
-<td>Minimum percentage of heap free after GC to avoid expansion.</td>
-</tr>
-<tr>
-<td>-XX:NewRatio=2</td>
-<td>Ratio of old/new generation sizes.</td>
-</tr>
-<tr>
-<td>-XX:NewSize=2m</td>
-<td>Default size of new generation (in bytes)</td>
-</tr>
-<tr>
-<td>-XX:ReservedCodeCacheSize=32m</td>
-<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
-</tr>
-<tr>
-<td>-XX:SurvivorRatio=8</td>
-<td>Ratio of eden/survivor space size</td>
-</tr>
-<tr>
-<td>-XX:TargetSurvivorRatio=50</td>
-<td>Desired percentage of survivor space used after scavenge.</td>
-</tr>
-<tr>
-<td>-XX:ThreadStackSize=512</td>
-<td>Thread Stack Size (in Kbytes).</td>
-</tr>
-<tr>
-<td>-XX:+UseBiasedLocking</td>
-<td>Enable biased locking. For more details, see this tuning example.</td>
-</tr>
-<tr>
-<td>-XX:+UseFastAccessorMethods</td>
-<td>Use optimized versions of Get Primitive Field.</td>
-</tr>
-<tr>
-<td>-XX:-UseISM</td>
-<td>Use Intimate Shared Memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseLargePages</td>
-<td>Use large page memory.</td>
-</tr>
-<tr>
-<td>-XX:+UseMPSS</td>
-<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
-</tr>
-<tr>
-<td>-XX:+UseStringCache</td>
-<td>Enables caching of commonly allocated strings.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchLines=1</td>
-<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchStyle=1</td>
-<td>Generated code style for prefetch instructions.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedStrings</td>
-<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
-</tr>
-<tr>
-<td>-XX:+OptimizeStringConcat</td>
-<td>Optimize String concatenation operations where possible.</td>
-</tr>
-</tbody>
-</table>
-<p><code>Debugging Options</code></p>
-<table>
-<thead>
-<tr>
-<th>Option and Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:-CITime</td>
-<td>Prints time spent in JIT Compiler.</td>
-</tr>
-<tr>
-<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
-<td>Save the error data to this file.</td>
-</tr>
-<tr>
-<td>-XX:-ExtendedDTraceProbes</td>
-<td>Enable performance-impacting dtrace probes.</td>
-</tr>
-<tr>
-<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
-<td>Path to directory or filename for heap dump.</td>
-</tr>
-<tr>
-<td>-XX:-HeapDumpOnOutOfMemoryError</td>
-<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
-</tr>
-<tr>
-<td>-XX:OnError=”cmd args;cmd args”</td>
-<td>Run user-defined commands on fatal error.</td>
-</tr>
-<tr>
-<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
-<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
-</tr>
-<tr>
-<td>-XX:-PrintClassHistogram</td>
-<td>Print a histogram of class instances on Ctrl-Break.</td>
-</tr>
-<tr>
-<td>-XX:-PrintConcurrentLocks</td>
-<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCommandLineFlags</td>
-<td>Print flags that appeared on the command line.</td>
-</tr>
-<tr>
-<td>-XX:-PrintCompilation</td>
-<td>Print message when a method is compiled.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGC</td>
-<td>Print messages at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCDetails</td>
-<td>Print more details at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintGCTimeStamps</td>
-<td>Print timestamps at garbage collection.</td>
-</tr>
-<tr>
-<td>-XX:-PrintTenuringDistribution</td>
-<td>Print tenuring age information.</td>
-</tr>
-<tr>
-<td>-XX:-PrintAdaptiveSizePolicy</td>
-<td>Enables printing of information about adaptive generation sizing.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoading</td>
-<td>Trace loading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassLoadingPreorder</td>
-<td>Trace all classes loaded in order referenced</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassResolution</td>
-<td>Trace constant pool resolutions.</td>
-</tr>
-<tr>
-<td>-XX:-TraceClassUnloading</td>
-<td>Trace unloading of classes.</td>
-</tr>
-<tr>
-<td>-XX:-TraceLoaderConstraints</td>
-<td>Trace recording of loader constraints.</td>
-</tr>
-<tr>
-<td>-XX:+PerfDataSaveToFile</td>
-<td>Saves jvmstat binary data on exit.</td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
-</tr>
-<tr>
-<td>-XX:+UseCompressedOops</td>
-<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
-</tr>
-<tr>
-<td>-XX:+AlwaysPreTouch</td>
-<td>Pre-touch the Java heap during JVM initialization.</td>
-</tr>
-<tr>
-<td>-XX:AllocatePrefetchDistance=n</td>
-<td>Sets the prefetch distance for object allocation.</td>
-</tr>
-<tr>
-<td>-XX:InlineSmallCode=n</td>
-<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
-</tr>
-<tr>
-<td>-XX:MaxInlineSize=35</td>
-<td>Maximum bytecode size of a method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:FreqInlineSize=n</td>
-<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
-</tr>
-<tr>
-<td>-XX:LoopUnrollLimit=n</td>
-<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
-</tr>
-<tr>
-<td>-XX:InitialTenuringThreshold=7</td>
-<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
-</tr>
-<tr>
-<td>-XX:MaxTenuringThreshold=n</td>
-<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
-</tr>
-<tr>
-<td>-Xloggc:<filename></filename></td>
-<td>Log GC verbose output to specified file.</td>
-</tr>
-<tr>
-<td>-XX:-UseGCLogFileRotation</td>
-<td>Enabled GC log rotation, requires -Xloggc.</td>
-</tr>
-<tr>
-<td>-XX:NumberOfGClogFiles=1</td>
-<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
-</tr>
-<tr>
-<td>-XX:GCLogFileSize=8K</td>
-<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
-</tr>
-</tbody>
-</table>
-<p>#####GC</p>
-<p>Garbage Collector is a memory management tool.</p>
-<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
-<p><code>Major GC vs Full GC</code></p>
-<p>#####Garbage First Garbage Collector</p>
-<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
-<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-XX:G1HeapRegionSize=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:MaxGCPauseMillis=200</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1NewSizePercent=5</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MaxNewSizePercent=60</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ParallelGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:ConcGCThreads=n</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:InitiatingHeapOccupancyPercent=45</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1HeapWastePercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1MixedGCCountTarget=8</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
-<td></td>
-</tr>
-<tr>
-<td>-XX:G1ReservePercent=10</td>
-</tr>
-</tbody>
-</table>
-<p><code>How to Unlock Experimental VM Flags</code></p>
-<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
-<p><strong>Recommendations</strong>:</p>
-<ol>
-<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
-<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
-<li>Taming Mixed Garbage Collections : </li>
-</ol>
-<p><code>G1 Garbage First Garbage Collector</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">The Garbage-First (G1) collector is a server-style garbage collector, targeted for multi-processor machines with large memories. It meets garbage collection (GC) pause time goals with a high probability, while achieving high throughput. The G1 garbage collector is fully supported in Oracle JDK 7 update 4 and later releases. The G1 collector is designed for applications that:</span><br><span class="line"></span><br><span class="line">- Can operate concurrently with applications threads like the CMS collector.</span><br><span class="line">- Compact free space without lengthy GC induced pause times.</span><br><span class="line">- Need more predictable GC pause durations.</span><br><span class="line">- Do not want to sacrifice a lot of throughput performance.</span><br><span class="line">- Do not require a much larger Java heap.</span><br></pre></td></tr></table></figure>
-<p><code>G1收集器的设计目标是取代CMS收集器，它同CMS相比，在以下方面表现的更出色：</code></p>
-<ul>
-<li>G1是一个有整理内存过程的垃圾收集器，不会产生很多内存碎片。</li>
-<li>G1的Stop The World更可控，G1在停顿时间上添加了预测机制，用户可以指定期望停顿时间。</li>
-</ul>
-<p><strong>G1中几个重要概念</strong></p>
-<p><code>Region</code> 传统的GC收集器将连续的内存空间划分为新生代、老年代和永久代，这种划分的特点是各代的存储地址是连续的。而G1的各代存储地址是不连续的，每一代都使用了n个不连续的大小相同的Region，每个Region占有一块连续的虚拟内存地址。</p>
-<p><code>SATB Snapshot-At-The-Beginning</code> GC开始时活着的对象的一个快照。</p>
-<p><code>RSet Remembered Set</code></p>
-<p><code>Pause Prediction Model</code> </p>
-<p><strong>GC过程</strong></p>
-<p><em>G1 GC模式</em></p>
-<p>G1提供了两种GC模式，Young GC和Mixed GC，两种都是完全Stop The World的。</p>
-<ul>
-<li>Young GC：选定所有年轻代里的Region。通过控制年轻代的region个数，即年轻代内存大小，来控制young GC的时间开销。</li>
-<li>Mixed GC：选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region。在用户指定的开销目标范围内尽可能选择收益高的老年代Region。</li>
-</ul>
-<p><strong>GC日志</strong></p>
-<p><em>Young GC日志</em></p>
-<p><em>global concurrent marking 日志</em></p>
-<p><code>global concurrent marking的执行过程分为四个步骤：</code></p>
-<ul>
-<li>初始标记（initial mark，STW）。它标记了从GC Root开始直接可达的对象。</li>
-<li>并发标记（Concurrent Marking）。这个阶段从GC Root开始对heap中的对象标记，标记线程与应用程序线程并行执行，并且收集各个Region的存活对象信息。</li>
-<li>最终标记（Remark，STW）。标记那些在并发标记阶段发生变化的对象，将被回收。</li>
-<li>清除垃圾（Cleanup）。清除空Region，加入到free list。</li>
-</ul>
-<hr>
-<p>###JShell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>内存区域</strong></p>
-<p>Java虚拟机在执行Java程序过程中会把他所管理的内存划分为若干个不同的数据区域。</p>
-<p>分为以下几个运行时数据区：程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区。</p>
-<p><strong>程序计数器（Program Counter Register）</strong></p>
-<p><em>当前线程所执行的字节码的行号指示器</em></p>
-<p><code>字节码解释器</code>工作时通过改变该计数器的值来选择下一条需要执行的字节码指令。</p>
-<p>每条线程都有一个独立的的程序计数器，各线程间的计数器互不影响，该区域是线程私有的。</p>
-<p>当线程在执行一个Java方法时，该计数器记录的是正在执行的虚拟机字节码指令的地址，当线程在执行的是Native方法时，该计数器的值为空。</p>
-<p><strong>Java虚拟机栈（Java Virtual Machine Stacks）</strong></p>
-<p><code>虚拟机栈</code>描述的是Java方法执行的内存模型：每个方法被执行的时候都会同时创建一个栈帧，栈它是用于支持续虚拟机进行方法调用和方法执行的数据结构。</p>
-<p>活动线程中，只有栈顶的栈帧是有效的，称为当前栈帧，这个栈帧所关联的方法称为当前方法。</p>
-<p>栈帧用于存储局部变量表、操作数栈、动态链接、方法返回地址和一些额外的附加信息。</p>
-<p>一个栈帧需要分配多少内存，不会受到程序运行期变量数据的影响，而仅仅取决于具体的虚拟机实现。</p>
-<p><code>局部变量表</code></p>
-<p>局部变量表是一组变量值存储空间，用于存放方法参数和方法内部定义的局部变量，其中存放的数据的类型是编译期可知的各种基本数据类型、对象引用和returnAddress类型。</p>
-<p>局部变量表所需的内存空间编译期间完成分配，即在Java程序被编译成Class文件时，就确定了所需分配的最大局部变量表的容量。</p>
-<p>当进入一个方法时，这个方法需要在栈中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。</p>
-<p>局部变量表的容量以变量槽（Slot）为最小单位。一个Slot可以存放一个32位以内的数据类型，64位的数据类型，虚拟机会以高位在前的方式为其分配两个连续的Slot空间。</p>
-<p>虚拟机使用<code>局部变量表</code>来完成参数值到参数变量列表的传递过程的</p>
-<p>如果是实例方法，则局部变量表中的第0位索引的Slot默认是用于传递方法所属对象实例的引用，在方法中可以通过关键字“this”来访问这个隐含的参数。</p>
-<p>其余参数则按照参数表的顺序来排列，占用从1开始的局部变量Slot，参数表分配完毕后，再根据方法体内部定义的变量顺序和作用域分配其余的Slot。</p>
-<p>局部变量表中的Slot是可重用的，方法体中定义的变量，作用域并不一定会覆盖整个方法体</p>
-<p>如果当前字节码PC计数器的值已经超过了某个变量的作用域，那么这个变量对应的Slot就可以交给其他变量使用。</p>
-<p><code>操作数栈</code></p>
-<p>操作数栈又常被称为操作栈，操作数栈的最大深度也是在编译的时候就确定了。</p>
-<p>Java虚拟机的解释执行引擎称为“基于栈的执行引擎”，其中所指的“栈”就是操作数栈。</p>
-<p>也称Java虚拟机是基于栈的，这点不同于Android虚拟机，Android虚拟机是基于寄存器的。</p>
-<p>基于栈的指令集最主要的优点是可移植性强，主要的缺点是执行速度相对会慢些。</p>
-<p>而由于寄存器由硬件直接提供，所以基于寄存器指令集最主要的优点是执行速度快，主要的缺点是可移植性差。</p>
-<p><code>动态连接</code></p>
-<p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。</p>
-<p>一部分会在类加载阶段或第一次使用的时候转化为直接引用，称为静态解析。</p>
-<p>另一部分将在每一次的运行期间转化为直接引用，这部分称为动态连接。</p>
-<p><code>方法返回地址</code></p>
-<p><strong>本地方法栈（Native Method Stacks）</strong></p>
-<p>本地方法栈则为使用到的本地操作系统方法服务。</p>
-<p><strong>Java堆（Java Heap）</strong></p>
-<p>Java堆是所有线程共享的一块内存区域。</p>
-<p>几乎所有的对象实例和数组都在这类分配内存。</p>
-<p>Java堆可以处在物理上不连续的内存空间中，只要逻辑上是连续的即可。</p>
-<p>如果在堆中没有内存可分配时，并且堆也无法扩展时，将会抛出OutOfMemoryError异常。</p>
-<p><strong>方法区（Method Area）</strong></p>
-<p>方法区也是各个线程共享的内存区域，它用于存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
-<p>Java虚拟机规范把方法区描述为Java堆的一个逻辑部分，而且它和Java Heap一样不需要连续的内存，可以选择固定大小或可扩展，另外，虚拟机规范允许该区域可以选择不实现垃圾回收。</p>
-<p>运行时常量池相对于Class文件常量池的另一个重要特征是具备动态性，Java语言并不要求常量一定只能在编译期产生，也就是并非预置入Class文件中的常量池的内容才能进入方法区的运行时常量池，运行期间也可能将新的常量放入池中。</p>
-<p><strong>直接内存（Direct Memory）</strong></p>
-<p>直接内存直接从操作系统中分配，因此不受Java堆大小的限制，但是会受到本机总内存的大小及处理器寻址空间的限制。</p>
-<p>这样能在一些场景中提高性能，因为避免了在Java堆和Native堆中来回复制数据。</p>
-<p><strong>内存溢出</strong></p>
-<p>内存泄露是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制，因而造成了资源的浪费。</p>
-<p>内存溢出是指程序所需要的内存超出了系统所能分配的内存的上限。</p>
-<hr>
-<p><strong>Class类文件结构</strong></p>
-<p>Java是与平台无关的语言，这得益于Java源代码编译后生成的Class文件。</p>
-<p>Class文件是一组以8位字节为基础单位的二进制流。</p>
-<p>Java虚拟机规范规定，Class文件格式采用一种类似于C语言结构体的伪结构来存储，这种伪结构中只有两种数据类型：无符号数和表。</p>
-<p>无符号数属于基本数据类型，以u1、u2、u4、u8来分别代表1、2、4、8个字节的无符号数。</p>
-<p>表是由多个无符号数或其他表作为数据项构成的符合数据类型，所有的表都习惯性地以“_info”结尾。</p>
-<p>整个Class文件本质上就是一张表。</p>
-<p><code>magic与version</code></p>
-<p>每个Class文件的头4个字节称为魔数，它的唯一作用是判断该文件是否为一个能被虚拟机接受的Class文件。</p>
-<p>它的值固定为0xCAFEBABE。</p>
-<p>紧接着magic的4个字节存储的是Class文件的次版本号和主版本号，高版本的JDK能向下兼容低版本的Class文件，但不能运行更高版本的Class文件。</p>
-<p><code>constant_pool</code></p>
-<p>major_version之后是常量池入口，它是Class文件中与其他项目关联最多的数据类型，也是占用Class文件空间最大的数据项目之一。</p>
-<p><code>access_flag</code></p>
-<p>这个标志用于识别一些类或接口层次的访问信息，包括：这个Class是类还是接口，是否定义为public类型，abstract类型，如果是类的话，是否声明为final，等等。</p>
-<p>每种访问信息都由一个十六进制的标志值表示，如果同时具有多种访问信息，则得到的标志值为这几种访问信息的标志值的逻辑或。</p>
-<p><code>this_class、super_class、interfaces</code></p>
-<p><code>fields</code></p>
-<p><code>methods</code></p>
-<p><code>attributes</code></p>
-<p><em>Code属性</em></p>
-<p><em>Exception属性</em></p>
-<p><em>LineNumberTable属性</em></p>
-<p>描述Java源码行号与字节码行号之间的对应关系。</p>
-<p><em>LocalVariableTable属性</em></p>
-<p>描述栈帧中局部变量表中的变量与Java源码中定义的变量之间的对应关系。</p>
-<p><em>SourceFile属性</em></p>
-<p>用于记录生成这个Class文件的源码文件名称。</p>
-<p><em>ConstantValue属性</em></p>
-<p>通知虚拟机自动为静态变量赋值，只有被static修饰的变量才可以使用这项属性。</p>
-<p><em>InnerClasses属性</em></p>
-<p>用于记录内部类与宿主类之间的关联。</p>
-<p><em>Deprecated属性和Synthetic属性</em></p>
-<p>用于表示某个类、字段和方法，已经被程序作者定为不再推荐使用。</p>
-<p><em>Synthetic属性</em></p>
-<p>代表此字段或方法并不是Java源代码直接生成的，而是由编译器自行添加的，如this字段和实例构造器、类构造器等。</p>
-<hr>
-<p><strong>类初始化</strong></p>
-<hr>
-<p><strong>类加载机制</strong></p>
-<hr>
-<p>参考资料:</p>
-<ol>
-<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
-<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
-<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
-<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477210&amp;idx=2&amp;sn=57955ff79f6c930a54b6ed52b9b30e70&amp;scene=21#wechat_redirect" target="_blank" rel="external">Java内存区域与内存溢出</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477221&amp;idx=2&amp;sn=2217ce137006e6dbe790733e074b9ba9&amp;scene=21#wechat_redirect" target="_blank" rel="external">Class类文件结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477246&amp;idx=3&amp;sn=f6e706408197d24791dc317ff666b256&amp;scene=21#wechat_redirect" target="_blank" rel="external">类初始化</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477252&amp;idx=2&amp;sn=6af2ebda31862bd1cbe131a42634955d&amp;scene=23&amp;srcid=0617RCitd6RZndjA53mZPwUJ#rd" target="_blank" rel="external">类加载机制</a></li>
-<li><a href="https://www.infoq.com/articles/G1-One-Garbage-Collector-To-Rule-Them-All" target="_blank" rel="external">G1: One Garbage Collector To Rule Them All</a></li>
-<li><a href="https://blogs.oracle.com/poonam/entry/understanding_g1_gc_logs" target="_blank" rel="external">Understanding G1 GC Logs</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/16/storage/rocksdb/">RocksDB</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="RocksDB"><a href="#RocksDB" class="headerlink" title="RocksDB"></a>RocksDB</h3><p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
-<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
-<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
-<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
-<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
-<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
-<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
-<hr>
-<p><strong>Structures</strong></p>
-<p><code>Options</code> define how RocksDB behaves and performs. </p>
-<p>options specific to the whole RocksDB instance will be defined in <code>DBOptions</code> .</p>
-<p>Column Families are handled and referenced with a <code>ColumnFamilyHandle</code> .</p>
-<p><code>Options</code> is inheriting both <code>ColumnFamilyOptions</code> and <code>DBOptions</code>, which means you can still use it to define all the options for a DB instance with a single (default) column family.</p>
-<hr>
-<p><strong>Static Sorted Table (Static Sorted Table)</strong></p>
-<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
-<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
-<p>Format :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
-<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
-<p>ReadOnly Mode</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Column Families</strong></p>
-<p>Each key-value pair in RocksDB is associated with exactly one Column Family. </p>
-<p>If there is no Column Family specified, key-value pair is associated with Column Family “default”.</p>
-<p>Column Families provide a way to logically partition the database.</p>
-<ul>
-<li>Atomic writes across Column Families are supported.</li>
-<li>Consistent view of the database across Column Families.</li>
-<li>Ability to configure different Column Families independently.</li>
-<li>On-the-fly adding new Column Families and dropping them.</li>
-</ul>
-<p>The main idea behind Column Families is that they share the write-ahead log and don’t share memtables and table files. </p>
-<p>By sharing write-ahead logs we get awesome benefit of atomic writes. </p>
-<p>By separating memtables and table files, we are able to configure column families independently and delete them quickly.</p>
-<p>Every time a single Column Family is flushed, we create a new WAL . </p>
-<p>We can delete the old WAL only when all Column Families have been flushed and all data contained in that WAL persisted in table files.</p>
-<p><code>Options::max_total_wal_size</code> which can be configured such that stale column families are automatically flushed.</p>
-<hr>
-<p><strong>Memory usage</strong> </p>
-<p>There are a couple of components in RocksDB that contribute to memory usage:</p>
-<ol>
-<li>Block cache</li>
-<li>Indexes and bloom filters</li>
-<li>Memtables</li>
-<li>Blocks pinned by iterators</li>
-</ol>
-<p><strong>Block cache</strong></p>
-<p>Block cache is where RocksDB caches uncompressed data blocks.</p>
-<p>RocksDB’s cache is two-tiered: <code>block cache</code> and <code>page cache</code>.</p>
-<p>If the data block is not found in block cache, RocksDB reads it from file using buffered IO. </p>
-<p><strong>Indexes and filter blocks</strong></p>
-<p><strong>Memtable</strong></p>
-<p>Memtables ,in-memory write buffers.</p>
-<p>Each new key-value pair is first written to the memtable. </p>
-<p>Memtable size is controlled by the option <code>write_buffer_size</code>.</p>
-<p>However, memtable size is inversely proportional to write amplification </p>
-<p><code>The more memory you give to the memtable, the less the write amplification is.</code></p>
-<p>If you increase your memtable size, be sure to also increase your L1 size!</p>
-<p>L1 size is controlled by the option <code>max_bytes_for_level_base</code>.</p>
-<p><strong>Blocks pinned by iterators</strong></p>
-<p>Each iterator pins exactly one data block for each L0 file plus one data block for each L1+ level.</p>
-<p>So the total memory usage from pinned blocks is approximately <code>num_iterators * block_size * ((num_levels-1) + num_l0_files)</code></p>
-<hr>
-<p><strong>WriteBatch</strong></p>
-<p>The <code>WriteBatch</code> holds a sequence of edits to be made to the database, and these edits within the batch are applied in order. </p>
-<p><code>WriteBatch</code> may also be used to speed up bulk updates by placing lots of individual mutations into the same batch.</p>
-<p><strong>Synchronous Writes</strong></p>
-<p>By default, each write to leveldb is asynchronous: it returns after pushing the write from the process into the operating system. </p>
-<p>The transfer from operating system memory to the underlying persistent storage happens asynchronously.</p>
-<p>The <code>sync</code> flag can be turned on for a particular write to make the write operation not return until the data being written has been pushed all the way to persistent storage. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WriteOptions writeOptions = new WriteOptions();</span><br><span class="line">writeOptions.setSync(true);</span><br><span class="line">writeOptions.sync();</span><br></pre></td></tr></table></figure>
-<p><strong>Asynchronous Writes</strong></p>
-<p><code>WriteBatch</code> provides an alternative to asynchronous writes.</p>
-<p>Multiple updates may be placed in the same <code>WriteBatch</code> and applied together using a synchronous write. </p>
-<p>You can disable syncing of data files by</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setDisableDataSync(true);</span><br></pre></td></tr></table></figure>
-<p>Once the operation is finished, you can manually call sync() to flush all dirty buffers to stable storage.</p>
-<p>RocksDB by default uses faster fdatasync() to sync files. </p>
-<p>If you want to use fsync(), you can set Options::use_fsync to true.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setUseFsync(true);</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Merge operators</strong></p>
-<hr>
-<p><strong>Iteration</strong></p>
-<p>The following example demonstrates how to print all key,value pairs in a database.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RocksIterator iterator = client.newIterator();</span><br><span class="line">try &#123;</span><br><span class="line">    for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) &#123;</span><br><span class="line">        String key = new String(iterator.key());</span><br><span class="line">        String value = new String(iterator.value());</span><br><span class="line">        System.out.println(key + &quot; --&gt; &quot; + value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">    client.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>The following variation shows how to process just the keys in the range [start,limit) .</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (iterator.seek(&quot;yid&quot;.getBytes()); iterator.isValid(); iterator.prev()) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Checksums</strong></p>
-<p><code>Rocksdb</code> associates checksums with all data it stores in the File System. </p>
-<p>There are two separate controls provided over how aggressively these checksums are verified:</p>
-<ul>
-<li><p><code>verify_checksums</code> forces checksum verification of all data that is read from the file system on. <em>This is on by default.</em></p>
-</li>
-<li><p><code>paranoid_checks</code> may be set to true before opening a database to make the database implementation raise an error as soon as it detects an internal corruption. </p>
-</li>
-</ul>
-<hr>
-<p><strong>Key Layout</strong></p>
-<p>Adjacent keys will usually be placed in the same block.</p>
-<p>The application can improve its performance by <code>placing keys that are accessed together near each other</code> and <code>placing infrequently used keys in a separate region of the key space</code>.</p>
-<hr>
-<p><strong>Filters</strong></p>
-<p><code>FilterPolicy</code> mechanism can be used to reduce the number of disk reads substantially.</p>
-<hr>
-<p><strong>Snapshots</strong></p>
-<p>Snapshots provide consistent read-only views over the entire state of the key-value store.</p>
-<hr>
-<p><strong>Slice</strong></p>
-<hr>
-<p><strong>Write buffer</strong></p>
-<hr>
-<p><strong>Compaction</strong></p>
-<p>The options that impact behavior of Compactions :</p>
-<ul>
-<li>compaction_style</li>
-<li>disable_auto_compactions</li>
-<li>compaction_filter</li>
-<li>compaction_filter_factory</li>
-</ul>
-<p>The options impacting performance of compactions : </p>
-<ul>
-<li>access_hint_on_compaction_start</li>
-<li>level0_file_num_compaction_trigger</li>
-<li>max_mem_compaction_level</li>
-<li>target_file_size_base</li>
-<li>target_file_size_multiplier</li>
-<li>expanded_compaction_factor</li>
-<li>source_compaction_factor</li>
-<li>max_grandparent_overlap_factor</li>
-<li>disable_seek_compaction</li>
-<li>max_background_compactions</li>
-</ul>
-<hr>
-<p><strong>Thread pools</strong></p>
-<hr>
-<p><strong>Purging WAL files</strong></p>
-<p>Old write-ahead logs are deleted automatically when application doesn’t need them anymore.</p>
-<p>There are options (<code>WAL_ttl_seconds</code> and <code>WAL_size_limit_MB</code>) that enable the user to archive the logs and then delete them lazily, either in TTL fashion or based on size limit.</p>
-<ul>
-<li>If both set to 0, logs will be deleted asap and will never get into the archive.</li>
-<li>If <code>WAL_ttl_seconds</code> is 0 and <code>WAL_size_limit_MB</code> is not 0, WAL files will be checked every 10 min and if total size is greater then</li>
-<li>If <code>WAL_ttl_seconds</code> is not 0 and <code>WAL_size_limit_MB</code> is 0, then WAL files will be checked every <code>WAL_ttl_seconds</code> / 2 and those that are older than <code>WAL_ttl_seconds</code> will be deleted.</li>
-<li>If both are not 0, WAL files will be checked every 10 min and both checks will be performed with ttl being first.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Options options = new Options()</span><br><span class="line">        .setCreateIfMissing(true)</span><br><span class="line">        .setWalDir(&quot;/tmp/basic.wal&quot;)</span><br><span class="line">        .setWalSizeLimitMB(32)</span><br><span class="line">        .setWalTtlSeconds(30);</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Java</strong></p>
-<hr>
-<p><strong>MANIFEST</strong></p>
-<p><strong>Terminology</strong></p>
-<p><code>MANIFEST</code> refers to the system that keeps track of RocksDB state changes in a transactional log</p>
-<p><code>Manifest log</code> refers to an individual log file that contains RocksDB state snapshot/edits</p>
-<p><code>CURRENT</code> refers to the latest manifest log</p>
-<p><strong>Version Edit</strong></p>
-<p>A certain state of RocksDB at any given time is referred to as a <code>version</code>.</p>
-<p>Any modification to the version is considered a version edit. </p>
-<p>A version is constructed by joining a sequence of version-edits.</p>
-<p><code>A manifest log file is a sequence of version edits.</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">version-edit      = Any RocksDB state change</span><br><span class="line">version           = &#123; version-edit* &#125;</span><br><span class="line">manifest-log-file = &#123; version, version-edit* &#125;</span><br><span class="line">                  = &#123; version-edit* &#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit</strong></p>
-<p><strong>Data Types</strong></p>
-<p><code>Simple data types</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VarX   - Variable character encoding of intX</span><br><span class="line">FixedX - Fixed character encoding of intX</span><br></pre></td></tr></table></figure>
-<p><code>Complex data types</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String - Length prefixed string data</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">| size (n)  | content of string  |</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">|&lt;- Var32 -&gt;|&lt;-- n            --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit Record Format</strong></p>
-<p>Version edit records have the following format. </p>
-<p>The decoder identifies the record type using the record identification number.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------ ......... ----------+</span><br><span class="line">| Record ID   | Variable size record data |</span><br><span class="line">+-------------+------ .......... ---------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- varies by type       --&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit Record Types and Layout</strong></p>
-<p><strong>Comparator edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Captures the comparator name</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kComparator | data           |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Log number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Lates WAL log file number</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kLogNumber  | log number     |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Previous File Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Previous manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kPrevFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Next File Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Next manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kNextFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Last Sequence Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Last sequence number of RocksDB</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kLastSequence    | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Max Column Family edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Adjust the maximum number of family columns allowed.</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kMaxColumnFamily    | log number     |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Deleted File edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mark a file as deleted from database.</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">| kDeletedFile    | level       | file number  |</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">&lt;-- Var32     ---&gt;|&lt;-- Var32 --&gt;|&lt;-- Var64  --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record with compaction information</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile4    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br><span class="line"></span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">|kPathID ---| Path size(n)  | path  | kNeedCompaction  | 1     | value (0/1)  |</span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">&lt;- var32  -&gt;|&lt;-- var32   --&gt;|&lt;- n -&gt;|&lt;-- var32      --&gt;|&lt;- 1 -&gt;|&lt;-- 1      --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record backward compatible</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile2    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">&lt;-- var32   --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record with path information</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile3    | level       | file number  | Path ID     | file size   | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64 --&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family status edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Note the status of column family feature (enabled/disabled)</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kColumnFamily    | 0/1            |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family add edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Add a column family</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kColumnFamilyAdd    | cf name        |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family drop edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drop all column family</span><br><span class="line">+---------------------+</span><br><span class="line">| kColumnFamilyDrop   |</span><br><span class="line">+---------------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Transactions</strong></p>
-<p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
-<p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
-<p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
-<hr>
-<p><strong>Indexing SST Files for Better Lookup Performance</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">                                file 1                              file 2</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">level 1:                     | 100, 200 |                        | 300, 400 |</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">                                </span><br><span class="line">           file 1   file 2    file 3    file 4     file 5     file 6     file 7     file 8</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">level 2: | 40, 50 | 60, 70 | 95, 110 | 150, 160 | 210, 230 | 290, 300 | 310, 320 | 410, 450 |</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">```         </span><br><span class="line"></span><br><span class="line">***</span><br><span class="line"></span><br><span class="line">**Merge Operator Implementation**</span><br><span class="line"></span><br><span class="line">*RocksDB Data Model*</span><br><span class="line"></span><br><span class="line">RocksDB is a versioned key-value store.</span><br><span class="line"></span><br><span class="line">Every change to the db is globally ordered and assigned a monotonically increasing sequence number.</span><br><span class="line"></span><br><span class="line">For each key, RocksDB keeps the history of operations.</span><br><span class="line"></span><br><span class="line">A key (K) that experienced n changes, looks like this logically</span><br></pre></td></tr></table></figure>
-<p>K:   OP1   OP2   OP3   …   OPn<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">*Get*</span><br><span class="line"></span><br><span class="line">Get returns the state of a key at a specific time.</span><br></pre></td></tr></table></figure></p>
-<p>K:   OP1    OP2   OP3   ….   OPk  …. OPn<br>                            ^<br>                            |<br>                         Get.seq<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Suppose `OPk` is the most recent operation that&apos;s visible to Get</span><br></pre></td></tr></table></figure></p>
-<p>k = max(i) {seq(OPi) &lt;= Get.seq}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-<p>K:   OP1    OP2   OP3   ….    OPk  …. OPn<br>            Put  Merge  Merge  Merge<br>                                 ^<br>                                 |<br>                              Get.seq<br>             ——————–&gt;<br>```             </p>
-<hr>
-<p><strong>Performance</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Index</th>
-<th style="text-align:center">Key Size</th>
-<th style="text-align:center">Disable WAL</th>
-<th style="text-align:center">Time (ms)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">0</td>
-<td style="text-align:center">1024 <em> 1024 </em> 64</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">198,285</td>
-</tr>
-<tr>
-<td style="text-align:left">1</td>
-<td style="text-align:center">1024 <em> 1024 </em> 64</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">178,082</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<p><strong>FAQ</strong></p>
-<ol>
-<li><p>If my process crashes, can it corrupt the database?</p>
-<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
-</li>
-<li><p>Does RocksDB throw exceptions?</p>
-<p><code>No, RocksDB returns Status to indicate any error.</code></p>
-</li>
-<li><p>How to know the number of keys stored in a RocksDB database?</p>
-<p><code>Use GetIntProperty to obtain an estimated number of keys stored in a column family, or use GetAggregatedIntProperty to obtain an estimated number of keys stored in the whole RocksDB database.</code></p>
-</li>
-<li><p>Can I write to RocksDB using multiple processes?</p>
-<p><code>No RocksDB support multi-process read only process without writing the database.</code></p>
-</li>
-<li><p>What’s the maximum key and value sizes supported?</p>
-<p><code>RocksDB is not designed for large keys. The maximum recommended sizes for key and value are 8MB and 3GB respectively.</code> </p>
-</li>
-<li><p>What’s the fastest way to load data into RocksDB?</p>
-<p><code>A fast way to direct insert data to the DB</code> </p>
-<ul>
-<li>using single writer thread and insert in sorted order</li>
-<li>batch hundreds of keys into one write batch</li>
-<li>use vector memtable</li>
-<li>make sure options.max_background_flushes is at least 4</li>
-<li>before inserting the data, disable automatic compaction</li>
-</ul>
-</li>
-<li><p>Is block_size before compression , or after?</p>
-<p><code>block_size is for size before compression.</code></p>
-</li>
-<li><p>Is it safe to directly copy an open RocksDB instance?</p>
-<p><code>No, unless the RocksDB instance is opened in read-only mode.</code></p>
-</li>
-<li><p>Can I open RocksDB with a different compression type and still read old data?    </p>
-<p><code>Rocksdb stored the compression information in each SST file and performs decompression accordingly, you can change the compression and the db will still be able to read existing files.</code> </p>
-</li>
-<li><p>If I delete a column family, and I didn’t yet delete the column family handle, can I still use it to access the data?</p>
-<p><code>DropColumnFamily only marks the specified column family as dropped, and it will not be dropped until its reference count goes to zero and marked as dropped.</code></p>
-</li>
-<li><p>Does RocksDB support replication?</p>
-<p><code>RocksDB does not directly support replication.</code></p>
-</li>
-<li><p>How much resource does an iterator hold and when will these resource be released?</p>
-<p><code>Iterators hold both data blocks and memtables in memory.</code></p>
-</li>
-<li><p>Are bloom filter blocks of SST files always loaded to memory, or can they be loaded from disk?</p>
-<p><code>When cache_index_and_filter_blocks is set to true, then bloom filters and index block will be loaded into a LRU cache only when related Get() requests are issued. In the other case , then RocksDB will try to keep the index block and bloom filter in memory up to max_open_files number of SST files.</code></p>
-</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
-<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
-<p><code>TensorFlow</code> 是一个编程系统，使用图来表示计算任务。图中的节点被称之为 op 。</p>
-<p>一个 op 获得 0 个或多个 <code>Tensor</code> 执行计算，产生 0 个或多个 <code>Tensor</code>。每个 <code>Tensor</code> 是一个类型化的多维数组。一个 TensorFlow 图描述了计算的过程. 为了进行计算, 图必须在 <code>会话</code> 里被启动。<code>会话</code> 将图的 op  发到 诸如 CPU 或 GPU 上。</p>
-<p><strong>Basic Concepts</strong></p>
-<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
-<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
-<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
-<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
-<p>核(<code>kernel</code>)</p>
-<p>kernel是operation在某种设备上的具体实现。</p>
-<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
-<p>边(<code>edge</code>)  </p>
-<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
-<p>特殊边，又称作控制依赖，(control dependencies) </p>
-<p>会话(<code>session</code>)</p>
-<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
-<p>在会话中添加节点和边，形成一张图，然后执行。</p>
-<p>变量(<code>variables</code>)</p>
-<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
-<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
-<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
-<hr>
-<p><strong>Using</strong></p>
-<p>构建图的第一步, 是创建源 op 。源 op 不需要任何输入，源 op 的输出 被传递给其它 op 做运算。</p>
-<p>TensorFlow Python 库有一个默认图 (default graph), op 构造器可以为其增加节点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Create a Constant op that produces a 1x2 matrix.  The op is</span><br><span class="line"># added as a node to the default graph.</span><br><span class="line">#</span><br><span class="line"># The value returned by the constructor represents the output</span><br><span class="line"># of the Constant op.</span><br><span class="line">matrix1 = tf.constant([[3., 3.]])</span><br><span class="line"></span><br><span class="line"># Create another Constant that produces a 2x1 matrix.</span><br><span class="line">matrix2 = tf.constant([[2.],[2.]])</span><br><span class="line"></span><br><span class="line"># Create a Matmul op that takes &apos;matrix1&apos; and &apos;matrix2&apos; as inputs.</span><br><span class="line"># The returned value, &apos;product&apos;, represents the result of the matrix</span><br><span class="line"># multiplication.</span><br><span class="line">product = tf.matmul(matrix1, matrix2)</span><br></pre></td></tr></table></figure>
-<p>默认图现在有三个节点, 两个 constant() op, 和一个 matmul() op。<br>为了真正进行矩阵相乘运算, 并得到矩阵乘法的结果, 必须在<code>会话</code>里启动这个图。</p>
-<p>启动图的第一步是创建一个 <code>Session</code> , 如果无任何创建参数, 会话构造器 将启动默认图。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Launch the default graph.</span><br><span class="line">sess = tf.Session()</span><br><span class="line"></span><br><span class="line"># To run the matmul op we call the session &apos;run()&apos; method, passing &apos;product&apos;</span><br><span class="line"># which represents the output of the matmul op.  This indicates to the call</span><br><span class="line"># that we want to get the output of the matmul op back.</span><br><span class="line">#</span><br><span class="line"># All inputs needed by the op are run automatically by the session.  They</span><br><span class="line"># typically are run in parallel.</span><br><span class="line">#</span><br><span class="line"># The call &apos;run(product)&apos; thus causes the execution of three ops in the</span><br><span class="line"># graph: the two constants and matmul.</span><br><span class="line">#</span><br><span class="line"># The output of the op is returned in &apos;result&apos; as a numpy `ndarray` object.</span><br><span class="line">result = sess.run(product)</span><br><span class="line">print(result)</span><br><span class="line"># ==&gt; [[ 12.]]</span><br><span class="line"></span><br><span class="line"># Close the Session when we&apos;re done.</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Implementation</strong></p>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
-<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/article/">2016-06-03</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/03/architecture/article/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>Reference :</p>
-<ol>
-<li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
-<li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
-<li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
-<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
-<p>Reference :</p>
-<ol>
-<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/" class="alignleft prev">Anterior</a>
+    <a href="/" class="alignleft prev">Vorherige Seite</a>
   
   
-    <a href="/page/3/" class="alignright next">Siguiente</a>
+    <a href="/page/3/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
@@ -1464,7 +1608,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1479,6 +1623,8 @@
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
@@ -1486,6 +1632,8 @@
     <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

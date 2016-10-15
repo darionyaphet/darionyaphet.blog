@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ZooKeeper | darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="ZooKeeperGoogle提出了中心化组件Chubby—粗粒度锁服务，通过锁原语为其他系统实现更高级的服务，比如组成员、域名服务和leader选举等等。Chubby本身也是一个小型的cell（通常由5个chubby结点组成），cell内部采用类似于状态机副本形式实现可靠容错。
+Google的Ch">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ZooKeeper"/>
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-11T16:00:00.000Z"><a href="/2016/10/12/distribution/zookeeper/">2016-10-12</a></time>
+      
+      
+  
+    <h1 class="title">ZooKeeper</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><p>Google提出了中心化组件Chubby—粗粒度锁服务，通过锁原语为其他系统实现更高级的服务，比如组成员、域名服务和leader选举等等。Chubby本身也是一个小型的cell（通常由5个chubby结点组成），cell内部采用类似于状态机副本形式实现可靠容错。</p>
+<p>Google的Chubby论文在OSDI上发表后引起了很大的反响，原因很多，主要有两个：</p>
+<p>第一，chubby很好的解决了分布式开发的一致性问题；</p>
+<p>第二，Google Chubby采用Leslie Lamport提出的paxos算法来实现可靠容错，这是业界关于paxos第一个完整可行的实现。</p>
+<hr>
+<p>和Chubby相比，ZooKeeper做了很多突破。</p>
+<p>不像Chubby的单点服务的结构，ZooKeeper采用多个server同时处理客户端的请求，异步读同步写，通过primary节点来同步数据的update，这一点大大改善了读服务的性能，当然弱化了客户端与服务器之间的一致性。</p>
+<p>另外，ZooKeeper采用block free的服务接口，采用watch机制的方式异步处理请求结果和指定数据的变更。</p>
+<p>ZooKeeper采用paxos的变种来实现消息传输的一致性。</p>
+<p>ZooKeeper开发了原子多播协议 Zab 来实现数据的一致性传输。</p>
+<p>ZooKeeper采用的是primary-backup的结构，primary节点产生non- commutative 事务，通过协议按序的广播到其他backup节点上。在节点无错的情况下，这是非常简单的事情，然而，面对复杂的网络环境，多变的软硬件条件，节点挂掉，重启，数据重复发送，这些异常很常见。Zookeeper如何做到即便是系统出现异常，也能够保证整个系统状态是一致？paxos的变种，Zookeeper的Zab协议很好的保证了这一点。</p>
+<p>Zab 协议以epoch的方式执行（相当与序列号），在每个epoch最多只有一个进程多播数据。如果某个进程执行了协议的的第一阶段，那么进程将不再接受之前还没确定提交的epoch的数据。这样一来就保证了在进程在recovery阶段不会出现丢失已提交的数据的情况。在某个epoch下，所有参加这个epoch的进程必须此epoch之前所有已经提交的数据镜像。为了保证一致性，进程在完全恢复之前必须不能广播新的事务。</p>
+<p>Zab协议的这几个特点处理了primary异常、新旧primary以及backup节点异常的情况，的确保证了primary进程原子多播的order特性。</p>
+<p>整个Zab协议的内容分成三个阶段：Discovery、Synchronization和Broadcast阶段。</p>
+<p>Discovery阶段其实是选举leader或者发现leader。</p>
+<pre><code>在这个阶段里，follower会给（可能是）leader的进程（这里的进程可以是多个）发送当前自己epoch的信息CEPOCH；
+
+如果（可能是）leader进程收到大多数的follower的CEPOCH消息，那么leader就会产生一个新epoch的消息NEWEPOCH，其中包含新的leader，并发送给follower；当follower f收到NEWEPOCH时，f会判断其中epoch是否比当前的大，如果是则反馈信息ACK-E，其中包含f所接受的最大事务编号和历史数据；leader会从这些ACK-E中选出最新的历史数据来初始化它当前的系统状态。这个阶段其实就是paxos的执行过程，由于两个大多数集合的交集肯定不为空，所以不可能一个epoch下会选出两个不同的leader。因此Discovery阶段最后的结果肯定只有一个新leader。
+
+在整个系统初始的时候，每个节点当前的epoch都为0，这样会给其它节点发送请求，这样有可能会导致paxos死锁，对此，每个zookeeper节点会通过配置获得唯一的id，并根据id的大则优先的原则来推选leader。
+</code></pre><p>Synchronization阶段其实就会状态同步，新leader会将其最新状态通知给所有的follower；follower的到leader的状态后，会和自己的进行比较，从中提前还未提交的数据T，并反馈给leader；leader收到大多数确认反馈时，则发送提交命令commit给这些follower；follower收到commit后提交T中的所有数据。</p>
+<p>Broadcast阶段和Synchronization阶段相似，只是这个阶段是对一个请求的提交而不是一个集合的提交。</p>
+<hr>
+<p>ZooKeeper Config </p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clientPort</td>
+<td>客户端连接server的端口，即对外服务端口，一般设置为2181 </td>
+</tr>
+<tr>
+<td>dataDir</td>
+<td>存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。建议同时配置参数dataLogDir, 事务日志的写性能直接影响zk性能。 </td>
+</tr>
+<tr>
+<td>tickTime</td>
+<td>ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2*tickTime。</td>
+</tr>
+<tr>
+<td>dataLogDir</td>
+<td>事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。</td>
+</tr>
+<tr>
+<td>globalOutstandingLimit</td>
+<td>最大请求堆积数。默认是1000。</td>
+</tr>
+<tr>
+<td>preAllocSize</td>
+<td>预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。</td>
+</tr>
+<tr>
+<td>snapCount</td>
+<td>每进行snapCount次事务日志输出后，触发一次快照(snapshot), 此时，ZK会生成一个snapshot文件，同时创建一个新的事务日志文件log。</td>
+</tr>
+<tr>
+<td>traceFile</td>
+<td>用于记录所有请求的log，一般调试过程中可以使用，但是生产环境不建议使用，会严重影响性能。</td>
+</tr>
+<tr>
+<td>maxClientCnxns</td>
+<td>单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。</td>
+</tr>
+<tr>
+<td>clientPortAddress</td>
+<td>对于多网卡的机器，可以为每个IP指定不同的监听端口。</td>
+</tr>
+<tr>
+<td>minSessionTimeoutmaxSessionTimeout</td>
+<td>Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。</td>
+</tr>
+<tr>
+<td>fsync.warningthresholdms</td>
+<td>事务日志输出时，如果调用fsync方法超过指定的超时时间，那么会在日志中输出警告信息。</td>
+</tr>
+<tr>
+<td>autopurge.purgeInterval</td>
+<td>ZK提供了自动清理事务日志和快照文件的功能，这个参数指定了清理频率，单位是小时，需要配置一个1或更大的整数，默认是0，表示不开启自动清理功能。</td>
+</tr>
+<tr>
+<td>autopurge.snapRetainCount</td>
+<td>需要保留的文件数目。默认是保留3个。</td>
+</tr>
+<tr>
+<td>electionAlg</td>
+<td>允许指定leader选举算法。</td>
+</tr>
+<tr>
+<td>initLimit</td>
+<td>Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在initLimit时间内完成这个工作。</td>
+</tr>
+<tr>
+<td>syncLimit</td>
+<td>如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。</td>
+</tr>
+<tr>
+<td>leaderServes</td>
+<td>Leader专注于集群中机器的协调，那么可以将这个参数设置为no，这样一来，会大大提高写操作的性能。</td>
+</tr>
+<tr>
+<td>server.x=[hostname]:nnnnn[:nnnnn]</td>
+<td>第一个端口用于F和L之间的数据同步和其它通信，第二个端口用于Leader选举过程中投票通信。</td>
+</tr>
+<tr>
+<td>group.x=nnnnn[:nnnnn]weight.x=nnnnn</td>
+<td>对机器分组和权重设置。</td>
+</tr>
+<tr>
+<td>cnxTimeout</td>
+<td>Leader选举过程中，打开一次连接的超时时间，默认是5s。</td>
+</tr>
+<tr>
+<td>zookeeper.DigestAuthenticationProvider.superDigest</td>
+<td>ZK权限设置相关。</td>
+</tr>
+<tr>
+<td>skipACL</td>
+<td>所有客户端请求都不作ACL检查。</td>
+</tr>
+<tr>
+<td>forceSync</td>
+<td>确定了是否需要在事务日志提交的时候调用FileChannel.force来保证数据完全同步到磁盘。</td>
+</tr>
+<tr>
+<td>jute.maxbuffer</td>
+<td>每个节点最大数据量，是默认是1M。</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Distributed/">Distributed</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/ZooKeeper/">ZooKeeper</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/10/12/distribution/zookeeper/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Kategorien</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

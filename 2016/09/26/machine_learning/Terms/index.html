@@ -348,6 +348,12 @@
 <li>论文：分布式词汇和短语表征以及他们的组合性（Distributed Representations of Words and Phrases and their Compositionality）</li>
 <li>论文：解释 word2vec 参数学习（word2vec Parameter Learning Explained）</li>
 </ul>
+<hr>
+<p><code>AUC (Area Under Curve)</code></p>
+<p>在计算广告学中，AUC经常用于统计ROC曲线的面积，用来量化评估广告的CTR质量。ROC(Receiver Operating Characteristics) graphs ROC经常被用于模式识别、分类器的结果展现和性能评测。传统的ROC曲线多用于医学检测领域，2000年以后，在机器学习、数据挖掘领域开始有使用、</p>
+<p>ROC是二维平面上的曲线，平面的横坐标是false positive rate(FPR)，纵坐标是true positive rate(TPR)，对某个待评估的数据挖掘方法而言，我们可以根据其在测试样本上的表现得到一个TPR和FPR点对。这样，分类器就可以映射成ROC平面上的一个点，这些点构成一个阶梯状的曲线，计算的AUC也就是这些阶梯下面的面积之和。</p>
+<p>在广告中，根据CTR的高低，将最有可能被用户点击的广告按顺序依次展现，根据点击反馈，可以生成ROC曲线（y方向，点击+1；x方向，未点击+1），很明显，用户点击的越多，被点击的广告排序越靠前，ROC曲线下的面积越大，即AUC越大，则表明广告投放的效果越好，也就是CTR预测越准确。</p>
+<hr>
 
       
     </div>
@@ -391,7 +397,7 @@
 
 
 <section id="comment">
-  <h1 class="title">Comentarios</h1>
+  <h1 class="title">Kommentare</h1>
 
   
       <div id="fb-root"></div>
@@ -414,23 +420,25 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>7</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
   
@@ -444,7 +452,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -459,6 +467,8 @@
   
     <li><a href="/tags/Java/">Java</a><small>1</small></li>
   
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
@@ -466,6 +476,8 @@
     <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
   

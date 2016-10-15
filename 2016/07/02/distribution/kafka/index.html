@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="KafkaConsumerLog CompactionA log is a data structure that maintains a timeline of things.
+Here is a high-level picture that shows the logical structur">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-02T05:49:49.000Z"><a href="/2016/07/02/distribution/kafka/">2016-07-02</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><h4 id="Log-Compaction"><a href="#Log-Compaction" class="headerlink" title="Log Compaction"></a>Log Compaction</h4><p>A log is a data structure that maintains a timeline of things.</p>
+<p>Here is a high-level picture that shows the logical structure of a Kafka log with the offset for each message. </p>
+<p>The head of the log is identical to a traditional Kafka log.</p>
+<p>Log compaction adds an option for handling the tail of the log. </p>
+<p><code>In 0.7 the tail of the log is always deleted.</code></p>
+<p><code>In 0.8 there is a per-topic option to choose either &quot;delete&quot; or &quot;compact&quot;.</code></p>
+<p><img src="resource/kafka/Log_Compaction.png" alt="Log Compaction"></p>
+<table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>log.cleaner.enable</td>
+<td>Turn on log cleaning. This is disabled by default for now.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>log.cleaner.dedupe.buffer.size</td>
+<td>The amount of memory that can be used for log cleaning across all cleaner threads.</td>
+<td>500 MB</td>
+</tr>
+<tr>
+<td>log.cleaner.io.buffer.size</td>
+<td>The buffer used for reads and writes to the log.</td>
+<td>512K</td>
+</tr>
+<tr>
+<td>log.cleaner.delete.retention.ms</td>
+<td>The time for which delete markers are retained in the tail of the log.</td>
+<td>24 Hours</td>
+</tr>
+<tr>
+<td>log.cleaner.min.cleanable.ratio</td>
+<td>The minimum ratio of cleanable log head to total log for a log to be eligible for cleaning.</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>log.cleaner.threads</td>
+<td>The number of background threads to use for log cleaning.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>log.cleaner.max.io.bytes.per.second</td>
+<td>The maximum I/O that the log cleaning across all threads.</td>
+<td>Infinity</td>
+</tr>
+<tr>
+<td>log.cleaner.backoff.ms</td>
+<td>The time to wait in between checking if there are any cleanable logs.</td>
+<td>30 seconds</td>
+</tr>
+<tr>
+<td>log.cleanup.policy</td>
+<td>The default policy for handling log tails. Can be either delete or compact.</td>
+<td>delete</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Internals"><a href="#Internals" class="headerlink" title="Internals"></a>Internals</h4><p><code>Kafka API layer</code></p>
+<p><code>LogManager and Log</code></p>
+<p><code>ReplicaManager</code></p>
+<p><code>ZookeeperConsumerConnector</code></p>
+<p><img src="resource/kafka/kafka_broker_internals.png" alt="Internals"></p>
+<h4 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h4><table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compression.codec</td>
+<td>Controls the compression codec to be used by the producer. 0 means no compression. 1 means GZIP compression. 2 means Snappy compression</td>
+<td>0</td>
+</tr>
+<tr>
+<td>compressed.topics</td>
+<td>comma separated list of topics for which compression should be enabled.</td>
+<td>empty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.confluent.io/blog/apache-kafka-0.9-is-released" target="_blank" rel="external">Apache Kafka 0.9 is Released</a></li>
+<li><a href="http://www.confluent.io/blog/290-reasons-to-upgrade-to-apache-kafka-0.9.0.0" target="_blank" rel="external">290 Reasons to Upgrade to Apache Kafka 0.9.0.0</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Log+Compaction" target="_blank" rel="external">Log Compaction</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Client+Re-Design" target="_blank" rel="external">Consumer Client Re-Design</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Offset+Management" target="_blank" rel="external">Offset Management</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Compression" target="_blank" rel="external">Compression</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/07/02/distribution/kafka/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Kategorien</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
