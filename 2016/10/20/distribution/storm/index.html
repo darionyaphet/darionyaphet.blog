@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Storm | darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="StormTrident
+Trident是在storm基础上，一个以realtime 计算为目标的高度抽象。 它在提供处理大吞吐量数据能力的同时，也提供了低延时分布式查询和有状态流式处理的能力。Tident提供了 joins, aggregations, grouping, functions, 以">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Storm"/>
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-19T16:00:00.000Z"><a href="/2016/10/20/distribution/storm/">2016-10-20</a></time>
+      
+      
+  
+    <h1 class="title">Storm</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Storm"><a href="#Storm" class="headerlink" title="Storm"></a>Storm</h3><p><strong>Trident</strong></p>
+<p><em>Trident是在storm基础上，一个以realtime 计算为目标的高度抽象。 它在提供处理大吞吐量数据能力的同时，也提供了低延时分布式查询和有状态流式处理的能力。Tident提供了 joins, aggregations, grouping, functions, 以及 filters等能力。除此之外，Trident 还提供了一些专门的原语，从而在基于数据库或者其他存储的前提下来应付有状态的递增式处理。</em></p>
+<p>让我们一起来看一个Trident的例子。在这个例子中，我们主要做了两件事情：</p>
+<ol>
+<li><p>从一个流式输入中读取语句病计算每个单词的个数</p>
+</li>
+<li><p>提供查询给定单词列表中每个单词当前总数的功能</p>
+</li>
+</ol>
+<p>因为这只是一个例子，我们会从如下这样一个无限的输入流中读取语句作为输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FixedBatchSpout spout = new FixedBatchSpout(new Fields(&quot;sentence&quot;), 3,</span><br><span class="line">               new Values(&quot;the cow jumped over the moon&quot;),</span><br><span class="line">               new Values(&quot;the man went to the store and bought some candy&quot;),</span><br><span class="line">               new Values(&quot;four score and seven years ago&quot;),</span><br><span class="line">               new Values(&quot;how many apples can you eat&quot;),spout.setCycle(true);</span><br></pre></td></tr></table></figure>
+<p>这个spout会循环输出列出的那些语句到sentence stream当中，下面的代码会以这个stream作为输入并计算每个单词的个数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TridentTopology topology = new TridentTopology();        </span><br><span class="line">TridentState wordCounts =topology.newStream(&quot;spout1&quot;, spout)</span><br><span class="line">       .each(new Fields(&quot;sentence&quot;), new Split(), new Fields(&quot;word&quot;))</span><br><span class="line">       .groupBy(new Fields(&quot;word&quot;))</span><br><span class="line">       .persistentAggregate(new MemoryMapState.Factory(), new Count(), new Fields(&quot;count&quot;))  </span><br><span class="line">       .parallelismHint(6);</span><br></pre></td></tr></table></figure>
+<p>让我们一起来读一下这段代码。我们首先创建了一个TridentTopology对象。</p>
+<p>TridentTopology类相应的接口来构造Trident计算过程中的所有内容。</p>
+<p>我们在调用了TridentTopology类的newStream方法时，传入了一个spout对象，spout对象会从外部读取数据并输出到当前topology当中，从而在topology中创建了一个新的数据流。在这个例子中，我们使用了上面定义的FixedBatchSpout对象。</p>
+<p>输入数据源同样也可以是如Kestrel或者Kafka这样的队列服务。</p>
+<p>Trident会再Zookeeper中保存一小部分状态信息来追踪数据的处理情况，而在代码中我们指定的字符串“spout1”就是Zookeeper中用来存储metadata信息的Znode节点</p>
+<p>Trident在处理输入stream的时候会把输入转换成若干个tuple的batch来处理。比如说，输入的sentence stream可能会被拆分成如下的batch：       </p>
+<p>一般来说，这些小的batch中的tuple可能会在数千或者数百万这样的数量级，这完全取决于你的输入的吞吐量。</p>
+<p>Trident提供了一系列非常成熟的批量处理的API来处理这些小batch. 这些API和你在Pig或者Cascading中看到的非常类似， 你可以做group by’s, joins, aggregations, 运行 functions, 执行 filters等等。当然，独立的处理每个小的batch并不是非常有趣的事情，所以Trident提供了很多功能来实现batch之间的聚合的结果并可以将这些聚合的结果存储到内存，Memcached， Cassandra或者是一些其他的存储中。同时，Trident还提供了非常好的功能来查询实时状态。这些实时状态可以被Trident更新，同时它也可以是一个独立的状态源。</p>
+<p>回到我们的这个例子中来，spout输出了一个只有单一字段“sentence”的数据流。在下一行，topology使用了Split函数来拆分stream中的每一个tuple，Split函数读取输入流中的“sentence”字段并将其拆分成若干个word tuple。每一个sentence tuple可能会被转换成多个word tuple，比如说”the cow jumped over the moon” 会被转换成6个 “word” tuples. 下面是Split的定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Split extends BaseFunction &#123;</span><br><span class="line">   public void execute(TridentTuple tuple, TridentCollector collector) &#123;</span><br><span class="line">       String sentence = tuple.getString(0);</span><br><span class="line">       for(String word: sentence.split(&quot; &quot;)) &#123;</span><br><span class="line">           collector.emit(new Values(word));                </span><br><span class="line">       &#125;</span><br><span class="line">   &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>如你所见，真的很简单。它只是简单的根据空格拆分sentence，并将拆分出的每个单词作为一个tuple输出。</p>
+<p>topology的其他部分计算单词的个数并将计算结果保存到了持久存储中。首先，word stream被根据“word”字段进行group操作，然后每一个group使用Count聚合器进行持久化聚合。persistentAggregate会帮助你把一个状态源聚合的结果存储或者更新到存储当中。在这个例子中，单词的数量被保持在内存中，不过我们可以很简单的把这些数据保存到其他的存储当中，如 Memcached, Cassandra等。如果我们要把结果存储到Memcached中，只是简单的使用下面这句话替换掉persistentAggregate就可以，这当中的”serverLocations”是Memcached cluster的主机和端口号列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.persistentAggregate(MemcachedState.transactional(serverLocations), new Count(), new Fields(&quot;count&quot;))        MemcachedState.transactional()</span><br><span class="line">```   </span><br><span class="line"></span><br><span class="line">persistentAggregate存储的数据就是所有batch聚合的结果。</span><br><span class="line"></span><br><span class="line">Trident非常酷的一点就是它是完全容错的，拥有者有且只有一次处理的语义。这就让你可以很轻松的使用Trident来进行实时数据处理。Trident会把状态以某种形式保持起来，当有错误发生时，它会根据需要来恢复这些状态。</span><br><span class="line"></span><br><span class="line">persistentAggregate方法会把数据流转换成一个TridentState对象。在这个例子当中，TridentState对象代表了所有的单词的数量。我们会使用这个TridentState对象来实现在计算过程中的进行分布式查询。</span><br><span class="line"></span><br><span class="line">下面这部分实现了一个低延时的单词数量的分布式查询。这个查询以一个用空格分割的单词列表为输入，并返回这些单词当天的个数。这些查询是想普通的RPC调用那样被执行的，要说不同的话，那就是他们在后台是并行执行的。下面是执行查询的一个例子：</span><br></pre></td></tr></table></figure>
+<p>DRPCClient client = new DRPCClient(“drpc.server.location”, 3772);<br>System.out.println(client.execute(“words”, “cat dog the man”);<br>// prints the JSON-encoded result, e.g.: “[[5078]]”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">如你所见，除了这是并发执行在storm cluster上之外，这看上去就是一个正常的RPC调用。这样的简单查询的延时通常在10毫秒左右。当然，更负责的DRPC调用可能会占用更长的时间，尽管延时很大程度上是取决于你给计算分配了多少资源。</span><br><span class="line"></span><br><span class="line">这个分布式查询的实现如下所示：</span><br></pre></td></tr></table></figure></p>
+<p>topology.newDRPCStream(“words”)<br>       .each(new Fields(“args”), new Split(), new Fields(“word”))<br>       .groupBy(new Fields(“word”))<br>       .stateQuery(wordCounts, new Fields(“word”), new MapGet(), new Fields(“count”))<br>       .each(new Fields(“count”), new FilterNull())<br>       .aggregate(new Fields(“count”), new Sum(), new Fields(“sum”));<br>```</p>
+<p>我们仍然是使用TridentTopology对象来创建DRPC stream，并且我们将这个函数命名为“words”。这个函数名会作为第一个参数在使用DRPC Client来执行查询的时候用到。</p>
+<p>每个DRPC请求会被当做只有一个tuple的batch来处理。在处理的过程中，以这个输入的单一tuple来表示这个请求。这个tuple包含了一个叫做“args”的字段，在这个字段中保存了客户端提供的查询参数。在这个例子中，这个参数是一个以空格分割的单词列表。</p>
+<p>首先，我们使用Splict功能把入参拆分成独立的单词。然后对“word” 进行group by操作，之后就可以使用stateQuery来在上面代码中创建的TridentState对象上进行查询。stateQuery接受一个数据源（在这个例子中，就是我们的topolgoy所计算的单词的个数）以及一个用于查询的函数作为输入。在这个例子中，我们使用了MapGet函数来获取每个单词的出现个数。由于DRPC stream是使用跟TridentState完全同样的group方式（按照“word”字段进行group），每个单词的查询会被路由到TridentState对象管理和更新这个单词的分区去执行。</p>
+<p>接下来，我们用FilterNull这个过滤器把从未出现过的单词给去掉，并使用Sum这个聚合器将这些count累加起来。最终，Trident会自动把这个结果发送回等待的客户端。</p>
+<p>Trident在如何最大程度的保证执行topogloy性能方面是非常智能的。在topology中会自动的发生两件非常有意思的事情：</p>
+<p>1. </p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Distributed/">Distributed</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Streaming-Process/">Streaming Process</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/10/20/distribution/storm/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>3</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 4 | darion.johannes.yaphet</title>
+  <title>Page 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,43 +44,6 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
   <article class="post">
   
   <div class="post-content">
@@ -311,6 +274,43 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-05-06T15:28:48.000Z"><a href="/2016/05/06/algorithms/hidden-markov-model/">2016-05-06</a></time>
       
       
@@ -348,6 +348,49 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/storage/mysql/">2016-05-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/01/storage/mysql/">MySQL</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><p><strong>Index</strong></p>
+<p><strong>内存表</strong></p>
+<p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+<p><strong>配置</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br></pre></td><td class="code"><pre><span class="line">[b]PS：本配置文件针对Dell R710，双至强E5620、16G内存的硬件配置。CentOS 5.6 64位系统，MySQL 5.5.x 稳定版。适用于日IP 50-100w，PV 100-300w的站点，主要使用InnoDB存储引擎。其他应用环境请根据实际情况来设置优化。[/b]</span><br><span class="line"></span><br><span class="line"># 以下选项会被MySQL客户端应用读取。</span><br><span class="line"># 注意只有MySQL附带的客户端应用程序保证可以读取这段内容。</span><br><span class="line"># 如果你想你自己的MySQL应用程序获取这些值。</span><br><span class="line"># 需要在MySQL客户端库初始化的时候指定这些选项。</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line">[client]</span><br><span class="line">#password = [your_password]</span><br><span class="line">port = @MYSQL_TCP_PORT@</span><br><span class="line">socket = @MYSQL_UNIX_ADDR@</span><br><span class="line"></span><br><span class="line"># *** 应用定制选项 ***</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># MySQL 服务端</span><br><span class="line">#</span><br><span class="line">[mysqld]</span><br><span class="line"></span><br><span class="line"># 一般配置选项</span><br><span class="line">port = @MYSQL_TCP_PORT@</span><br><span class="line">socket = @MYSQL_UNIX_ADDR@</span><br><span class="line"></span><br><span class="line"># back_log 是操作系统在监听队列中所能保持的连接数,</span><br><span class="line"># 队列保存了在MySQL连接管理器线程处理之前的连接.</span><br><span class="line"># 如果你有非常高的连接率并且出现”connection refused” 报错,</span><br><span class="line"># 你就应该增加此处的值.</span><br><span class="line"># 检查你的操作系统文档来获取这个变量的最大值.</span><br><span class="line"># 如果将back_log设定到比你操作系统限制更高的值,将会没有效果</span><br><span class="line">back_log = 300</span><br><span class="line"></span><br><span class="line"># 不在TCP/IP端口上进行监听.</span><br><span class="line"># 如果所有的进程都是在同一台服务器连接到本地的mysqld,</span><br><span class="line"># 这样设置将是增强安全的方法</span><br><span class="line"># 所有mysqld的连接都是通过Unix sockets 或者命名管道进行的.</span><br><span class="line"># 注意在windows下如果没有打开命名管道选项而只是用此项</span><br><span class="line"># (通过 “enable-named-pipe” 选项) 将会导致mysql服务没有任何作用!</span><br><span class="line">#skip-networking</span><br><span class="line"></span><br><span class="line"># MySQL 服务所允许的同时会话数的上限</span><br><span class="line"># 其中一个连接将被SUPER权限保留作为管理员登录.</span><br><span class="line"># 即便已经达到了连接数的上限.</span><br><span class="line">max_connections = 3000</span><br><span class="line"># 每个客户端连接最大的错误允许数量,如果达到了此限制.</span><br><span class="line"># 这个客户端将会被MySQL服务阻止直到执行了”FLUSH HOSTS” 或者服务重启</span><br><span class="line"># 非法的密码以及其他在链接时的错误会增加此值.</span><br><span class="line"># 查看 “Aborted_connects” 状态来获取全局计数器.</span><br><span class="line">max_connect_errors = 30</span><br><span class="line"></span><br><span class="line"># 所有线程所打开表的数量.</span><br><span class="line"># 增加此值就增加了mysqld所需要的文件描述符的数量</span><br><span class="line"># 这样你需要确认在[mysqld_safe]中 “open-files-limit” 变量设置打开文件数量允许至少4096</span><br><span class="line">table_cache = 4096</span><br><span class="line"></span><br><span class="line"># 允许外部文件级别的锁. 打开文件锁会对性能造成负面影响</span><br><span class="line"># 所以只有在你在同样的文件上运行多个数据库实例时才使用此选项(注意仍会有其他约束!)</span><br><span class="line"># 或者你在文件层面上使用了其他一些软件依赖来锁定MyISAM表</span><br><span class="line">#external-locking</span><br><span class="line"></span><br><span class="line"># 服务所能处理的请求包的最大大小以及服务所能处理的最大的请求大小(当与大的BLOB字段一起工作时相当必要)</span><br><span class="line"># 每个连接独立的大小.大小动态增加</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line"></span><br><span class="line"># 在一个事务中binlog为了记录SQL状态所持有的cache大小</span><br><span class="line"># 如果你经常使用大的,多声明的事务,你可以增加此值来获取更大的性能.</span><br><span class="line"># 所有从事务来的状态都将被缓冲在binlog缓冲中然后在提交后一次性写入到binlog中</span><br><span class="line"># 如果事务比此值大, 会使用磁盘上的临时文件来替代.</span><br><span class="line"># 此缓冲在每个连接的事务第一次更新状态时被创建</span><br><span class="line">binlog_cache_size = 4M</span><br><span class="line"></span><br><span class="line"># 独立的内存表所允许的最大容量.</span><br><span class="line"># 此选项为了防止意外创建一个超大的内存表导致永尽所有的内存资源.</span><br><span class="line">max_heap_table_size = 128M</span><br><span class="line"></span><br><span class="line"># 排序缓冲被用来处理类似ORDER BY以及GROUP BY队列所引起的排序</span><br><span class="line"># 如果排序后的数据无法放入排序缓冲,</span><br><span class="line"># 一个用来替代的基于磁盘的合并分类会被使用</span><br><span class="line"># 查看 “Sort_merge_passes” 状态变量.</span><br><span class="line"># 在排序发生时由每个线程分配</span><br><span class="line">sort_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 此缓冲被使用来优化全联合(full JOINs 不带索引的联合).</span><br><span class="line"># 类似的联合在极大多数情况下有非常糟糕的性能表现,</span><br><span class="line"># 但是将此值设大能够减轻性能影响.</span><br><span class="line"># 通过 “Select_full_join” 状态变量查看全联合的数量</span><br><span class="line"># 当全联合发生时,在每个线程中分配</span><br><span class="line">join_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 我们在cache中保留多少线程用于重用</span><br><span class="line"># 当一个客户端断开连接后,如果cache中的线程还少于thread_cache_size,</span><br><span class="line"># 则客户端线程被放入cache中.</span><br><span class="line"># 这可以在你需要大量新连接的时候极大的减少线程创建的开销</span><br><span class="line"># (一般来说如果你有好的线程模型的话,这不会有明显的性能提升.)</span><br><span class="line">thread_cache_size = 16</span><br><span class="line"></span><br><span class="line"># 此允许应用程序给予线程系统一个提示在同一时间给予渴望被运行的线程的数量.</span><br><span class="line"># 此值只对于支持 thread_concurrency() 函数的系统有意义( 例如Sun Solaris).</span><br><span class="line"># 你可可以尝试使用 [CPU数量]*(2..4) 来作为thread_concurrency的值</span><br><span class="line">thread_concurrency = 8</span><br><span class="line"></span><br><span class="line"># 查询缓冲常被用来缓冲 SELECT 的结果并且在下一次同样查询的时候不再执行直接返回结果.</span><br><span class="line"># 打开查询缓冲可以极大的提高服务器速度, 如果你有大量的相同的查询并且很少修改表.</span><br><span class="line"># 查看 “Qcache_lowmem_prunes” 状态变量来检查是否当前值对于你的负载来说是否足够高.</span><br><span class="line"># 注意: 在你表经常变化的情况下或者如果你的查询原文每次都不同,</span><br><span class="line"># 查询缓冲也许引起性能下降而不是性能提升.</span><br><span class="line">query_cache_size = 128M</span><br><span class="line"></span><br><span class="line"># 只有小于此设定值的结果才会被缓冲</span><br><span class="line"># 此设置用来保护查询缓冲,防止一个极大的结果集将其他所有的查询结果都覆盖.</span><br><span class="line">query_cache_limit = 4M</span><br><span class="line"></span><br><span class="line"># 被全文检索索引的最小的字长.</span><br><span class="line"># 你也许希望减少它,如果你需要搜索更短字的时候.</span><br><span class="line"># 注意在你修改此值之后,</span><br><span class="line"># 你需要重建你的 FULLTEXT 索引</span><br><span class="line">ft_min_word_len = 8</span><br><span class="line"></span><br><span class="line"># 如果你的系统支持 memlock() 函数,你也许希望打开此选项用以让运行中的mysql在在内存高度紧张的时候,数据在内存中保持锁定并且防止可能被swapping out</span><br><span class="line"># 此选项对于性能有益</span><br><span class="line">#memlock</span><br><span class="line"></span><br><span class="line"># 当创建新表时作为默认使用的表类型,</span><br><span class="line"># 如果在创建表示没有特别执行表类型,将会使用此值</span><br><span class="line">default_table_type = MYISAM</span><br><span class="line"></span><br><span class="line"># 线程使用的堆大小. 此容量的内存在每次连接时被预留.</span><br><span class="line"># MySQL 本身常不会需要超过64K的内存</span><br><span class="line"># 如果你使用你自己的需要大量堆的UDF函数</span><br><span class="line"># 或者你的操作系统对于某些操作需要更多的堆,</span><br><span class="line"># 你也许需要将其设置的更高一点.</span><br><span class="line">thread_stack = 512K</span><br><span class="line"></span><br><span class="line"># 设定默认的事务隔离级别.可用的级别如下:</span><br><span class="line"># READ-UNCOMMITTED, READ-COMMITTED, REPEATABLE-READ, SERIALIZABLE</span><br><span class="line">transaction_isolation = REPEATABLE-READ</span><br><span class="line"></span><br><span class="line"># 内部(内存中)临时表的最大大小</span><br><span class="line"># 如果一个表增长到比此值更大,将会自动转换为基于磁盘的表.</span><br><span class="line"># 此限制是针对单个表的,而不是总和.</span><br><span class="line">tmp_table_size = 128M</span><br><span class="line"></span><br><span class="line"># 打开二进制日志功能.</span><br><span class="line"># 在复制(replication)配置中,作为MASTER主服务器必须打开此项</span><br><span class="line"># 如果你需要从你最后的备份中做基于时间点的恢复,你也同样需要二进制日志.</span><br><span class="line">log-bin=mysql-bin</span><br><span class="line"></span><br><span class="line"># 如果你在使用链式从服务器结构的复制模式 (A-&gt;B-&gt;C),</span><br><span class="line"># 你需要在服务器B上打开此项.</span><br><span class="line"># 此选项打开在从线程上重做过的更新的日志,</span><br><span class="line"># 并将其写入从服务器的二进制日志.</span><br><span class="line">#log_slave_updates</span><br><span class="line"></span><br><span class="line"># 打开全查询日志. 所有的由服务器接收到的查询 (甚至对于一个错误语法的查询)</span><br><span class="line"># 都会被记录下来. 这对于调试非常有用, 在生产环境中常常关闭此项.</span><br><span class="line">#log</span><br><span class="line"></span><br><span class="line"># 将警告打印输出到错误log文件. 如果你对于MySQL有任何问题</span><br><span class="line"># 你应该打开警告log并且仔细审查错误日志,查出可能的原因.</span><br><span class="line">#log_warnings</span><br><span class="line"></span><br><span class="line"># 记录慢速查询. 慢速查询是指消耗了比 “long_query_time” 定义的更多时间的查询.</span><br><span class="line"># 如果 log_long_format 被打开,那些没有使用索引的查询也会被记录.</span><br><span class="line"># 如果你经常增加新查询到已有的系统内的话. 一般来说这是一个好主意,</span><br><span class="line">log_slow_queries</span><br><span class="line"></span><br><span class="line"># 所有的使用了比这个时间(以秒为单位)更多的查询会被认为是慢速查询.</span><br><span class="line"># 不要在这里使用”1″, 否则会导致所有的查询,甚至非常快的查询页被记录下来(由于MySQL 目前时间的精确度只能达到秒的级别).</span><br><span class="line">long_query_time = 6</span><br><span class="line"></span><br><span class="line"># 在慢速日志中记录更多的信息.</span><br><span class="line"># 一般此项最好打开.</span><br><span class="line"># 打开此项会记录使得那些没有使用索引的查询也被作为到慢速查询附加到慢速日志里</span><br><span class="line">log_long_format</span><br><span class="line"></span><br><span class="line"># 此目录被MySQL用来保存临时文件.例如,</span><br><span class="line"># 它被用来处理基于磁盘的大型排序,和内部排序一样.</span><br><span class="line"># 以及简单的临时表.</span><br><span class="line"># 如果你不创建非常大的临时文件,将其放置到 swapfs/tmpfs 文件系统上也许比较好</span><br><span class="line"># 另一种选择是你也可以将其放置在独立的磁盘上.</span><br><span class="line"># 你可以使用”;”来放置多个路径</span><br><span class="line"># 他们会按照roud-robin方法被轮询使用.</span><br><span class="line">#tmpdir = /tmp</span><br><span class="line"></span><br><span class="line"># *** 主从复制相关的设置</span><br><span class="line"></span><br><span class="line"># 唯一的服务辨识号,数值位于 1 到 2^32-1之间.</span><br><span class="line"># 此值在master和slave上都需要设置.</span><br><span class="line"># 如果 “master-host” 没有被设置,则默认为1, 但是如果忽略此选项,MySQL不会作为master生效.</span><br><span class="line">server-id = 1</span><br><span class="line"></span><br><span class="line"># 复制的Slave (去掉master段的注释来使其生效)</span><br><span class="line">#</span><br><span class="line"># 为了配置此主机作为复制的slave服务器,你可以选择两种方法:</span><br><span class="line">#</span><br><span class="line"># 1) 使用 CHANGE MASTER TO 命令 (在我们的手册中有完整描述) -</span><br><span class="line"># 语法如下:</span><br><span class="line">#</span><br><span class="line"># CHANGE MASTER TO MASTER_HOST=, MASTER_PORT=,</span><br><span class="line"># MASTER_USER=, MASTER_PASSWORD= ;</span><br><span class="line">#</span><br><span class="line"># 你需要替换掉 , , 等被尖括号包围的字段以及使用master的端口号替换 (默认3306).</span><br><span class="line">#</span><br><span class="line"># 例子:</span><br><span class="line">#</span><br><span class="line"># CHANGE MASTER TO MASTER_HOST=’125.564.12.1′, MASTER_PORT=3306,</span><br><span class="line"># MASTER_USER=’joe’, MASTER_PASSWORD=’secret’;</span><br><span class="line">#</span><br><span class="line"># 或者</span><br><span class="line">#</span><br><span class="line"># 2) 设置以下的变量. 不论如何, 在你选择这种方法的情况下, 然后第一次启动复制(甚至不成功的情况下,</span><br><span class="line"># 例如如果你输入错密码在master-password字段并且slave无法连接),</span><br><span class="line"># slave会创建一个 master.info 文件,并且之后任何对于包含在此文件内的参数的变化都会被忽略</span><br><span class="line"># 并且由 master.info 文件内的内容覆盖, 除非你关闭slave服务, 删除 master.info 并且重启slave 服务.</span><br><span class="line"># 由于这个原因,你也许不想碰一下的配置(注释掉的) 并且使用 CHANGE MASTER TO (查看上面) 来代替</span><br><span class="line">#</span><br><span class="line"># 所需要的唯一id号位于 2 和 2^32 – 1之间</span><br><span class="line"># (并且和master不同)</span><br><span class="line"># 如果master-host被设置了.则默认值是2</span><br><span class="line"># 但是如果省略,则不会生效</span><br><span class="line">#server-id = 2</span><br><span class="line">#</span><br><span class="line"># 复制结构中的master – 必须</span><br><span class="line">#master-host =</span><br><span class="line">#</span><br><span class="line"># 当连接到master上时slave所用来认证的用户名 – 必须</span><br><span class="line">#master-user =</span><br><span class="line">#</span><br><span class="line"># 当连接到master上时slave所用来认证的密码 – 必须</span><br><span class="line">#master-password =</span><br><span class="line">#</span><br><span class="line"># master监听的端口.</span><br><span class="line"># 可选 – 默认是3306</span><br><span class="line">#master-port =</span><br><span class="line"></span><br><span class="line"># 使得slave只读.只有用户拥有SUPER权限和在上面的slave线程能够修改数据.</span><br><span class="line"># 你可以使用此项去保证没有应用程序会意外的修改slave而不是master上的数据</span><br><span class="line">#read_only</span><br><span class="line"></span><br><span class="line">#*** MyISAM 相关选项</span><br><span class="line"></span><br><span class="line"># 关键词缓冲的大小, 一般用来缓冲MyISAM表的索引块.</span><br><span class="line"># 不要将其设置大于你可用内存的30%,</span><br><span class="line"># 因为一部分内存同样被OS用来缓冲行数据</span><br><span class="line"># 甚至在你并不使用MyISAM 表的情况下, 你也需要仍旧设置起 8-64M 内存由于它同样会被内部临时磁盘表使用.</span><br><span class="line">key_buffer_size = 128M</span><br><span class="line"></span><br><span class="line"># 用来做MyISAM表全表扫描的缓冲大小.</span><br><span class="line"># 当全表扫描需要时,在对应线程中分配.</span><br><span class="line">read_buffer_size = 8M</span><br><span class="line"></span><br><span class="line"># 当在排序之后,从一个已经排序好的序列中读取行时,行数据将从这个缓冲中读取来防止磁盘寻道.</span><br><span class="line"># 如果你增高此值,可以提高很多ORDER BY的性能.</span><br><span class="line"># 当需要时由每个线程分配</span><br><span class="line">read_rnd_buffer_size = 64M</span><br><span class="line"></span><br><span class="line"># MyISAM 使用特殊的类似树的cache来使得突发插入</span><br><span class="line"># (这些插入是,INSERT … SELECT, INSERT … VALUES (…), (…), …, 以及 LOAD DATA</span><br><span class="line"># INFILE) 更快. 此变量限制每个进程中缓冲树的字节数.</span><br><span class="line"># 设置为 0 会关闭此优化.</span><br><span class="line"># 为了最优化不要将此值设置大于 “key_buffer_size”.</span><br><span class="line"># 当突发插入被检测到时此缓冲将被分配.</span><br><span class="line">bulk_insert_buffer_size = 256M</span><br><span class="line"></span><br><span class="line"># 此缓冲当MySQL需要在 REPAIR, OPTIMIZE, ALTER 以及 LOAD DATA INFILE 到一个空表中引起重建索引时被分配.</span><br><span class="line"># 这在每个线程中被分配.所以在设置大值时需要小心.</span><br><span class="line">myisam_sort_buffer_size = 256M</span><br><span class="line"></span><br><span class="line"># MySQL重建索引时所允许的最大临时文件的大小 (当 REPAIR, ALTER TABLE 或者 LOAD DATA INFILE).</span><br><span class="line"># 如果文件大小比此值更大,索引会通过键值缓冲创建(更慢)</span><br><span class="line">myisam_max_sort_file_size = 10G</span><br><span class="line"></span><br><span class="line"># 如果被用来更快的索引创建索引所使用临时文件大于制定的值,那就使用键值缓冲方法.</span><br><span class="line"># 这主要用来强制在大表中长字串键去使用慢速的键值缓冲方法来创建索引.</span><br><span class="line">myisam_max_extra_sort_file_size = 10G</span><br><span class="line"></span><br><span class="line"># 如果一个表拥有超过一个索引, MyISAM 可以通过并行排序使用超过一个线程去修复他们.</span><br><span class="line"># 这对于拥有多个CPU以及大量内存情况的用户,是一个很好的选择.</span><br><span class="line">myisam_repair_threads = 1</span><br><span class="line"></span><br><span class="line"># 自动检查和修复没有适当关闭的 MyISAM 表.</span><br><span class="line">myisam_recover</span><br><span class="line"></span><br><span class="line"># 默认关闭 Federated</span><br><span class="line">skip-federated</span><br><span class="line"></span><br><span class="line"># *** BDB 相关选项 ***</span><br><span class="line"></span><br><span class="line"># 如果你运行的MySQL服务有BDB支持但是你不准备使用的时候使用此选项. 这会节省内存并且可能加速一些事.</span><br><span class="line">skip-bdb</span><br><span class="line"></span><br><span class="line"># *** INNODB 相关选项 ***</span><br><span class="line"></span><br><span class="line"># 如果你的MySQL服务包含InnoDB支持但是并不打算使用的话,</span><br><span class="line"># 使用此选项会节省内存以及磁盘空间,并且加速某些部分</span><br><span class="line">#skip-innodb</span><br><span class="line"></span><br><span class="line"># 附加的内存池被InnoDB用来保存 metadata 信息</span><br><span class="line"># 如果InnoDB为此目的需要更多的内存,它会开始从OS这里申请内存.</span><br><span class="line"># 由于这个操作在大多数现代操作系统上已经足够快, 你一般不需要修改此值.</span><br><span class="line"># SHOW INNODB STATUS 命令会显示当先使用的数量.</span><br><span class="line">innodb_additional_mem_pool_size = 64M</span><br><span class="line"></span><br><span class="line"># InnoDB使用一个缓冲池来保存索引和原始数据, 不像 MyISAM.</span><br><span class="line"># 这里你设置越大,你在存取表里面数据时所需要的磁盘I/O越少.</span><br><span class="line"># 在一个独立使用的数据库服务器上,你可以设置这个变量到服务器物理内存大小的80%</span><br><span class="line"># 不要设置过大,否则,由于物理内存的竞争可能导致操作系统的换页颠簸.</span><br><span class="line"># 注意在32位系统上你每个进程可能被限制在 2-3.5G 用户层面内存限制,</span><br><span class="line"># 所以不要设置的太高.</span><br><span class="line">innodb_buffer_pool_size = 6G</span><br><span class="line"></span><br><span class="line"># InnoDB 将数据保存在一个或者多个数据文件中成为表空间.</span><br><span class="line"># 如果你只有单个逻辑驱动保存你的数据,一个单个的自增文件就足够好了.</span><br><span class="line"># 其他情况下.每个设备一个文件一般都是个好的选择.</span><br><span class="line"># 你也可以配置InnoDB来使用裸盘分区 – 请参考手册来获取更多相关内容</span><br><span class="line">innodb_data_file_path = ibdata1:10M:autoextend</span><br><span class="line"></span><br><span class="line"># 设置此选项如果你希望InnoDB表空间文件被保存在其他分区.</span><br><span class="line"># 默认保存在MySQL的datadir中.</span><br><span class="line">#innodb_data_home_dir =</span><br><span class="line"></span><br><span class="line"># 用来同步IO操作的IO线程的数量. This value is</span><br><span class="line"># 此值在Unix下被硬编码为4,但是在Windows磁盘I/O可能在一个大数值下表现的更好.</span><br><span class="line">innodb_file_io_threads = 4</span><br><span class="line"></span><br><span class="line"># 如果你发现InnoDB表空间损坏, 设置此值为一个非零值可能帮助你导出你的表.</span><br><span class="line"># 从1开始并且增加此值知道你能够成功的导出表.</span><br><span class="line">#innodb_force_recovery=1</span><br><span class="line"></span><br><span class="line"># 在InnoDb核心内的允许线程数量.</span><br><span class="line"># 最优值依赖于应用程序,硬件以及操作系统的调度方式.</span><br><span class="line"># 过高的值可能导致线程的互斥颠簸.</span><br><span class="line">innodb_thread_concurrency = 16</span><br><span class="line"></span><br><span class="line"># 如果设置为1 ,InnoDB会在每次提交后刷新(fsync)事务日志到磁盘上,</span><br><span class="line"># 这提供了完整的ACID行为.</span><br><span class="line"># 如果你愿意对事务安全折衷, 并且你正在运行一个小的食物, 你可以设置此值到0或者2来减少由事务日志引起的磁盘I/O</span><br><span class="line"># 0代表日志只大约每秒写入日志文件并且日志文件刷新到磁盘.</span><br><span class="line"># 2代表日志写入日志文件在每次提交后,但是日志文件只有大约每秒才会刷新到磁盘上.</span><br><span class="line">innodb_flush_log_at_trx_commit = 2</span><br><span class="line">（说明：如果是游戏服务器，建议此值设置为2；如果是对数据安全要求极高的应用，建议设置为1；设置为0性能最高，但如果发生故障，数据可能会有丢失的危险！默认值1的意思是每一次事务提交或事务外的指令都需要把日志写入（flush）硬盘，这是很费时的。特别是使用电池供电缓存（Battery backed up cache）时。设成2对于很多运用，特别是从MyISAM表转过来的是可以的，它的意思是不写入硬盘而是写入系统缓存。日志仍然会每秒flush到硬盘，所以你一般不会丢失超过1-2秒的更新。设成0会更快一点，但安全方面比较差，即使MySQL挂了也可能会丢失事务的数据。而值2只会在整个操作系统挂了时才可能丢数据。）</span><br><span class="line"></span><br><span class="line"># 加速InnoDB的关闭. 这会阻止InnoDB在关闭时做全清除以及插入缓冲合并.</span><br><span class="line"># 这可能极大增加关机时间, 但是取而代之的是InnoDB可能在下次启动时做这些操作.</span><br><span class="line">#innodb_fast_shutdown</span><br><span class="line"></span><br><span class="line"># 用来缓冲日志数据的缓冲区的大小.</span><br><span class="line"># 当此值快满时, InnoDB将必须刷新数据到磁盘上.</span><br><span class="line"># 由于基本上每秒都会刷新一次,所以没有必要将此值设置的太大(甚至对于长事务而言)</span><br><span class="line"></span><br><span class="line">innodb_log_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 在日志组中每个日志文件的大小.</span><br><span class="line"># 你应该设置日志文件总合大小到你缓冲池大小的25%~100%</span><br><span class="line"># 来避免在日志文件覆写上不必要的缓冲池刷新行为.</span><br><span class="line"># 不论如何, 请注意一个大的日志文件大小会增加恢复进程所需要的时间.</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line"># 在日志组中的文件总数.</span><br><span class="line"># 通常来说2~3是比较好的.</span><br><span class="line">innodb_log_files_in_group = 3</span><br><span class="line"></span><br><span class="line"># InnoDB的日志文件所在位置. 默认是MySQL的datadir.</span><br><span class="line"># 你可以将其指定到一个独立的硬盘上或者一个RAID1卷上来提高其性能</span><br><span class="line">#innodb_log_group_home_dir</span><br><span class="line"></span><br><span class="line"># 在InnoDB缓冲池中最大允许的脏页面的比例.</span><br><span class="line"># 如果达到限额, InnoDB会开始刷新他们防止他们妨碍到干净数据页面.</span><br><span class="line"># 这是一个软限制,不被保证绝对执行.</span><br><span class="line">innodb_max_dirty_pages_pct = 90</span><br><span class="line"></span><br><span class="line"># InnoDB用来刷新日志的方法.</span><br><span class="line"># 表空间总是使用双重写入刷新方法</span><br><span class="line"># 默认值是 “fdatasync”, 另一个是 “O_DSYNC”.</span><br><span class="line">#innodb_flush_method=O_DSYNC</span><br><span class="line"></span><br><span class="line"># 在被回滚前,一个InnoDB的事务应该等待一个锁被批准多久.</span><br><span class="line"># InnoDB在其拥有的锁表中自动检测事务死锁并且回滚事务.</span><br><span class="line"># 如果你使用 LOCK TABLES 指令, 或者在同样事务中使用除了InnoDB以外的其他事务安全的存储引擎</span><br><span class="line"># 那么一个死锁可能发生而InnoDB无法注意到.</span><br><span class="line"># 这种情况下这个timeout值对于解决这种问题就非常有帮助.</span><br><span class="line">innodb_lock_wait_timeout = 120</span><br><span class="line"></span><br><span class="line">[mysqldump]</span><br><span class="line"># 不要在将内存中的整个结果写入磁盘之前缓存. 在导出非常巨大的表时需要此项</span><br><span class="line">quick</span><br><span class="line"></span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line"></span><br><span class="line"># 仅仅允许使用键值的 UPDATEs 和 DELETEs .</span><br><span class="line">#safe-updates</span><br><span class="line"></span><br><span class="line">[isamchk]</span><br><span class="line">key_buffer = 2048M</span><br><span class="line">sort_buffer_size = 2048M</span><br><span class="line">read_buffer = 32M</span><br><span class="line">write_buffer = 32M</span><br><span class="line"></span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer = 2048M</span><br><span class="line">sort_buffer_size = 2048M</span><br><span class="line">read_buffer = 32M</span><br><span class="line">write_buffer = 32M</span><br><span class="line"></span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line"># 增加每个进程的可打开文件数量.</span><br><span class="line"># 警告: 确认你已经将全系统限制设定的足够高!</span><br><span class="line"># 打开大量表需要将此值设大</span><br><span class="line">open-files-limit = 8192</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/distribution/hbase/">2016-05-01</a></time>
       
       
@@ -361,7 +404,8 @@
         <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
 <p>一个实例作为Master使用，其他作为backup。</p>
 <h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
-<h4 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h4><p>Zookeeper 中存储-ROOT-表，.META.表</p>
+<p><strong>ZooKeeper</strong></p>
+<p>Zookeeper 中存储-ROOT-表，.META.表</p>
 <p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
 <p>AssignmentManager 管理&amp;负责Region分配</p>
 <p>TableLockManager  管理分布式表级锁</p>
@@ -376,14 +420,18 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
 <p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
-<h4 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
-<h4 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h4><p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
+<p><strong>Split</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
+<p><strong>Replication</strong></p>
+<p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
 <p>进入master cluster shell 中 执行:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
 <hr>
-<h4 id="Bucket-Cache"><a href="#Bucket-Cache" class="headerlink" title="Bucket Cache"></a>Bucket Cache</h4><p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
-<h4 id="HBase-ZooKeeper-ZNode"><a href="#HBase-ZooKeeper-ZNode" class="headerlink" title="HBase ZooKeeper ZNode"></a>HBase ZooKeeper ZNode</h4><table>
+<p><strong>Bucket Cache</strong></p>
+<p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
+<p><strong>HBase ZooKeeper ZNode</strong></p>
+<table>
 <thead>
 <tr>
 <th>Path</th>
@@ -477,8 +525,101 @@
 </tr>
 </tbody>
 </table>
+<p><strong>Snapshots</strong></p>
+<p><em>HBase快照允许管理员不拷贝数据直接克隆一张表，这对域服务器产生的影响最小。将快照导出至其他集群不会直接影响到任何域服务器；导出只是带有一些额外逻辑的群间数据同步。</em></p>
+<p>在HBase 0.95之前，唯一能够备份或克隆表就是使用复制/导出表或者在关闭表之后拷贝HDFS中所有的HFile。复制/导出是通过一系列工具调用MapReduce来扫描并复制表，这样会对RegionServer效率有直接影响。关闭表会停止所有的读写操作，实际环境中往往无法接受。</p>
+<p>HBase快照允许管理员不拷贝数据直接克隆一张表，这对RegionServer产生的影响最小。将快照导出至其他集群不会直接影响到任何域服务器；导出只是带有一些额外逻辑的群间数据同步。</p>
+<p>快照是啥？</p>
+<p>快照是一份元信息的合集，允许管理员恢复到表的先前状态。快照不是表的复制而是一个文件名称列表，因而不会复制数据。完全快照恢复是指恢复到之前的“表结构”以及当时的数据，快照之后发生的数据不会恢复。</p>
+<p>HBase的主要设计原则之一就是一旦文件写入就不再修改。文件不可变意味着快照只需保持对快照产生时存在的文件追踪，并且在压缩时负责提示系统该文件不应删除而是应当归档保存。快照和复制表之间的主要差异是快照操作只写入元数据，不涉及海量数据。</p>
+<p>hbase-site.xml中的hbase.snapshot.enabled是否设置为true确认打开了快照许可。</p>
+<ul>
+<li>生成快照：本操作尝试对指定表生成快照。如果集群在执行数据均衡、分隔或合并等操作时，可能会引起操作失败。</li>
+<li><p>克隆快照：本操作使用与指定快照相同的结构数据构建一张新表。操作结果会生成一张有完整功能的表，对该表的任意修改不会对原表或快照产生影响。</p>
+</li>
+<li><p>还原快照：本操作将表结构和数据恢复到生成快照时的状态。</p>
+</li>
+<li><p>删除快照：本操作将系统中的快照删除，释放未共享的磁盘空间，而且不会影响其他克隆或快照。</p>
+</li>
+<li><p>导出快照：本操作将快照数据和元数据复制到其他集群。操作只会涉及HDFS，不会与Master或域服务器产生任何联系，因此HBase集群可以关闭。</p>
+</li>
+</ul>
 <p>Reference :</p>
 <p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/design/design_pattern/">2016-05-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/01/design/design_pattern/">Design pattern</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Design-pattern"><a href="#Design-pattern" class="headerlink" title="Design pattern"></a>Design pattern</h3><p><em>设计模式（Design pattern）是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。</em></p>
+<p>面向对象有几个原则：</p>
+<ul>
+<li>开闭原则（Open Closed Principle，OCP）</li>
+<li>里氏代换原则（Liskov Substitution Principle，LSP）</li>
+<li>依赖倒转原则（Dependency Inversion Principle，DIP）</li>
+<li>接口隔离原则（Interface Segregation Principle，ISP）</li>
+<li>合成/聚合复用原则（Composite/Aggregate Reuse Principle，CARP）</li>
+<li>最小知识原则（Principle of Least Knowledge，PLK，也叫迪米特法则）</li>
+</ul>
+<p>设计模式分为三种类型，共23种。</p>
+<ul>
+<li><p>创建型模式：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式。</p>
+</li>
+<li><p>结构型模式：适配器模式、桥接模式、装饰模式、组合模式、外观模式、享元模式、代理模式。</p>
+</li>
+<li><p>行为型模式：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、职责链模式、访问者模式。</p>
+</li>
+</ul>
+<p>Abstract Factory（抽象工厂模式）：提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+<p><code>Adapter（适配器模式）</code> 将一个类的接口转换成客户希望的另外一个接口。Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+<p><code>Bridge（桥接模式）</code> 将抽象部分与它的实现部分分离，使它们都可以独立地变化。</p>
+<p><code>Builder（建造者模式）</code> 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
+<p><code>Chain of Responsibility（职责链模式）</code> 为解除请求的发送者和接收者之间耦合，而使多个对象都有机会处理这个请求。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它。</p>
+<p><code>Command（命令模式）</code> 将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作。</p>
+<p><code>Composite（组合模式）</code> 将对象组合成树形结构以表示“部分-整体”的层次结构。它使得客户对单个对象和复合对象的使用具有一致性。</p>
+<p><code>Decorator（装饰模式）</code> 动态地给一个对象添加一些额外的职责。就扩展功能而言， 它比生成子类方式更为灵活。</p>
+<p><code>Facade（外观模式）</code> 为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p><code>Factory Method（工厂模式）</code> 定义一个用于创建对象的接口，让子类决定将哪一个类实例化。Factory Method使一个类的实例化延迟到其子类。</p>
+<p><code>Flyweight（享元模式）</code> 运用共享技术有效地支持大量细粒度的对象。</p>
+<p><code>Interpreter（解析器模式）</code> 给定一个语言, 定义它的文法的一种表示，并定义一个解释器, 该解释器使用该表示来解释语言中的句子。</p>
+<p><code>Iterator（迭代器模式）</code> 提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露该对象的内部表示。</p>
+<p><code>Mediator（中介模式）</code> 用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+<p><code>Memento（备忘录模式）</code> 在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到保存的状态。</p>
+<p><code>Observer（观察者模式）</code> 定义对象间的一种一对多的依赖关系,以便当一个对象的状态发生改变时,所有依赖于它的对象都得到通知并自动刷新。</p>
+<p><code>Prototype（原型模式）</code> 用原型实例指定创建对象的种类，并且通过拷贝这个原型来创建新的对象。</p>
+<p><code>Proxy（代理模式）</code> 为其他对象提供一个代理以控制对这个对象的访问。</p>
+<p><code>Singleton（单例模式）</code> 保证一个类仅有一个实例，并提供一个访问它的全局访问点。 单例模式是最简单的设计模式之一，但是对于Java的开发者来说，它却有很多缺陷。在九月的专栏中，David Geary探讨了单例模式以及在面对多线程（multi-threading）、类装载器（class loaders）和序列化（serialization）时如何处理这些缺陷。</p>
+<p><code>State（状态模式）</code> 允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它所属的类。</p>
+<p><code>Strategy（策略模式）</code> 定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法的变化可独立于使用它的客户。</p>
+<p><code>Template Method（模板方法模式）</code> 定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</p>
+<p><code>Visitor（访问者模式）</code> 表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。</p>
 
       
     </div>
@@ -544,522 +685,34 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-23T12:45:20.000Z"><a href="/2016/04/23/distribution/akka/">2016-04-23</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/23/distribution/akka/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Actor-Modle"><a href="#Actor-Modle" class="headerlink" title="Actor Modle"></a>Actor Modle</h3><p>The Actor Model takes a different approach to solving the problem of concurrency,<br>by avoiding the issues caused by threads and locks. In the Actor Model, all objects<br>are modeled as independent, computational entities that only respond to the<br>messages received. </p>
-<p>Actors change their state only when they receive a stimulus in the form of a message. </p>
-<p>The Actor Model is based on the following principles:</p>
-<ol>
-<li>The immutable messages are used to communicate between actors. </li>
-<li>Each actor has a queue attached where the incoming messages are enqueued. </li>
-<li>Messages are passed between actors asynchronously. </li>
-<li>Communication between the sender and receiver is decoupled and<br>asynchronous, allowing them to execute in different threads. </li>
-</ol>
-<p>Actors can change their state and behavior based on the message passed. </p>
-<p>The connection wire between the sender sending a<br>message and the receiver actor receiving the message is called the mailbox. </p>
-<h3 id="Akka"><a href="#Akka" class="headerlink" title="Akka"></a>Akka</h3><p>The Akka framework has taken the “Actor Model” concept to build an<br>event-driven, middleware framework that allows the building of concurrent,<br>scalable, and distributed systems. </p>
-<p>The Akka framework provides the following features:</p>
-<ol>
-<li><p><code>Concurrency</code>: The Akka Actor Model abstracts concurrency handling and<br>allows the programmer to focus on the business logic</p>
-</li>
-<li><p><code>Scalability</code>: The Akka Actor Model’s asynchronous message passing allows<br>applications to scale up on multicore servers</p>
-</li>
-<li><p><code>Fault tolerance</code>: Akka borrows the concepts and techniques from Erlang to<br>build the “Let It Crash”, fault tolerance model</p>
-</li>
-<li><p><code>Event-driven architecture</code>: Akka provides an asynchronous messaging<br>platform for building event-driven architectures</p>
-</li>
-<li><p><code>Transaction support</code>: Akka implements transactors that combine the actors<br>and software transactional memory (STM) into transactional actors</p>
-</li>
-<li><p><code>Location transparency</code>: Akka provides a unified programming model for<br>multicore and distributed computing needs</p>
-</li>
-<li><p><code>Scala/Java APIs</code>: Akka supports both Java and Scala APIs for<br>building applications</p>
-</li>
-</ol>
-<h4 id="Akka-Use-Case"><a href="#Akka-Use-Case" class="headerlink" title="Akka Use Case"></a>Akka Use Case</h4><ul>
-<li>Transaction processing</li>
-<li>Service providers</li>
-<li>Batch processing</li>
-<li>Data mining/analytics/Business Intelligence</li>
-<li>Service gateways/hubs</li>
-<li>Apps requiring concurrency/parallelism</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">akka.protocol://system@host:1234/user/my/actor/hierarchy/path</span><br></pre></td></tr></table></figure>
-<p>Actors can change their state and behavior based on the message passed.</p>
-<p>Behavior is nothing but the computation logic that needs to be executed in response<br>to the message received.</p>
-<h3 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h3><p>(!)</p>
-<p>Akka provides hooks such as preStart that allow the actor’s state and behavior to be initialized. </p>
-<p>When the actor is stopped, Akka disables the message queuing for the actor before<br>PostStop is invoked. In the postStop hook, any persistence of the state or clean up<br>of any hold-up resources can be done</p>
-<p>An actor’s lifecycle consists of three phases :</p>
-<ul>
-<li>Actor is initialized and started</li>
-<li>Actor receives and processes messages by executing a specific behavior</li>
-<li>Actor stops itself when it receives a termination message</li>
-</ul>
-<p><code>preStart()</code> and <code>postStop()</code> can be implemented to <code>initialize/clean</code> any resources used by the actor to process the messages.</p>
-<p><code>preRestart()</code> and <code>postRestart()</code> allow the actor to manage the state in case an exception has been raised and Supervisor actor restarts the actor.</p>
-<h3 id="Defining-an-actor"><a href="#Defining-an-actor" class="headerlink" title="Defining an actor"></a>Defining an actor</h3><p>All actors are created in the <code>context</code> of an actor system or another actor. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActorSystem _system = ActorSystem.create(&quot;MyActorSystem&quot;);</span><br><span class="line">ActorRef myActor = _system.actorOf(new Props(MyActor.class),&quot;myActor&quot;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val system = ActorSystem(&quot;MyActorSystem&quot;)</span><br><span class="line">val myActor = system.actorOf(Props[MyActor], name = &quot;myActor&quot;)</span><br></pre></td></tr></table></figure>
-<h4 id="Stopping-actor"><a href="#Stopping-actor" class="headerlink" title="Stopping actor"></a>Stopping actor</h4><h4 id="Killing-actor"><a href="#Killing-actor" class="headerlink" title="Killing actor"></a>Killing actor</h4><p>An actor can be killed when a kill() message is sent to it. </p>
-<p><code>PoisonPill</code> is an asynchronous way to shut down the actor. <code>kill()</code>  is a synchronous way.</p>
-<h4 id="HotSwap"><a href="#HotSwap" class="headerlink" title="HotSwap"></a>HotSwap</h4><h3 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h3><p>This actor hierarchy forms the basis of the Akka’s <code>&quot;Let It Crash&quot;</code> fault-tolerance<br>model. </p>
-<p>Akka’s fault-tolerance model is built using the <code>actor hierarchy</code> and <code>supervisor model</code>. </p>
-<h3 id="Location-transparency"><a href="#Location-transparency" class="headerlink" title="Location transparency"></a>Location transparency</h3><p>Akka uses the same philosophy of the WWW to identify and locate resources on the Web.</p>
-<p>Akka uses the similar URL convention to locate the actors. The default values are <code>akka://hostname/</code> or <code>akka://hostname:2552/</code></p>
-<h3 id="Actor-System"><a href="#Actor-System" class="headerlink" title="Actor System"></a>Actor System</h3><hr>
-<p>Akka uses the Actor Model together with Software Transactional Memory to raise the abstraction level and provide a better platform to build correct concurrent and scalable applications.</p>
-<p>For fault-tolerance Akka adopts the “Let it crash”, also called “Embrace failure”, model which have been used with great success in the telecom industry to build applications that self-heals, systems that never stop.</p>
-<hr>
-<blockquote>
-<p>The <code>actor</code> model in computer science is a mathematical model of concurrent computation that treats “actors” as the universal primitives of concurrent computation</p>
-</blockquote>
-<p>Actors can be created:</p>
-<ul>
-<li>Extending the ‘Actor’ class and implementing the ‘receive’ method.</li>
-<li>Create an anonymous Actor using one of the ‘actor’ methods.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class MyActor extends Actor &#123;</span><br><span class="line">  def receive = &#123;</span><br><span class="line">    case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">    case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val myActor = new MyActor</span><br><span class="line">myActor.start</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val myActor = actor &#123; </span><br><span class="line">  case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">  case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Akka’s approach to fault-tolerance; the “let it crash” model, is implemented by linking Actors.</p>
-<h4 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h4><p>An actor can change another actor’s state only by sending it a message. Actors communicate with other actors using the <code>address</code> of the target actor’s mailbox. Communication between actors is completely asynchronous and non-blocking; actors only react to the messages being sent to them.</p>
-<h6 id="Typed-Actor"><a href="#Typed-Actor" class="headerlink" title="Typed Actor"></a>Typed Actor</h6><p>In Akka, <code>typed actors</code> have been implemented using the Active Object pattern. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The Active Object Design pattern decouples method execution from method invocation, which reside in their own threads of control. </span><br><span class="line"></span><br><span class="line">The goal is to introduce concurrency and fault tolerance, by using asynchronous method invocation and a scheduler for handling requests.</span><br><span class="line"></span><br><span class="line">The key objective of the Active Object pattern is to decouple the method execution</span><br><span class="line">from the method invocation.</span><br></pre></td></tr></table></figure>
-<p><code>Active Object pattern</code> decouples the method invocation from method execution :</p>
-<ol>
-<li>The client calls the proxy object and invokes the method</li>
-<li>The proxy in passes the method calls as method requests to a scheduler or invocation handler that intercepts the call</li>
-<li>Scheduler or invocation handler enqueues the method requests on a queue</li>
-<li>The scheduler continuously monitors the queue and determines which method request(s) have become runnable</li>
-<li>Scheduler or invocation handler dispatches the requests to the implementation object</li>
-<li>The implementation object, running on the same thread as the scheduler, processes the request and returns any value to the client as Future</li>
-</ol>
-<p><code>Proxy instance</code> has an associated invocation handler. </p>
-<p><code>Method invocation</code> is dispatched to the invoke method of the instance’s invocation handler. </p>
-<p>Actors are entities that change their state by processing the incoming messages and generating other messages in response.</p>
-<p>Use <code>typed actors</code> sparingly and avoid blocking behavior by writing methods that either return Unit or Future.</p>
-<p>Typed Actor Model is communication via method calls. The parameter values are the messages and these need to be <code>immutable</code>. </p>
-<p>Messages can be passed to an actor in two modes:</p>
-<ol>
-<li>Fire and forget (the caller of the method does not expect any reply)</li>
-<li>Send and receive (the caller of the method expects a reply from the implementation class and will wait for that reply)</li>
-</ol>
-<p><strong>Actor lifecycle monitoring</strong></p>
-<p><code>TypedActor.PreStart</code> and <code>TypedActor.PostStop</code> interfaces, we can add the required functionality before the actor starts responding to the method calls</p>
-<p><code>TypedActor.PreRestart</code> and <code>TypedActor.PostRestart</code> interfaces to add functionality on actor restart as part of the supervision</p>
-<p><strong>Receiving messages</strong></p>
-<p>Typed actors can implement the <code>akka.actor.TypedActor.Receiver</code> interface in<br>order to process messages coming to them.</p>
-<p><strong>Supervisor strategy</strong></p>
-<p>Akka’s “Let It Crash” model is implemented by linking actors in a hierarchy. </p>
-<p><strong>Using dispatchers</strong><br>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p><strong>Using routers</strong></p>
-<p>A router is also a type of actor, which routes the incoming messages to the outbound actors. </p>
-<hr>
-<p>Dispatchers are the heart of the Akka application and this is what makes it<br>humming.</p>
-<p>Routers on the other hand, route incoming messages to outbound actors. </p>
-<h4 id="Dispatchers"><a href="#Dispatchers" class="headerlink" title="Dispatchers"></a>Dispatchers</h4><p>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p>The dispatchers run on their threads &amp; dispatch the actors and messages from the attached mailbox and allocate on heap to the executor threads. </p>
-<p>The executor threads are configured and tuned to the underlying processor cores that available for processing the messages.</p>
-<p>In Akka, a router is also a type of actor, which <code>routes the incoming messages to the outbound actors</code>. </p>
-<p>Dispatchers are used to control the <code>flow of execution</code>. Based on the dispatching policy, dispatchers will <code>route the incoming message or request to the business process</code>. </p>
-<ul>
-<li>Centralized control</li>
-<li>Application partitioning</li>
-<li>Reduced inter-dependencies<br>less contention on the same resources,leading to a scalable model.</li>
-</ul>
-<p><code>Types of dispatchers</code></p>
-<p>There are 4 different types of message dispatchers</p>
-<ol>
-<li>Dispatcher</li>
-<li>PinnedDispatcher</li>
-<li>Balancing dispatcher</li>
-<li>Calling thread dispatcher</li>
-</ol>
-<p>And  there are four default mailbox implementations provided as follows:</p>
-<ol>
-<li>Unbounded mailbox</li>
-<li>Bounded mailbox</li>
-<li>Unbounded priority mailbox</li>
-<li>Bounded priority mailbox</li>
-</ol>
-<p>An event-based dispatcher that binds a set of actors to a thread pool backed up by a BlockingQueue method.</p>
-<ol>
-<li>Every actor is backed by its own mailbox</li>
-<li>The dispatcher can be shared with any number of actors</li>
-<li>The dispatcher can be backed by either thread pool or fork join pool</li>
-<li>The dispatcher is optimized for non-blocking code</li>
-</ol>
-<p><code>Pinned dispatcher</code> ( single, dedicated thread for each actor)</p>
-<p>This dispatcher is useful when the actors are doing I/O operations or performing long-running calculations. The dispatcher will deallocate the thread attached to the actor after a configurable period of inactivity.</p>
-<ol>
-<li>Every actor is backed by its own mailbox.</li>
-<li>A dedicated thread for each actor implies that this dispatcher cannot be shared with any other actors.</li>
-<li>The dispatcher is backed by the thread pool executor.</li>
-<li>The dispatcher is optimized for blocking operations. </li>
-</ol>
-<p><code>Balancing dispatcher</code> ( event-based dispatcher that tries to redistribute work from busy actors and allocate it to idle ones)</p>
-<p>Redistribution of tasks can only work if all actors are of the same type </p>
-<p>The dispatcher looks for actors that are idle and dispatches the message to them for processing.</p>
-<ol>
-<li>There is only one mailbox for all actors</li>
-<li>The dispatcher can be shared only with actors of the same type</li>
-<li>The dispatcher can be backed by a either thread pool or fork join pool</li>
-</ol>
-<p><code>Calling thread dispatcher</code> ( runs the task execution on the current thread only)</p>
-<p><strong>Types of mailboxes</strong></p>
-<ol>
-<li>Blocking queue means a queue that waits for space to become available before putting in an element and similarly waits for the queue to become non-empty before retrieving an element</li>
-<li>Bounded queue means a queue that limits the size of the queue; meaning you cannot add more elements than the specified size</li>
-</ol>
-<p><strong>Types of Executor</strong></p>
-<ol>
-<li>Thread pool executor ( Tasks are assigned to the pool using a queue. )</li>
-<li>Fork join executor ( Based on the premise of divide-and-conquer)</li>
-</ol>
-<p><code>Fork join executor</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> # Configuration for the fork join pool</span><br><span class="line"> fork-join-executor &#123;</span><br><span class="line"> </span><br><span class="line">    # Min number of threads</span><br><span class="line">    parallelism-min = 2</span><br><span class="line">    </span><br><span class="line">    # available processors * factor</span><br><span class="line">    parallelism-factor = 2.0</span><br><span class="line">    </span><br><span class="line">    # Max number of threads</span><br><span class="line">    parallelism-max = 10</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = Dispatcher</span><br><span class="line">    executor = &quot;fork-join-executor&quot;</span><br><span class="line">    </span><br><span class="line">    fork-join-executor &#123;</span><br><span class="line">       parallelism-min = 2</span><br><span class="line">       parallelism-factor = 2.0</span><br><span class="line">       parallelism-max = 10</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type = &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = PinnedDispatcher</span><br><span class="line"></span><br><span class="line">        executor = &quot;thread-pool-executor&quot;</span><br><span class="line">        thread-pool-executor &#123;</span><br><span class="line">        core-pool-size-min = 2</span><br><span class="line">        core-pool-size-factor = 2.0</span><br><span class="line">        core-pool-size-max = 10</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type =&quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Routers"><a href="#Routers" class="headerlink" title="Routers"></a>Routers</h3><p>An entity that directs the message from the source to the destination actor. </p>
-<p>Routers route incoming messages to outbound actors.</p>
-<p>Router is also a type of actor, which routes the incoming messages to the outbound actors.</p>
-<p>For the router, the outbound actors are also called routees. </p>
-<p>Akka router supports the following :</p>
-<ol>
-<li>Round robin router ( routes the incoming messages in a circular order to all its routees)</li>
-<li>Random router ( randomly selects a routee and routes the message to the same)</li>
-<li>Smallest mailbox router ( identifies the actor with the least number of messages in its mailbox and routes the message to the same)</li>
-<li>Broadcast router ( forwards the same message to all the routees)</li>
-<li>Scatter gather first completed router ( forwards the message to all its routees as a future, then whichever routee actor responds back, it takes the results and sends them back to the caller)</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyRouterExample&#123;</span><br><span class="line">    akka.actor.deployment &#123;</span><br><span class="line">        /myRandomRouterActor &#123;</span><br><span class="line">            router = random</span><br><span class="line">            nr-of-instances = 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Dynamically resizing routers</strong></p>
-<p>To handle the variability of the incoming message traffic, it might be important to increase the number of actors available to handle the load at runtime. </p>
-<p>For this, routers provide a construct called resize, which allows us to define the range bound in terms of minimum and maximum instances.</p>
-<hr>
-<h4 id="Supervision-and-Monitoring"><a href="#Supervision-and-Monitoring" class="headerlink" title="Supervision and Monitoring"></a>Supervision and Monitoring</h4><p><code>When an actor crashes or throws an exception, who is responsible to catch
-the exception?</code></p>
-<h4 id="Actor-hierarchy"><a href="#Actor-hierarchy" class="headerlink" title="Actor hierarchy"></a>Actor hierarchy</h4><p>The design idea of the Actor Model is to break down the large task into smaller tasks to the point where the task is granular and structured enough to be performed by one specialized actor.</p>
-<h4 id="Supervision"><a href="#Supervision" class="headerlink" title="Supervision"></a>Supervision</h4><h4 id="Supervision-strategies"><a href="#Supervision-strategies" class="headerlink" title="Supervision strategies"></a>Supervision strategies</h4><p>Akka provides two supervision strategies:</p>
-<ul>
-<li><code>One-For-One strategy</code> the supervision strategy is applied only to the failed child. (default)</li>
-<li><code>All-For-One strategy</code> the supervision strategy is applied to all the actor siblings.</li>
-</ul>
-<h4 id="Software-Transactional-Memory"><a href="#Software-Transactional-Memory" class="headerlink" title="Software Transactional Memory"></a>Software Transactional Memory</h4><p>Transactions provide a mechanism to manage the application access to data in a multiuser environment</p>
-<p><img src="resource/akka/supervision_strategies.jpg" alt="supervision_strategies"></p>
-<hr>
-<h4 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h4><p>Akka Cluster provides a fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.</p>
-<p>A cluster is made up of a set of member nodes. The identifier for each node is a <code>hostname:port:uid</code> tuple.</p>
-<p><strong>Gossip</strong></p>
-<p>In <code>push-pull gossip</code> a digest is sent representing current versions but not actual values; the recipient of the gossip can then send back any values for which it has newer versions and also request values for which it has outdated versions. Akka uses a single shared state with a vector clock for versioning, so the variant of push-pull gossip used in Akka makes use of this version to only push the actual state as needed.</p>
-<p>Each node chooses another random node to initiate a round of gossip with.</p>
-<p>The gossip messages are serialized with <code>protobuf</code> and also <code>gzipped</code> to reduce payload size.</p>
-<p><strong>Vector Clocks</strong></p>
-<p><strong>Gossip Convergence</strong></p>
-<p><strong>Failure Detector</strong></p>
-<p><strong>Leader</strong></p>
-<p><strong>Seed Nodes</strong></p>
-<p>When a new node is started it sends a message to all seed nodes and then sends a join command to the seed node that answers first.</p>
-<p><strong>Gossip Protocol</strong></p>
-<p><strong>Membership Lifecycle</strong></p>
-<p><img src="resource/akka/member-states-weakly-up.png" alt="member-states-weakly-up"></p>
-<p><img src="resource/akka/member-states.png" alt="member-states"></p>
-<p><strong>Member States</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>joining</td>
-<td>transient state when joining a cluster</td>
-</tr>
-<tr>
-<td>weakly up</td>
-<td>transient state while network split</td>
-</tr>
-<tr>
-<td>up</td>
-<td>normal operating state</td>
-</tr>
-<tr>
-<td>leaving / exiting</td>
-<td>states during graceful removal</td>
-</tr>
-<tr>
-<td>down</td>
-<td>marked as down</td>
-</tr>
-<tr>
-<td>removed</td>
-<td>tombstone state </td>
-</tr>
-</tbody>
-</table>
-<p><strong>User Actions</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>join</td>
-<td>join a single node to a cluster</td>
-</tr>
-<tr>
-<td>leave</td>
-<td>tell a node to leave the cluster gracefully</td>
-</tr>
-<tr>
-<td>down</td>
-<td>mark a node as down</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Distributed Publish Subscribe in Cluster</strong></p>
-<p><strong>Cluster Client</strong></p>
-<p>Communication from an actor system that is not part of the cluster to actors running somewhere in the cluster. </p>
-<p>The client does not have to know on which node the destination actor is running.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote.port=9999 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><p><strong>Core concepts</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Stream</td>
-<td></td>
-</tr>
-<tr>
-<td>Element</td>
-<td></td>
-</tr>
-<tr>
-<td>Back-pressure</td>
-<td></td>
-</tr>
-<tr>
-<td>Non-Blocking</td>
-<td></td>
-</tr>
-<tr>
-<td>Graph</td>
-<td></td>
-</tr>
-<tr>
-<td>Processing Stage</td>
-<td></td>
-</tr>
-<tr>
-<td>Source</td>
-<td></td>
-</tr>
-<tr>
-<td>Sink</td>
-<td></td>
-</tr>
-<tr>
-<td>Flow</td>
-<td></td>
-</tr>
-<tr>
-<td>RunnableGraph</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<hr>
-<ol>
-<li><code>node</code> : A logical member of a cluster. There could be multiple nodes on a physical machine. Defined by a hostname:port:uid tuple.</li>
-<li><code>cluster</code> : A set of nodes joined together through the membership service.</li>
-<li><code>leader</code> : A single node in the cluster that acts as the leader. Managing cluster convergence and membership state transitions.</li>
-</ol>
-<hr>
-<h3 id="Managing-application-configuration"><a href="#Managing-application-configuration" class="headerlink" title="Managing application configuration"></a>Managing application configuration</h3><p>Akka provides a powerful mechanism called extensions. </p>
-<p>Extensions are loaded in a static way with only one instance per ActorSystem. </p>
-<p>Extensions are implemented as a factory pattern. </p>
-<p>Akka extensions are comprised of two parts, given as follows:</p>
-<ol>
-<li>Extension ( Extension is the interface that needs to be implemented by the class and registered with ActorSystem, and ActorSystem will register the class and make the result available.)</li>
-<li>ExtensionId (It is the unique ID of the extension that is used to identify the<br>extension within ActorSystem.)</li>
-</ol>
-<p><strong>Trace</strong></p>
-<p>Tracing is disabled by default, so we need to enable it for the specific actor systems that need to be monitored</p>
-<p>Define the node property for each node in the system, as this is used to identify and tag the multiple actor systems that are running</p>
-<p>Define the MongoDB name and URL, specifying the location of MongoDB</p>
-<p><strong>Analyze</strong></p>
-<p>A span is the path between two trace events, and the duration between these events is the data that captures the essence of the availability and scalability of the application.</p>
-<p><strong>Query</strong></p>
-<p><strong>JMX</strong></p>
-<p><strong>Durable mailboxes</strong></p>
-<p><strong>Actors and web applications</strong></p>
-<p><strong>Integrating actors with ZeroMQ</strong></p>
-<hr>
-<p><strong>Persistence</strong></p>
-<p>Akka persistence is that only changes to an actor’s internal state are persisted but never its current state directly.</p>
-<ol>
-<li><p>PersistentActor <code>When a persistent actor is started or restarted, journaled messages are replayed to that actor so that it can recover internal state from these messages.</code></p>
-</li>
-<li><p>PersistentView <code>A view itself does not journal new messages, it updates internal state only from a persistent actor&#39;s replicated message stream.</code></p>
-</li>
-<li><p>AtLeastOnceDelivery <code>in case of sender and receiver JVM crashes</code></p>
-</li>
-<li><p>AsyncWriteJournal <code>A journal stores the sequence of messages sent to a persistent actor.Journal maintains highestSequenceNr that is increased on each message.The persistence extension comes with a &quot;leveldb&quot; journal plugin, which writes to the local filesystem.</code></p>
-</li>
-<li><p>Snapshot store <code>Snapshots are used for optimizing recovery times.The persistence extension comes with a &quot;local&quot; snapshot storage plugin, which writes to the local filesystem.</code></p>
-</li>
-</ol>
-<p><strong>Event sourcing</strong></p>
-<p>Akka persistence supports event sourcing with the <code>PersistentActor</code> trait.</p>
-<p>An actor that extends this trait uses the <code>persist</code> method to persist and handle events.</p>
-<p><strong>Identifiers</strong></p>
-<p>A persistent actor must have an identifier that doesn’t change across different actor incarnations. </p>
-<p>The identifier must be defined with the persistenceId method.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">override def persistenceId = &quot;my-persistence-id&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>Recovery</strong></p>
-<p><strong>Atomic writes</strong></p>
-<p><strong>Batch writes</strong></p>
-<p><strong>Message deletion</strong></p>
-<p><strong>Persistence status handling</strong></p>
-<p><strong>Safely shutting down persistent actors</strong></p>
-<p><strong><em>Persistent Views</em></strong></p>
-<p><strong>At-Least-Once Delivery</strong></p>
-<p><strong>Relationship between deliver and confirmDelivery</strong></p>
-<p><strong>Event Adapters</strong></p>
-<p><strong>Persistent FSM</strong></p>
-<p><strong>Storage plugins</strong></p>
-<p><strong>Multiple persistence plugin configurations</strong></p>
-<hr>
-<h3 id="Actor-DSL"><a href="#Actor-DSL" class="headerlink" title="Actor DSL"></a>Actor DSL</h3><p>Actor can be created more concisely using the Act trait.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import akka.actor.ActorDSL._</span><br><span class="line">import akka.actor.ActorSystem</span><br><span class="line"></span><br><span class="line">implicit val system = ActorSystem(&quot;demo&quot;)</span><br></pre></td></tr></table></figure>
-<p>To define a simple actor: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a = actor(new Act &#123;</span><br><span class="line">  become &#123;</span><br><span class="line">    case &quot;hello&quot; ⇒ sender() ! &quot;hi&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><strong>Life-cycle management</strong></p>
-<p>Life-cycle hooks are also exposed as DSL elements</p>
-<p><strong>Finite State Machine</strong></p>
-<p>Finite State Machine can be described as a set of relations:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">State(S) x Event(E) -&gt; Actions (A), State(S&apos;)</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference :"></a>Reference :</h4><ol>
-<li><a href="https://dzone.com/articles/introducing-akka-%E2%80%93-simpler" target="_blank" rel="external">Introducing Akka – Simpler Scalability, Fault-Tolerance, Concurrency &amp; Remoting Through Actors</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Actor_model" target="_blank" rel="external">Actor model</a></li>
-<li>Akka Essentials</li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.1/java.html" target="_blank" rel="external">Java Documentation</a></li>
-<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/reflection/proxy.html" target="_blank" rel="external">Implementation of Dynamic Proxy classes in JDK</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.1.2/project/migration-guide-2.0.x-2.1.x.html" target="_blank" rel="external">Migration Guide 2.0.x to 2.1.x</a></li>
-<li><a href="https://www.typesafe.com/blog/typesafe-announces-akka-streams" target="_blank" rel="external">Typesafe announces Akka Streams, a part of the Reactive Streams Initiative</a></li>
-<li><a href="https://github.com/functional-streams-for-scala/fs2" target="_blank" rel="external">Compositional, streaming I/O library for Scala</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/persistence.html" target="_blank" rel="external">persistence</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/actordsl.html" target="_blank" rel="external">Actor DSL</a></li>
-<li><a href="http://www.infoq.com/cn/presentations/akka-cluster-realization/" target="_blank" rel="external">Akka下分片集群的实现</a></li>
-<li><a href="http://erlang.org/documentation/doc-4.8.2/doc/design_principles/fsm.html" target="_blank" rel="external">Erlang design principles</a></li>
-<li><a href="http://letitcrash.com/post/30165507578/shutdown-patterns-in-akka-2" target="_blank" rel="external">Shutdown Patterns in Akka 2</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.4/scala.html" target="_blank" rel="external">Akka Scala Documentation</a></li>
-<li><a href="https://opencredo.com/introduction-to-akka-streams-getting-started/" target="_blank" rel="external">Introduction to Akka Streams – Getting started</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T14:46:44.000Z"><a href="/2016/04/22/algorithms/community-detection/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/algorithms/community-detection/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Community-Detection-社区发现算法"><a href="#Community-Detection-社区发现算法" class="headerlink" title="Community Detection (社区发现算法)"></a>Community Detection (社区发现算法)</h3><p>针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研究者所重视，而近年来随着社交网络的崛起，这一领域的关注度已大大提升。</p>
-<p>Reference :</p>
-<ol>
-<li><a href="http://senseable.mit.edu/community_detection/" target="_blank" rel="external">Community Detection - MIT Senseable City Lab</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/3/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/5/" class="alignright next">Nächste Seite</a>
+    <a href="/page/5/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Categories</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>8</small></li>
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
   
     <li><a href="/categories/Language/">Language</a><small>4</small></li>
   
@@ -1067,7 +720,7 @@ the exception?</code></p>
   
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
-    <li><a href="/categories/Storage/">Storage</a><small>1</small></li>
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
     <li><a href="/categories/live/">live</a><small>3</small></li>
   
@@ -1088,6 +741,8 @@ the exception?</code></p>
   
     <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
   
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
     <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
@@ -1098,9 +753,13 @@ the exception?</code></p>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   
     <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
   
     <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
   
