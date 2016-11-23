@@ -141,6 +141,11 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 <h3 id="MLlib"><a href="#MLlib" class="headerlink" title="MLlib"></a>MLlib</h3><p>MLlib 是 Spark 对常用的机器学习算法的实现库,同时包括相关的测试和数据生成器。</p>
 <p>Spark 的设计初衷就是为了支持一些迭代的 Job, 这正好是很多机器学习算法的性质。</p>
 <p>MLlib 目前支持四种常见的机器学习问题: 分类, 回归, 聚类和协同过滤。</p>
+<p><code>DataFrame</code> : This ML API uses DataFrame from Spark SQL as an ML dataset, which can hold a variety of data types. E.g., a DataFrame could have different columns storing text, feature vectors, true labels, and predictions.</p>
+<p><code>Transformer</code> : A Transformer is an algorithm which can transform one DataFrame into another DataFrame. E.g., an ML model is a Transformer which transforms a DataFrame with features into a DataFrame with predictions.</p>
+<p><code>Estimator</code> : An Estimator is an algorithm which can be fit on a DataFrame to produce a Transformer. E.g., a learning algorithm is an Estimator which trains on a DataFrame and produces a model.</p>
+<p><code>Pipeline</code> : A Pipeline chains multiple Transformers and Estimators together to specify an ML workflow.</p>
+<p><code>Parameter</code> : All Transformers and Estimators now share a common API for specifying parameters.</p>
 <hr>
 <h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><p>SparkR provides a distributed data frame implementation that supports operations like selection, filtering, aggregation etc.</p>
 <p>SparkR also supports distributed machine learning using MLlib.</p>
@@ -575,7 +580,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Comentarios</h1>
 
   
       <div id="fb-root"></div>
@@ -598,31 +603,37 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -632,7 +643,7 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -647,13 +658,27 @@ It provides high-level APIs in Java, Scala, Python and R, and an optimized ">
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

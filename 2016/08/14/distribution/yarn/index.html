@@ -76,6 +76,13 @@ The fundamental idea ">
 <p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
 <p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
 <p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
+<h3 id="Yarn-状态转换图生成方法"><a href="#Yarn-状态转换图生成方法" class="headerlink" title="Yarn 状态转换图生成方法"></a>Yarn 状态转换图生成方法</h3><p>Yarn中ResourceManager，NodeManager几个组建的状态变迁使用的是有限状态机。</p>
+<ol>
+<li><code>mvn compile -Pvisualize   生成多个.gv文件</code></li>
+<li><p>确保安装了graphviz   然后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dot -Tpng NodeManager.gv &gt; NodeManager.png</span><br><span class="line">dot -Tpng ResourceManager.gv &gt;ResourceManager.png</span><br><span class="line">dot -Tpng MapReduce.gv &gt; MapReduce.png</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <h3 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h3><p>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
 <h3 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h3><h3 id="ApplicationsManager"><a href="#ApplicationsManager" class="headerlink" title="ApplicationsManager"></a>ApplicationsManager</h3><h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
 <p><code>yarn application [options]</code></p>
@@ -207,7 +214,6 @@ The fundamental idea ">
 <li>Container API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/nodes/containers/container_id</code></li>
 </ol>
 <p><code>Timeline Server</code></p>
-<p>1. </p>
 
       
     </div>
@@ -251,7 +257,7 @@ The fundamental idea ">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Comentarios</h1>
 
   
       <div id="fb-root"></div>
@@ -274,31 +280,37 @@ The fundamental idea ">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -308,7 +320,7 @@ The fundamental idea ">
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -323,13 +335,27 @@ The fundamental idea ">
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

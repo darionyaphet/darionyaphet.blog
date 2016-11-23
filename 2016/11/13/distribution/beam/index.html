@@ -1,0 +1,285 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="BeamApache Beam的主要目标是统一批处理和流处理的编程范式，为无限，乱序，web-scale的数据集处理提供简单灵活，功能丰富以及表达能力十分强大的SDK。
+Apache Beam项目重点在于数据处理的编程范式和接口定义，并不涉及具体执行引擎的实现，Apache Beam希望基于Beam">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-13T02:08:48.000Z"><a href="/2016/11/13/distribution/beam/">2016-11-13</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Beam"><a href="#Beam" class="headerlink" title="Beam"></a>Beam</h3><p>Apache Beam的主要目标是统一批处理和流处理的编程范式，为无限，乱序，web-scale的数据集处理提供简单灵活，功能丰富以及表达能力十分强大的SDK。</p>
+<p>Apache Beam项目重点在于数据处理的编程范式和接口定义，并不涉及具体执行引擎的实现，Apache Beam希望基于Beam开发的数据处理程序可以执行在任意的分布式计算引擎上。</p>
+<p><strong>Apache Beam基本架构</strong></p>
+<ol>
+<li>统一批处理和流处理的需求。</li>
+<li>生成的分布式数据处理任务应该能够在各个分布式执行引擎上执行，用户可以自由切换分布式数据处理任务的执行引擎与执行环境。</li>
+</ol>
+<p>Apache Beam主要由<code>Beam SDK</code>和<code>Beam Runner</code>组成，<code>Beam SDK</code>定义了开发分布式数据处理任务业务逻辑的API接口，生成的的分布式数据处理任务Pipeline交给具体的<code>Beam Runner</code>执行引擎。</p>
+<p><strong>Beam Model</strong></p>
+<ol>
+<li>数据。分布式数据处理要处理的数据类型一般可以分为两类，有限的数据集和无限的数据流。</li>
+<li>时间。Process Time是指数据进入分布式处理框架的时间，而Event-Time则是指数据产生的时间。</li>
+<li>乱序。对于流处理框架处理的数据流来说，其数据的到达顺序可能并不严格按照Event-Time的时间顺序。对于基于Event Time定义的时间窗口来说，可能存在时间靠前的消息在时间靠后的消息后到达的情况。</li>
+</ol>
+<p>Beam Model处理的目标数据是无限的时间乱序数据流，不考虑时间顺序或是有限的数据集可看做是无限乱序数据流的一个特例。</p>
+<p>Beam Model从下面四个维度归纳了用户在进行数据处理的时候需要考虑的问题：</p>
+<ol>
+<li>What。如何对数据进行计算？</li>
+<li>Where。数据在什么范围中计算？</li>
+<li>When。何时将计算结果输出？</li>
+<li>How。迟到数据如何处理？</li>
+</ol>
+<p><strong>Beam SDK</strong></p>
+<p><code>Pipeline</code> : </p>
+<p><code>PCollection</code> : </p>
+<p><code>Transform</code> :</p>
+<p><code>Source</code> and <code>Sink</code> : </p>
+<p>A typical Beam driver program works as follows:</p>
+<ol>
+<li>Create a <code>Pipeline</code> object and set the pipeline execution options, including the Pipeline Runner.</li>
+<li>Create an initial <code>PCollection</code> for pipeline data, either using the Source API to read data from an external source, or using a Create transform to build a PCollection from in-memory data.</li>
+<li>Apply <code>Transforms</code> to each <code>PCollection</code>. Transforms can change, filter, group, analyze, or otherwise process the elements in a PCollection. A transform creates a new output PCollection without consuming the input collection. A typical pipeline applies subsequent transforms to the each new output PCollection in turn until processing is complete.</li>
+<li>Output the final, transformed PCollection(s), typically using the Sink API to write data to an external source.</li>
+<li>Run the pipeline using the designated Pipeline Runner.</li>
+</ol>
+<p><em>Creating the Pipeline</em></p>
+<p><em>Working with PCollections</em></p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/23618169" target="_blank" rel="external">Apache Beam: 下一代的大数据处理标准</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comentarios</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/11/13/distribution/beam/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categorías</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
+  
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>4</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Etiquetas</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

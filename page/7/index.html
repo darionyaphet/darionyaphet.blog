@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 7 | darion.johannes.yaphet</title>
+  <title>Página 7 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,425 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:19.000Z"><a href="/2016/04/22/other/git/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/git/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h4 id="Git-the-stupid-content-tracker"><a href="#Git-the-stupid-content-tracker" class="headerlink" title="Git - the stupid content tracker"></a>Git - the stupid content tracker</h4><p><code>Git</code> is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
+<p>Git 会把<code>每次提交的文件的全部内容</code>都会记录下来</p>
+<hr>
+<p><strong>Config</strong></p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">λ ~/ git</span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c name=value]</span><br><span class="line">           [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">           [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">           &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">These are common Git commands used in various situations:</span><br><span class="line"></span><br><span class="line">start a working area (see also: git help tutorial)</span><br><span class="line">   clone      Clone a repository into a new directory</span><br><span class="line">   init       Create an empty Git repository or reinitialize an existing one</span><br><span class="line"></span><br><span class="line">work on the current change (see also: git help everyday)</span><br><span class="line">   add        Add file contents to the index</span><br><span class="line">   mv         Move or rename a file, a directory, or a symlink</span><br><span class="line">   reset      Reset current HEAD to the specified state</span><br><span class="line">   rm         Remove files from the working tree and from the index</span><br><span class="line"></span><br><span class="line">examine the history and state (see also: git help revisions)</span><br><span class="line">   bisect     Use binary search to find the commit that introduced a bug</span><br><span class="line">   grep       Print lines matching a pattern</span><br><span class="line">   log        Show commit logs</span><br><span class="line">   show       Show various types of objects</span><br><span class="line">   status     Show the working tree status</span><br><span class="line"></span><br><span class="line">grow, mark and tweak your common history</span><br><span class="line">   branch     List, create, or delete branches</span><br><span class="line">   checkout   Switch branches or restore working tree files</span><br><span class="line">   commit     Record changes to the repository</span><br><span class="line">   diff       Show changes between commits, commit and working tree, etc</span><br><span class="line">   merge      Join two or more development histories together</span><br><span class="line">   rebase     Forward-port local commits to the updated upstream head</span><br><span class="line">   tag        Create, list, delete or verify a tag object signed with GPG</span><br><span class="line"></span><br><span class="line">collaborate (see also: git help workflows)</span><br><span class="line">   fetch      Download objects and refs from another repository</span><br><span class="line">   pull       Fetch from and integrate with another repository or a local branch</span><br><span class="line">   push       Update remote refs along with associated objects</span><br><span class="line"></span><br><span class="line">&apos;git help -a&apos; and &apos;git help -g&apos; list available subcommands and some</span><br><span class="line">concept guides. See &apos;git help &lt;command&gt;&apos; or &apos;git help &lt;concept&gt;&apos;</span><br><span class="line">to read about a specific subcommand or concept.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Branch</strong></p>
+<p>使用分支意味着可以把你的工作从开发主线上分离开来，以免影响开发主线。</p>
+<p><em>Git 保存的不是文件的变化或者差异，而是一系列不同时刻的文件快照。</em></p>
+<p>在进行提交操作时，Git 会保存一个提交对象。提交对象会包含一个指向暂存内容快照的指针。 但不仅仅是这样，该提交对象还包含了作者的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针。首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象，而由多个分支合并产生的提交对象有多个父对象，</p>
+<p>暂存操作会为每一个文件计算校验和，然后会把当前版本的文件快照保存到 Git 仓库中，最终将校验和加入到暂存区域等待提交。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch  列出本地分支 当前分支前加*标记</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -r 列出远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -r</span><br><span class="line">  origin/HEAD -&gt; origin/master</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -a 列出本地分支和远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch 创建一个新的本地分支 只创建分支 不切换支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch local</span><br><span class="line">λ ~/git.learning/ master</span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">  local</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout 切换分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git checkout local</span><br><span class="line">Switched to branch &apos;local&apos;</span><br><span class="line">λ ~/git.learning/ local</span><br><span class="line">λ ~/git.learning/ local git branch</span><br><span class="line">* local</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d | -D  删除分支</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d -r  删除远程分支</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Remote</strong></p>
+<hr>
+<p><strong>Log 显示提交记录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log [&lt;options&gt;] [&lt;revision range&gt;] [[\--] &lt;path&gt;…​]</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Alias</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.last &apos;log -1 HEAD&apos;</span><br><span class="line">git config --global alias.unstage &apos;reset HEAD --&apos;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Tag</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag 列出已有的标签</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 看到标签信息与对应的提交信息</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Bisect</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git bisect &lt;subcommand&gt; &lt;options&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git bisect start [--term-&#123;old,good&#125;=&lt;term&gt; --term-&#123;new,bad&#125;=&lt;term&gt;]</span><br><span class="line">         [--no-checkout] [&lt;bad&gt; [&lt;good&gt;...]] [--] [&lt;paths&gt;...]</span><br><span class="line">git bisect (bad|new) [&lt;rev&gt;]</span><br><span class="line">git bisect (good|old) [&lt;rev&gt;...]</span><br><span class="line">git bisect terms [--term-good | --term-bad]</span><br><span class="line">git bisect skip [(&lt;rev&gt;|&lt;range&gt;)...]</span><br><span class="line">git bisect reset [&lt;commit&gt;]</span><br><span class="line">git bisect visualize</span><br><span class="line">git bisect replay &lt;logfile&gt;</span><br><span class="line">git bisect log</span><br><span class="line">git bisect run &lt;cmd&gt;...</span><br><span class="line">git bisect help</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Blame</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>Tips :</code></p>
+<p><strong>Git自动补全</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash</span><br></pre></td></tr></table></figure>
+<p>在~/.bash_profile文件中添加以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ -f ~/.git-completion.bash ]; then</span><br><span class="line">    . ~/.git-completion.bash</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>GitHub秘籍</strong></p>
+<ol>
+<li>在任意diff页面的URL后加上 <code>?w=1</code> ，可以去掉那些只是空白字符的变化，使你能更专注于代码的变化。 </li>
+<li>在diff或者file页面的URL后面加上 <code>?ts=4</code> ，这样当显示tab字符的长度时就会是4个空格的长度，不再是默认的8个空格。 ts 后面的数字还可以根据你个人的偏好进行修改。</li>
+<li>查看某个用户的所有提交历史，只需在commits页面URL后加上 <code>?author=username</code> 。</li>
+<li>Gists还可以像任何标准仓库一样被克隆。</li>
+<li><a href="https://git.io/" target="_blank" rel="external">Git.io</a> 是Github的短网址服务。</li>
+<li>代码文件地址后加上 #L52 或者单击行号52都会将第52行代码高亮显示。多行高亮也可以，比如用 #L53-L60 选择范围，或者按住 shift 键，然后再点击选择的两行。</li>
+<li>如果某个提交修复了一个Issue，当提交到master分支时，提交信息里可以使用 <code>fix/fixes/fixed</code> , <code>close/closes/closed</code> 或者 <code>resolve/resolves/resolved</code>等关键词，后面再跟上<code>Issue号</code>，这样就会关闭这个Issue。</li>
+<li>引用同一个仓库中一个Issue : <code>#</code> 加上<code>Issue号</code>，自动创建到此Issue的链接,链接到其他仓库的Issue <code>user_name/repo_name#ISSUE_NUMBER</code></li>
+<li>Github支持的完整表情符号列表详见 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">emoji-cheat-sheet.com</a> 或 <a href="https://github.com/scotch-io/All-Github-Emoji-Icons" target="_blank" rel="external">scotch-io/All-Github-Emoji-Icons </a></li>
+<li><a href="http://www.kancloud.cn/thinkphp/github-tips/37891" target="_blank" rel="external">Issues和Pull requests里可以添加复选框</a></li>
+<li>GitHub支持将 <code>.csv</code> 和 <code>.tsv</code> 格式的文件渲染成表格数据。</li>
+<li>Pull Request中的Revert按钮来撤销一个已合并的Pull Request中的commit。</li>
+<li>根目录添加一个名为 CONTRIBUTING 的文件后，贡献者在新建Issue或Pull Request时会看到这个文件的链接。</li>
+<li><a href="https://github.com/github/hub#commands" target="_blank" rel="external">Hub</a>是一个对Git进行了封装的命令行工具</li>
+<li>提交和Pull Requests里包含有Github支持的可渲染文档（比如Markdown）会提供 source 和 rendered 两个视图功能。</li>
+</ol>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://hubingforever.blog.163.com/blog/static/1710405792012587105464/" target="_blank" rel="external">Git对象模型</a> </li>
+<li><a href="http://hubingforever.blog.163.com/blog/static/17104057920125794943922/" target="_blank" rel="external">Git索引</a></li>
+<li><a href="http://git-scm.com/" target="_blank" rel="external">git Doc</a></li>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></li>
+<li><a href="http://gitref.org/" target="_blank" rel="external">gitref</a></li>
+<li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
+<li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/gradle/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Gradle</p>
+<p>###Build Script Basic<br>任何一个Gradle构建都是由一个或多个 projects 组成.</p>
+<p>每个project包括许多可构建组成部分. 这完全取决于你要构建些什么.</p>
+<p>举个栗子.每个project或许是一个jar包或者一个web应用, 它也可以是一个由许多其他项目中产生的jar构成的zip压缩包.一个project不必描述它只能进行构建操作. </p>
+<p>它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大.<br>Gradle的build-by-convention可以让您来具体定义一个project到底该做什么.</p>
+<p>每个project都由多个tasks组成.每个task都代表了构建执行过程中的一个原子性操作.如编译,打包,生成javadoc,发布到某个仓库等操作</p>
+<p>你可以通过在命令行运行gradle命令来执行构建, gradle命令会从当前目录下寻找 build.gradle 文件来执行构建.</p>
+<p>我们称 build.gradle 文件为构建脚本. 严格来说这其实是一个构建配置脚本</p>
+<p>build.gradle</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println &apos;Hello World !&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &apos;Hello World&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doFirst &#123;</span><br><span class="line">    println &apos;Before&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doLast &#123;</span><br><span class="line">   println &apos;After&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task &lt;&lt; &#123;</span><br><span class="line">    println &apos;Last&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>doFirst 和 doLast 可以进行多次调用. 分别被添加在任务的开头和结尾.</p>
+<p>当任务开始执行时这些动作会按照既定顺序进行.其中 &lt;&lt; 操作符 是 doLast 的简写方式.</p>
+<p><code>增加自定义属性</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task myTask &#123;</span><br><span class="line">    ext.name = &apos;darion.yaphet&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task printName &#123;</span><br><span class="line">    println myTask.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>默认任务</code></p>
+<p>Gradle允许在脚本中定义多个默认任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks &apos;clean&apos; ,&apos;run&apos;</span><br><span class="line"></span><br><span class="line">task clean &lt;&lt; &#123;</span><br><span class="line">    println &apos;default clean&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task  run &lt;&lt; &#123;</span><br><span class="line">    println &apos;default run&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###Java Plugin<br>大部分Java项目基本流程都是相似的:编译源文件,进行单元测试,创建Jar包.<br>使用Gradle做这些工作不必为每个工程都编写代码.<br>Gradle已经提供了完美的插件来解决这些问题. </p>
+<p>插件就是Gradle的扩展,简而言之就是为你添加一些非常有用的默认配置.<br>Gradle自带了很多插件,并且你也可以很容易的编写和分享自己的插件.<br>Java plugin作为其中之一,为你提供了诸如编译,测试,打包等一些功能.</p>
+<p>Java插件为工程定义了许多默认值,如Java源文件位置.<br>如果你遵循这些默认规则,那么你无需在你的脚本文件中书写太多代码.<br>当然,Gradle也允许你自定义项目中的一些规则.<br>实际上,由于对Java工程的构建是基于插件的,那么你也可以完全不用插件自己编写代码来进行构建.</p>
+<p><code>一个基本Java项目</code></p>
+<p>###Web Plugin</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/maven/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/maven/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Maven</p>
+<p>###Commands</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">mvn -h</span><br><span class="line"></span><br><span class="line">usage: mvn [options] [&lt;goal(s)&gt;] [&lt;phase(s)&gt;]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"> -am,--also-make                        If project list is specified, also</span><br><span class="line">                                        build projects required by the</span><br><span class="line">                                        list</span><br><span class="line"> -amd,--also-make-dependents            If project list is specified, also</span><br><span class="line">                                        build projects that depend on</span><br><span class="line">                                        projects on the list</span><br><span class="line"> -B,--batch-mode                        Run in non-interactive (batch)</span><br><span class="line">                                        mode</span><br><span class="line"> -b,--builder &lt;arg&gt;                     The id of the build strategy to</span><br><span class="line">                                        use.</span><br><span class="line"> -C,--strict-checksums                  Fail the build if checksums don&apos;t</span><br><span class="line">                                        match</span><br><span class="line"> -c,--lax-checksums                     Warn if checksums don&apos;t match</span><br><span class="line"> -cpu,--check-plugin-updates            Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -D,--define &lt;arg&gt;                      Define a system property</span><br><span class="line"> -e,--errors                            Produce execution error messages</span><br><span class="line"> -emp,--encrypt-master-password &lt;arg&gt;   Encrypt master security password</span><br><span class="line"> -ep,--encrypt-password &lt;arg&gt;           Encrypt server password</span><br><span class="line"> -f,--file &lt;arg&gt;                        Force the use of an alternate POM</span><br><span class="line">                                        file (or directory with pom.xml).</span><br><span class="line"> -fae,--fail-at-end                     Only fail the build afterwards;</span><br><span class="line">                                        allow all non-impacted builds to</span><br><span class="line">                                        continue</span><br><span class="line"> -ff,--fail-fast                        Stop at first failure in</span><br><span class="line">                                        reactorized builds</span><br><span class="line"> -fn,--fail-never                       NEVER fail the build, regardless</span><br><span class="line">                                        of project result</span><br><span class="line"> -gs,--global-settings &lt;arg&gt;            Alternate path for the global</span><br><span class="line">                                        settings file</span><br><span class="line"> -gt,--global-toolchains &lt;arg&gt;          Alternate path for the global</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -h,--help                              Display help information</span><br><span class="line"> -l,--log-file &lt;arg&gt;                    Log file where all build output</span><br><span class="line">                                        will go.</span><br><span class="line"> -llr,--legacy-local-repository         Use Maven 2 Legacy Local</span><br><span class="line">                                        Repository behaviour, ie no use of</span><br><span class="line">                                        _remote.repositories. Can also be</span><br><span class="line">                                        activated by using</span><br><span class="line">                                        -Dmaven.legacyLocalRepo=true</span><br><span class="line"> -N,--non-recursive                     Do not recurse into sub-projects</span><br><span class="line"> -npr,--no-plugin-registry              Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -npu,--no-plugin-updates               Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -nsu,--no-snapshot-updates             Suppress SNAPSHOT updates</span><br><span class="line"> -o,--offline                           Work offline</span><br><span class="line"> -P,--activate-profiles &lt;arg&gt;           Comma-delimited list of profiles</span><br><span class="line">                                        to activate</span><br><span class="line"> -pl,--projects &lt;arg&gt;                   Comma-delimited list of specified</span><br><span class="line">                                        reactor projects to build instead</span><br><span class="line">                                        of all projects. A project can be</span><br><span class="line">                                        specified by [groupId]:artifactId</span><br><span class="line">                                        or by its relative path.</span><br><span class="line"> -q,--quiet                             Quiet output - only show errors</span><br><span class="line"> -rf,--resume-from &lt;arg&gt;                Resume reactor from specified</span><br><span class="line">                                        project</span><br><span class="line"> -s,--settings &lt;arg&gt;                    Alternate path for the user</span><br><span class="line">                                        settings file</span><br><span class="line"> -T,--threads &lt;arg&gt;                     Thread count, for instance 2.0C</span><br><span class="line">                                        where C is core multiplied</span><br><span class="line"> -t,--toolchains &lt;arg&gt;                  Alternate path for the user</span><br><span class="line">                                        toolchains file</span><br><span class="line"> -U,--update-snapshots                  Forces a check for missing</span><br><span class="line">                                        releases and updated snapshots on</span><br><span class="line">                                        remote repositories</span><br><span class="line"> -up,--update-plugins                   Ineffective, only kept for</span><br><span class="line">                                        backward compatibility</span><br><span class="line"> -V,--show-version                      Display version information</span><br><span class="line">                                        WITHOUT stopping build</span><br><span class="line"> -v,--version                           Display version information</span><br><span class="line"> -X,--debug                             Produce execution debug output</span><br></pre></td></tr></table></figure>
+<p>###Configuring</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Simple Build Tool</p>
+<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/python/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/python/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Python</p>
+<p><strong>Python Egg</strong></p>
+<p>Python 中的egg文件 就如同Java中的jar文件 是一个打包文件 用于方便安装部署。</p>
+<p>Python的setup.py其实是python工具包distutils的配置文件，setuptools就是基于distutils来做的。</p>
+<p>在setup.py中通过setup函数来配置打包信息。</p>
+<p>首先要引入setuptools的函数setup。</p>
+<p>setuptools的setup其实就是distutils的setup函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#coding=utf8</span><br><span class="line"></span><br><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name = &quot;py-example-example&quot;,</span><br><span class="line">    version = &quot;0.1&quot;,</span><br><span class="line">    packages = find_packages(),</span><br><span class="line"></span><br><span class="line">    description = &quot;python egg example&quot;,</span><br><span class="line">    long_description = &quot;python egg example&quot;,</span><br><span class="line">    author = &quot;darion&quot;,</span><br><span class="line">    author_email = &quot;darion.yaphet@gmail.com&quot;,</span><br><span class="line"></span><br><span class="line">    license = &quot;GPL&quot;,</span><br><span class="line">    keywords = (&quot;python&quot;, &quot;egg&quot;),</span><br><span class="line">    platforms = &quot;Independant&quot;,</span><br><span class="line">    url = &quot;http://darion.yaphet.github.io&quot;, </span><br><span class="line">	</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>运行<code>python setup.py bdist_egg</code> ,生成Python egg文件。</p>
+<hr>
+<p><strong>IPython</strong></p>
+<hr>
+<p>####Debugger framework</p>
+<p>####Python Debugger</p>
+<p>Reference:</p>
+<ol>
+<li><a href="http://www.snarky.ca/why-print-became-a-function-in-python-3" target="_blank" rel="external">Why <code>print</code> became a function in Python 3</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Golang</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
+<ol>
+<li>#<code>runtime metaprogramming</code></li>
+</ol>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Domain-specific language</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -122,368 +541,50 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/red-black-tree/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/red-black-tree/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Red Black Tree</p>
-<p>Red Black Tree由Rudolf Bayer发明的，当时被称为平衡二叉B树。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。</p>
-<p>红黑树每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了额外要求:</p>
-<ol>
-<li>节点是红色或黑色</li>
-<li>根节点是黑色</li>
-<li>每个叶节点是黑色的</li>
-<li>每个红色节点的两个子节点都是黑色</li>
-<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/divide-and-conquer/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/divide-and-conquer/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/dynamic-programming/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/dynamic-programming/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Dynamic Programming</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">把多阶段过程转化为一系列单阶段问题，利用各阶段之间的关系，逐个求解</span><br><span class="line">创立了解决这类过程优化问题的新方法——动态规划</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/binary-tree/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/binary-tree/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Binary-Tree"><a href="#Binary-Tree" class="headerlink" title="Binary Tree"></a>Binary Tree</h3><h4 id="Traverse"><a href="#Traverse" class="headerlink" title="Traverse"></a>Traverse</h4><p>遍历操作分为递归与非递归两种，递归操作一般需要借助辅助数据结构。</p>
-<ol>
-<li><p>Pre-Order</p>
-</li>
-<li><p>In-Order</p>
-</li>
-<li><p>Post-Order</p>
-</li>
-<li><p>Level</p>
-</li>
-</ol>
-<h4 id="求二叉树第K层的节点个数"><a href="#求二叉树第K层的节点个数" class="headerlink" title="求二叉树第K层的节点个数"></a>求二叉树第K层的节点个数</h4>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/sort/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/sort/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/stack/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/stack/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/list/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/list/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODUxOTA5Mg==&amp;mid=2652549143&amp;idx=1&amp;sn=c32136d795aa30b55e412ed7c579c13f&amp;scene=23&amp;srcid=0426T0W75iKpSewMxeA6iL8b#rd" target="_blank" rel="external">三种链表及其哨兵</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-19T15:53:43.000Z"><a href="/2016/04/19/live/chess/">2016-04-19</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/19/live/chess/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Chess"><a href="#Chess" class="headerlink" title="Chess"></a>Chess</h3><p><img src="resource/chess/chess.jpg" alt="Chess"></p>
-<h3 id="入门-amp-常识"><a href="#入门-amp-常识" class="headerlink" title="入门&amp;常识"></a>入门&amp;常识</h3><p>国际象棋有8*8共64个棋格，相邻的两个棋格总是黑白相间。为了方便，我们可以用A——H，和1——8这些字母和数字来标志每个格子。如下图。对局双方分为黑、白两方，各执16个棋子。这16个棋子分别是8个兵，2个车，2个马，2个象，1个王后，1个国王。只要将对方的国王吃掉就算胜利。</p>
-<ol>
-<li>国王。国王可以直行、横行、斜行，但是每次只能动一个格。国王死掉，棋局结束。</li>
-<li>王后。王后是国际象棋中最为厉害的棋子，她可以直行、横行、斜行，且行走的格数不受限制，只要前方没有其它棋子。</li>
-<li>象。只能斜行。国际象棋中有两个象，一个位于黑格，一个位于白格，着也意味着，黑格中的象永远不会出现在白格的位置。</li>
-<li>马。国际象棋中的马和中国象棋中的马的行走方法是一样的，都是走“日”字。但是国际象棋中的马没有“拌腿”一说。</li>
-<li>车。国际象棋中的车与中国象棋中的车一样，都是可以直走、横走，且走的格数不受限制。另外，车还有一种特殊的走法，叫做“王车易位”。每局中，对局双方都有一次同时移动国王和车的机会。但是王车易位有诸多限制。</li>
-<li>兵。如果兵是第一次行走，可以走一格或者两格，如果不是第一次行走，只能走一格，且只能直行，不能横行和斜行。另外，兵吃子儿的方法比较特殊，一般，兵只能吃斜前方的子儿，吃完后占据斜前方的位置，还有一种特殊的吃法，兵一次走两格，走完后在同一横线上有对方的兵时，可以将其吃掉，然后占据斜前方的位置。这叫做“吃过路兵”。如果己方的兵走到对方的底线时，这时候兵就可以升为除国王和兵以外的其它棋子，由于王后的威力最大，所以，兵经常升为王后。</li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/6/" class="alignleft prev">Prev</a>
+    <a href="/page/6/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/8/" class="alignright next">Next</a>
+    <a href="/page/8/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -493,7 +594,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -508,13 +609,27 @@
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

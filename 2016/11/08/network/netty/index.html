@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="##Netty
+
+###架构总览
+Netty is a NIO client server framework which enables quick and easy development of network applications such as protocol servers and ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-08T02:52:38.000Z"><a href="/2016/11/08/network/netty/">2016-11-08</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Netty</p>
+<p><img src="../resource/netty/lable.png" alt="Netty"></p>
+<p>###架构总览<br><img src="../resource/netty/architecture.png" alt="archietecture"></p>
+<p>Netty is a NIO client server framework which enables quick and easy development of network applications such as protocol servers and clients. It greatly simplifies and streamlines network programming such as TCP and UDP socket server. – Netty 官网</p>
+<p>总体来说 Netty算是一个异步-事件驱动网络框架，具有很高的性能与扩展能力。</p>
+<p>###重要组件介绍</p>
+<ol>
+<li><p>ServerBootstrap instance is then configured, as shown in the following listing, to set options, such as the port, the threading model/event loop, and the server handler to handle the business logic </p>
+</li>
+<li><p>EventExecutor : a special EventExecutorGroup which comes with some handy methods to see if a Thread is executed in a event loop.</p>
+</li>
+<li><p>EventExecutorGroup : responsible for providing the EventExecutor’s to use via its next() method. </p>
+</li>
+</ol>
+<p>2.Bootstrap</p>
+<p>3.Channel</p>
+<p>4.ChannelPipeline</p>
+<p>可以理解为ChannelHandler的有序容器</p>
+<p>5.ChannelBuffer</p>
+<p>6.ChannelHandler</p>
+<p>ChannelHandler分为ChannelInboundHandler与ChannelOutboundHandler两类</p>
+<p>ChannelInboundHandler对从Client –&gt; Server的消息进行处理</p>
+<p>ChannelOutboundHandler对从Server –&gt; CLient的消息进行处理</p>
+<p>7.ChannelHandlerContext</p>
+<p>###示例程序<br>以著名的Discard程序为例  说明Netty程序基本结构</p>
+<p>首先是Server端结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">EventLoopGroup bossGroup = new NioEventLoopGroup(1);</span><br><span class="line">EventLoopGroup workerGroup = new NioEventLoopGroup();</span><br><span class="line"></span><br><span class="line">ServerBootstrap b = new ServerBootstrap();</span><br><span class="line">b.group(bossGroup, workerGroup)</span><br><span class="line">    .channel(NioServerSocketChannel.class)</span><br><span class="line">    .handler(new LoggingHandler(LogLevel.INFO))</span><br><span class="line">    .childHandler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void initChannel(SocketChannel ch) &#123;</span><br><span class="line">            ChannelPipeline p = ch.pipeline();</span><br><span class="line">            if (sslCtx != null) &#123;</span><br><span class="line">                p.addLast(sslCtx.newHandler(ch.alloc()));</span><br><span class="line">            &#125;</span><br><span class="line">            p.addLast(new DiscardServerHandler());</span><br><span class="line">        &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// Bind and start to accept incoming connections.</span><br><span class="line">ChannelFuture f = b.bind(PORT).sync();</span><br><span class="line"></span><br><span class="line">// Wait until the server socket is closed.</span><br><span class="line">// In this example, this does not happen, but you can do that to gracefully</span><br><span class="line">// shut down your server.</span><br><span class="line">f.channel().closeFuture().sync();</span><br></pre></td></tr></table></figure>
+<p>之后是Client端结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">EventLoopGroup group = new NioEventLoopGroup();</span><br><span class="line">Bootstrap b = new Bootstrap();</span><br><span class="line">b.group(group)</span><br><span class="line">    .channel(NioSocketChannel.class)</span><br><span class="line">    .handler(new ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        protected void initChannel(SocketChannel ch) throws Exception &#123;</span><br><span class="line">            ChannelPipeline p = ch.pipeline();</span><br><span class="line">            if (sslCtx != null) &#123;</span><br><span class="line">                p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));</span><br><span class="line">            &#125;</span><br><span class="line">            p.addLast(new DiscardClientHandler());</span><br><span class="line">        &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>AbstractBootstrap中<br>doBind(final SocketAddress localAddress)</p>
+<p>init(Channel channel)</p>
+<p>A Future is an abstraction, which represents a value that may become available at some point. </p>
+<p>A Future object either holds the result of a computation or, in the case of a failed computation, an exception. </p>
+<p>##Your first Netty application </p>
+<p>A Netty application begins with one of the Bootstrap classes, a Bootstrap is a construct Netty provides that makes it easy for you to configure how Netty should setup or bootstrap the application.</p>
+<p>In order to allow multiple protocols and various ways of processing data, Netty has what are called handlers.</p>
+<p>The ChannelInboundHandler receives messages which you can process and decide what to do with it.</p>
+<p>When a channel is registered, Netty binds that channel to a single EventLoop  for the lifetime of that Channel. EventLoop is always bound to a single Thread that never changed during its life time. </p>
+<p>EventLoopGroup contains one or more EventLoop</p>
+<p>Netty allows the same EventLoopGroup to be used for processing IO and accepting<br>connections. </p>
+<p>To understand what happens to data when it is written or read, it is first essential to have some understanding of what handlers are. </p>
+<p>Handlers themselves depend upon the aforementioned ChannelPipeline to prescribe their order of execution. </p>
+<p>A ChannelHandler may do some action on the data and then may pass it to the next<br>ChannelHandler in the ChannelPipeline. Another often action is do not do any action at all and just pass the specific event to the next ChannelHandler in the ChannelPipeline. This next ChannelHandler may handle it then or just forward it to the next ChannelHandler again. </p>
+<p>Both ChannelInboundHandler and ChannelOutboundHandler can be mixed into the same ChannelPipeline. </p>
+<p>###Encoding</p>
+<p>When you send or receive a message with Netty it must be converted from one form to another. </p>
+<p>If the message is being received it must be converted from bytes to a Java object (decoded by some kind of decoder). </p>
+<p>If the message is being sent it must be converted from a<br>Java object to bytes (encoded by some type of encoder). </p>
+<p>##Transports</p>
+<p><code>Channel interface</code>, which is used for all of the outbound operations. All I/O operations in Netty are asynchronous. </p>
+<pre><code>A channel provides a user:
+Current state of the channel 
+ChannelConfig configuration parameters of the channel
+I/O operations that the channel supports
+ChannelPipeline which handles all I/O events and requests
+</code></pre><p>The ChannelPipeline holds all of the ChannelHandler instances that should be used for the inbound and outbound data that is passed through the channel. </p>
+<p>ChannelHandler use for :</p>
+<ol>
+<li>Transforming data from one format to another.  </li>
+<li>Notifying you of exceptions. </li>
+<li>Notifying you when a Channel becomes active or inactive.</li>
+<li>Notifying you once a channel is registered/deregistered from an EventLoop.</li>
+<li>Notifying you about user-specific events. </li>
+</ol>
+<p>###IOI(Old blocking I/O )</p>
+<p>The OIO transport is a compromise in Netty.</p>
+<p>##Buffers</p>
+<p><strong>Different types of ByteBuf</strong></p>
+<ol>
+<li>HEAP BUFFERS</li>
+<li>DIRECT BUFFERS</li>
+<li>COMPOSITE BUFFERS</li>
+</ol>
+<p>##Transports<br>The heart of the transport API is the <strong>Channel</strong> interface, which is used for all of the outbound operations. A channel has a <em>ChannelPipeline</em> and a <em>ChannelConfig</em><br>assigned to it.</p>
+<p>The <strong>ChannelPipeline</strong> holds all of the ChannelHandler instances that should be used for the inbound and outbound data that is passed through the channel. </p>
+<p>##ChannelHandler</p>
+<p>your channel handler must extend the ChannelInboundHandlerAdapter class and override the messageReceived method. This method is called every time messages are received, which in this case are bytes. </p>
+<p>channelActive Called after the connection to the server is established</p>
+<p>channelRead0  Called after you receive data from the server </p>
+<p>exceptionCaught  Called if any exception was raised during processing </p>
+<p><strong>ChannelInboundHandler</strong> and <strong>ChannelOutboundHandler</strong> extends <strong>ChannelHandler</strong></p>
+<p>##ChannelPipeline</p>
+<p>The <strong>ChannelPipeline</strong> holds all of the ChannelHandler instances that should be used for the <em>inbound</em> and <em>outbound</em> data that is passed through the channel. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">                                              I/O Request</span><br><span class="line">                                          via &#123;@link Channel&#125; or</span><br><span class="line">                                      &#123;@link ChannelHandlerContext&#125;</span><br><span class="line">                                                    |</span><br><span class="line">+---------------------------------------------------+---------------+</span><br><span class="line">|                           ChannelPipeline         |               |</span><br><span class="line">|                                                  \|/              |</span><br><span class="line">|    +---------------------+            +-----------+----------+    |</span><br><span class="line">|    | Inbound Handler  N  |            | Outbound Handler  1  |    |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|              /|\                                  |               |</span><br><span class="line">|               |                                  \|/              |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|    | Inbound Handler N-1 |            | Outbound Handler  2  |    |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|              /|\                                  .               |</span><br><span class="line">|               .                                   .               |</span><br><span class="line">| ChannelHandlerContext.fireIN_EVT() ChannelHandlerContext.OUT_EVT()|</span><br><span class="line">|        [ method call]                       [method call]         |</span><br><span class="line">|               .                                   .               |</span><br><span class="line">|               .                                  \|/              |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|    | Inbound Handler  2  |            | Outbound Handler M-1 |    |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|              /|\                                  |               |</span><br><span class="line">|               |                                  \|/              |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|    | Inbound Handler  1  |            | Outbound Handler  M  |    |</span><br><span class="line">|    +----------+----------+            +-----------+----------+    |</span><br><span class="line">|              /|\                                  |               |</span><br><span class="line">+---------------+-----------------------------------+---------------+</span><br><span class="line">                |                                  \|/</span><br><span class="line">+---------------+-----------------------------------+---------------+</span><br><span class="line">|               |                                   |               |</span><br><span class="line">|       [ Socket.read() ]                    [ Socket.write() ]     |</span><br><span class="line">|                                                                   |</span><br><span class="line">|  Netty Internal I/O Threads (Transport Implementation)            |</span><br><span class="line">+-------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p><code>Included transports</code></p>
+<p><strong>NIO  Nonblocking I/O</strong> </p>
+<p><strong>OIO  Old blocking I/O</strong></p>
+<p><strong>Local  In VM transport</strong></p>
+<p><strong>Embedded transport</strong></p>
+<p>##Codec</p>
+<p>##Bootstrap</p>
+<p>A Netty application begins with one of the Bootstrap classes, is a construct Netty provides that makes it easy for you to configure how Netty should setup or bootstrap the application.</p>
+<p>The <strong>ChannelInboundHandler</strong> receives messages which you can process and decide what to do with it. You may also write/flush data out from inside an ChannelInboundHandler when your application needs to provide a response.</p>
+<p><strong>ChannelInitializer</strong> is to add <strong>ChannelHandler</strong> implementations to whats called the <strong>ChannelPipeline</strong>. </p>
+<p>All Netty applications are based on what is called a <strong>ChannelPipeline</strong>. </p>
+<p>All IO operations in Netty are performed asynchronously.</p>
+<p><strong>ChannelFuture</strong> is a special java.util.concurrent.Future, which allos you to register ChannnelFutureListeners tot he ChannelFuture.</p>
+<p>##Thread Model </p>
+<p><code>ChannelHandlers</code> contain your business logic, are guaranteed to be executed by <code>a single thread</code> at the same time for a specific Channel. This doesnt mean Netty fails to use multithreading, but it does limit each connection<br>to one thread as this design works well for nonblocking execution. </p>
+<p>Theres no need for you to think about any of the issues you often have when working with multithreaded applications. </p>
+<hr>
+<p><code>General API for compression codecs</code></p>
+<p>Each compression codec is presented as its own class. It’s difficult to switch one compression codec to another without significant code modifications.</p>
+<p>Modifications:<br>Added classes:</p>
+<ul>
+<li><code>CompressionCodecFactory</code> - factory for all compression codecs</li>
+<li><code>CompressionDecoder</code> - abstract class, parent for all compression decoders</li>
+<li><code>CompressionEncoder</code> - abstract class, parent for all compression encoders</li>
+<li><code>CompressionFormat</code> - enum with all available compression formats</li>
+</ul>
+<p>Extend all compression encoders and decoders to use new abstract classes.</p>
+<p>Result:General API for every compression codecs.</p>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://netty.io/wiki/new-and-noteworthy-in-4.0.html" target="_blank" rel="external">New and noteworthy in 4.0</a></li>
+<li><a href="http://blog.csdn.net/SpiderDog/article/category/1800249" target="_blank" rel="external">Netty4学习笔记</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comentarios</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/11/08/network/netty/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categorías</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
+  
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>4</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Etiquetas</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

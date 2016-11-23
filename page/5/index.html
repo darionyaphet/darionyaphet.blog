@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 5 | darion.johannes.yaphet</title>
+  <title>Página 5 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,436 +50,21 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-23T12:45:20.000Z"><a href="/2016/04/23/distribution/akka/">2016-04-23</a></time>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/article/">2016-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/23/distribution/akka/"></a></h1>
+    <h1 class="title"><a href="/2016/06/03/architecture/article/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Actor-Modle"><a href="#Actor-Modle" class="headerlink" title="Actor Modle"></a>Actor Modle</h3><p>The Actor Model takes a different approach to solving the problem of concurrency,<br>by avoiding the issues caused by threads and locks. In the Actor Model, all objects<br>are modeled as independent, computational entities that only respond to the<br>messages received. </p>
-<p>Actors change their state only when they receive a stimulus in the form of a message. </p>
-<p>The Actor Model is based on the following principles:</p>
+        <p>Reference :</p>
 <ol>
-<li>The immutable messages are used to communicate between actors. </li>
-<li>Each actor has a queue attached where the incoming messages are enqueued. </li>
-<li>Messages are passed between actors asynchronously. </li>
-<li>Communication between the sender and receiver is decoupled and<br>asynchronous, allowing them to execute in different threads. </li>
-</ol>
-<p>Actors can change their state and behavior based on the message passed. </p>
-<p>The connection wire between the sender sending a<br>message and the receiver actor receiving the message is called the mailbox. </p>
-<h3 id="Akka"><a href="#Akka" class="headerlink" title="Akka"></a>Akka</h3><p>The Akka framework has taken the “Actor Model” concept to build an<br>event-driven, middleware framework that allows the building of concurrent,<br>scalable, and distributed systems. </p>
-<p>The Akka framework provides the following features:</p>
-<ol>
-<li><p><code>Concurrency</code>: The Akka Actor Model abstracts concurrency handling and<br>allows the programmer to focus on the business logic</p>
-</li>
-<li><p><code>Scalability</code>: The Akka Actor Model’s asynchronous message passing allows<br>applications to scale up on multicore servers</p>
-</li>
-<li><p><code>Fault tolerance</code>: Akka borrows the concepts and techniques from Erlang to<br>build the “Let It Crash”, fault tolerance model</p>
-</li>
-<li><p><code>Event-driven architecture</code>: Akka provides an asynchronous messaging<br>platform for building event-driven architectures</p>
-</li>
-<li><p><code>Transaction support</code>: Akka implements transactors that combine the actors<br>and software transactional memory (STM) into transactional actors</p>
-</li>
-<li><p><code>Location transparency</code>: Akka provides a unified programming model for<br>multicore and distributed computing needs</p>
-</li>
-<li><p><code>Scala/Java APIs</code>: Akka supports both Java and Scala APIs for<br>building applications</p>
-</li>
-</ol>
-<h4 id="Akka-Use-Case"><a href="#Akka-Use-Case" class="headerlink" title="Akka Use Case"></a>Akka Use Case</h4><ul>
-<li>Transaction processing</li>
-<li>Service providers</li>
-<li>Batch processing</li>
-<li>Data mining/analytics/Business Intelligence</li>
-<li>Service gateways/hubs</li>
-<li>Apps requiring concurrency/parallelism</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">akka.protocol://system@host:1234/user/my/actor/hierarchy/path</span><br></pre></td></tr></table></figure>
-<p>Actors can change their state and behavior based on the message passed.</p>
-<p>Behavior is nothing but the computation logic that needs to be executed in response<br>to the message received.</p>
-<h3 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h3><p>(!)</p>
-<p>Akka provides hooks such as preStart that allow the actor’s state and behavior to be initialized. </p>
-<p>When the actor is stopped, Akka disables the message queuing for the actor before<br>PostStop is invoked. In the postStop hook, any persistence of the state or clean up<br>of any hold-up resources can be done</p>
-<p>An actor’s lifecycle consists of three phases :</p>
-<ul>
-<li>Actor is initialized and started</li>
-<li>Actor receives and processes messages by executing a specific behavior</li>
-<li>Actor stops itself when it receives a termination message</li>
-</ul>
-<p><code>preStart()</code> and <code>postStop()</code> can be implemented to <code>initialize/clean</code> any resources used by the actor to process the messages.</p>
-<p><code>preRestart()</code> and <code>postRestart()</code> allow the actor to manage the state in case an exception has been raised and Supervisor actor restarts the actor.</p>
-<h3 id="Defining-an-actor"><a href="#Defining-an-actor" class="headerlink" title="Defining an actor"></a>Defining an actor</h3><p>All actors are created in the <code>context</code> of an actor system or another actor. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ActorSystem _system = ActorSystem.create(&quot;MyActorSystem&quot;);</span><br><span class="line">ActorRef myActor = _system.actorOf(new Props(MyActor.class),&quot;myActor&quot;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val system = ActorSystem(&quot;MyActorSystem&quot;)</span><br><span class="line">val myActor = system.actorOf(Props[MyActor], name = &quot;myActor&quot;)</span><br></pre></td></tr></table></figure>
-<h4 id="Stopping-actor"><a href="#Stopping-actor" class="headerlink" title="Stopping actor"></a>Stopping actor</h4><h4 id="Killing-actor"><a href="#Killing-actor" class="headerlink" title="Killing actor"></a>Killing actor</h4><p>An actor can be killed when a kill() message is sent to it. </p>
-<p><code>PoisonPill</code> is an asynchronous way to shut down the actor. <code>kill()</code>  is a synchronous way.</p>
-<h4 id="HotSwap"><a href="#HotSwap" class="headerlink" title="HotSwap"></a>HotSwap</h4><h3 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h3><p>This actor hierarchy forms the basis of the Akka’s <code>&quot;Let It Crash&quot;</code> fault-tolerance<br>model. </p>
-<p>Akka’s fault-tolerance model is built using the <code>actor hierarchy</code> and <code>supervisor model</code>. </p>
-<h3 id="Location-transparency"><a href="#Location-transparency" class="headerlink" title="Location transparency"></a>Location transparency</h3><p>Akka uses the same philosophy of the WWW to identify and locate resources on the Web.</p>
-<p>Akka uses the similar URL convention to locate the actors. The default values are <code>akka://hostname/</code> or <code>akka://hostname:2552/</code></p>
-<h3 id="Actor-System"><a href="#Actor-System" class="headerlink" title="Actor System"></a>Actor System</h3><hr>
-<p>Akka uses the Actor Model together with Software Transactional Memory to raise the abstraction level and provide a better platform to build correct concurrent and scalable applications.</p>
-<p>For fault-tolerance Akka adopts the “Let it crash”, also called “Embrace failure”, model which have been used with great success in the telecom industry to build applications that self-heals, systems that never stop.</p>
-<hr>
-<blockquote>
-<p>The <code>actor</code> model in computer science is a mathematical model of concurrent computation that treats “actors” as the universal primitives of concurrent computation</p>
-</blockquote>
-<p>Actors can be created:</p>
-<ul>
-<li>Extending the ‘Actor’ class and implementing the ‘receive’ method.</li>
-<li>Create an anonymous Actor using one of the ‘actor’ methods.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class MyActor extends Actor &#123;</span><br><span class="line">  def receive = &#123;</span><br><span class="line">    case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">    case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val myActor = new MyActor</span><br><span class="line">myActor.start</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val myActor = actor &#123; </span><br><span class="line">  case &quot;test&quot; =&gt; println(&quot;received test&quot;)</span><br><span class="line">  case _      =&gt; println(&quot;received unknown message&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Akka’s approach to fault-tolerance; the “let it crash” model, is implemented by linking Actors.</p>
-<h4 id="Actor"><a href="#Actor" class="headerlink" title="Actor"></a>Actor</h4><p>An actor can change another actor’s state only by sending it a message. Actors communicate with other actors using the <code>address</code> of the target actor’s mailbox. Communication between actors is completely asynchronous and non-blocking; actors only react to the messages being sent to them.</p>
-<h6 id="Typed-Actor"><a href="#Typed-Actor" class="headerlink" title="Typed Actor"></a>Typed Actor</h6><p>In Akka, <code>typed actors</code> have been implemented using the Active Object pattern. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The Active Object Design pattern decouples method execution from method invocation, which reside in their own threads of control. </span><br><span class="line"></span><br><span class="line">The goal is to introduce concurrency and fault tolerance, by using asynchronous method invocation and a scheduler for handling requests.</span><br><span class="line"></span><br><span class="line">The key objective of the Active Object pattern is to decouple the method execution</span><br><span class="line">from the method invocation.</span><br></pre></td></tr></table></figure>
-<p><code>Active Object pattern</code> decouples the method invocation from method execution :</p>
-<ol>
-<li>The client calls the proxy object and invokes the method</li>
-<li>The proxy in passes the method calls as method requests to a scheduler or invocation handler that intercepts the call</li>
-<li>Scheduler or invocation handler enqueues the method requests on a queue</li>
-<li>The scheduler continuously monitors the queue and determines which method request(s) have become runnable</li>
-<li>Scheduler or invocation handler dispatches the requests to the implementation object</li>
-<li>The implementation object, running on the same thread as the scheduler, processes the request and returns any value to the client as Future</li>
-</ol>
-<p><code>Proxy instance</code> has an associated invocation handler. </p>
-<p><code>Method invocation</code> is dispatched to the invoke method of the instance’s invocation handler. </p>
-<p>Actors are entities that change their state by processing the incoming messages and generating other messages in response.</p>
-<p>Use <code>typed actors</code> sparingly and avoid blocking behavior by writing methods that either return Unit or Future.</p>
-<p>Typed Actor Model is communication via method calls. The parameter values are the messages and these need to be <code>immutable</code>. </p>
-<p>Messages can be passed to an actor in two modes:</p>
-<ol>
-<li>Fire and forget (the caller of the method does not expect any reply)</li>
-<li>Send and receive (the caller of the method expects a reply from the implementation class and will wait for that reply)</li>
-</ol>
-<p><strong>Actor lifecycle monitoring</strong></p>
-<p><code>TypedActor.PreStart</code> and <code>TypedActor.PostStop</code> interfaces, we can add the required functionality before the actor starts responding to the method calls</p>
-<p><code>TypedActor.PreRestart</code> and <code>TypedActor.PostRestart</code> interfaces to add functionality on actor restart as part of the supervision</p>
-<p><strong>Receiving messages</strong></p>
-<p>Typed actors can implement the <code>akka.actor.TypedActor.Receiver</code> interface in<br>order to process messages coming to them.</p>
-<p><strong>Supervisor strategy</strong></p>
-<p>Akka’s “Let It Crash” model is implemented by linking actors in a hierarchy. </p>
-<p><strong>Using dispatchers</strong><br>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p><strong>Using routers</strong></p>
-<p>A router is also a type of actor, which routes the incoming messages to the outbound actors. </p>
-<hr>
-<p>Dispatchers are the heart of the Akka application and this is what makes it<br>humming.</p>
-<p>Routers on the other hand, route incoming messages to outbound actors. </p>
-<h4 id="Dispatchers"><a href="#Dispatchers" class="headerlink" title="Dispatchers"></a>Dispatchers</h4><p>A dispatcher controls and coordinates the message dispatching to the actors that is<br>mapped on the underlying threads. </p>
-<p>The dispatchers run on their threads &amp; dispatch the actors and messages from the attached mailbox and allocate on heap to the executor threads. </p>
-<p>The executor threads are configured and tuned to the underlying processor cores that available for processing the messages.</p>
-<p>In Akka, a router is also a type of actor, which <code>routes the incoming messages to the outbound actors</code>. </p>
-<p>Dispatchers are used to control the <code>flow of execution</code>. Based on the dispatching policy, dispatchers will <code>route the incoming message or request to the business process</code>. </p>
-<ul>
-<li>Centralized control</li>
-<li>Application partitioning</li>
-<li>Reduced inter-dependencies<br>less contention on the same resources,leading to a scalable model.</li>
-</ul>
-<p><code>Types of dispatchers</code></p>
-<p>There are 4 different types of message dispatchers</p>
-<ol>
-<li>Dispatcher</li>
-<li>PinnedDispatcher</li>
-<li>Balancing dispatcher</li>
-<li>Calling thread dispatcher</li>
-</ol>
-<p>And  there are four default mailbox implementations provided as follows:</p>
-<ol>
-<li>Unbounded mailbox</li>
-<li>Bounded mailbox</li>
-<li>Unbounded priority mailbox</li>
-<li>Bounded priority mailbox</li>
-</ol>
-<p>An event-based dispatcher that binds a set of actors to a thread pool backed up by a BlockingQueue method.</p>
-<ol>
-<li>Every actor is backed by its own mailbox</li>
-<li>The dispatcher can be shared with any number of actors</li>
-<li>The dispatcher can be backed by either thread pool or fork join pool</li>
-<li>The dispatcher is optimized for non-blocking code</li>
-</ol>
-<p><code>Pinned dispatcher</code> ( single, dedicated thread for each actor)</p>
-<p>This dispatcher is useful when the actors are doing I/O operations or performing long-running calculations. The dispatcher will deallocate the thread attached to the actor after a configurable period of inactivity.</p>
-<ol>
-<li>Every actor is backed by its own mailbox.</li>
-<li>A dedicated thread for each actor implies that this dispatcher cannot be shared with any other actors.</li>
-<li>The dispatcher is backed by the thread pool executor.</li>
-<li>The dispatcher is optimized for blocking operations. </li>
-</ol>
-<p><code>Balancing dispatcher</code> ( event-based dispatcher that tries to redistribute work from busy actors and allocate it to idle ones)</p>
-<p>Redistribution of tasks can only work if all actors are of the same type </p>
-<p>The dispatcher looks for actors that are idle and dispatches the message to them for processing.</p>
-<ol>
-<li>There is only one mailbox for all actors</li>
-<li>The dispatcher can be shared only with actors of the same type</li>
-<li>The dispatcher can be backed by a either thread pool or fork join pool</li>
-</ol>
-<p><code>Calling thread dispatcher</code> ( runs the task execution on the current thread only)</p>
-<p><strong>Types of mailboxes</strong></p>
-<ol>
-<li>Blocking queue means a queue that waits for space to become available before putting in an element and similarly waits for the queue to become non-empty before retrieving an element</li>
-<li>Bounded queue means a queue that limits the size of the queue; meaning you cannot add more elements than the specified size</li>
-</ol>
-<p><strong>Types of Executor</strong></p>
-<ol>
-<li>Thread pool executor ( Tasks are assigned to the pool using a queue. )</li>
-<li>Fork join executor ( Based on the premise of divide-and-conquer)</li>
-</ol>
-<p><code>Fork join executor</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> # Configuration for the fork join pool</span><br><span class="line"> fork-join-executor &#123;</span><br><span class="line"> </span><br><span class="line">    # Min number of threads</span><br><span class="line">    parallelism-min = 2</span><br><span class="line">    </span><br><span class="line">    # available processors * factor</span><br><span class="line">    parallelism-factor = 2.0</span><br><span class="line">    </span><br><span class="line">    # Max number of threads</span><br><span class="line">    parallelism-max = 10</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = Dispatcher</span><br><span class="line">    executor = &quot;fork-join-executor&quot;</span><br><span class="line">    </span><br><span class="line">    fork-join-executor &#123;</span><br><span class="line">       parallelism-min = 2</span><br><span class="line">       parallelism-factor = 2.0</span><br><span class="line">       parallelism-max = 10</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type = &quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">my-dispatcher &#123;</span><br><span class="line">    type = PinnedDispatcher</span><br><span class="line"></span><br><span class="line">        executor = &quot;thread-pool-executor&quot;</span><br><span class="line">        thread-pool-executor &#123;</span><br><span class="line">        core-pool-size-min = 2</span><br><span class="line">        core-pool-size-factor = 2.0</span><br><span class="line">        core-pool-size-max = 10</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    throughput = 100</span><br><span class="line">    mailbox-capacity = -1</span><br><span class="line">    mailbox-type =&quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Routers"><a href="#Routers" class="headerlink" title="Routers"></a>Routers</h3><p>An entity that directs the message from the source to the destination actor. </p>
-<p>Routers route incoming messages to outbound actors.</p>
-<p>Router is also a type of actor, which routes the incoming messages to the outbound actors.</p>
-<p>For the router, the outbound actors are also called routees. </p>
-<p>Akka router supports the following :</p>
-<ol>
-<li>Round robin router ( routes the incoming messages in a circular order to all its routees)</li>
-<li>Random router ( randomly selects a routee and routes the message to the same)</li>
-<li>Smallest mailbox router ( identifies the actor with the least number of messages in its mailbox and routes the message to the same)</li>
-<li>Broadcast router ( forwards the same message to all the routees)</li>
-<li>Scatter gather first completed router ( forwards the message to all its routees as a future, then whichever routee actor responds back, it takes the results and sends them back to the caller)</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MyRouterExample&#123;</span><br><span class="line">    akka.actor.deployment &#123;</span><br><span class="line">        /myRandomRouterActor &#123;</span><br><span class="line">            router = random</span><br><span class="line">            nr-of-instances = 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Dynamically resizing routers</strong></p>
-<p>To handle the variability of the incoming message traffic, it might be important to increase the number of actors available to handle the load at runtime. </p>
-<p>For this, routers provide a construct called resize, which allows us to define the range bound in terms of minimum and maximum instances.</p>
-<hr>
-<h4 id="Supervision-and-Monitoring"><a href="#Supervision-and-Monitoring" class="headerlink" title="Supervision and Monitoring"></a>Supervision and Monitoring</h4><p><code>When an actor crashes or throws an exception, who is responsible to catch
-the exception?</code></p>
-<h4 id="Actor-hierarchy"><a href="#Actor-hierarchy" class="headerlink" title="Actor hierarchy"></a>Actor hierarchy</h4><p>The design idea of the Actor Model is to break down the large task into smaller tasks to the point where the task is granular and structured enough to be performed by one specialized actor.</p>
-<h4 id="Supervision"><a href="#Supervision" class="headerlink" title="Supervision"></a>Supervision</h4><h4 id="Supervision-strategies"><a href="#Supervision-strategies" class="headerlink" title="Supervision strategies"></a>Supervision strategies</h4><p>Akka provides two supervision strategies:</p>
-<ul>
-<li><code>One-For-One strategy</code> the supervision strategy is applied only to the failed child. (default)</li>
-<li><code>All-For-One strategy</code> the supervision strategy is applied to all the actor siblings.</li>
-</ul>
-<h4 id="Software-Transactional-Memory"><a href="#Software-Transactional-Memory" class="headerlink" title="Software Transactional Memory"></a>Software Transactional Memory</h4><p>Transactions provide a mechanism to manage the application access to data in a multiuser environment</p>
-<p><img src="resource/akka/supervision_strategies.jpg" alt="supervision_strategies"></p>
-<hr>
-<h4 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h4><p>Akka Cluster provides a fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.</p>
-<p>A cluster is made up of a set of member nodes. The identifier for each node is a <code>hostname:port:uid</code> tuple.</p>
-<p><strong>Gossip</strong></p>
-<p>In <code>push-pull gossip</code> a digest is sent representing current versions but not actual values; the recipient of the gossip can then send back any values for which it has newer versions and also request values for which it has outdated versions. Akka uses a single shared state with a vector clock for versioning, so the variant of push-pull gossip used in Akka makes use of this version to only push the actual state as needed.</p>
-<p>Each node chooses another random node to initiate a round of gossip with.</p>
-<p>The gossip messages are serialized with <code>protobuf</code> and also <code>gzipped</code> to reduce payload size.</p>
-<p><strong>Vector Clocks</strong></p>
-<p><strong>Gossip Convergence</strong></p>
-<p><strong>Failure Detector</strong></p>
-<p><strong>Leader</strong></p>
-<p><strong>Seed Nodes</strong></p>
-<p>When a new node is started it sends a message to all seed nodes and then sends a join command to the seed node that answers first.</p>
-<p><strong>Gossip Protocol</strong></p>
-<p><strong>Membership Lifecycle</strong></p>
-<p><img src="resource/akka/member-states-weakly-up.png" alt="member-states-weakly-up"></p>
-<p><img src="resource/akka/member-states.png" alt="member-states"></p>
-<p><strong>Member States</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>joining</td>
-<td>transient state when joining a cluster</td>
-</tr>
-<tr>
-<td>weakly up</td>
-<td>transient state while network split</td>
-</tr>
-<tr>
-<td>up</td>
-<td>normal operating state</td>
-</tr>
-<tr>
-<td>leaving / exiting</td>
-<td>states during graceful removal</td>
-</tr>
-<tr>
-<td>down</td>
-<td>marked as down</td>
-</tr>
-<tr>
-<td>removed</td>
-<td>tombstone state </td>
-</tr>
-</tbody>
-</table>
-<p><strong>User Actions</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>join</td>
-<td>join a single node to a cluster</td>
-</tr>
-<tr>
-<td>leave</td>
-<td>tell a node to leave the cluster gracefully</td>
-</tr>
-<tr>
-<td>down</td>
-<td>mark a node as down</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Distributed Publish Subscribe in Cluster</strong></p>
-<p><strong>Cluster Client</strong></p>
-<p>Communication from an actor system that is not part of the cluster to actors running somewhere in the cluster. </p>
-<p>The client does not have to know on which node the destination actor is running.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote.port=9999 </span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate=false </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><p><strong>Core concepts</strong></p>
-<table>
-<thead>
-<tr>
-<th>Terms</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Stream</td>
-<td></td>
-</tr>
-<tr>
-<td>Element</td>
-<td></td>
-</tr>
-<tr>
-<td>Back-pressure</td>
-<td></td>
-</tr>
-<tr>
-<td>Non-Blocking</td>
-<td></td>
-</tr>
-<tr>
-<td>Graph</td>
-<td></td>
-</tr>
-<tr>
-<td>Processing Stage</td>
-<td></td>
-</tr>
-<tr>
-<td>Source</td>
-<td></td>
-</tr>
-<tr>
-<td>Sink</td>
-<td></td>
-</tr>
-<tr>
-<td>Flow</td>
-<td></td>
-</tr>
-<tr>
-<td>RunnableGraph</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<hr>
-<ol>
-<li><code>node</code> : A logical member of a cluster. There could be multiple nodes on a physical machine. Defined by a hostname:port:uid tuple.</li>
-<li><code>cluster</code> : A set of nodes joined together through the membership service.</li>
-<li><code>leader</code> : A single node in the cluster that acts as the leader. Managing cluster convergence and membership state transitions.</li>
-</ol>
-<hr>
-<h3 id="Managing-application-configuration"><a href="#Managing-application-configuration" class="headerlink" title="Managing application configuration"></a>Managing application configuration</h3><p>Akka provides a powerful mechanism called extensions. </p>
-<p>Extensions are loaded in a static way with only one instance per ActorSystem. </p>
-<p>Extensions are implemented as a factory pattern. </p>
-<p>Akka extensions are comprised of two parts, given as follows:</p>
-<ol>
-<li>Extension ( Extension is the interface that needs to be implemented by the class and registered with ActorSystem, and ActorSystem will register the class and make the result available.)</li>
-<li>ExtensionId (It is the unique ID of the extension that is used to identify the<br>extension within ActorSystem.)</li>
-</ol>
-<p><strong>Trace</strong></p>
-<p>Tracing is disabled by default, so we need to enable it for the specific actor systems that need to be monitored</p>
-<p>Define the node property for each node in the system, as this is used to identify and tag the multiple actor systems that are running</p>
-<p>Define the MongoDB name and URL, specifying the location of MongoDB</p>
-<p><strong>Analyze</strong></p>
-<p>A span is the path between two trace events, and the duration between these events is the data that captures the essence of the availability and scalability of the application.</p>
-<p><strong>Query</strong></p>
-<p><strong>JMX</strong></p>
-<p><strong>Durable mailboxes</strong></p>
-<p><strong>Actors and web applications</strong></p>
-<p><strong>Integrating actors with ZeroMQ</strong></p>
-<hr>
-<p><strong>Persistence</strong></p>
-<p>Akka persistence is that only changes to an actor’s internal state are persisted but never its current state directly.</p>
-<ol>
-<li><p>PersistentActor <code>When a persistent actor is started or restarted, journaled messages are replayed to that actor so that it can recover internal state from these messages.</code></p>
-</li>
-<li><p>PersistentView <code>A view itself does not journal new messages, it updates internal state only from a persistent actor&#39;s replicated message stream.</code></p>
-</li>
-<li><p>AtLeastOnceDelivery <code>in case of sender and receiver JVM crashes</code></p>
-</li>
-<li><p>AsyncWriteJournal <code>A journal stores the sequence of messages sent to a persistent actor.Journal maintains highestSequenceNr that is increased on each message.The persistence extension comes with a &quot;leveldb&quot; journal plugin, which writes to the local filesystem.</code></p>
-</li>
-<li><p>Snapshot store <code>Snapshots are used for optimizing recovery times.The persistence extension comes with a &quot;local&quot; snapshot storage plugin, which writes to the local filesystem.</code></p>
-</li>
-</ol>
-<p><strong>Event sourcing</strong></p>
-<p>Akka persistence supports event sourcing with the <code>PersistentActor</code> trait.</p>
-<p>An actor that extends this trait uses the <code>persist</code> method to persist and handle events.</p>
-<p><strong>Identifiers</strong></p>
-<p>A persistent actor must have an identifier that doesn’t change across different actor incarnations. </p>
-<p>The identifier must be defined with the persistenceId method.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">override def persistenceId = &quot;my-persistence-id&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>Recovery</strong></p>
-<p><strong>Atomic writes</strong></p>
-<p><strong>Batch writes</strong></p>
-<p><strong>Message deletion</strong></p>
-<p><strong>Persistence status handling</strong></p>
-<p><strong>Safely shutting down persistent actors</strong></p>
-<p><strong><em>Persistent Views</em></strong></p>
-<p><strong>At-Least-Once Delivery</strong></p>
-<p><strong>Relationship between deliver and confirmDelivery</strong></p>
-<p><strong>Event Adapters</strong></p>
-<p><strong>Persistent FSM</strong></p>
-<p><strong>Storage plugins</strong></p>
-<p><strong>Multiple persistence plugin configurations</strong></p>
-<hr>
-<h3 id="Actor-DSL"><a href="#Actor-DSL" class="headerlink" title="Actor DSL"></a>Actor DSL</h3><p>Actor can be created more concisely using the Act trait.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import akka.actor.ActorDSL._</span><br><span class="line">import akka.actor.ActorSystem</span><br><span class="line"></span><br><span class="line">implicit val system = ActorSystem(&quot;demo&quot;)</span><br></pre></td></tr></table></figure>
-<p>To define a simple actor: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a = actor(new Act &#123;</span><br><span class="line">  become &#123;</span><br><span class="line">    case &quot;hello&quot; ⇒ sender() ! &quot;hi&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><strong>Life-cycle management</strong></p>
-<p>Life-cycle hooks are also exposed as DSL elements</p>
-<p><strong>Finite State Machine</strong></p>
-<p>Finite State Machine can be described as a set of relations:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">State(S) x Event(E) -&gt; Actions (A), State(S&apos;)</span><br></pre></td></tr></table></figure>
-<hr>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference :"></a>Reference :</h4><ol>
-<li><a href="https://dzone.com/articles/introducing-akka-%E2%80%93-simpler" target="_blank" rel="external">Introducing Akka – Simpler Scalability, Fault-Tolerance, Concurrency &amp; Remoting Through Actors</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Actor_model" target="_blank" rel="external">Actor model</a></li>
-<li>Akka Essentials</li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.1/java.html" target="_blank" rel="external">Java Documentation</a></li>
-<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/reflection/proxy.html" target="_blank" rel="external">Implementation of Dynamic Proxy classes in JDK</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.1.2/project/migration-guide-2.0.x-2.1.x.html" target="_blank" rel="external">Migration Guide 2.0.x to 2.1.x</a></li>
-<li><a href="https://www.typesafe.com/blog/typesafe-announces-akka-streams" target="_blank" rel="external">Typesafe announces Akka Streams, a part of the Reactive Streams Initiative</a></li>
-<li><a href="https://github.com/functional-streams-for-scala/fs2" target="_blank" rel="external">Compositional, streaming I/O library for Scala</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/persistence.html" target="_blank" rel="external">persistence</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.2/scala/actordsl.html" target="_blank" rel="external">Actor DSL</a></li>
-<li><a href="http://www.infoq.com/cn/presentations/akka-cluster-realization/" target="_blank" rel="external">Akka下分片集群的实现</a></li>
-<li><a href="http://erlang.org/documentation/doc-4.8.2/doc/design_principles/fsm.html" target="_blank" rel="external">Erlang design principles</a></li>
-<li><a href="http://letitcrash.com/post/30165507578/shutdown-patterns-in-akka-2" target="_blank" rel="external">Shutdown Patterns in Akka 2</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.4.4/scala.html" target="_blank" rel="external">Akka Scala Documentation</a></li>
-<li><a href="https://opencredo.com/introduction-to-akka-streams-getting-started/" target="_blank" rel="external">Introduction to Akka Streams – Getting started</a></li>
+<li><a href="http://wanqu.co/" target="_blank" rel="external">湾区日报</a></li>
+<li><a href="http://blog.cleancoder.com/uncle-bob/2016/01/04/ALittleArchitecture.html" target="_blank" rel="external">A Little Architecture</a></li>
+<li><a href="http://www.nextplatform.com/2015/09/10/airbnb-shares-the-keys-to-its-infrastructure/" target="_blank" rel="external">Airbnb Shares The Keys To Its Infrastructure</a></li>
 </ol>
 
       
@@ -503,20 +88,22 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T14:46:44.000Z"><a href="/2016/04/22/algorithms/community-detection/">2016-04-22</a></time>
+        <time datetime="2016-06-02T16:00:00.000Z"><a href="/2016/06/03/language/scala/">2016-06-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/algorithms/community-detection/"></a></h1>
+    <h1 class="title"><a href="/2016/06/03/language/scala/">Scala</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Community-Detection-社区发现算法"><a href="#Community-Detection-社区发现算法" class="headerlink" title="Community Detection (社区发现算法)"></a>Community Detection (社区发现算法)</h3><p>针对社区的研究实际上是从子图分割问题演化而来，Kernighan-Lin 提出的二分算法使得子图分割问题逐渐成为当时图挖掘领域关注的重点。另外，在社会学领域，社会学家也发现社区结构在各种复杂网络中的普遍存在性。进入21世纪后，社区的研究开始被研究者所重视，而近年来随着社交网络的崛起，这一领域的关注度已大大提升。</p>
+        <p>##Scala</p>
+<p>###trait</p>
 <p>Reference :</p>
 <ol>
-<li><a href="http://senseable.mit.edu/community_detection/" target="_blank" rel="external">Community Detection - MIT Senseable City Lab</a></li>
+<li><a href="https://www.gitbook.com/book/windor/beginners-guide-to-scala/details" target="_blank" rel="external">Scala 初学者指南</a></li>
+<li><a href="https://www.coursera.org/course/progfun" target="_blank" rel="external">Scala 函数式程序设计原理</a></li>
 </ol>
 
       
@@ -540,71 +127,26 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
+        <time datetime="2016-05-18T15:23:08.000Z"><a href="/2016/05/18/algorithms/machine-learning/">2016-05-18</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/django/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/web/django/"></a></h1>
+    <h1 class="title"><a href="/2016/05/18/algorithms/machine-learning/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Django</p>
-<p>projects和apps的区别:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app是专注于做某件事的web应用，比如用户认证系统，公开投票系统；</span><br><span class="line">project则是一个web站点，可能包括许多app和一些配置。</span><br><span class="line">一个project可以包含许多app，一个app可以用于许多project中。</span><br></pre></td></tr></table></figure>
+        <h3 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a>Machine Learning</h3><p><code>监督学习</code></p>
+<p>从标记的训练数据来推断一个功能的机器学习任务。训练数据包括一套训练示例。在监督学习中，每个实例都是由一个输入对象（通常为矢量）和一个期望的输出值（也称为监督信号）组成。监督学习算法是分析该训练数据，并产生一个推断的功能，其可以用于映射出新的实例。一个最佳的方案将允许该算法来正确地决定那些看不见的实例的类标签。这就要求学习算法是在一种“合理”的方式从一种从训练数据到看不见的情况下形成。</p>
 <hr>
-<p><code>django_learning/settings.py</code> 对项目进行一定配置，比如时区，数据库连接，app添加、删除等</p>
-<p><code>python manage.py migrate</code> 生成相应的数据库表</p>
-<p>默认情况下，项目配置文件<code>settings.py</code>里面已经配置有Django自带的应用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p><code>python manage.py runserver</code> 开启Django自带的开发环境web服务</p>
-<p><code>python manage.py createsuperuser</code> 添加后台管理员账号 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="external">http://127.0.0.1:8000/admin/</a> 进入管理员登录页面</p>
-<p><code>python manage.py test examples</code> </p>
-<p><code>python manage.py shell</code> 使用python解释器的交互模式</p>
-<p>Django提供了models方便设计数据库，因此我们的questions/models.py看起来可能是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">λ ~/django_learning/ master* python manage.py help</span><br><span class="line"></span><br><span class="line">Type &apos;manage.py help &lt;subcommand&gt;&apos; for help on a specific subcommand.</span><br><span class="line"></span><br><span class="line">Available subcommands:</span><br><span class="line"></span><br><span class="line">[auth]</span><br><span class="line">    changepassword</span><br><span class="line">    createsuperuser</span><br><span class="line"></span><br><span class="line">[django]</span><br><span class="line">    check</span><br><span class="line">    compilemessages</span><br><span class="line">    createcachetable</span><br><span class="line">    dbshell</span><br><span class="line">    diffsettings</span><br><span class="line">    dumpdata</span><br><span class="line">    flush</span><br><span class="line">    inspectdb</span><br><span class="line">    loaddata</span><br><span class="line">    makemessages</span><br><span class="line">    makemigrations</span><br><span class="line">    migrate</span><br><span class="line">    sendtestemail</span><br><span class="line">    shell</span><br><span class="line">    showmigrations</span><br><span class="line">    sqlflush</span><br><span class="line">    sqlmigrate</span><br><span class="line">    sqlsequencereset</span><br><span class="line">    squashmigrations</span><br><span class="line">    startapp</span><br><span class="line">    startproject</span><br><span class="line">    test</span><br><span class="line">    testserver</span><br><span class="line"></span><br><span class="line">[sessions]</span><br><span class="line">    clearsessions</span><br><span class="line"></span><br><span class="line">[staticfiles]</span><br><span class="line">    collectstatic</span><br><span class="line">    findstatic</span><br><span class="line">    runserver</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py</span><br><span class="line">cleanup           -- remove old data from the database</span><br><span class="line">compilemessages   -- compile .po files to .mo for use with gettext</span><br><span class="line">createcachetable  -- creates table for SQL cache backend</span><br><span class="line">createsuperuser   -- create a superuser</span><br><span class="line">dbshell           -- run command-line client for the current database</span><br><span class="line">diffsettings      -- display differences between the current settings and Django defaults</span><br><span class="line">dumpdata          -- output contents of database as a fixture</span><br><span class="line">flush             -- execute &apos;sqlflush&apos; on the current database</span><br><span class="line">inspectdb         -- output Django model module for tables in database</span><br><span class="line">loaddata          -- install the named fixture(s) in the database</span><br><span class="line">makemessages      -- pull out all strings marked for translation</span><br><span class="line">reset             -- executes &apos;sqlreset&apos; for the given app(s)</span><br><span class="line">runfcgi           -- run this project as a fastcgi</span><br><span class="line">runserver         -- start a lightweight web server for development</span><br><span class="line">shell             -- run a Python interactive interpreter. Tries to use IPython, if it&apos;s available</span><br><span class="line">sql               -- print the CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlall            -- print the CREATE TABLE, CREATE INDEX and custom statements for the given app(s)</span><br><span class="line">sqlclear          -- print the DROP TABLE statements for the given app(s)</span><br><span class="line">sqlcustom         -- print the custom table-modifying SQL statements for the given app(s)</span><br><span class="line">sqlflush          -- print the SQL statements required to return all tables to installation state</span><br><span class="line">sqlindexes        -- print the CREATE INDEX statements for the given app(s)</span><br><span class="line">sqlreset          -- print the DROP TABLE and CREATE TABLE statements for the given app(s)</span><br><span class="line">sqlsequencereset  -- print the SQL statements for resetting sequences for the given app(s)</span><br><span class="line">startapp          -- create Django app directory in this project&apos;s directory</span><br><span class="line">syncdb            -- create database tables for apps in INSTALLED_APPS where required</span><br><span class="line">test              -- run the test suite for the specified app, or the entire site</span><br><span class="line">testserver        -- run a development server with data from the given fixture(s)</span><br><span class="line">validate          -- validate all installed modules</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">λ ~/django_learning/ master* python manage.py changepassword --help</span><br><span class="line">usage: manage.py changepassword [-h] [--version] [-v &#123;0,1,2,3&#125;]</span><br><span class="line">                                [--settings SETTINGS]</span><br><span class="line">                                [--pythonpath PYTHONPATH] [--traceback]</span><br><span class="line">                                [--no-color] [--database DATABASE]</span><br><span class="line">                                [username]</span><br><span class="line"></span><br><span class="line">Change a user&apos;s password for django.contrib.auth.</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  username              Username to change password for; by default, it&apos;s the</span><br><span class="line">                        current username.</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --help            show this help message and exit</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  -v &#123;0,1,2,3&#125;, --verbosity &#123;0,1,2,3&#125;</span><br><span class="line">                        Verbosity level; 0=minimal output, 1=normal output,</span><br><span class="line">                        2=verbose output, 3=very verbose output</span><br><span class="line">  --settings SETTINGS   The Python path to a settings module, e.g.</span><br><span class="line">                        &quot;myproject.settings.main&quot;. If this isn&apos;t provided, the</span><br><span class="line">                        DJANGO_SETTINGS_MODULE environment variable will be</span><br><span class="line">                        used.</span><br><span class="line">  --pythonpath PYTHONPATH</span><br><span class="line">                        A directory to add to the Python path, e.g.</span><br><span class="line">                        &quot;/home/djangoprojects/myproject&quot;.</span><br><span class="line">  --traceback           Raise on CommandError exceptions</span><br><span class="line">  --no-color            Don&apos;t colorize the command output.</span><br><span class="line">  --database DATABASE   Specifies the database to use. Default is &quot;default&quot;.</span><br></pre></td></tr></table></figure>
+<p><code>无监督学习</code></p>
+<p>目标是我们不告诉计算机怎么做，而是让计算机去学习怎样做一些事情。非监督学习一般有两种思路。第一种思路是在指导Agent时不为其指定明确的分类，而是在成功时采用某种形式的激励制度。需要注意的是，这类训练通常会置于决策问题的框架里，因为它的目标不是产生一个分类系统，而是做出最大回报的决定。这种思路很好的概括了现实世界，Agent可以对那些正确的行为做出激励，并对其他的行为进行处罚。</p>
 <hr>
-<p>参考:</p>
+<p>Reference :</p>
 <ol>
-<li><p><a href="http://segmentfault.com/a/1190000002447511" target="_blank" rel="external">两篇文章帮你入门Django(上)</a></p>
-</li>
-<li><p><a href="http://segmentfault.com/a/1190000002479013" target="_blank" rel="external">两篇文章帮你入门Django(下)</a></p>
-</li>
+<li><a href="http://baike.baidu.com/link?url=A91wTJZJ6fm5bLjp4tVAjJMgvuQkFoj02qlzCamVKiQY_LqBG1X4UtoGuwjuS43syJYVZBl_3wcJYZbCjq_ugq" target="_blank" rel="external">监督学习</a></li>
+<li><a href="http://baike.baidu.com/link?url=oTHkWqi7IGEWOjAZI5RvN_-NorTWagwIaqgSl5E01LldfdgJQimAmH0Bf_Ik5bhwHqrIGOQ6WKDrsMUBNDtlkK" target="_blank" rel="external">无监督学习</a></li>
 </ol>
 
       
@@ -628,222 +170,396 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/log4j/">2016-04-22</a></time>
+        <time datetime="2016-05-14T16:00:00.000Z"><a href="/2016/05/15/distribution/alluxio/">2016-05-15</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/other/log4j/"></a></h1>
+    <h1 class="title"><a href="/2016/05/15/distribution/alluxio/">Alluxio</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Loj4J</p>
-<p>#####Basic<br>Log4j由三个重要的组件构成：日志信息的优先级，日志信息的输出目的地，日志信息的输出格式。</p>
-<p><code>日志信息优先级</code>从高到低有ERROR、WARN、 INFO、DEBUG，分别用来指定这条日志信息的重要程度；<br><code>日志信息的输出目的地</code>指定了日志将打印到控制台还是文件中；<br><code>日志输出格式</code>则控制了日志信息的显示内容。</p>
-<p>#####定义配置文件<br>Log4j支持两种配置文件格式，一种是XML文件，一种是Java Properties文件。</p>
+        <h3 id="Alluxio"><a href="#Alluxio" class="headerlink" title="Alluxio"></a>Alluxio</h3><p>Alluxio统一了数据访问的方式，为上层计算框架和底层存储系统构建了桥梁。 应用只需要连接Alluxio即可访问存储在底层任意存储系统中的数据。<br>Alluxio以内存为中心的架构使得数据的访问速度能比现有常规方案快几个数量级。</p>
+<p><code>灵活的文件API</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alluxio的本地API类似于java.io.File类，提供了InputStream和OutputStream的接口和对内存映射I/O的高效支持。</span><br><span class="line">我们推荐使用这套API以获得Alluxio的最好性能。 </span><br><span class="line">另外，Alluxio提供兼容Hadoop的文件系统接口，Hadoop MapReduce和Spark可以使用Alluxio代替HDFS。</span><br></pre></td></tr></table></figure>
+<p><strong>IO选项</strong></p>
+<table>
+<thead>
+<tr>
+<th>读类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_PROMOTE</td>
+<td>如果读取的数据在Worker上时，该数据被移动到Worker的最高层。如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。这是默认的读类型。</td>
+</tr>
+<tr>
+<td>CACHE</td>
+<td>如果该数据不在本地Worker的Alluxio存储中，那么就将一个副本添加到本地Alluxio Worker中，用于每次完整地读取数据快。</td>
+</tr>
+<tr>
+<td>NO_CACHE</td>
+<td>不会创建副本。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>写类型</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CACHE_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker和底层存储系统。</td>
+</tr>
+<tr>
+<td>MUST_CACHE</td>
+<td>数据被同步地写入到Alluxio的Worker。但不会被写入到底层存储系统。这是默认写类型。</td>
+</tr>
+<tr>
+<td>THROUGH</td>
+<td>数据被同步地写入到底层存储系统。但不会被写入到Alluxio的Worker。</td>
+</tr>
+<tr>
+<td>ASYNC_THROUGH</td>
+<td>数据被同步地写入到Alluxio的Worker，并异步地写入到底层存储系统。处于实验阶段。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>键值存储</strong> </p>
+<p>Alluxio 还在文件系统之上提供Key-Value Store , Key-Value 放入存储后是不可变的。</p>
+<p>Key Value Store 可以用AlluxioURI来表示路径，比如alluxio://path/my-kvstore。</p>
+<p>单个Key Value Store可能有一个以上的分区，分区是由Alluxio内部来管理，对用户透明。</p>
+<p>Alluxio默认配置是禁用键值存储库的，可以通过配置alluxio.keyvalue.enabled为true来启用。</p>
+<p>获取一个 Key Value Store Client :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeyValueSystem kvs = KeyValueSystem.Factory().create();</span><br></pre></td></tr></table></figure>
+<p><strong>创建一个新的 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreWriter writer = kvs.createStore(new AlluxioURI(&quot;alluxio://path/my-kvstore&quot;));</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;100&quot;, &quot;foo&quot;)</span><br><span class="line">writer.put(&quot;100&quot;, &quot;foo&quot;);</span><br><span class="line"></span><br><span class="line">// Insert key-value pair (&quot;200&quot;, &quot;bar&quot;)</span><br><span class="line">writer.put(&quot;200&quot;, &quot;bar&quot;);</span><br><span class="line"></span><br><span class="line">// Close and complete the store</span><br><span class="line">writer.close();</span><br></pre></td></tr></table></figure>
+<p><strong>通过迭代器遍历 Key Value Store</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KeyValueStoreReader reader = kvs.openStore(new AlluxioURI(&quot;alluxio://path/kvstore/&quot;));</span><br><span class="line">KeyValueIterator iterator = reader.iterator();</span><br><span class="line"></span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">  KeyValuePair pair = iterator.next();</span><br><span class="line">  ByteBuffer key = pair.getkKey();</span><br><span class="line">  ByteBuffer value = pair.getValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Close the reader on the store</span><br><span class="line">reader.close()</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce InputFormat</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conf.setInputFormat(KeyValueInputFormat.class);</span><br><span class="line">FileInputFormat.setInputPaths(conf, new Path(&quot;alluxio://input-store&quot;));</span><br></pre></td></tr></table></figure>
+<p><strong>MapReduce OutputFormat</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conf.setOutputKeyClass(BytesWritable.class);</span><br><span class="line">conf.setOutputValueClass(BytesWritable.class);</span><br><span class="line">conf.setOutputFormat(KeyValueOutputFormat.class);</span><br><span class="line">conf.setOutputCommitter(KeyValueOutputCommitter.class);</span><br><span class="line">FileOutputFormat.setOutputPath(conf, new Path(&quot;alluxio://output-store&quot;));</span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>可插拔的底层存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在容错方面，Alluxio备份内存数据到底层存储系统。</span><br><span class="line">Alluxio提供了通用接口以简化插入不同的底层存储系统。</span><br><span class="line">目前我们支持Amazon S3，OpenStack Swift，Apache HDFS，GlusterFS以及单节点本地文件系统，后续也会支持很多其它的文件系统。</span><br></pre></td></tr></table></figure>
+<p><code>层次化存储</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过分层存储，Alluxio不仅可以管理内存，也可以管理SSD 和HDD,能够让更大的数据集存储在Alluxio上。</span><br><span class="line">数据在不同层之间自动被管理，保证热数据在更快的存储层上。</span><br><span class="line">自定义策略可以方便地加入Alluxio，而且pin的概念允许用户直接控制数据的存放位置。</span><br></pre></td></tr></table></figure>
+<p>目前Alluxio支持这些存储类型：</p>
 <ol>
-<li><p>配置根Logger语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger = [ level ] , appenderName, appenderName, …</span><br></pre></td></tr></table></figure>
-<p>level 是日志记录的优先级，分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL或者您定义的级别。</p>
-<p>Log4j建议只使用四个级别，优 先级从高到低分别是ERROR、WARN、INFO、DEBUG。通过在这里定义的级别，可以控制到应用程序中相应级别的日志信息的开关。</p>
-</li>
-<li><p>配置日志信息输出目的地Appender语法为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName = fully.qualified.name.of.appender.class  </span><br><span class="line">log4j.appender.appenderName.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.optionN = valueN</span><br></pre></td></tr></table></figure>
-</li>
+<li>MEM(内存)</li>
+<li>SSD(固态硬盘)</li>
+<li>HDD(硬盘驱动器)</li>
 </ol>
-<p>   Log4j提供的appender有以下几种：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.ConsoleAppender（控制台）</span><br><span class="line">org.apache.log4j.FileAppender（文件）</span><br><span class="line">org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件）</span><br><span class="line">org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件）</span><br><span class="line">org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</span><br></pre></td></tr></table></figure>
+<p><strong>使用分层存储</strong></p>
+<p>Alluxio管理的数据块不只在内存，可在任何可用的存储层。<br>Alluxio使用分配策略和回收策略管理块的存放和移动。Alluxio基于I/O性能从上到下排序存储层。</p>
+<p>因此，这种典型的分层存储设置决定了最顶层是MEM，然后是SSD，最后是HDD。</p>
+<p><strong>存储目录</strong></p>
+<p><strong>写数据</strong></p>
+<p>写入新数据块时默认写在最顶层。如果顶层没有足够的空间存放数据块，回收策略会被触发释放空间给新数据块。</p>
+<p><strong>读数据</strong></p>
+<p>读取分层存储的数据块和标准Alluxio类似。Alluxio从存储位置读取数据块。如果Alluxio配置了多层存储，数据块不一定是从顶层读取，因为可能被透明地移到下层。</p>
+<p>读取存储策略为AlluxioStorageType.PROMOTE的数据会确保数据从worker读取前先被转移到顶层。通过显式将热数据移到更高层,该策略也可以作为数据管理策略使用。</p>
+<p><strong>固定文件</strong></p>
+<p>文件被固定时，数据块不会被移出。用户可以促使已固定文件的块移到顶层。</p>
+<p>固定文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(true);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p>文件可以取消固定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FileSystem fs = FileSystem.Factory.get();</span><br><span class="line">AlluxioURI uri = new AlluxioURI(&quot;/myFile&quot;);</span><br><span class="line">SetAttributeOptions pinOpt = SetAttributeOptions.defaults().setPinned(false);</span><br><span class="line">fs.setAttribute(uri, pinOpt);</span><br></pre></td></tr></table></figure>
+<p><strong>分配策略</strong></p>
+<ul>
+<li>贪心分配策略 分配新数据块到首个有足够空间的存储目录。</li>
+<li>最大剩余空间分配策略 分配数据块到有最大剩余空间的存储目录。</li>
+<li>轮询调度分配策略 分配数据块到有空间的最高存储层，存储目录通过轮询调度选出。</li>
+</ul>
+<p><strong>回收策略</strong></p>
+<ul>
+<li>贪心回收策略</li>
+<li>LRU回收策略</li>
+<li>LRFU回收策略</li>
+<li>部分LRU回收策略</li>
+</ul>
+<p><strong>空间预留器</strong></p>
+<p><strong>开启和配置空间预留</strong></p>
+<hr>
+<p><code>统一命名空间</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Alluxio通过挂载功能在不同的存储系统之间实现高效的数据管理。</span><br><span class="line">并且透明命名在持久化这些对象到底层存储系统时可以保留这些对象的文件名和目录层次结构。</span><br></pre></td></tr></table></figure>
+<p><code>世系(Lineage)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">通过世系(Lineage)，Alluxio可以不受容错的限制实现高吞吐的写入， 丢失的输出可以通过重新执行创建这一输出的任务来恢复。</span><br><span class="line">应用将输出写入内存，Alluxio以异步方式定期备份数据到底层文件系统。</span><br><span class="line">写入失败时，Alluxio启动任务重执行恢复丢失的文件。</span><br></pre></td></tr></table></figure>
+<p><code>网页UI &amp; 命令行</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用户可以通过网页UI浏览文件系统。</span><br><span class="line">在调试模式下，管理员可以查看每一个文件的详细信息，包括存放位置，检查点路径等等。</span><br><span class="line">用户也可以通过./bin/alluxio fs与Alluxio交互，例如：将数据从文件系统拷入拷出。</span><br></pre></td></tr></table></figure>
+<p>Reference :</p>
 <ol>
-<li><p>配置日志信息的格式（布局）语法为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName.layout = fully.qualified.name.of.layout.class  </span><br><span class="line">log4j.appender.appenderName.layout.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.layout.optionN = valueN</span><br></pre></td></tr></table></figure>
-</li>
+<li><a href="http://alluxio.org/documentation/v1.0.1/cn/" target="_blank" rel="external">alluxio官网</a></li>
 </ol>
-<p>   Log4j提供的layout有已下几种：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.HTMLLayout（以HTML表格形式布局） </span><br><span class="line">org.apache.log4j.PatternLayout（可以灵活地指定布局模式）</span><br><span class="line">org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串）</span><br><span class="line">org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</span><br></pre></td></tr></table></figure>
-<p>   Log4J采用类似C语言中的printf函数的打印格式格式化日志信息，打印参数如下：</p>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL  </span><br><span class="line">%r 输出自应用启动到输出该log信息耗费的毫秒数  </span><br><span class="line">%c 输出所属的类目，通常就是所在类的全名  </span><br><span class="line">%t 输出产生该日志事件的线程名  </span><br><span class="line">%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”  </span><br><span class="line">%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d&#123;yyy MMM dd HH:mm:ss,SSS&#125;，输出类似：2002年10月18日 22：10：28，921  </span><br><span class="line">%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)</span><br></pre></td></tr></table></figure>
-<p>参考：</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Redis</p>
+<p>####Benchmarks</p>
+<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
+<p>####Cluster</p>
+<p>####Hyperloglog</p>
+<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
+<hr>
+<p>####FAQ</p>
+<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Dynamo</p>
+<p>###INTRODUCTION</p>
+<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
+<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
+<p>###Peer to Peer Systems</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>##Cassandra </p>
+<p>###Introduction</p>
+<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
+<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
+<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
+<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
+<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
+<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
+<p>###gossip: Internode communications</p>
+<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
+<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
+<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
+<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
+<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
+<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
+<p>###Virtual nodes</p>
+<p>###Write </p>
+<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
 <ol>
-<li><a href="http://www.codeceo.com/article/log4j-usage.html" target="_blank" rel="external">最详细的Log4j使用教程</a></li>
+<li>Logging data in the commit log</li>
+<li>Writing data to the memtable</li>
+<li>Flushing data from the memtable</li>
+<li>Storing data on disk in SSTables</li>
+<li>Compaction</li>
 </ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:41.000Z"><a href="/2016/04/22/other/calcite/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/calcite/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>####Calcite</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">First, we define a schema based on a schema factory class in a model file. </span><br><span class="line"></span><br><span class="line">Then the schema factory creates a schema, and the schema creates several tables, each of which knows how to get data by scanning a CSV file. </span><br><span class="line"></span><br><span class="line">Last, after Calcite has parsed the query and planned it to use those tables, Calcite invokes the tables to read the data as the query is being executed.</span><br></pre></td></tr></table></figure>
-<p>Here is a JSON Modle:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  version: &apos;1.0&apos;,</span><br><span class="line">  defaultSchema: &apos;SALES&apos;,</span><br><span class="line">  schemas: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: &apos;SALES&apos;,</span><br><span class="line">      type: &apos;custom&apos;,</span><br><span class="line">      factory: &apos;org.apache.calcite.adapter.csv.CsvSchemaFactory&apos;,</span><br><span class="line">      operand: &#123;</span><br><span class="line">        directory: &apos;target/test-classes/sales&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Driven by the model, the schema factory instantiates a single schema <code>SALES</code></p>
-<p>A schema’s job is to produce a list of tables. </p>
-<p>The tables implement Calcite’s <code>Table</code> interface.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line">package org.darion.yaphet.calcite;</span><br><span class="line"></span><br><span class="line">import org.apache.calcite.adapter.jdbc.JdbcSchema;</span><br><span class="line">import org.apache.calcite.schema.SchemaPlus;</span><br><span class="line">import org.apache.calcite.sql.SqlBasicCall;</span><br><span class="line">import org.apache.calcite.sql.SqlDelete;</span><br><span class="line">import org.apache.calcite.sql.SqlInsert;</span><br><span class="line">import org.apache.calcite.sql.SqlNode;</span><br><span class="line">import org.apache.calcite.sql.SqlUpdate;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParseException;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParser;</span><br><span class="line">import org.apache.calcite.tools.FrameworkConfig;</span><br><span class="line">import org.apache.calcite.tools.Frameworks;</span><br><span class="line">import org.apache.calcite.tools.Planner;</span><br><span class="line">import org.apache.calcite.tools.RelConversionException;</span><br><span class="line">import org.apache.calcite.tools.ValidationException;</span><br><span class="line"></span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by darion.johannes.yaphet on 16/3/8.</span><br><span class="line"> */</span><br><span class="line">public class ParseSQL &#123;</span><br><span class="line"></span><br><span class="line">    private static final String[] SQLArray = &#123;</span><br><span class="line">            &quot;INSERT INTO TABLE0(ID,NAME) VALUES(0,&apos;darion&apos;)&quot;,</span><br><span class="line">            &quot;UPDATE TABLE0 SET NAME = &apos;darion.yaphet&apos; WHERE ID = 1&quot;,</span><br><span class="line">            &quot;DELETE FROM TABLE0 WHERE ID = 1 &quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws ClassNotFoundException, SqlParseException, ValidationException, RelConversionException &#123;</span><br><span class="line">        String sDriverName = &quot;com.mysql.jdbc.Driver&quot;;</span><br><span class="line">        Class.forName(sDriverName);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; operand = new HashMap&lt;&gt;();</span><br><span class="line">        operand.put(&quot;jdbcDriver&quot;, sDriverName);</span><br><span class="line">        operand.put(&quot;jdbcUrl&quot;, &quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">        operand.put(&quot;jdbcUser&quot;, &quot;root&quot;);</span><br><span class="line">        operand.put(&quot;jdbcPassword&quot;, &quot;&quot;);</span><br><span class="line">        operand.put(&quot;Lex&quot;, &quot;MYSQL_ANSI&quot;);</span><br><span class="line"></span><br><span class="line">        SchemaPlus rootSchema = Frameworks.createRootSchema(true);</span><br><span class="line">        org.apache.calcite.schema.Schema schema = new JdbcSchema.Factory().create(rootSchema, &quot;TABLE0&quot;, operand);</span><br><span class="line">        rootSchema = rootSchema.add(&quot;TABLE0&quot;, schema);</span><br><span class="line"></span><br><span class="line">        Frameworks.ConfigBuilder configBuilder = Frameworks.newConfigBuilder();</span><br><span class="line">        configBuilder.defaultSchema(rootSchema);</span><br><span class="line"></span><br><span class="line">        FrameworkConfig config = Frameworks.newConfigBuilder()</span><br><span class="line">                .parserConfig(SqlParser.configBuilder()</span><br><span class="line">                        .setCaseSensitive(false)</span><br><span class="line">                        .build())</span><br><span class="line">                .defaultSchema(rootSchema)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;SELECT * FROM TABLE0 WHERE AGE &gt; 15.0&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,CONCAT(&apos;NAME&apos;,&apos;AGE&apos;))&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) SELECT ID,NAME FROM TABLE0 WHERE ID = 0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;select concat(&apos;11&apos;,&apos;22&apos;,&apos;33&apos;) FROM TABLE0&quot;;</span><br><span class="line">        //String SQL = &quot;select COUNT(*) FROM TABLE0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,&apos;darion&apos;)&quot;;</span><br><span class="line"></span><br><span class="line">        for (String SQL : SQLArray) &#123;</span><br><span class="line">            System.out.println(SQL);</span><br><span class="line">            Planner planner = Frameworks.getPlanner(config);</span><br><span class="line">            SqlNode node = planner.parse(SQL);</span><br><span class="line">            SqlNode validated = planner.validate(node);</span><br><span class="line">            System.out.println(&quot;Type : &quot; + validated.getKind());</span><br><span class="line"></span><br><span class="line">            switch (validated.getKind().toString()) &#123;</span><br><span class="line">                case &quot;INSERT&quot;:</span><br><span class="line">                    SqlInsert insertNode = (SqlInsert) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List : &quot; + insertNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Column List  : &quot; + insertNode.getTargetColumnList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Target Table : &quot; + insertNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    for (SqlNode insertToken : ((SqlBasicCall) insertNode.getSource()).getOperandList()) &#123;</span><br><span class="line">                        System.out.println(&quot;Source       : &quot; + ((SqlBasicCall) insertToken) + &quot; &quot; +</span><br><span class="line">                                ((SqlBasicCall) insertToken).getKind());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;DELETE&quot;:</span><br><span class="line">                    SqlDelete deleteNode = (SqlDelete) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + deleteNode.getOperandList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + deleteNode.getCondition() + &quot; &quot;);// where</span><br><span class="line">                    System.out.println(&quot;Target Table  : &quot; + deleteNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + deleteNode.getSourceSelect() + &quot; &quot; + deleteNode.getSourceSelect().getKind());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;UPDATE&quot;:</span><br><span class="line">                    SqlUpdate updateNode = (SqlUpdate) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + updateNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + updateNode.getSourceSelect());</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + updateNode.getCondition());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                default:</span><br><span class="line">                    System.out.println(&quot;Unknow Type : &quot; + validated.getKind());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //RelNode relationalExpression = planner.rel(validated).rel;</span><br><span class="line">            System.out.println(&quot;-----------------------------------&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //System.out.println(relationalExpression.getRowType());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getQualifiedName());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getCollationList());</span><br><span class="line"></span><br><span class="line">        //JavaTypeFactory typeFactory = new JavaTypeFactoryImpl(</span><br><span class="line">        //        RelDataTypeSystem.DEFAULT);</span><br><span class="line"></span><br><span class="line">        //RelToSqlConverter converter = new RelToSqlConverter(SqlDialect.CALCITE);</span><br><span class="line">        //SqlImplementor.Result result = converter.visitChild(0, relationalExpression);</span><br><span class="line"></span><br><span class="line">        // select</span><br><span class="line">        //SqlNode sqlNode = converter.visitChild(0, relationalExpression).asQuery();</span><br><span class="line">        //System.out.println(sqlNode.getKind());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getSelectList());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getFrom());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getWhere());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getGroup());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getHaving());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getOrderList());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // insert</span><br><span class="line">        //System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:45:19.000Z"><a href="/2016/04/22/other/git/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/git/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h4 id="Git-the-stupid-content-tracker"><a href="#Git-the-stupid-content-tracker" class="headerlink" title="Git - the stupid content tracker"></a>Git - the stupid content tracker</h4><p><code>Git</code> is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
-<p>Git 会把<code>每次提交的文件的全部内容</code>都会记录下来</p>
+<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
+<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
+<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
+<p>###Read </p>
+<p>###Delete</p>
+<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
+<p>###Compaction</p>
+<p>###Hinted Handoff</p>
+<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
+<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
+<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
+<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
+<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
+<p>###SSTable</p>
+<p>SSTables have 3 separate files created per column-family.</p>
+<ol>
+<li>Bloom Filter</li>
+<li>Index</li>
+<li>Data</li>
+</ol>
+<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
+<p>###Memtable</p>
+<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
+<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
+<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
+<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
+<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
+<p>column_definition is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
+<p>partition_key is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
+<p>collection_type is:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
+<p><code>CREATE TYPE</code>  Create a user-defined type</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
+<p>Example :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Config</strong></p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">λ ~/ git</span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c name=value]</span><br><span class="line">           [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">           [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">           &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">These are common Git commands used in various situations:</span><br><span class="line"></span><br><span class="line">start a working area (see also: git help tutorial)</span><br><span class="line">   clone      Clone a repository into a new directory</span><br><span class="line">   init       Create an empty Git repository or reinitialize an existing one</span><br><span class="line"></span><br><span class="line">work on the current change (see also: git help everyday)</span><br><span class="line">   add        Add file contents to the index</span><br><span class="line">   mv         Move or rename a file, a directory, or a symlink</span><br><span class="line">   reset      Reset current HEAD to the specified state</span><br><span class="line">   rm         Remove files from the working tree and from the index</span><br><span class="line"></span><br><span class="line">examine the history and state (see also: git help revisions)</span><br><span class="line">   bisect     Use binary search to find the commit that introduced a bug</span><br><span class="line">   grep       Print lines matching a pattern</span><br><span class="line">   log        Show commit logs</span><br><span class="line">   show       Show various types of objects</span><br><span class="line">   status     Show the working tree status</span><br><span class="line"></span><br><span class="line">grow, mark and tweak your common history</span><br><span class="line">   branch     List, create, or delete branches</span><br><span class="line">   checkout   Switch branches or restore working tree files</span><br><span class="line">   commit     Record changes to the repository</span><br><span class="line">   diff       Show changes between commits, commit and working tree, etc</span><br><span class="line">   merge      Join two or more development histories together</span><br><span class="line">   rebase     Forward-port local commits to the updated upstream head</span><br><span class="line">   tag        Create, list, delete or verify a tag object signed with GPG</span><br><span class="line"></span><br><span class="line">collaborate (see also: git help workflows)</span><br><span class="line">   fetch      Download objects and refs from another repository</span><br><span class="line">   pull       Fetch from and integrate with another repository or a local branch</span><br><span class="line">   push       Update remote refs along with associated objects</span><br><span class="line"></span><br><span class="line">&apos;git help -a&apos; and &apos;git help -g&apos; list available subcommands and some</span><br><span class="line">concept guides. See &apos;git help &lt;command&gt;&apos; or &apos;git help &lt;concept&gt;&apos;</span><br><span class="line">to read about a specific subcommand or concept.</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Branch</strong></p>
-<p>使用分支意味着可以把你的工作从开发主线上分离开来，以免影响开发主线。</p>
-<p><em>Git 保存的不是文件的变化或者差异，而是一系列不同时刻的文件快照。</em></p>
-<p>在进行提交操作时，Git 会保存一个提交对象。提交对象会包含一个指向暂存内容快照的指针。 但不仅仅是这样，该提交对象还包含了作者的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针。首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象，而由多个分支合并产生的提交对象有多个父对象，</p>
-<p>暂存操作会为每一个文件计算校验和，然后会把当前版本的文件快照保存到 Git 仓库中，最终将校验和加入到暂存区域等待提交。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch  列出本地分支 当前分支前加*标记</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git branch -r 列出远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -r</span><br><span class="line">  origin/HEAD -&gt; origin/master</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch -a 列出本地分支和远程分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git branch 创建一个新的本地分支 只创建分支 不切换支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git branch local</span><br><span class="line">λ ~/git.learning/ master</span><br><span class="line">λ ~/git.learning/ master git branch</span><br><span class="line">  local</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout 切换分支</span><br><span class="line"></span><br><span class="line">λ ~/git.learning/ master git checkout local</span><br><span class="line">Switched to branch &apos;local&apos;</span><br><span class="line">λ ~/git.learning/ local</span><br><span class="line">λ ~/git.learning/ local git branch</span><br><span class="line">* local</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d | -D  删除分支</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d -r  删除远程分支</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Remote</strong></p>
-<hr>
-<p><strong>Log 显示提交记录</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log [&lt;options&gt;] [&lt;revision range&gt;] [[\--] &lt;path&gt;…​]</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Alias</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.last &apos;log -1 HEAD&apos;</span><br><span class="line">git config --global alias.unstage &apos;reset HEAD --&apos;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Tag</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag 列出已有的标签</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show 看到标签信息与对应的提交信息</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Bisect</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git bisect &lt;subcommand&gt; &lt;options&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git bisect start [--term-&#123;old,good&#125;=&lt;term&gt; --term-&#123;new,bad&#125;=&lt;term&gt;]</span><br><span class="line">         [--no-checkout] [&lt;bad&gt; [&lt;good&gt;...]] [--] [&lt;paths&gt;...]</span><br><span class="line">git bisect (bad|new) [&lt;rev&gt;]</span><br><span class="line">git bisect (good|old) [&lt;rev&gt;...]</span><br><span class="line">git bisect terms [--term-good | --term-bad]</span><br><span class="line">git bisect skip [(&lt;rev&gt;|&lt;range&gt;)...]</span><br><span class="line">git bisect reset [&lt;commit&gt;]</span><br><span class="line">git bisect visualize</span><br><span class="line">git bisect replay &lt;logfile&gt;</span><br><span class="line">git bisect log</span><br><span class="line">git bisect run &lt;cmd&gt;...</span><br><span class="line">git bisect help</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Blame</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
+<p>###Cassandra tools</p>
+<p>The nodetool utility is a command line interface for managing a cluster.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
+<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
+<p>###Architecture</p>
+<p>###Authentication</p>
+<p>To Configure Cassandra to use internal authentication,</p>
+<p>###Virtual Nodes</p>
+<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
+<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
+<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
+<p>####JVM Turning</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<hr>
-<p><code>Tips :</code></p>
-<p><strong>Git自动补全</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash</span><br></pre></td></tr></table></figure>
-<p>在~/.bash_profile文件中添加以下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ -f ~/.git-completion.bash ]; then</span><br><span class="line">    . ~/.git-completion.bash</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>GitHub秘籍</strong></p>
-<ol>
-<li>在任意diff页面的URL后加上 <code>?w=1</code> ，可以去掉那些只是空白字符的变化，使你能更专注于代码的变化。 </li>
-<li>在diff或者file页面的URL后面加上 <code>?ts=4</code> ，这样当显示tab字符的长度时就会是4个空格的长度，不再是默认的8个空格。 ts 后面的数字还可以根据你个人的偏好进行修改。</li>
-<li>查看某个用户的所有提交历史，只需在commits页面URL后加上 <code>?author=username</code> 。</li>
-<li>Gists还可以像任何标准仓库一样被克隆。</li>
-<li><a href="https://git.io/" target="_blank" rel="external">Git.io</a> 是Github的短网址服务。</li>
-<li>代码文件地址后加上 #L52 或者单击行号52都会将第52行代码高亮显示。多行高亮也可以，比如用 #L53-L60 选择范围，或者按住 shift 键，然后再点击选择的两行。</li>
-<li>如果某个提交修复了一个Issue，当提交到master分支时，提交信息里可以使用 <code>fix/fixes/fixed</code> , <code>close/closes/closed</code> 或者 <code>resolve/resolves/resolved</code>等关键词，后面再跟上<code>Issue号</code>，这样就会关闭这个Issue。</li>
-<li>引用同一个仓库中一个Issue : <code>#</code> 加上<code>Issue号</code>，自动创建到此Issue的链接,链接到其他仓库的Issue <code>user_name/repo_name#ISSUE_NUMBER</code></li>
-<li>Github支持的完整表情符号列表详见 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">emoji-cheat-sheet.com</a> 或 <a href="https://github.com/scotch-io/All-Github-Emoji-Icons" target="_blank" rel="external">scotch-io/All-Github-Emoji-Icons </a></li>
-<li><a href="http://www.kancloud.cn/thinkphp/github-tips/37891" target="_blank" rel="external">Issues和Pull requests里可以添加复选框</a></li>
-<li>GitHub支持将 <code>.csv</code> 和 <code>.tsv</code> 格式的文件渲染成表格数据。</li>
-<li>Pull Request中的Revert按钮来撤销一个已合并的Pull Request中的commit。</li>
-<li>根目录添加一个名为 CONTRIBUTING 的文件后，贡献者在新建Issue或Pull Request时会看到这个文件的链接。</li>
-<li><a href="https://github.com/github/hub#commands" target="_blank" rel="external">Hub</a>是一个对Git进行了封装的命令行工具</li>
-<li>提交和Pull Requests里包含有Github支持的可渲染文档（比如Markdown）会提供 source 和 rendered 两个视图功能。</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://hubingforever.blog.163.com/blog/static/1710405792012587105464/" target="_blank" rel="external">Git对象模型</a> </li>
-<li><a href="http://hubingforever.blog.163.com/blog/static/17104057920125794943922/" target="_blank" rel="external">Git索引</a></li>
-<li><a href="http://git-scm.com/" target="_blank" rel="external">git Doc</a></li>
-<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></li>
-<li><a href="http://gitref.org/" target="_blank" rel="external">gitref</a></li>
-<li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
-<li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
-</ol>
+<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
+<p>####Inner Cassandra </p>
+<p>#####StartUp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -866,73 +582,21 @@ the exception?</code></p>
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
+        <time datetime="2016-05-06T15:28:48.000Z"><a href="/2016/05/06/algorithms/hidden-markov-model/">2016-05-06</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/other/gradle/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Gradle</p>
-<p>###Build Script Basic<br>任何一个Gradle构建都是由一个或多个 projects 组成.</p>
-<p>每个project包括许多可构建组成部分. 这完全取决于你要构建些什么.</p>
-<p>举个栗子.每个project或许是一个jar包或者一个web应用, 它也可以是一个由许多其他项目中产生的jar构成的zip压缩包.一个project不必描述它只能进行构建操作. </p>
-<p>它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大.<br>Gradle的build-by-convention可以让您来具体定义一个project到底该做什么.</p>
-<p>每个project都由多个tasks组成.每个task都代表了构建执行过程中的一个原子性操作.如编译,打包,生成javadoc,发布到某个仓库等操作</p>
-<p>你可以通过在命令行运行gradle命令来执行构建, gradle命令会从当前目录下寻找 build.gradle 文件来执行构建.</p>
-<p>我们称 build.gradle 文件为构建脚本. 严格来说这其实是一个构建配置脚本</p>
-<p>build.gradle</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast &#123;</span><br><span class="line">        println &apos;Hello World !&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &apos;Hello World&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doFirst &#123;</span><br><span class="line">    println &apos;Before&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task.doLast &#123;</span><br><span class="line">   println &apos;After&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task &lt;&lt; &#123;</span><br><span class="line">    println &apos;Last&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>doFirst 和 doLast 可以进行多次调用. 分别被添加在任务的开头和结尾.</p>
-<p>当任务开始执行时这些动作会按照既定顺序进行.其中 &lt;&lt; 操作符 是 doLast 的简写方式.</p>
-<p><code>增加自定义属性</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task myTask &#123;</span><br><span class="line">    ext.name = &apos;darion.yaphet&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task printName &#123;</span><br><span class="line">    println myTask.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>默认任务</code></p>
-<p>Gradle允许在脚本中定义多个默认任务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">defaultTasks &apos;clean&apos; ,&apos;run&apos;</span><br><span class="line"></span><br><span class="line">task clean &lt;&lt; &#123;</span><br><span class="line">    println &apos;default clean&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task  run &lt;&lt; &#123;</span><br><span class="line">    println &apos;default run&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>###Java Plugin<br>大部分Java项目基本流程都是相似的:编译源文件,进行单元测试,创建Jar包.<br>使用Gradle做这些工作不必为每个工程都编写代码.<br>Gradle已经提供了完美的插件来解决这些问题. </p>
-<p>插件就是Gradle的扩展,简而言之就是为你添加一些非常有用的默认配置.<br>Gradle自带了很多插件,并且你也可以很容易的编写和分享自己的插件.<br>Java plugin作为其中之一,为你提供了诸如编译,测试,打包等一些功能.</p>
-<p>Java插件为工程定义了许多默认值,如Java源文件位置.<br>如果你遵循这些默认规则,那么你无需在你的脚本文件中书写太多代码.<br>当然,Gradle也允许你自定义项目中的一些规则.<br>实际上,由于对Java工程的构建是基于插件的,那么你也可以完全不用插件自己编写代码来进行构建.</p>
-<p><code>一个基本Java项目</code></p>
-<p>###Web Plugin</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
+    <h1 class="title"><a href="/2016/05/06/algorithms/hidden-markov-model/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Simple Build Tool</p>
-<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
+        <h3 id="Hidden-Markov-Model"><a href="#Hidden-Markov-Model" class="headerlink" title="Hidden Markov Model"></a>Hidden Markov Model</h3><p>Reference :</p>
+<ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzI2NjA3NTc4Ng==&amp;mid=2652077944&amp;idx=1&amp;sn=d17758f0aed8670ba0f5f41e481f0205&amp;scene=23&amp;srcid=0506YCgtc3T5Bwj2Bwrn2fn7#rd" target="_blank" rel="external">如何用简单易懂的例子解释隐马尔可夫模型</a></li>
+<li></li>
+</ol>
 
       
     </div>
@@ -952,41 +616,47 @@ the exception?</code></p>
 
 <nav id="pagination">
   
-    <a href="/page/4/" class="alignleft prev">Prev</a>
+    <a href="/page/4/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/6/" class="alignright next">Next</a>
+    <a href="/page/6/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -996,7 +666,7 @@ the exception?</code></p>
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1011,13 +681,27 @@ the exception?</code></p>
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

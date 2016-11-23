@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 4 | darion.johannes.yaphet</title>
+  <title>Página 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,324 +50,31 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/level/">2016-05-10</a></time>
+        <time datetime="2016-07-02T02:04:08.000Z"><a href="/2016/07/02/other/gobblin/">2016-07-02</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/10/storage/level/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/cassandra/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/cassandra/"></a></h1>
+    <h1 class="title"><a href="/2016/07/02/other/gobblin/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>##Cassandra </p>
-<p>###Introduction</p>
-<p>Cassandra is a peer-to-peer distributed data store with column oriented database system.  </p>
-<p>Cassandra is developed by using Google Big table and  Amazon ‘s Dynamo distribution model.  </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. </p>
-<p>Client read or write requests can go to any node in the cluster. It is shared nothing architecture.</p>
-<p>Cassandra is designed to handle big data workloads across multiple nodes with no single point of failure.<br>Cassandra addresses the problem of failures by employing a peer-to-peer distributed system across<br>homogeneous nodes where data is distributed among all nodes in the cluster. </p>
-<p>A sequentially written commit log on each node captures write activity to ensure data durability. Data is then indexed and written to an in-memory structure, called<br>a <code>memtable</code>, which resembles a write-back cache. Once the memory structure is full, the data is written to disk in an <code>SSTable</code> data file. </p>
-<p>All writes are automatically partitioned and replicated throughout the cluster. Using a process called <code>compaction</code> Cassandra periodically consolidates SSTables, discarding obsolete data and tombstones</p>
-<p>###gossip: Internode communications</p>
-<p><code>Gossip</code> is a peer-to-peer communication protocol in which nodes periodically exchange state information about themselves and about other nodes they know about. </p>
-<p>The gossip process runs every second and exchanges state messages with up to three other nodes in the cluster. The nodes exchange information about themselves and about the other nodes that they have gossiped about, so all nodes quickly learn<br>about all other nodes in the cluster. </p>
-<p>A gossip message has a version associated with it, so that during a gossip exchange, older information is overwritten with the most current state for a particular node.To prevent problems in gossip communications, use the same list of seed nodes for all nodes in a cluster.This is most critical the first time a node starts up. </p>
-<p>By default, a node remembers other nodes it has<br>gossiped with between subsequent restarts. The seed node designation has no purpose other than<br>bootstrapping the gossip process for new nodes joining the cluster. Seed nodes are not a single point<br>of failure, nor do they have any other special purpose in cluster operations beyond the bootstrapping of<br>nodes.</p>
-<p>####Failure detection and recovery<br>Failure detection is a method for <code>locally determining from gossip state and history</code> if another node in the system is up or down.</p>
-<p>Cassandra uses this information to avoid routing client requests to unreachable nodes whenever possible.Uses an <code>accrual detection mechanism</code> to calculate a per-node threshold that takes into account network performance, workload, and historical conditions.Every node maintains <code>a sliding window of inter-arrival times of gossip messages</code> from other nodes in the cluster.</p>
-<p>###Virtual nodes</p>
-<p>###Write </p>
-<p>Cassandra processes data at several stages on the write path, starting with the immediate logging of a write and ending in compaction</p>
+        <h3 id="Gobblin"><a href="#Gobblin" class="headerlink" title="Gobblin"></a>Gobblin</h3><p><strong>Data lifecycle management</strong></p>
+<p>Here is a sampling of the most common requirements :</p>
 <ol>
-<li>Logging data in the commit log</li>
-<li>Writing data to the memtable</li>
-<li>Flushing data from the memtable</li>
-<li>Storing data on disk in SSTables</li>
-<li>Compaction</li>
+<li>Can you also copy this data onto these other Hadoop clusters?</li>
+<li>Can you purge some rows for compliance reasons? Can this be done continuously?</li>
+<li>Can the data be automatically registered with Hive, Presto, etc.?</li>
+<li>Can you provide certain datasets in a more optimal format like ORC?</li>
+<li>Can you retain data for a period of time and then purge it on an ongoing basis?</li>
+<li>Can you guarantee that the data doesn’t have duplicates?</li>
+<li>Can I easily declare lifecycle management policies that apply to datasets, dataset groups and clusters?</li>
 </ol>
-<p>Cassandra stores the data in a structure in memory, the memtable, and also appends writes to the commit log on disk.</p>
-<p>When memtable contents exceed a configurable threshold, the memtable data, which includes indexes, is put in a queue to be flushed to disk.<code>Typically, before restarting nodes, flushing the memtable is recommended to reduce commit log replay time.</code></p>
-<p>SSTables are immutable, not written to again after the memtable is flushed.</p>
-<p>###Read </p>
-<p>###Delete</p>
-<p>Cassandra can have an optional expiration date called TTL (time to live) and marks TTL data with a tombstone after the requested amount of time has expired.  After data is marked with a tombstone, the data is automatically removed during the normal <code>compaction</code> process.</p>
-<p>###Compaction</p>
-<p>###Hinted Handoff</p>
-<p>Hinted Handoff is an optional part of writes in Cassandra, enabled by default, with two purposes:</p>
-<p>Hinted handoff allows Cassandra to offer full write availability when consistency is not required.</p>
-<p>Hinted handoff dramatically improves response consistency after temporary outages such as network failures.</p>
-<p>All hints for a given replica are stored under a single partition key, so replaying hints is a simple sequential read with minimal performance impact.</p>
-<p><a href="http://www.datastax.com/dev/blog/modern-hinted-handoff" target="_blank" rel="external">http://www.datastax.com/dev/blog/modern-hinted-handoff</a></p>
-<p>###SSTable</p>
-<p>SSTables have 3 separate files created per column-family.</p>
-<ol>
-<li>Bloom Filter</li>
-<li>Index</li>
-<li>Data</li>
-</ol>
-<p>The format of a SSTable component file is<br><code>&lt;keyspace&gt;-&lt;column family&gt;-[tmp marker]-&lt;version&gt;-&lt;generation&gt;-&lt;component&gt;.db</code></p>
-<p>###Memtable</p>
-<p>###CQL<br>Cassandra Query Language is the default and primary interface into the Cassandra DBMS. </p>
-<p>CQL and SQL share the same abstract idea of a table constructed of tables and rows. </p>
-<p>The Cassandra keyspace is a namespace that defines how data is replicated on nodes.Typically, a cluster has one keyspace per application. Replication is controlled on a per-keyspace basis, so data that has different replication requirements typically resides in different keyspaces. </p>
-<p>Keyspaces are not designed to be used as a significant map layer within the data model. Keyspaces are designed to control data replication for a set of tables.</p>
-<p>To use NetworkTopologyStrategy for production use, you need to change the default snitch, SimpleSnitch, to a network-aware snitch, define one or more data center names in the snitch properties file, and use the data center name(s) to define the keyspace</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE keyspace_name.table_name </span><br><span class="line">( column_definition, column_definition, ...)</span><br><span class="line">WITH property AND property ...</span><br></pre></td></tr></table></figure>
-<p>column_definition is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name cql_type</span><br><span class="line">| column_name cql_type PRIMARY KEY</span><br><span class="line">| PRIMARY KEY ( partition_key )</span><br><span class="line">| column_name collection_type</span><br></pre></td></tr></table></figure>
-<p>partition_key is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">column_name</span><br><span class="line">| ( column_name1</span><br><span class="line">        , column_name2, column_name3 ... )</span><br><span class="line">| ((column_name1*, column_name2*), column3*, column4* . . . )</span><br></pre></td></tr></table></figure>
-<p>collection_type is:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LIST &lt;cql_type&gt;</span><br><span class="line">| SET &lt;cql_type&gt;</span><br><span class="line">| MAP &lt;cql_type, cql_type&gt;</span><br></pre></td></tr></table></figure>
-<p><code>CREATE TYPE</code>  Create a user-defined type</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE IF NOT EXISTS keyspace.type_name ( field, field, ...)</span><br></pre></td></tr></table></figure>
-<p>Example :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TYPE address (</span><br><span class="line">  street text,</span><br><span class="line">  city text,</span><br><span class="line">  zip_code int,</span><br><span class="line">  phones set&lt;text&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">λ ~/source/apache-cassandra-2.2.1/ bin/cqlsh</span><br><span class="line">Connected to Test Cluster at 127.0.0.1:9042.</span><br><span class="line">[cqlsh 5.0.1 | Cassandra 2.2.1 | CQL spec 3.3.0 | Native protocol v4]</span><br><span class="line">Use HELP for help.</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; CREATE KEYSPACE mykeyspace</span><br><span class="line">   ... WITH REPLICATION = &#123; &apos;class&apos; : &apos;SimpleStrategy&apos;, &apos;replication_factor&apos; : 1 &#125;;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt;</span><br><span class="line">cqlsh&gt; use mykeyspace ;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE TABLE users (</span><br><span class="line">              ...   user_id int PRIMARY KEY,</span><br><span class="line">              ...   fname text,</span><br><span class="line">              ...   lname text</span><br><span class="line">              ... );</span><br><span class="line"></span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1745, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1744, &apos;john&apos;, &apos;doe&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt; INSERT INTO users (user_id,  fname, lname)</span><br><span class="line">              ...   VALUES (1746, &apos;john&apos;, &apos;smith&apos;);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(3 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE  user_id = 1744;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1744 |  john |   doe</span><br><span class="line"></span><br><span class="line">(1 rows)</span><br><span class="line">cqlsh:mykeyspace&gt; CREATE INDEX ON users (lname);</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt; SELECT * FROM users WHERE lname = &apos;smith&apos;;</span><br><span class="line"></span><br><span class="line"> user_id | fname | lname</span><br><span class="line">---------+-------+-------</span><br><span class="line">    1745 |  john | smith</span><br><span class="line">    1746 |  john | smith</span><br><span class="line"></span><br><span class="line">(2 rows)</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br><span class="line">cqlsh:mykeyspace&gt;</span><br></pre></td></tr></table></figure>
-<p>###Cassandra tools</p>
-<p>The nodetool utility is a command line interface for managing a cluster.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND</span><br></pre></td></tr></table></figure>
-<p>Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide<br><code>rebuild repair taketoken</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">bin/nodetool help</span><br><span class="line">usage: nodetool [(-pwf &lt;passwordFilePath&gt; | --password-file &lt;passwordFilePath&gt;)]</span><br><span class="line">        [(-pw &lt;password&gt; | --password &lt;password&gt;)] [(-h &lt;host&gt; | --host &lt;host&gt;)]</span><br><span class="line">        [(-u &lt;username&gt; | --username &lt;username&gt;)] [(-p &lt;port&gt; | --port &lt;port&gt;)]</span><br><span class="line">        &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">The most commonly used nodetool commands are:</span><br><span class="line">    assassinate                  Forcefully remove a dead node without re-replicating any data.  Use as a last resort if you cannot removenode</span><br><span class="line">    bootstrap                    Monitor/manage node&apos;s bootstrap process</span><br><span class="line">    cleanup                      Triggers the immediate cleanup of keys no longer belonging to a node. By default, clean all keyspaces</span><br><span class="line">    clearsnapshot                Remove the snapshot with the given name from the given keyspaces. If no snapshotName is specified we will remove all snapshots</span><br><span class="line">    compact                      Force a (major) compaction on one or more tables</span><br><span class="line">    compactionhistory            Print history of compaction</span><br><span class="line">    compactionstats              Print statistics on compactions</span><br><span class="line">    decommission                 Decommission the *node I am connecting to*</span><br><span class="line">    describecluster              Print the name, snitch, partitioner and schema version of a cluster</span><br><span class="line">    describering                 Shows the token ranges info of a given keyspace</span><br><span class="line">    disableautocompaction        Disable autocompaction for the given keyspace and table</span><br><span class="line">    disablebackup                Disable incremental backup</span><br><span class="line">    disablebinary                Disable native transport (binary protocol)</span><br><span class="line">    disablegossip                Disable gossip (effectively marking the node down)</span><br><span class="line">    disablehandoff               Disable storing hinted handoffs</span><br><span class="line">    disablethrift                Disable thrift server</span><br><span class="line">    drain                        Drain the node (stop accepting writes and flush all tables)</span><br><span class="line">    enableautocompaction         Enable autocompaction for the given keyspace and table</span><br><span class="line">    enablebackup                 Enable incremental backup</span><br><span class="line">    enablebinary                 Reenable native transport (binary protocol)</span><br><span class="line">    enablegossip                 Reenable gossip</span><br><span class="line">    enablehandoff                Reenable the future hints storing on the current node</span><br><span class="line">    enablethrift                 Reenable thrift server</span><br><span class="line">    flush                        Flush one or more tables</span><br><span class="line">    gcstats                      Print GC Statistics</span><br><span class="line">    getcompactionthreshold       Print min and max compaction thresholds for a given table</span><br><span class="line">    getcompactionthroughput      Print the MB/s throughput cap for compaction in the system</span><br><span class="line">    getendpoints                 Print the end points that owns the key</span><br><span class="line">    getlogginglevels             Get the runtime logging levels</span><br><span class="line">    getsstables                  Print the sstable filenames that own the key</span><br><span class="line">    getstreamthroughput          Print the Mb/s throughput cap for streaming in the system</span><br><span class="line">    gossipinfo                   Shows the gossip information for the cluster</span><br><span class="line">    help                         Display help information</span><br><span class="line">    info                         Print node information (uptime, load, ...)</span><br><span class="line">    invalidatecountercache       Invalidate the counter cache</span><br><span class="line">    invalidatekeycache           Invalidate the key cache</span><br><span class="line">    invalidaterowcache           Invalidate the row cache</span><br><span class="line">    join                         Join the ring</span><br><span class="line">    listsnapshots                Lists all the snapshots along with the size on disk and true size.</span><br><span class="line">    move                         Move node on the token ring to a new token</span><br><span class="line">    netstats                     Print network information on provided host (connecting node by default)</span><br><span class="line">    pausehandoff                 Pause hints delivery process</span><br><span class="line">    proxyhistograms              Print statistic histograms for network operations</span><br><span class="line">    rangekeysample               Shows the sampled keys held across all keyspaces</span><br><span class="line">    rebuild                      Rebuild data by streaming from other nodes (similarly to bootstrap)</span><br><span class="line">    rebuild_index                A full rebuild of native secondary indexes for a given table</span><br><span class="line">    refresh                      Load newly placed SSTables to the system without restart</span><br><span class="line">    reloadtriggers               Reload trigger classes</span><br><span class="line">    removenode                   Show status of current node removal, force completion of pending removal or remove provided ID</span><br><span class="line">    repair                       Repair one or more tables</span><br><span class="line">    resetlocalschema             Reset node&apos;s local schema and resync</span><br><span class="line">    resumehandoff                Resume hints delivery process</span><br><span class="line">    ring                         Print information about the token ring</span><br><span class="line">    scrub                        Scrub (rebuild sstables for) one or more tables</span><br><span class="line">    setcachecapacity             Set global key, row, and counter cache capacities (in MB units)</span><br><span class="line">    setcachekeystosave           Set number of keys saved by each cache for faster post-restart warmup. 0 to disable</span><br><span class="line">    setcompactionthreshold       Set min and max compaction thresholds for a given table</span><br><span class="line">    setcompactionthroughput      Set the MB/s throughput cap for compaction in the system, or 0 to disable throttling</span><br><span class="line">    sethintedhandoffthrottlekb   Set hinted handoff throttle in kb per second, per delivery thread.</span><br><span class="line">    setlogginglevel              Set the log level threshold for a given class. If both class and level are empty/null, it will reset to the initial configuration</span><br><span class="line">    setstreamthroughput          Set the Mb/s throughput cap for streaming in the system, or 0 to disable throttling</span><br><span class="line">    settraceprobability          Sets the probability for tracing any given request to value. 0 disables, 1 enables for all requests, 0 is the default</span><br><span class="line">    snapshot                     Take a snapshot of specified keyspaces or a snapshot of the specified table</span><br><span class="line">    status                       Print cluster information (state, load, IDs, ...)</span><br><span class="line">    statusbackup                 Status of incremental backup</span><br><span class="line">    statusbinary                 Status of native transport (binary protocol)</span><br><span class="line">    statusgossip                 Status of gossip</span><br><span class="line">    statushandoff                Status of storing future hints on the current node</span><br><span class="line">    statusthrift                 Status of thrift server</span><br><span class="line">    stop                         Stop compaction</span><br><span class="line">    stopdaemon                   Stop cassandra daemon</span><br><span class="line">    tablehistograms              Print statistic histograms for a given table</span><br><span class="line">    tablestats                   Print statistics on tables</span><br><span class="line">    toppartitions                Sample and print the most active partitions for a given column family</span><br><span class="line">    tpstats                      Print usage statistics of thread pools</span><br><span class="line">    truncatehints                Truncate all hints on the local node, or truncate hints for the endpoint(s) specified.</span><br><span class="line">    upgradesstables              Rewrite sstables (for the requested tables) that are not on the current version (thus upgrading them to said current version)</span><br><span class="line">    verify                       Verify (check data checksum for) one or more tables</span><br><span class="line">    version                      Print cassandra version</span><br><span class="line"></span><br><span class="line">See &apos;nodetool help &lt;command&gt;&apos; for more information on a specific command.</span><br></pre></td></tr></table></figure>
-<p>###Architecture</p>
-<p>###Authentication</p>
-<p>To Configure Cassandra to use internal authentication,</p>
-<p>###Virtual Nodes</p>
-<p>Prior to Cassandra 1.2, each node was assigned to a specific token range. Now each node can support <code>multiple</code>, <code>non-contiguous</code> token ranges. Instead of a node being responsible for one large range of tokens, it is responsible for many smaller ranges. In this way, one physical node is essentially hosting many smaller <code>&quot;virtual&quot; nodes</code>.</p>
-<p>Cassandra predetermines the size of each virtual node. You can control the number of virtual nodes assigned to each physical node.</p>
-<p><img src="../resource/cassandra/vnodes.png" alt="VNode"></p>
-<p>####JVM Turning</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>####Config<br>Property     | Description<br>:———– | :———–<br>cluster_name| name of the cluster<br>num_tokens| number of tokens randomly assigned to this node on the ring<br>initial_token| specify tokens manually<br>hinted_handoff_enabled|<br>max_hint_window_in_ms|<br>hinted_handoff_throttle_in_kb|<br>max_hints_delivery_threads|number of threads to deliver hints<br>batchlog_replay_throttle_in_kb|<br>authenticator|<code>AllowAllAuthenticator</code> set it to disable authentication ,<code>PasswordAuthenticator</code> username/password pairs to authenticate<br>authorizer|<br>role_manager|maintain grants and memberships between roles<br>roles_validity_in_ms|<br>roles_update_interval_in_ms|<br>permissions_validity_in_ms|refresh interval for roles cache<br>permissions_update_interval_in_ms|refresh interval for permissions cache<br>partitioner|distributing groups of rows across nodes<br>data_file_directories|store data on disk<br>commitlog_directory|<br>disk_failure_policy|policy for data disk failures<br>commit_failure_policy|policy for commit disk failures<br>key_cache_size_in_mb|max size of the key cache in memory<br>key_cache_save_period|<br>key_cache_keys_to_save|number of keys to save<br>row_cache_class_name|row cache implementation class name<br>row_cache_size_in_mb|max size of the row cache in memory<br>row_cache_save_period|<br>row_cache_keys_to_save|number of keys from the row cache to save<br>counter_cache_size_in_mb|max size of the counter cache in memory<br>counter_cache_save_period|seconds save the counter cache<br>counter_cache_keys_to_save|number of keys from the counter cache to save<br>memory_allocator|off-heap memory allocator<br>saved_caches_directory| saved caches<br>commitlog_sync|<code>periodic</code> writes may be acked immediately  <code>batch</code> won’t ack writes until the commit log has been fsynced to disk<br>commitlog_sync_period_in_ms|<br>commitlog_segment_size_in_mb|size of commitlog file segments<br>commitlog_compression|compression commit log<br>seed_provider|<br>concurrent_reads|<br>concurrent_writes|<br>concurrent_counter_writes|<br>file_cache_size_in_mb|<br>memtable_heap_space_in_mb|<br>memtable_offheap_space_in_mb|<br>memtable_cleanup_threshold|<br>memtable_allocation_type|specify the way allocates and manages memtable memory<br>commitlog_total_space_in_mb|total space to use for commit logs on disk<br>memtable_flush_writers|the amount of memtable flush writer threads<br>index_summary_capacity_in_mb|<br>index_summary_resize_interval_in_minutes|<br>trickle_fsync|<br>trickle_fsync_interval_in_kb|<br>storage_port|<br>ssl_storage_port|<br>listen_address|<br>broadcast_address|<br>internode_authenticator|<br>start_native_transport|<br>native_transport_port|<br>native_transport_max_threads|<br>native_transport_max_frame_size_in_mb|<br>native_transport_max_concurrent_connections|<br>native_transport_max_concurrent_connections_per_ip|<br>start_rpc|<br>rpc_address|<br>rpc_port|<br>rpc_keepalive|<br>rpc_server_type|<br>rpc_min_threads|<br>rpc_max_threads|<br>rpc_send_buff_size_in_bytes|<br>rpc_recv_buff_size_in_bytes|<br>internode_send_buff_size_in_bytes|<br>internode_recv_buff_size_in_bytes|<br>thrift_framed_transport_size_in_mb|<br>incremental_backups|<br>snapshot_before_compaction|<br>auto_snapshot|<br>tombstone_warn_threshold|<br>tombstone_failure_threshold|<br>column_index_size_in_kb|<br>batch_size_warn_threshold_in_kb|<br>batch_size_fail_threshold_in_kb|<br>concurrent_compactors|<br>compaction_throughput_mb_per_sec|<br>compaction_large_partition_warning_threshold_mb|<br>sstable_preemptive_open_interval_in_mb|<br>stream_throughput_outbound_megabits_per_sec|<br>inter_dc_stream_throughput_outbound_megabits_per_sec|<br>read_request_timeout_in_ms|<br>range_request_timeout_in_ms|<br>write_request_timeout_in_ms|<br>counter_write_request_timeout_in_ms|<br>cas_contention_timeout_in_ms|<br>truncate_request_timeout_in_ms|<br>request_timeout_in_ms|<br>cross_node_timeout|<br>streaming_socket_timeout_in_ms|<br>phi_convict_threshold|<br>endpoint_snitch|<br>dynamic_snitch_update_interval_in_ms|<br>dynamic_snitch_reset_interval_in_ms|<br>dynamic_snitch_badness_threshold|<br>request_scheduler|<br>request_scheduler_options|<br>request_scheduler_id|<br>server_encryption_options|<br>client_encryption_options|<br>internode_compression|<br>inter_dc_tcp_nodelay|<br>tracetype_query_ttl|<br>tracetype_repair_ttl|<br>enable_user_defined_functions|<br>windows_timer_interval|</p>
-<p>####Inner Cassandra </p>
-<p>#####StartUp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/redis/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/redis/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Redis</p>
-<p>####Benchmarks</p>
-<p>Redis includes the redis-benchmark utility that simulates running commands done by N clients at the same time sending M total queries.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: redis-benchmark [-h &lt;host&gt;] [-p &lt;port&gt;] [-c &lt;clients&gt;] [-n &lt;requests]&gt; [-k &lt;boolean&gt;]</span><br><span class="line"></span><br><span class="line"> -h &lt;hostname&gt;      Server hostname (default 127.0.0.1)</span><br><span class="line"> -p &lt;port&gt;          Server port (default 6379)</span><br><span class="line"> -s &lt;socket&gt;        Server socket (overrides host and port)</span><br><span class="line"> -a &lt;password&gt;      Password for Redis Auth</span><br><span class="line"> -c &lt;clients&gt;       Number of parallel connections (default 50)</span><br><span class="line"> -n &lt;requests&gt;      Total number of requests (default 100000)</span><br><span class="line"> -d &lt;size&gt;          Data size of SET/GET value in bytes (default 2)</span><br><span class="line"> -dbnum &lt;db&gt;        SELECT the specified db number (default 0)</span><br><span class="line"> -k &lt;boolean&gt;       1=keep alive 0=reconnect (default 1)</span><br><span class="line"> -r &lt;keyspacelen&gt;   Use random keys for SET/GET/INCR, random values for SADD</span><br><span class="line">  Using this option the benchmark will expand the string __rand_int__</span><br><span class="line">  inside an argument with a 12 digits number in the specified range</span><br><span class="line">  from 0 to keyspacelen-1. The substitution changes every time a command</span><br><span class="line">  is executed. Default tests use this to hit random keys in the</span><br><span class="line">  specified range.</span><br><span class="line"> -P &lt;numreq&gt;        Pipeline &lt;numreq&gt; requests. Default 1 (no pipeline).</span><br><span class="line"> -q                 Quiet. Just show query/sec values</span><br><span class="line"> --csv              Output in CSV format</span><br><span class="line"> -l                 Loop. Run the tests forever</span><br><span class="line"> -t &lt;tests&gt;         Only run the comma separated list of tests. The test</span><br><span class="line">                    names are the same as the ones produced as output.</span><br><span class="line"> -I                 Idle mode. Just open N idle connections and wait.</span><br></pre></td></tr></table></figure>
-<p>####Cluster</p>
-<p>####Hyperloglog</p>
-<p><code>Hyperloglog</code> is an approximate technique for computing the number of distinct entries in a set, It does this while using a small amount of memory. For instance, to achieve 99% accuracy, it needs only 16 KB.</p>
-<hr>
-<p>####FAQ</p>
-<p><a href="https://github.com/antirez/redis/issues/2902" target="_blank" rel="external">Does FLUSHDB command stop the ping/pong message?</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Redis is single-threaded. Every command will block other clients. </span><br><span class="line"></span><br><span class="line">If your FLUSHDB takes a long time, Sentinel/Cluster might see that node as down, as it doesn&apos;t respond to pings anymore.</span><br><span class="line"></span><br><span class="line">Soon you will be able to use FLUSHDB LAZY to lazily flush the database without blocking it for a long time.</span><br></pre></td></tr></table></figure>
-<hr>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/postgresql/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/postgresql/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-10T13:23:20.000Z"><a href="/2016/05/10/storage/dynamo/">2016-05-10</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/10/storage/dynamo/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>##Dynamo</p>
-<p>###INTRODUCTION</p>
-<p>Dynamo, a highly available key-value storage system that some of Amazon’s<br>core services use to provide an “always-on” experience.</p>
-<p>To achieve this level of availability, Dynamo sacrifices consistency under certain failure scenarios. It makes extensive use of object versioning and application-assisted conflict resolution in a manner that provides a novel interface for developers to use. </p>
-<p>###Peer to Peer Systems</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-06T15:28:48.000Z"><a href="/2016/05/06/algorithms/hidden-markov-model/">2016-05-06</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/06/algorithms/hidden-markov-model/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Hidden-Markov-Model"><a href="#Hidden-Markov-Model" class="headerlink" title="Hidden Markov Model"></a>Hidden Markov Model</h3><p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzI2NjA3NTc4Ng==&amp;mid=2652077944&amp;idx=1&amp;sn=d17758f0aed8670ba0f5f41e481f0205&amp;scene=23&amp;srcid=0506YCgtc3T5Bwj2Bwrn2fn7#rd" target="_blank" rel="external">如何用简单易懂的例子解释隐马尔可夫模型</a></li>
-<li></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/storage/mysql/">2016-05-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/01/storage/mysql/">MySQL</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><p><strong>Index</strong></p>
-<p><strong>内存表</strong></p>
-<p><code>内存表</code>与<code>临时表</code>并不相同，临时表也是存放在内存中，临时表最大所需内存需要通过tmp_table_size = 128M设定。当数据超过临时表的最大值设定时，自动转为磁盘表，此时因需要进行IO操作，性能会大大下降，而内存表不会，内存表满后，会提示数据满错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table test</span><br><span class="line">(</span><br><span class="line">  id int unsigned not null auto_increment primary key,</span><br><span class="line">  state char(10),</span><br><span class="line">  type char(20),</span><br><span class="line">  date char(30)</span><br><span class="line">)ENGINE=MEMORY DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
-<p><strong>配置</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br></pre></td><td class="code"><pre><span class="line">[b]PS：本配置文件针对Dell R710，双至强E5620、16G内存的硬件配置。CentOS 5.6 64位系统，MySQL 5.5.x 稳定版。适用于日IP 50-100w，PV 100-300w的站点，主要使用InnoDB存储引擎。其他应用环境请根据实际情况来设置优化。[/b]</span><br><span class="line"></span><br><span class="line"># 以下选项会被MySQL客户端应用读取。</span><br><span class="line"># 注意只有MySQL附带的客户端应用程序保证可以读取这段内容。</span><br><span class="line"># 如果你想你自己的MySQL应用程序获取这些值。</span><br><span class="line"># 需要在MySQL客户端库初始化的时候指定这些选项。</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line">[client]</span><br><span class="line">#password = [your_password]</span><br><span class="line">port = @MYSQL_TCP_PORT@</span><br><span class="line">socket = @MYSQL_UNIX_ADDR@</span><br><span class="line"></span><br><span class="line"># *** 应用定制选项 ***</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># MySQL 服务端</span><br><span class="line">#</span><br><span class="line">[mysqld]</span><br><span class="line"></span><br><span class="line"># 一般配置选项</span><br><span class="line">port = @MYSQL_TCP_PORT@</span><br><span class="line">socket = @MYSQL_UNIX_ADDR@</span><br><span class="line"></span><br><span class="line"># back_log 是操作系统在监听队列中所能保持的连接数,</span><br><span class="line"># 队列保存了在MySQL连接管理器线程处理之前的连接.</span><br><span class="line"># 如果你有非常高的连接率并且出现”connection refused” 报错,</span><br><span class="line"># 你就应该增加此处的值.</span><br><span class="line"># 检查你的操作系统文档来获取这个变量的最大值.</span><br><span class="line"># 如果将back_log设定到比你操作系统限制更高的值,将会没有效果</span><br><span class="line">back_log = 300</span><br><span class="line"></span><br><span class="line"># 不在TCP/IP端口上进行监听.</span><br><span class="line"># 如果所有的进程都是在同一台服务器连接到本地的mysqld,</span><br><span class="line"># 这样设置将是增强安全的方法</span><br><span class="line"># 所有mysqld的连接都是通过Unix sockets 或者命名管道进行的.</span><br><span class="line"># 注意在windows下如果没有打开命名管道选项而只是用此项</span><br><span class="line"># (通过 “enable-named-pipe” 选项) 将会导致mysql服务没有任何作用!</span><br><span class="line">#skip-networking</span><br><span class="line"></span><br><span class="line"># MySQL 服务所允许的同时会话数的上限</span><br><span class="line"># 其中一个连接将被SUPER权限保留作为管理员登录.</span><br><span class="line"># 即便已经达到了连接数的上限.</span><br><span class="line">max_connections = 3000</span><br><span class="line"># 每个客户端连接最大的错误允许数量,如果达到了此限制.</span><br><span class="line"># 这个客户端将会被MySQL服务阻止直到执行了”FLUSH HOSTS” 或者服务重启</span><br><span class="line"># 非法的密码以及其他在链接时的错误会增加此值.</span><br><span class="line"># 查看 “Aborted_connects” 状态来获取全局计数器.</span><br><span class="line">max_connect_errors = 30</span><br><span class="line"></span><br><span class="line"># 所有线程所打开表的数量.</span><br><span class="line"># 增加此值就增加了mysqld所需要的文件描述符的数量</span><br><span class="line"># 这样你需要确认在[mysqld_safe]中 “open-files-limit” 变量设置打开文件数量允许至少4096</span><br><span class="line">table_cache = 4096</span><br><span class="line"></span><br><span class="line"># 允许外部文件级别的锁. 打开文件锁会对性能造成负面影响</span><br><span class="line"># 所以只有在你在同样的文件上运行多个数据库实例时才使用此选项(注意仍会有其他约束!)</span><br><span class="line"># 或者你在文件层面上使用了其他一些软件依赖来锁定MyISAM表</span><br><span class="line">#external-locking</span><br><span class="line"></span><br><span class="line"># 服务所能处理的请求包的最大大小以及服务所能处理的最大的请求大小(当与大的BLOB字段一起工作时相当必要)</span><br><span class="line"># 每个连接独立的大小.大小动态增加</span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line"></span><br><span class="line"># 在一个事务中binlog为了记录SQL状态所持有的cache大小</span><br><span class="line"># 如果你经常使用大的,多声明的事务,你可以增加此值来获取更大的性能.</span><br><span class="line"># 所有从事务来的状态都将被缓冲在binlog缓冲中然后在提交后一次性写入到binlog中</span><br><span class="line"># 如果事务比此值大, 会使用磁盘上的临时文件来替代.</span><br><span class="line"># 此缓冲在每个连接的事务第一次更新状态时被创建</span><br><span class="line">binlog_cache_size = 4M</span><br><span class="line"></span><br><span class="line"># 独立的内存表所允许的最大容量.</span><br><span class="line"># 此选项为了防止意外创建一个超大的内存表导致永尽所有的内存资源.</span><br><span class="line">max_heap_table_size = 128M</span><br><span class="line"></span><br><span class="line"># 排序缓冲被用来处理类似ORDER BY以及GROUP BY队列所引起的排序</span><br><span class="line"># 如果排序后的数据无法放入排序缓冲,</span><br><span class="line"># 一个用来替代的基于磁盘的合并分类会被使用</span><br><span class="line"># 查看 “Sort_merge_passes” 状态变量.</span><br><span class="line"># 在排序发生时由每个线程分配</span><br><span class="line">sort_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 此缓冲被使用来优化全联合(full JOINs 不带索引的联合).</span><br><span class="line"># 类似的联合在极大多数情况下有非常糟糕的性能表现,</span><br><span class="line"># 但是将此值设大能够减轻性能影响.</span><br><span class="line"># 通过 “Select_full_join” 状态变量查看全联合的数量</span><br><span class="line"># 当全联合发生时,在每个线程中分配</span><br><span class="line">join_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 我们在cache中保留多少线程用于重用</span><br><span class="line"># 当一个客户端断开连接后,如果cache中的线程还少于thread_cache_size,</span><br><span class="line"># 则客户端线程被放入cache中.</span><br><span class="line"># 这可以在你需要大量新连接的时候极大的减少线程创建的开销</span><br><span class="line"># (一般来说如果你有好的线程模型的话,这不会有明显的性能提升.)</span><br><span class="line">thread_cache_size = 16</span><br><span class="line"></span><br><span class="line"># 此允许应用程序给予线程系统一个提示在同一时间给予渴望被运行的线程的数量.</span><br><span class="line"># 此值只对于支持 thread_concurrency() 函数的系统有意义( 例如Sun Solaris).</span><br><span class="line"># 你可可以尝试使用 [CPU数量]*(2..4) 来作为thread_concurrency的值</span><br><span class="line">thread_concurrency = 8</span><br><span class="line"></span><br><span class="line"># 查询缓冲常被用来缓冲 SELECT 的结果并且在下一次同样查询的时候不再执行直接返回结果.</span><br><span class="line"># 打开查询缓冲可以极大的提高服务器速度, 如果你有大量的相同的查询并且很少修改表.</span><br><span class="line"># 查看 “Qcache_lowmem_prunes” 状态变量来检查是否当前值对于你的负载来说是否足够高.</span><br><span class="line"># 注意: 在你表经常变化的情况下或者如果你的查询原文每次都不同,</span><br><span class="line"># 查询缓冲也许引起性能下降而不是性能提升.</span><br><span class="line">query_cache_size = 128M</span><br><span class="line"></span><br><span class="line"># 只有小于此设定值的结果才会被缓冲</span><br><span class="line"># 此设置用来保护查询缓冲,防止一个极大的结果集将其他所有的查询结果都覆盖.</span><br><span class="line">query_cache_limit = 4M</span><br><span class="line"></span><br><span class="line"># 被全文检索索引的最小的字长.</span><br><span class="line"># 你也许希望减少它,如果你需要搜索更短字的时候.</span><br><span class="line"># 注意在你修改此值之后,</span><br><span class="line"># 你需要重建你的 FULLTEXT 索引</span><br><span class="line">ft_min_word_len = 8</span><br><span class="line"></span><br><span class="line"># 如果你的系统支持 memlock() 函数,你也许希望打开此选项用以让运行中的mysql在在内存高度紧张的时候,数据在内存中保持锁定并且防止可能被swapping out</span><br><span class="line"># 此选项对于性能有益</span><br><span class="line">#memlock</span><br><span class="line"></span><br><span class="line"># 当创建新表时作为默认使用的表类型,</span><br><span class="line"># 如果在创建表示没有特别执行表类型,将会使用此值</span><br><span class="line">default_table_type = MYISAM</span><br><span class="line"></span><br><span class="line"># 线程使用的堆大小. 此容量的内存在每次连接时被预留.</span><br><span class="line"># MySQL 本身常不会需要超过64K的内存</span><br><span class="line"># 如果你使用你自己的需要大量堆的UDF函数</span><br><span class="line"># 或者你的操作系统对于某些操作需要更多的堆,</span><br><span class="line"># 你也许需要将其设置的更高一点.</span><br><span class="line">thread_stack = 512K</span><br><span class="line"></span><br><span class="line"># 设定默认的事务隔离级别.可用的级别如下:</span><br><span class="line"># READ-UNCOMMITTED, READ-COMMITTED, REPEATABLE-READ, SERIALIZABLE</span><br><span class="line">transaction_isolation = REPEATABLE-READ</span><br><span class="line"></span><br><span class="line"># 内部(内存中)临时表的最大大小</span><br><span class="line"># 如果一个表增长到比此值更大,将会自动转换为基于磁盘的表.</span><br><span class="line"># 此限制是针对单个表的,而不是总和.</span><br><span class="line">tmp_table_size = 128M</span><br><span class="line"></span><br><span class="line"># 打开二进制日志功能.</span><br><span class="line"># 在复制(replication)配置中,作为MASTER主服务器必须打开此项</span><br><span class="line"># 如果你需要从你最后的备份中做基于时间点的恢复,你也同样需要二进制日志.</span><br><span class="line">log-bin=mysql-bin</span><br><span class="line"></span><br><span class="line"># 如果你在使用链式从服务器结构的复制模式 (A-&gt;B-&gt;C),</span><br><span class="line"># 你需要在服务器B上打开此项.</span><br><span class="line"># 此选项打开在从线程上重做过的更新的日志,</span><br><span class="line"># 并将其写入从服务器的二进制日志.</span><br><span class="line">#log_slave_updates</span><br><span class="line"></span><br><span class="line"># 打开全查询日志. 所有的由服务器接收到的查询 (甚至对于一个错误语法的查询)</span><br><span class="line"># 都会被记录下来. 这对于调试非常有用, 在生产环境中常常关闭此项.</span><br><span class="line">#log</span><br><span class="line"></span><br><span class="line"># 将警告打印输出到错误log文件. 如果你对于MySQL有任何问题</span><br><span class="line"># 你应该打开警告log并且仔细审查错误日志,查出可能的原因.</span><br><span class="line">#log_warnings</span><br><span class="line"></span><br><span class="line"># 记录慢速查询. 慢速查询是指消耗了比 “long_query_time” 定义的更多时间的查询.</span><br><span class="line"># 如果 log_long_format 被打开,那些没有使用索引的查询也会被记录.</span><br><span class="line"># 如果你经常增加新查询到已有的系统内的话. 一般来说这是一个好主意,</span><br><span class="line">log_slow_queries</span><br><span class="line"></span><br><span class="line"># 所有的使用了比这个时间(以秒为单位)更多的查询会被认为是慢速查询.</span><br><span class="line"># 不要在这里使用”1″, 否则会导致所有的查询,甚至非常快的查询页被记录下来(由于MySQL 目前时间的精确度只能达到秒的级别).</span><br><span class="line">long_query_time = 6</span><br><span class="line"></span><br><span class="line"># 在慢速日志中记录更多的信息.</span><br><span class="line"># 一般此项最好打开.</span><br><span class="line"># 打开此项会记录使得那些没有使用索引的查询也被作为到慢速查询附加到慢速日志里</span><br><span class="line">log_long_format</span><br><span class="line"></span><br><span class="line"># 此目录被MySQL用来保存临时文件.例如,</span><br><span class="line"># 它被用来处理基于磁盘的大型排序,和内部排序一样.</span><br><span class="line"># 以及简单的临时表.</span><br><span class="line"># 如果你不创建非常大的临时文件,将其放置到 swapfs/tmpfs 文件系统上也许比较好</span><br><span class="line"># 另一种选择是你也可以将其放置在独立的磁盘上.</span><br><span class="line"># 你可以使用”;”来放置多个路径</span><br><span class="line"># 他们会按照roud-robin方法被轮询使用.</span><br><span class="line">#tmpdir = /tmp</span><br><span class="line"></span><br><span class="line"># *** 主从复制相关的设置</span><br><span class="line"></span><br><span class="line"># 唯一的服务辨识号,数值位于 1 到 2^32-1之间.</span><br><span class="line"># 此值在master和slave上都需要设置.</span><br><span class="line"># 如果 “master-host” 没有被设置,则默认为1, 但是如果忽略此选项,MySQL不会作为master生效.</span><br><span class="line">server-id = 1</span><br><span class="line"></span><br><span class="line"># 复制的Slave (去掉master段的注释来使其生效)</span><br><span class="line">#</span><br><span class="line"># 为了配置此主机作为复制的slave服务器,你可以选择两种方法:</span><br><span class="line">#</span><br><span class="line"># 1) 使用 CHANGE MASTER TO 命令 (在我们的手册中有完整描述) -</span><br><span class="line"># 语法如下:</span><br><span class="line">#</span><br><span class="line"># CHANGE MASTER TO MASTER_HOST=, MASTER_PORT=,</span><br><span class="line"># MASTER_USER=, MASTER_PASSWORD= ;</span><br><span class="line">#</span><br><span class="line"># 你需要替换掉 , , 等被尖括号包围的字段以及使用master的端口号替换 (默认3306).</span><br><span class="line">#</span><br><span class="line"># 例子:</span><br><span class="line">#</span><br><span class="line"># CHANGE MASTER TO MASTER_HOST=’125.564.12.1′, MASTER_PORT=3306,</span><br><span class="line"># MASTER_USER=’joe’, MASTER_PASSWORD=’secret’;</span><br><span class="line">#</span><br><span class="line"># 或者</span><br><span class="line">#</span><br><span class="line"># 2) 设置以下的变量. 不论如何, 在你选择这种方法的情况下, 然后第一次启动复制(甚至不成功的情况下,</span><br><span class="line"># 例如如果你输入错密码在master-password字段并且slave无法连接),</span><br><span class="line"># slave会创建一个 master.info 文件,并且之后任何对于包含在此文件内的参数的变化都会被忽略</span><br><span class="line"># 并且由 master.info 文件内的内容覆盖, 除非你关闭slave服务, 删除 master.info 并且重启slave 服务.</span><br><span class="line"># 由于这个原因,你也许不想碰一下的配置(注释掉的) 并且使用 CHANGE MASTER TO (查看上面) 来代替</span><br><span class="line">#</span><br><span class="line"># 所需要的唯一id号位于 2 和 2^32 – 1之间</span><br><span class="line"># (并且和master不同)</span><br><span class="line"># 如果master-host被设置了.则默认值是2</span><br><span class="line"># 但是如果省略,则不会生效</span><br><span class="line">#server-id = 2</span><br><span class="line">#</span><br><span class="line"># 复制结构中的master – 必须</span><br><span class="line">#master-host =</span><br><span class="line">#</span><br><span class="line"># 当连接到master上时slave所用来认证的用户名 – 必须</span><br><span class="line">#master-user =</span><br><span class="line">#</span><br><span class="line"># 当连接到master上时slave所用来认证的密码 – 必须</span><br><span class="line">#master-password =</span><br><span class="line">#</span><br><span class="line"># master监听的端口.</span><br><span class="line"># 可选 – 默认是3306</span><br><span class="line">#master-port =</span><br><span class="line"></span><br><span class="line"># 使得slave只读.只有用户拥有SUPER权限和在上面的slave线程能够修改数据.</span><br><span class="line"># 你可以使用此项去保证没有应用程序会意外的修改slave而不是master上的数据</span><br><span class="line">#read_only</span><br><span class="line"></span><br><span class="line">#*** MyISAM 相关选项</span><br><span class="line"></span><br><span class="line"># 关键词缓冲的大小, 一般用来缓冲MyISAM表的索引块.</span><br><span class="line"># 不要将其设置大于你可用内存的30%,</span><br><span class="line"># 因为一部分内存同样被OS用来缓冲行数据</span><br><span class="line"># 甚至在你并不使用MyISAM 表的情况下, 你也需要仍旧设置起 8-64M 内存由于它同样会被内部临时磁盘表使用.</span><br><span class="line">key_buffer_size = 128M</span><br><span class="line"></span><br><span class="line"># 用来做MyISAM表全表扫描的缓冲大小.</span><br><span class="line"># 当全表扫描需要时,在对应线程中分配.</span><br><span class="line">read_buffer_size = 8M</span><br><span class="line"></span><br><span class="line"># 当在排序之后,从一个已经排序好的序列中读取行时,行数据将从这个缓冲中读取来防止磁盘寻道.</span><br><span class="line"># 如果你增高此值,可以提高很多ORDER BY的性能.</span><br><span class="line"># 当需要时由每个线程分配</span><br><span class="line">read_rnd_buffer_size = 64M</span><br><span class="line"></span><br><span class="line"># MyISAM 使用特殊的类似树的cache来使得突发插入</span><br><span class="line"># (这些插入是,INSERT … SELECT, INSERT … VALUES (…), (…), …, 以及 LOAD DATA</span><br><span class="line"># INFILE) 更快. 此变量限制每个进程中缓冲树的字节数.</span><br><span class="line"># 设置为 0 会关闭此优化.</span><br><span class="line"># 为了最优化不要将此值设置大于 “key_buffer_size”.</span><br><span class="line"># 当突发插入被检测到时此缓冲将被分配.</span><br><span class="line">bulk_insert_buffer_size = 256M</span><br><span class="line"></span><br><span class="line"># 此缓冲当MySQL需要在 REPAIR, OPTIMIZE, ALTER 以及 LOAD DATA INFILE 到一个空表中引起重建索引时被分配.</span><br><span class="line"># 这在每个线程中被分配.所以在设置大值时需要小心.</span><br><span class="line">myisam_sort_buffer_size = 256M</span><br><span class="line"></span><br><span class="line"># MySQL重建索引时所允许的最大临时文件的大小 (当 REPAIR, ALTER TABLE 或者 LOAD DATA INFILE).</span><br><span class="line"># 如果文件大小比此值更大,索引会通过键值缓冲创建(更慢)</span><br><span class="line">myisam_max_sort_file_size = 10G</span><br><span class="line"></span><br><span class="line"># 如果被用来更快的索引创建索引所使用临时文件大于制定的值,那就使用键值缓冲方法.</span><br><span class="line"># 这主要用来强制在大表中长字串键去使用慢速的键值缓冲方法来创建索引.</span><br><span class="line">myisam_max_extra_sort_file_size = 10G</span><br><span class="line"></span><br><span class="line"># 如果一个表拥有超过一个索引, MyISAM 可以通过并行排序使用超过一个线程去修复他们.</span><br><span class="line"># 这对于拥有多个CPU以及大量内存情况的用户,是一个很好的选择.</span><br><span class="line">myisam_repair_threads = 1</span><br><span class="line"></span><br><span class="line"># 自动检查和修复没有适当关闭的 MyISAM 表.</span><br><span class="line">myisam_recover</span><br><span class="line"></span><br><span class="line"># 默认关闭 Federated</span><br><span class="line">skip-federated</span><br><span class="line"></span><br><span class="line"># *** BDB 相关选项 ***</span><br><span class="line"></span><br><span class="line"># 如果你运行的MySQL服务有BDB支持但是你不准备使用的时候使用此选项. 这会节省内存并且可能加速一些事.</span><br><span class="line">skip-bdb</span><br><span class="line"></span><br><span class="line"># *** INNODB 相关选项 ***</span><br><span class="line"></span><br><span class="line"># 如果你的MySQL服务包含InnoDB支持但是并不打算使用的话,</span><br><span class="line"># 使用此选项会节省内存以及磁盘空间,并且加速某些部分</span><br><span class="line">#skip-innodb</span><br><span class="line"></span><br><span class="line"># 附加的内存池被InnoDB用来保存 metadata 信息</span><br><span class="line"># 如果InnoDB为此目的需要更多的内存,它会开始从OS这里申请内存.</span><br><span class="line"># 由于这个操作在大多数现代操作系统上已经足够快, 你一般不需要修改此值.</span><br><span class="line"># SHOW INNODB STATUS 命令会显示当先使用的数量.</span><br><span class="line">innodb_additional_mem_pool_size = 64M</span><br><span class="line"></span><br><span class="line"># InnoDB使用一个缓冲池来保存索引和原始数据, 不像 MyISAM.</span><br><span class="line"># 这里你设置越大,你在存取表里面数据时所需要的磁盘I/O越少.</span><br><span class="line"># 在一个独立使用的数据库服务器上,你可以设置这个变量到服务器物理内存大小的80%</span><br><span class="line"># 不要设置过大,否则,由于物理内存的竞争可能导致操作系统的换页颠簸.</span><br><span class="line"># 注意在32位系统上你每个进程可能被限制在 2-3.5G 用户层面内存限制,</span><br><span class="line"># 所以不要设置的太高.</span><br><span class="line">innodb_buffer_pool_size = 6G</span><br><span class="line"></span><br><span class="line"># InnoDB 将数据保存在一个或者多个数据文件中成为表空间.</span><br><span class="line"># 如果你只有单个逻辑驱动保存你的数据,一个单个的自增文件就足够好了.</span><br><span class="line"># 其他情况下.每个设备一个文件一般都是个好的选择.</span><br><span class="line"># 你也可以配置InnoDB来使用裸盘分区 – 请参考手册来获取更多相关内容</span><br><span class="line">innodb_data_file_path = ibdata1:10M:autoextend</span><br><span class="line"></span><br><span class="line"># 设置此选项如果你希望InnoDB表空间文件被保存在其他分区.</span><br><span class="line"># 默认保存在MySQL的datadir中.</span><br><span class="line">#innodb_data_home_dir =</span><br><span class="line"></span><br><span class="line"># 用来同步IO操作的IO线程的数量. This value is</span><br><span class="line"># 此值在Unix下被硬编码为4,但是在Windows磁盘I/O可能在一个大数值下表现的更好.</span><br><span class="line">innodb_file_io_threads = 4</span><br><span class="line"></span><br><span class="line"># 如果你发现InnoDB表空间损坏, 设置此值为一个非零值可能帮助你导出你的表.</span><br><span class="line"># 从1开始并且增加此值知道你能够成功的导出表.</span><br><span class="line">#innodb_force_recovery=1</span><br><span class="line"></span><br><span class="line"># 在InnoDb核心内的允许线程数量.</span><br><span class="line"># 最优值依赖于应用程序,硬件以及操作系统的调度方式.</span><br><span class="line"># 过高的值可能导致线程的互斥颠簸.</span><br><span class="line">innodb_thread_concurrency = 16</span><br><span class="line"></span><br><span class="line"># 如果设置为1 ,InnoDB会在每次提交后刷新(fsync)事务日志到磁盘上,</span><br><span class="line"># 这提供了完整的ACID行为.</span><br><span class="line"># 如果你愿意对事务安全折衷, 并且你正在运行一个小的食物, 你可以设置此值到0或者2来减少由事务日志引起的磁盘I/O</span><br><span class="line"># 0代表日志只大约每秒写入日志文件并且日志文件刷新到磁盘.</span><br><span class="line"># 2代表日志写入日志文件在每次提交后,但是日志文件只有大约每秒才会刷新到磁盘上.</span><br><span class="line">innodb_flush_log_at_trx_commit = 2</span><br><span class="line">（说明：如果是游戏服务器，建议此值设置为2；如果是对数据安全要求极高的应用，建议设置为1；设置为0性能最高，但如果发生故障，数据可能会有丢失的危险！默认值1的意思是每一次事务提交或事务外的指令都需要把日志写入（flush）硬盘，这是很费时的。特别是使用电池供电缓存（Battery backed up cache）时。设成2对于很多运用，特别是从MyISAM表转过来的是可以的，它的意思是不写入硬盘而是写入系统缓存。日志仍然会每秒flush到硬盘，所以你一般不会丢失超过1-2秒的更新。设成0会更快一点，但安全方面比较差，即使MySQL挂了也可能会丢失事务的数据。而值2只会在整个操作系统挂了时才可能丢数据。）</span><br><span class="line"></span><br><span class="line"># 加速InnoDB的关闭. 这会阻止InnoDB在关闭时做全清除以及插入缓冲合并.</span><br><span class="line"># 这可能极大增加关机时间, 但是取而代之的是InnoDB可能在下次启动时做这些操作.</span><br><span class="line">#innodb_fast_shutdown</span><br><span class="line"></span><br><span class="line"># 用来缓冲日志数据的缓冲区的大小.</span><br><span class="line"># 当此值快满时, InnoDB将必须刷新数据到磁盘上.</span><br><span class="line"># 由于基本上每秒都会刷新一次,所以没有必要将此值设置的太大(甚至对于长事务而言)</span><br><span class="line"></span><br><span class="line">innodb_log_buffer_size = 16M</span><br><span class="line"></span><br><span class="line"># 在日志组中每个日志文件的大小.</span><br><span class="line"># 你应该设置日志文件总合大小到你缓冲池大小的25%~100%</span><br><span class="line"># 来避免在日志文件覆写上不必要的缓冲池刷新行为.</span><br><span class="line"># 不论如何, 请注意一个大的日志文件大小会增加恢复进程所需要的时间.</span><br><span class="line">innodb_log_file_size = 512M</span><br><span class="line"></span><br><span class="line"># 在日志组中的文件总数.</span><br><span class="line"># 通常来说2~3是比较好的.</span><br><span class="line">innodb_log_files_in_group = 3</span><br><span class="line"></span><br><span class="line"># InnoDB的日志文件所在位置. 默认是MySQL的datadir.</span><br><span class="line"># 你可以将其指定到一个独立的硬盘上或者一个RAID1卷上来提高其性能</span><br><span class="line">#innodb_log_group_home_dir</span><br><span class="line"></span><br><span class="line"># 在InnoDB缓冲池中最大允许的脏页面的比例.</span><br><span class="line"># 如果达到限额, InnoDB会开始刷新他们防止他们妨碍到干净数据页面.</span><br><span class="line"># 这是一个软限制,不被保证绝对执行.</span><br><span class="line">innodb_max_dirty_pages_pct = 90</span><br><span class="line"></span><br><span class="line"># InnoDB用来刷新日志的方法.</span><br><span class="line"># 表空间总是使用双重写入刷新方法</span><br><span class="line"># 默认值是 “fdatasync”, 另一个是 “O_DSYNC”.</span><br><span class="line">#innodb_flush_method=O_DSYNC</span><br><span class="line"></span><br><span class="line"># 在被回滚前,一个InnoDB的事务应该等待一个锁被批准多久.</span><br><span class="line"># InnoDB在其拥有的锁表中自动检测事务死锁并且回滚事务.</span><br><span class="line"># 如果你使用 LOCK TABLES 指令, 或者在同样事务中使用除了InnoDB以外的其他事务安全的存储引擎</span><br><span class="line"># 那么一个死锁可能发生而InnoDB无法注意到.</span><br><span class="line"># 这种情况下这个timeout值对于解决这种问题就非常有帮助.</span><br><span class="line">innodb_lock_wait_timeout = 120</span><br><span class="line"></span><br><span class="line">[mysqldump]</span><br><span class="line"># 不要在将内存中的整个结果写入磁盘之前缓存. 在导出非常巨大的表时需要此项</span><br><span class="line">quick</span><br><span class="line"></span><br><span class="line">max_allowed_packet = 32M</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line"></span><br><span class="line"># 仅仅允许使用键值的 UPDATEs 和 DELETEs .</span><br><span class="line">#safe-updates</span><br><span class="line"></span><br><span class="line">[isamchk]</span><br><span class="line">key_buffer = 2048M</span><br><span class="line">sort_buffer_size = 2048M</span><br><span class="line">read_buffer = 32M</span><br><span class="line">write_buffer = 32M</span><br><span class="line"></span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer = 2048M</span><br><span class="line">sort_buffer_size = 2048M</span><br><span class="line">read_buffer = 32M</span><br><span class="line">write_buffer = 32M</span><br><span class="line"></span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line"># 增加每个进程的可打开文件数量.</span><br><span class="line"># 警告: 确认你已经将全系统限制设定的足够高!</span><br><span class="line"># 打开大量表需要将此值设大</span><br><span class="line">open-files-limit = 8192</span><br></pre></td></tr></table></figure>
 <p>Reference :</p>
 <ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=402904260&amp;idx=2&amp;sn=19ba9befd5258cfe01f58fceedec3ca6&amp;scene=23&amp;srcid=0405r4HLfjqqjCpxVFFDrzYA#rd" target="_blank" rel="external">由 B-/B+ 树看 MySQL 索引结构</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5ODM5MDU3MA==&amp;mid=2650861618&amp;idx=2&amp;sn=8cb8851f579b73eaf4b71734a106fda8&amp;scene=23&amp;srcid=0509sGaRSxN1PQK2Vk65Uiqw#rd" target="_blank" rel="external">MySQL 内存表的特性与使用介绍</a></li>
+<li><a href="https://engineering.linkedin.com/blog/2016/06/announcing-gobblin-0-7-0--going-beyond-ingestion" target="_blank" rel="external">Announcing Gobblin 0.7.0: Going Beyond Ingestion</a></li>
 </ol>
 
       
@@ -391,283 +98,1350 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/distribution/hbase/">2016-05-01</a></time>
+        <time datetime="2016-06-20T03:43:00.000Z"><a href="/2016/06/20/statistics/ExponentialDistribution/">2016-06-20</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/05/01/distribution/hbase/">HBase</a></h1>
+    <h1 class="title"><a href="/2016/06/20/statistics/ExponentialDistribution/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h3><h4 id="HMaster"><a href="#HMaster" class="headerlink" title="HMaster"></a>HMaster</h4><p>HBase中不存在单点问题，集群中可以启动多个HMaster实例。</p>
-<p>一个实例作为Master使用，其他作为backup。</p>
-<h4 id="HRegionServer"><a href="#HRegionServer" class="headerlink" title="HRegionServer"></a>HRegionServer</h4><p>HRegionServer响应Client请求，完成数据读写操作。</p>
-<p><strong>ZooKeeper</strong></p>
-<p>Zookeeper 中存储-ROOT-表，.META.表</p>
-<p>HRegionServer把自己以Ephedral方式注册到Zookeeper中，HMaster随时感知各个HRegionServer的健康状况<br>Zookeeper避免HMaster单点问题</p>
-<p>AssignmentManager 管理&amp;负责Region分配</p>
-<p>TableLockManager  管理分布式表级锁</p>
-<p>RegionStates  在内存中存储Region状态  在AssignmentManager中跟踪Region状态</p>
-<p>HRegionInfo  含有Region信息  Region包含一个完整键空间</p>
-<p>RegionName含有：</p>
-<p>tableName   : The name of the table</p>
-<p>startKey    : The startKey for the region.</p>
-<p>regionId    : A timestamp when the region is created.</p>
-<p>replicaId   : An id starting from 0 to differentiate replicas of the same region range but hosted in separated servers. The same region range can be hosted in multiple locations.</p>
-<p>createRegionName </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface TableLock &#123;</span><br><span class="line">    void acquire() throws IOException;</span><br><span class="line">    void release() throws IOException;                </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>HBase is composed of three types of servers in a master slave type of architecture. Region servers serve data for reads and writes. When accessing data, clients communicate with HBase RegionServers directly. Region assignment, DDL (create, delete tables) operations are handled by the HBase Master process. Zookeeper, which is part of HDFS, maintains a live cluster state.</p>
-<p><a href="https://www.mapr.com/blog/in-depth-look-hbase-architecture" target="_blank" rel="external">https://www.mapr.com/blog/in-depth-look-hbase-architecture</a></p>
-<p><strong>Split</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Table (HBase table)</span><br><span class="line">  Region (Regions for the table)  </span><br><span class="line">    Store (Store per ColumnFamily for each Region for the table)    </span><br><span class="line">      MemStore (MemStore for each Store for each Region for the tale)</span><br><span class="line">      StoreFile (StoreFiles for each Store for each Region for the tab          le)      </span><br><span class="line">        Block(Blocks within a StoreFile within a Store for each Region for the table)</span><br></pre></td></tr></table></figure>
-<p><strong>Replication</strong></p>
-<p>需要确保主从cluster上有相同的Table 且Table结构一致 都是enable 版本都在0.90.0之上 主从机器两两互通  master cluster hbase-site.xml 中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>进入master cluster shell 中 执行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_peer &apos;1&apos;,&quot;slave:2181/slave-zk-parent&quot;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Bucket Cache</strong></p>
-<p><img src="resource/hbase/cache.png" alt="HBase Cache"></p>
-<p><strong>HBase ZooKeeper ZNode</strong></p>
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-20T03:42:27.000Z"><a href="/2016/06/20/statistics/PoissonDistribution/">2016-06-20</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/20/statistics/PoissonDistribution/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-20T03:40:56.000Z"><a href="/2016/06/20/machine_learning/NeuralNetworks/">2016-06-20</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/20/machine_learning/NeuralNetworks/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm/">2016-06-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/18/language/jvm/">Java Virtual Machine</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="Java-Virtual-Machine"><a href="#Java-Virtual-Machine" class="headerlink" title="Java Virtual Machine"></a>Java Virtual Machine</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><h3 id="Command-Line-Tools"><a href="#Command-Line-Tools" class="headerlink" title="Command Line Tools"></a>Command Line Tools</h3><p>jstat -gc 106607</p>
+<pre><code>       S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
+
+2041.2 211456.0 209652.6  53248.0    26791.8   27136.0 27075.6 827555 2715.477 12222  672.023 3387.500
+</code></pre><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0C</td>
+<td>3584.0</td>
+<td>S0容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>2048.0</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>S0C,S1C,S0U,S1U: 0/1幸存区(survivor)容量(C:Capacity)/使用量（U:Used)。</p>
+<p>#####Java HotSpot VM Options<br><code>Behavioral Options</code></p>
 <table>
 <thead>
 <tr>
-<th>Path</th>
+<th>Option and Default Value</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>/hbase (zookeeper.znode.parent)</td>
-<td>The root znode that will contain all the znodes created/used by HBase</td>
+<td>-XX:-AllowUserSignalHandlers</td>
+<td>Do not complain if the application installs signal handlers.</td>
 </tr>
 <tr>
-<td>/hbase/hbaseid (zookeeper.znode.clusterId)</td>
-<td>Initialized by the Master with the UUID that identifies the cluster.The ID is also stored on HDFS in hdfs:/<namenode>:<port>/hbase/hbase.id.</port></namenode></td>
+<td>-XX:AltStackSize=16384</td>
+<td>Alternate signal stack size (in Kbytes).</td>
 </tr>
 <tr>
-<td>/hbase/root-region-server (zookeeper.znode.rootserver)</td>
-<td>Contains the location of the server hosting the ROOT region. It is queried by the client to identify the RegionServer responsible for ROOT and ask for the META locations.</td>
+<td>-XX:-DisableExplicitGC</td>
+<td>Disable calls to System.gc().</td>
 </tr>
 <tr>
-<td>/hbase/rs (zookeeper.znode.rs)</td>
-<td>On startup each RegionServer will create a sub-znode that is supposed to describe the “online” state of the RegionServer. The master monitors this znode to get the “online” RegionServer list and use that during Assignment/Balancing.</td>
+<td>-XX:+FailOverToOldVerifier</td>
+<td>Fail over to old verifier when the new type checker fails.</td>
 </tr>
 <tr>
-<td>/hbase/unassigned (zookeeper.znode.unassigned)</td>
-<td>Contains a sub-znode for each unassigned region . This znode is used by the Assignment Manager to discover the regions to assign.</td>
+<td>-XX:+HandlePromotionFailure</td>
+<td>The youngest generation collection does not require a guarantee of full promotion of all live objects.</td>
 </tr>
 <tr>
-<td>/hbase/master (zookeeper.znode.master)</td>
-<td>The “active” master will register its own address in this znode at startup, making this znode the source of truth for identifying which server is the Master.</td>
+<td>-XX:+MaxFDLimit</td>
+<td>Bump the number of file descriptors to max.</td>
 </tr>
 <tr>
-<td>/hbase/backup-masters (zookeeper.znode.backup.masters)</td>
-<td>Each inactive Master will register itself as backup Master by creating a sub-znode. This znode is mainly used to track which machines are available to replace the Master in case of failure.</td>
+<td>-XX:PreBlockSpin=10</td>
+<td>Spin count variable for use with -XX:+UseSpinning.</td>
 </tr>
 <tr>
-<td>/hbase/shutdown (zookeeper.znode.state)</td>
-<td>Describes the cluster state, “Is the cluster up?” It is created by the Master on startup and deleted by the Master on shutdown. It is watched by the RegionServers.</td>
+<td>-XX:-RelaxAccessControlCheck</td>
+<td>Relax the access control checks in the verifier.</td>
 </tr>
 <tr>
-<td>/hbase/draining (zookeeper.znode.draining.rs)</td>
-<td>Used to decommission more than one RegionServer at a time by creating sub-znodes with the form serverName,port,startCode .</td>
+<td>-XX:+ScavengeBeforeFullGC</td>
+<td>Do young generation GC prior to a full GC.</td>
 </tr>
 <tr>
-<td>/hbase/table (zookeeper.znode.masterTableEnableDisable)</td>
-<td>Used by the master to track the table state during assignments .</td>
+<td>-XX:+UseAltSigs</td>
+<td>Use alternate signals instead of SIGUSR1 and SIGUSR2 for VM internal signals.</td>
 </tr>
 <tr>
-<td>/hbase/splitlog (zookeeper.znode.splitlog)</td>
-<td>Used by the log splitter to track the pending log to replay and its assignment.</td>
+<td>-XX:+UseBoundThreads</td>
+<td>Bind user level threads to kernel threads.</td>
 </tr>
 <tr>
-<td>/hbase/acl (zookeeper.znode.acl.parent)</td>
-<td>The acl znode is used for synchronizing the changes made to the <em>acl</em> table by the grant/revoke commands.</td>
+<td>-XX:-UseConcMarkSweepGC</td>
+<td>Use concurrent mark-sweep collection for the old generation.</td>
 </tr>
 <tr>
-<td>/hbase/tokenauth (zookeeper.znode.tokenauth.parent)</td>
-<td>The token provider is usually used to allow a MapReduce job to access the HBase cluster.</td>
+<td>-XX:+UseGCOverheadLimit</td>
+<td>Use a policy that limits the proportion of the VM’s time that is spent in GC before an OutOfMemory error is thrown.</td>
 </tr>
 <tr>
-<td>/hbase/replication (zookeeper.znode.replication)</td>
-<td>Root znode that contains all HBase replication state information</td>
+<td>-XX:+UseLWPSynchronization</td>
+<td>Use LWP-based instead of thread based synchronization.</td>
 </tr>
 <tr>
-<td>/hbase/replication/peers (zookeeper.znode.replication.peers)</td>
-<td>Each peer will have a sub-znode containing the ZK ensemble’s addresses that allows the peer to be contacted.</td>
+<td>-XX:-UseParallelGC</td>
+<td>Use parallel garbage collection for scavenges.</td>
 </tr>
 <tr>
-<td>/hbase/replication/peers/<clusterid>/peer-state (zookeeper.znode.replication.peers.state)</clusterid></td>
-<td>Mirror of the /hbase/replication/peers znode, but here each sub-znode will track the peer enabled/disabled state.</td>
+<td>-XX:-UseParallelOldGC</td>
+<td>Use parallel garbage collection for the full collections. Enabling this option automatically sets -XX:+UseParallelGC.</td>
 </tr>
 <tr>
-<td>/hbase/replication/state (zookeeper.znode.replication.state)</td>
-<td>Indicates whether replication is enabled. Replication can be enabled by setting the hbase.replication configuration to true, or can be enabled/disabled by using the start/stop command in the HBase shell.</td>
+<td>-XX:-UseSerialGC</td>
+<td>Use serial garbage collection.</td>
 </tr>
 <tr>
-<td>/hbase/replication/rs (zookeeper.znode.replication.rs)</td>
-<td>Contains the list of RegionServers in the main cluster .</td>
+<td>-XX:-UseSpinning</td>
+<td>Enable naive spinning on Java monitor before entering operating system thread synchronizaton code.</td>
 </tr>
 <tr>
-<td>/hbase/online-snapshot/acquired</td>
-<td>The acquired znode describes the first step of a snapshot transaction. The Master will create a sub-znode for the snapshot.</td>
+<td>-XX:+UseTLAB</td>
+<td>Use thread-local object allocation</td>
 </tr>
 <tr>
-<td>/hbase/online-snapshot/reached</td>
-<td>Once each RegionServer has joined the acquired znode, the Master will create the reached znode for the snapshot telling each RegionServer that it is time to finalize/commit the snapshot.</td>
+<td>-XX:+UseSplitVerifier</td>
+<td>Use the new type checker with StackMapTable attributes.</td>
 </tr>
 <tr>
-<td>/hbase/online-snapshot/abort</td>
-<td>If something fails on the Master side or the RegionServer side, the abort znode will be created for the snapshot telling everyone that something went wrong with the snapshot and to abort the job.</td>
+<td>-XX:+UseThreadPriorities</td>
+<td>Use native thread priorities.</td>
+</tr>
+<tr>
+<td>-XX:+UseVMInterruptibleIO</td>
+<td>Thread interrupt before or with EINTR for I/O operations results in OS_INTRPT.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Snapshots</strong></p>
-<p><em>HBase快照允许管理员不拷贝数据直接克隆一张表，这对域服务器产生的影响最小。将快照导出至其他集群不会直接影响到任何域服务器；导出只是带有一些额外逻辑的群间数据同步。</em></p>
-<p>在HBase 0.95之前，唯一能够备份或克隆表就是使用复制/导出表或者在关闭表之后拷贝HDFS中所有的HFile。复制/导出是通过一系列工具调用MapReduce来扫描并复制表，这样会对RegionServer效率有直接影响。关闭表会停止所有的读写操作，实际环境中往往无法接受。</p>
-<p>HBase快照允许管理员不拷贝数据直接克隆一张表，这对RegionServer产生的影响最小。将快照导出至其他集群不会直接影响到任何域服务器；导出只是带有一些额外逻辑的群间数据同步。</p>
-<p>快照是啥？</p>
-<p>快照是一份元信息的合集，允许管理员恢复到表的先前状态。快照不是表的复制而是一个文件名称列表，因而不会复制数据。完全快照恢复是指恢复到之前的“表结构”以及当时的数据，快照之后发生的数据不会恢复。</p>
-<p>HBase的主要设计原则之一就是一旦文件写入就不再修改。文件不可变意味着快照只需保持对快照产生时存在的文件追踪，并且在压缩时负责提示系统该文件不应删除而是应当归档保存。快照和复制表之间的主要差异是快照操作只写入元数据，不涉及海量数据。</p>
-<p>hbase-site.xml中的hbase.snapshot.enabled是否设置为true确认打开了快照许可。</p>
-<ul>
-<li>生成快照：本操作尝试对指定表生成快照。如果集群在执行数据均衡、分隔或合并等操作时，可能会引起操作失败。</li>
-<li><p>克隆快照：本操作使用与指定快照相同的结构数据构建一张新表。操作结果会生成一张有完整功能的表，对该表的任意修改不会对原表或快照产生影响。</p>
-</li>
-<li><p>还原快照：本操作将表结构和数据恢复到生成快照时的状态。</p>
-</li>
-<li><p>删除快照：本操作将系统中的快照删除，释放未共享的磁盘空间，而且不会影响其他克隆或快照。</p>
-</li>
-<li><p>导出快照：本操作将快照数据和元数据复制到其他集群。操作只会涉及HDFS，不会与Master或域服务器产生任何联系，因此HBase集群可以关闭。</p>
-</li>
-</ul>
-<p>Reference :</p>
-<p>1.<a href="http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/" target="_blank" rel="external">What are HBase znodes?</a></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-30T16:00:00.000Z"><a href="/2016/05/01/design/design_pattern/">2016-05-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/01/design/design_pattern/">Design pattern</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Design-pattern"><a href="#Design-pattern" class="headerlink" title="Design pattern"></a>Design pattern</h3><p><em>设计模式（Design pattern）是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。</em></p>
-<p>面向对象有几个原则：</p>
-<ul>
-<li>开闭原则（Open Closed Principle，OCP）</li>
-<li>里氏代换原则（Liskov Substitution Principle，LSP）</li>
-<li>依赖倒转原则（Dependency Inversion Principle，DIP）</li>
-<li>接口隔离原则（Interface Segregation Principle，ISP）</li>
-<li>合成/聚合复用原则（Composite/Aggregate Reuse Principle，CARP）</li>
-<li>最小知识原则（Principle of Least Knowledge，PLK，也叫迪米特法则）</li>
-</ul>
-<p>设计模式分为三种类型，共23种。</p>
-<ul>
-<li><p>创建型模式：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式。</p>
-</li>
-<li><p>结构型模式：适配器模式、桥接模式、装饰模式、组合模式、外观模式、享元模式、代理模式。</p>
-</li>
-<li><p>行为型模式：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、职责链模式、访问者模式。</p>
-</li>
-</ul>
-<p>Abstract Factory（抽象工厂模式）：提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
-<p><code>Adapter（适配器模式）</code> 将一个类的接口转换成客户希望的另外一个接口。Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
-<p><code>Bridge（桥接模式）</code> 将抽象部分与它的实现部分分离，使它们都可以独立地变化。</p>
-<p><code>Builder（建造者模式）</code> 将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</p>
-<p><code>Chain of Responsibility（职责链模式）</code> 为解除请求的发送者和接收者之间耦合，而使多个对象都有机会处理这个请求。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它。</p>
-<p><code>Command（命令模式）</code> 将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可取消的操作。</p>
-<p><code>Composite（组合模式）</code> 将对象组合成树形结构以表示“部分-整体”的层次结构。它使得客户对单个对象和复合对象的使用具有一致性。</p>
-<p><code>Decorator（装饰模式）</code> 动态地给一个对象添加一些额外的职责。就扩展功能而言， 它比生成子类方式更为灵活。</p>
-<p><code>Facade（外观模式）</code> 为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
-<p><code>Factory Method（工厂模式）</code> 定义一个用于创建对象的接口，让子类决定将哪一个类实例化。Factory Method使一个类的实例化延迟到其子类。</p>
-<p><code>Flyweight（享元模式）</code> 运用共享技术有效地支持大量细粒度的对象。</p>
-<p><code>Interpreter（解析器模式）</code> 给定一个语言, 定义它的文法的一种表示，并定义一个解释器, 该解释器使用该表示来解释语言中的句子。</p>
-<p><code>Iterator（迭代器模式）</code> 提供一种方法顺序访问一个聚合对象中各个元素，而又不需暴露该对象的内部表示。</p>
-<p><code>Mediator（中介模式）</code> 用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-<p><code>Memento（备忘录模式）</code> 在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到保存的状态。</p>
-<p><code>Observer（观察者模式）</code> 定义对象间的一种一对多的依赖关系,以便当一个对象的状态发生改变时,所有依赖于它的对象都得到通知并自动刷新。</p>
-<p><code>Prototype（原型模式）</code> 用原型实例指定创建对象的种类，并且通过拷贝这个原型来创建新的对象。</p>
-<p><code>Proxy（代理模式）</code> 为其他对象提供一个代理以控制对这个对象的访问。</p>
-<p><code>Singleton（单例模式）</code> 保证一个类仅有一个实例，并提供一个访问它的全局访问点。 单例模式是最简单的设计模式之一，但是对于Java的开发者来说，它却有很多缺陷。在九月的专栏中，David Geary探讨了单例模式以及在面对多线程（multi-threading）、类装载器（class loaders）和序列化（serialization）时如何处理这些缺陷。</p>
-<p><code>State（状态模式）</code> 允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它所属的类。</p>
-<p><code>Strategy（策略模式）</code> 定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。本模式使得算法的变化可独立于使用它的客户。</p>
-<p><code>Template Method（模板方法模式）</code> 定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。Template Method使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。</p>
-<p><code>Visitor（访问者模式）</code> 表示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-27T10:55:35.000Z"><a href="/2016/04/27/distribution/mesos/">2016-04-27</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/27/distribution/mesos/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h3><p>Mesos 被定义为一个<code>分布式系统内核</code>。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。</p>
-<p>Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。</p>
-<p><img src="resource/mesos/architecture.jpg" alt="Architect"></p>
-<p>Mesos采用了<code>master/slave</code>结构，master做得尽可能地轻量级，其上面所有的元数据可通过各个slave重新注册而进行重构，故很容易通过zookeeper解决该单点故障问题。</p>
-<p>Mesos 基本术语：</p>
+<p><code>Garbage First Garbage Collection Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+UseG1GC</td>
+<td>Use the Garbage First Collector</td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=n</td>
+<td>Sets a target for the maximum GC pause time.</td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=n</td>
+<td>Percentage of the heap occupancy to start a concurrent GC cycle.</td>
+</tr>
+<tr>
+<td>-XX:NewRatio=n</td>
+<td>Ratio of old/new generation sizes.</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio=n</td>
+<td>Ratio of eden/survivor space size.</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=n</td>
+<td>Maximum value for tenuring threshold.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td>Sets the number of threads used during parallel phases of the garbage collectors.</td>
+</tr>
+<tr>
+<td>-XX:ConcGCThreads=n</td>
+<td>Number of threads concurrent garbage collectors will use.</td>
+</tr>
+<tr>
+<td>-XX:G1ReservePercent=n</td>
+<td>Sets the amount of heap that is reserved as a false ceiling to reduce the possibility of promotion failure.</td>
+</tr>
+<tr>
+<td>-XX:G1HeapRegionSize=n</td>
+<td>With G1 the Java heap is subdivided into uniformly sized regions.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Performance Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+AggressiveOpts</td>
+<td>Turn on point performance compiler optimizations that are expected to be default in upcoming releases.</td>
+</tr>
+<tr>
+<td>-XX:CompileThreshold=10000</td>
+<td>Number of method invocations/branches before compiling</td>
+</tr>
+<tr>
+<td>-XX:LargePageSizeInBytes=4m</td>
+<td>Sets the large page size used for the Java heap.</td>
+</tr>
+<tr>
+<td>-XX:MaxHeapFreeRatio=70</td>
+<td>Maximum percentage of heap free after GC to avoid shrinking.</td>
+</tr>
+<tr>
+<td>-XX:MaxNewSize=size</td>
+<td>Maximum size of new generation (in bytes).</td>
+</tr>
+<tr>
+<td>-XX:MaxPermSize=64m</td>
+<td>Size of the Permanent Generation.</td>
+</tr>
+<tr>
+<td>-XX:MinHeapFreeRatio=40</td>
+<td>Minimum percentage of heap free after GC to avoid expansion.</td>
+</tr>
+<tr>
+<td>-XX:NewRatio=2</td>
+<td>Ratio of old/new generation sizes.</td>
+</tr>
+<tr>
+<td>-XX:NewSize=2m</td>
+<td>Default size of new generation (in bytes)</td>
+</tr>
+<tr>
+<td>-XX:ReservedCodeCacheSize=32m</td>
+<td>Reserved code cache size (in bytes) - maximum code cache size.</td>
+</tr>
+<tr>
+<td>-XX:SurvivorRatio=8</td>
+<td>Ratio of eden/survivor space size</td>
+</tr>
+<tr>
+<td>-XX:TargetSurvivorRatio=50</td>
+<td>Desired percentage of survivor space used after scavenge.</td>
+</tr>
+<tr>
+<td>-XX:ThreadStackSize=512</td>
+<td>Thread Stack Size (in Kbytes).</td>
+</tr>
+<tr>
+<td>-XX:+UseBiasedLocking</td>
+<td>Enable biased locking. For more details, see this tuning example.</td>
+</tr>
+<tr>
+<td>-XX:+UseFastAccessorMethods</td>
+<td>Use optimized versions of Get Primitive Field.</td>
+</tr>
+<tr>
+<td>-XX:-UseISM</td>
+<td>Use Intimate Shared Memory.</td>
+</tr>
+<tr>
+<td>-XX:+UseLargePages</td>
+<td>Use large page memory.</td>
+</tr>
+<tr>
+<td>-XX:+UseMPSS</td>
+<td>Use Multiple Page Size Support w/4mb pages for the heap.</td>
+</tr>
+<tr>
+<td>-XX:+UseStringCache</td>
+<td>Enables caching of commonly allocated strings.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchLines=1</td>
+<td>Number of cache lines to load after the last object allocation using prefetch instructions generated in JIT compiled code.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchStyle=1</td>
+<td>Generated code style for prefetch instructions.</td>
+</tr>
+<tr>
+<td>-XX:+UseCompressedStrings</td>
+<td>Use a byte[] for Strings which can be represented as pure ASCII.</td>
+</tr>
+<tr>
+<td>-XX:+OptimizeStringConcat</td>
+<td>Optimize String concatenation operations where possible.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Debugging Options</code></p>
+<table>
+<thead>
+<tr>
+<th>Option and Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:-CITime</td>
+<td>Prints time spent in JIT Compiler.</td>
+</tr>
+<tr>
+<td>-XX:ErrorFile=./hs_err_pid<pid>.log</pid></td>
+<td>Save the error data to this file.</td>
+</tr>
+<tr>
+<td>-XX:-ExtendedDTraceProbes</td>
+<td>Enable performance-impacting dtrace probes.</td>
+</tr>
+<tr>
+<td>-XX:HeapDumpPath=./java_pid<pid>.hprof</pid></td>
+<td>Path to directory or filename for heap dump.</td>
+</tr>
+<tr>
+<td>-XX:-HeapDumpOnOutOfMemoryError</td>
+<td>Dump heap to file when java.lang.OutOfMemoryError is thrown.</td>
+</tr>
+<tr>
+<td>-XX:OnError=”cmd args;cmd args”</td>
+<td>Run user-defined commands on fatal error.</td>
+</tr>
+<tr>
+<td>-XX:OnOutOfMemoryError=”cmd args;cmd args”</td>
+<td>Run user-defined commands when an OutOfMemoryError is first thrown.</td>
+</tr>
+<tr>
+<td>-XX:-PrintClassHistogram</td>
+<td>Print a histogram of class instances on Ctrl-Break.</td>
+</tr>
+<tr>
+<td>-XX:-PrintConcurrentLocks</td>
+<td>Print java.util.concurrent locks in Ctrl-Break thread dump.</td>
+</tr>
+<tr>
+<td>-XX:-PrintCommandLineFlags</td>
+<td>Print flags that appeared on the command line.</td>
+</tr>
+<tr>
+<td>-XX:-PrintCompilation</td>
+<td>Print message when a method is compiled.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGC</td>
+<td>Print messages at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGCDetails</td>
+<td>Print more details at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintGCTimeStamps</td>
+<td>Print timestamps at garbage collection.</td>
+</tr>
+<tr>
+<td>-XX:-PrintTenuringDistribution</td>
+<td>Print tenuring age information.</td>
+</tr>
+<tr>
+<td>-XX:-PrintAdaptiveSizePolicy</td>
+<td>Enables printing of information about adaptive generation sizing.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassLoading</td>
+<td>Trace loading of classes.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassLoadingPreorder</td>
+<td>Trace all classes loaded in order referenced</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassResolution</td>
+<td>Trace constant pool resolutions.</td>
+</tr>
+<tr>
+<td>-XX:-TraceClassUnloading</td>
+<td>Trace unloading of classes.</td>
+</tr>
+<tr>
+<td>-XX:-TraceLoaderConstraints</td>
+<td>Trace recording of loader constraints.</td>
+</tr>
+<tr>
+<td>-XX:+PerfDataSaveToFile</td>
+<td>Saves jvmstat binary data on exit.</td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td>Sets the number of garbage collection threads in the young and old parallel garbage collectors.</td>
+</tr>
+<tr>
+<td>-XX:+UseCompressedOops</td>
+<td>Enables the use of compressed pointers for optimized 64-bit performance with Java heap sizes less than 32gb.</td>
+</tr>
+<tr>
+<td>-XX:+AlwaysPreTouch</td>
+<td>Pre-touch the Java heap during JVM initialization.</td>
+</tr>
+<tr>
+<td>-XX:AllocatePrefetchDistance=n</td>
+<td>Sets the prefetch distance for object allocation.</td>
+</tr>
+<tr>
+<td>-XX:InlineSmallCode=n</td>
+<td>Inline a previously compiled method only if its generated native code size is less than this.</td>
+</tr>
+<tr>
+<td>-XX:MaxInlineSize=35</td>
+<td>Maximum bytecode size of a method to be inlined.</td>
+</tr>
+<tr>
+<td>-XX:FreqInlineSize=n</td>
+<td>Maximum bytecode size of a frequently executed method to be inlined.</td>
+</tr>
+<tr>
+<td>-XX:LoopUnrollLimit=n</td>
+<td>Unroll loop bodies with server compiler intermediate representation node count less than this value.</td>
+</tr>
+<tr>
+<td>-XX:InitialTenuringThreshold=7</td>
+<td>Sets the initial tenuring threshold for use in adaptive GC sizing in the parallel young collector.</td>
+</tr>
+<tr>
+<td>-XX:MaxTenuringThreshold=n</td>
+<td>Sets the maximum tenuring threshold for use in adaptive GC sizing.</td>
+</tr>
+<tr>
+<td>-Xloggc:<filename></filename></td>
+<td>Log GC verbose output to specified file.</td>
+</tr>
+<tr>
+<td>-XX:-UseGCLogFileRotation</td>
+<td>Enabled GC log rotation, requires -Xloggc.</td>
+</tr>
+<tr>
+<td>-XX:NumberOfGClogFiles=1</td>
+<td>Set the number of files to use when rotating logs, must be &gt;= 1.</td>
+</tr>
+<tr>
+<td>-XX:GCLogFileSize=8K</td>
+<td>The size of the log file at which point the log will be rotated, must be &gt;= 8K.</td>
+</tr>
+</tbody>
+</table>
+<p>#####GC</p>
+<p>Garbage Collector is a memory management tool.</p>
+<p><code>Minor GC</code><br>Collecting garbage from Young space (consisting of Eden and Survivor spaces) is called a Minor GC. This definition is both clear and uniformly understood. But there are still some interesting take-aways you should be aware of when dealing with Minor Garbage Collection events:</p>
+<p><code>Major GC vs Full GC</code></p>
+<p>#####Garbage First Garbage Collector</p>
+<p>The <code>Garbage First Garbage Collector</code> is the low-pause, server-style generational garbage collector for Java HotSpot VM</p>
+<p>G1 uses concurrent and parallel phases to achieve its target pause time and to maintain good throughput.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:G1HeapRegionSize=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:MaxGCPauseMillis=200</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1NewSizePercent=5</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MaxNewSizePercent=60</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:ParallelGCThreads=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:ConcGCThreads=n</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:InitiatingHeapOccupancyPercent=45</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCLiveThresholdPercent=65</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1HeapWastePercent=10</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1MixedGCCountTarget=8</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1OldCSetRegionThresholdPercent=10</td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:G1ReservePercent=10</td>
+</tr>
+</tbody>
+</table>
+<p><code>How to Unlock Experimental VM Flags</code></p>
+<p><strong>XX:+UnlockExperimentalVMOptions</strong> explicitly on the command line before any experimental flags. </p>
+<p><strong>Recommendations</strong>:</p>
 <ol>
-<li>Mesos Master主要负责管理各个framework和slave，并将slave上的资源分配给各个framework.</li>
-<li>Mesos Slave负责管理本节点上的各个mesos-task，比如：为各个executor分配资源</li>
-<li>Framework Hadoop，Spark等计算框架,通过MesosSchedulerDiver接入Mesos.</li>
-<li>Executor 执行器 Mesos Slave上，用于启动计算框架中的task</li>
+<li>Young Generation Size : Avoid explicitly setting young generation size with the -Xmn option . </li>
+<li>Pause Time Goals : G1 is an incremental GC with uniform pauses, but also more overhead on the application threads.</li>
+<li>Taming Mixed Garbage Collections : </li>
 </ol>
-<p>Mesos Master是系统核心，负责管理接入各个framework和 slave 并将slave资源分配给framework.Mesos Slave负责接收并执行来自Mesos Master命令,管理节点上的Mesos Task</p>
-<h4 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h4><p>Reference :</p>
+<p><code>G1 Garbage First Garbage Collector</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">The Garbage-First (G1) collector is a server-style garbage collector, targeted for multi-processor machines with large memories. It meets garbage collection (GC) pause time goals with a high probability, while achieving high throughput. The G1 garbage collector is fully supported in Oracle JDK 7 update 4 and later releases. The G1 collector is designed for applications that:</span><br><span class="line"></span><br><span class="line">- Can operate concurrently with applications threads like the CMS collector.</span><br><span class="line">- Compact free space without lengthy GC induced pause times.</span><br><span class="line">- Need more predictable GC pause durations.</span><br><span class="line">- Do not want to sacrifice a lot of throughput performance.</span><br><span class="line">- Do not require a much larger Java heap.</span><br></pre></td></tr></table></figure>
+<p><code>G1收集器的设计目标是取代CMS收集器，它同CMS相比，在以下方面表现的更出色：</code></p>
+<ul>
+<li>G1是一个有整理内存过程的垃圾收集器，不会产生很多内存碎片。</li>
+<li>G1的Stop The World更可控，G1在停顿时间上添加了预测机制，用户可以指定期望停顿时间。</li>
+</ul>
+<p><strong>G1中几个重要概念</strong></p>
+<p><code>Region</code> 传统的GC收集器将连续的内存空间划分为新生代、老年代和永久代，这种划分的特点是各代的存储地址是连续的。而G1的各代存储地址是不连续的，每一代都使用了n个不连续的大小相同的Region，每个Region占有一块连续的虚拟内存地址。</p>
+<p><code>SATB Snapshot-At-The-Beginning</code> GC开始时活着的对象的一个快照。</p>
+<p><code>RSet Remembered Set</code></p>
+<p><code>Pause Prediction Model</code> </p>
+<p><strong>GC过程</strong></p>
+<p><em>G1 GC模式</em></p>
+<p>G1提供了两种GC模式，Young GC和Mixed GC，两种都是完全Stop The World的。</p>
+<ul>
+<li>Young GC：选定所有年轻代里的Region。通过控制年轻代的region个数，即年轻代内存大小，来控制young GC的时间开销。</li>
+<li>Mixed GC：选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region。在用户指定的开销目标范围内尽可能选择收益高的老年代Region。</li>
+</ul>
+<p><strong>GC日志</strong></p>
+<p><em>Young GC日志</em></p>
+<p><em>global concurrent marking 日志</em></p>
+<p><code>global concurrent marking的执行过程分为四个步骤：</code></p>
+<ul>
+<li>初始标记（initial mark，STW）。它标记了从GC Root开始直接可达的对象。</li>
+<li>并发标记（Concurrent Marking）。这个阶段从GC Root开始对heap中的对象标记，标记线程与应用程序线程并行执行，并且收集各个Region的存活对象信息。</li>
+<li>最终标记（Remark，STW）。标记那些在并发标记阶段发生变化的对象，将被回收。</li>
+<li>清除垃圾（Cleanup）。清除空Region，加入到free list。</li>
+</ul>
+<hr>
+<p>###JShell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">-&gt; /help</span><br><span class="line">Type a Java language expression, statement, or declaration.</span><br><span class="line">Or type one of the following commands:</span><br><span class="line"></span><br><span class="line">/l  or /list [all]                -- list the source you have typed</span><br><span class="line">       /seteditor &lt;executable&gt;    -- set the external editor command to use</span><br><span class="line">/e  or /edit &lt;name or id&gt;         -- edit a source entry referenced by name or id</span><br><span class="line">/d  or /drop &lt;name or id&gt;         -- delete a source entry referenced by name or id</span><br><span class="line">/s  or /save [all|history] &lt;file&gt; -- save the source you have typed</span><br><span class="line">/o  or /open &lt;file&gt;               -- open a file as source input</span><br><span class="line">/v  or /vars                      -- list the declared variables and their values</span><br><span class="line">/m  or /methods                   -- list the declared methods and their signatures</span><br><span class="line">/c  or /classes                   -- list the declared classes</span><br><span class="line">/i  or /imports                   -- list the imported items</span><br><span class="line">/x  or /exit                      -- exit the REPL</span><br><span class="line">/r  or /reset                     -- reset everything in the REPL</span><br><span class="line">/f  or /feedback &lt;level&gt;          -- feedback information: off, concise, normal, verbose, default, or ?</span><br><span class="line">/p  or /prompt                    -- toggle display of a prompt</span><br><span class="line">/cp or /classpath &lt;path&gt;          -- add a path to the classpath</span><br><span class="line">/h  or /history                   -- history of what you have typed</span><br><span class="line">       /setstart &lt;file&gt;           -- read file and set as the new start-up definitions</span><br><span class="line">       /savestart &lt;file&gt;          -- save the default start-up definitions to the file</span><br><span class="line">/?  or /help                      -- this help message</span><br><span class="line">       /!                         -- re-run last snippet</span><br><span class="line">       /&lt;n&gt;                       -- re-run n-th snippet</span><br><span class="line">       /-&lt;n&gt;                      -- re-run n-th previous snippet</span><br><span class="line"></span><br><span class="line">Supported shortcuts include:</span><br><span class="line">&lt;tab&gt;       -- show possible completions for the current text</span><br><span class="line">Shift-&lt;tab&gt; -- for current method or constructor invocation, show a synopsis of the method/constructor</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-&gt; System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">Hello Darion</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&gt; class Main &#123;</span><br><span class="line">&gt;&gt;</span><br><span class="line">&gt;&gt;     public static void main(String[] args)&#123;</span><br><span class="line">&gt;&gt;         System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">|  Added class Main</span><br><span class="line"></span><br><span class="line">-&gt; /classes</span><br><span class="line">|    class Main</span><br><span class="line"></span><br><span class="line">-&gt; Main.main(null) ;</span><br><span class="line">Hello Darion.Yaphet</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*</span><br><span class="line"></span><br><span class="line">-&gt; List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br><span class="line">|  Added variable list of type List&lt;Integer&gt; with initial value [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /vars</span><br><span class="line">|    List&lt;Integer&gt; list = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">-&gt; /list</span><br><span class="line"></span><br><span class="line">   1 : class Main &#123;</span><br><span class="line">           public static void main(String[] args)&#123;</span><br><span class="line">               System.out.println(&quot;Hello Darion.Yaphet&quot;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   2 : System.out.println(&quot;Hello Darion&quot;) ;</span><br><span class="line">   3 : Main.main(null) ;</span><br><span class="line">   4 : List&lt;Integer&gt; list = new ArrayList&lt;&gt;(Arrays.asList(1,2,3));</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-&gt; void print()&#123;System.out.println(&quot;Hello Darion&quot;); &#125;</span><br><span class="line">|  Added method print()</span><br><span class="line"></span><br><span class="line">-&gt; /methods</span><br><span class="line">|    printf (String,Object...)void</span><br><span class="line">|    print ()void</span><br><span class="line"></span><br><span class="line">-&gt; print()</span><br><span class="line">Hello Darion</span><br><span class="line"></span><br><span class="line">-&gt; /x</span><br><span class="line">|  Goodbye</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>内存区域</strong></p>
+<p>Java虚拟机在执行Java程序过程中会把他所管理的内存划分为若干个不同的数据区域。</p>
+<p>分为以下几个运行时数据区：程序计数器、Java虚拟机栈、本地方法栈、Java堆、方法区。</p>
+<p><strong>程序计数器（Program Counter Register）</strong></p>
+<p><em>当前线程所执行的字节码的行号指示器</em></p>
+<p><code>字节码解释器</code>工作时通过改变该计数器的值来选择下一条需要执行的字节码指令。</p>
+<p>每条线程都有一个独立的的程序计数器，各线程间的计数器互不影响，该区域是线程私有的。</p>
+<p>当线程在执行一个Java方法时，该计数器记录的是正在执行的虚拟机字节码指令的地址，当线程在执行的是Native方法时，该计数器的值为空。</p>
+<p><strong>Java虚拟机栈（Java Virtual Machine Stacks）</strong></p>
+<p><code>虚拟机栈</code>描述的是Java方法执行的内存模型：每个方法被执行的时候都会同时创建一个栈帧，栈它是用于支持续虚拟机进行方法调用和方法执行的数据结构。</p>
+<p>活动线程中，只有栈顶的栈帧是有效的，称为当前栈帧，这个栈帧所关联的方法称为当前方法。</p>
+<p>栈帧用于存储局部变量表、操作数栈、动态链接、方法返回地址和一些额外的附加信息。</p>
+<p>一个栈帧需要分配多少内存，不会受到程序运行期变量数据的影响，而仅仅取决于具体的虚拟机实现。</p>
+<p><code>局部变量表</code></p>
+<p>局部变量表是一组变量值存储空间，用于存放方法参数和方法内部定义的局部变量，其中存放的数据的类型是编译期可知的各种基本数据类型、对象引用和returnAddress类型。</p>
+<p>局部变量表所需的内存空间编译期间完成分配，即在Java程序被编译成Class文件时，就确定了所需分配的最大局部变量表的容量。</p>
+<p>当进入一个方法时，这个方法需要在栈中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。</p>
+<p>局部变量表的容量以变量槽（Slot）为最小单位。一个Slot可以存放一个32位以内的数据类型，64位的数据类型，虚拟机会以高位在前的方式为其分配两个连续的Slot空间。</p>
+<p>虚拟机使用<code>局部变量表</code>来完成参数值到参数变量列表的传递过程的</p>
+<p>如果是实例方法，则局部变量表中的第0位索引的Slot默认是用于传递方法所属对象实例的引用，在方法中可以通过关键字“this”来访问这个隐含的参数。</p>
+<p>其余参数则按照参数表的顺序来排列，占用从1开始的局部变量Slot，参数表分配完毕后，再根据方法体内部定义的变量顺序和作用域分配其余的Slot。</p>
+<p>局部变量表中的Slot是可重用的，方法体中定义的变量，作用域并不一定会覆盖整个方法体</p>
+<p>如果当前字节码PC计数器的值已经超过了某个变量的作用域，那么这个变量对应的Slot就可以交给其他变量使用。</p>
+<p><code>操作数栈</code></p>
+<p>操作数栈又常被称为操作栈，操作数栈的最大深度也是在编译的时候就确定了。</p>
+<p>Java虚拟机的解释执行引擎称为“基于栈的执行引擎”，其中所指的“栈”就是操作数栈。</p>
+<p>也称Java虚拟机是基于栈的，这点不同于Android虚拟机，Android虚拟机是基于寄存器的。</p>
+<p>基于栈的指令集最主要的优点是可移植性强，主要的缺点是执行速度相对会慢些。</p>
+<p>而由于寄存器由硬件直接提供，所以基于寄存器指令集最主要的优点是执行速度快，主要的缺点是可移植性差。</p>
+<p><code>动态连接</code></p>
+<p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。</p>
+<p>一部分会在类加载阶段或第一次使用的时候转化为直接引用，称为静态解析。</p>
+<p>另一部分将在每一次的运行期间转化为直接引用，这部分称为动态连接。</p>
+<p><code>方法返回地址</code></p>
+<p><strong>本地方法栈（Native Method Stacks）</strong></p>
+<p>本地方法栈则为使用到的本地操作系统方法服务。</p>
+<p><strong>Java堆（Java Heap）</strong></p>
+<p>Java堆是所有线程共享的一块内存区域。</p>
+<p>几乎所有的对象实例和数组都在这类分配内存。</p>
+<p>Java堆可以处在物理上不连续的内存空间中，只要逻辑上是连续的即可。</p>
+<p>如果在堆中没有内存可分配时，并且堆也无法扩展时，将会抛出OutOfMemoryError异常。</p>
+<p><strong>方法区（Method Area）</strong></p>
+<p>方法区也是各个线程共享的内存区域，它用于存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。</p>
+<p>Java虚拟机规范把方法区描述为Java堆的一个逻辑部分，而且它和Java Heap一样不需要连续的内存，可以选择固定大小或可扩展，另外，虚拟机规范允许该区域可以选择不实现垃圾回收。</p>
+<p>运行时常量池相对于Class文件常量池的另一个重要特征是具备动态性，Java语言并不要求常量一定只能在编译期产生，也就是并非预置入Class文件中的常量池的内容才能进入方法区的运行时常量池，运行期间也可能将新的常量放入池中。</p>
+<p><strong>直接内存（Direct Memory）</strong></p>
+<p>直接内存直接从操作系统中分配，因此不受Java堆大小的限制，但是会受到本机总内存的大小及处理器寻址空间的限制。</p>
+<p>这样能在一些场景中提高性能，因为避免了在Java堆和Native堆中来回复制数据。</p>
+<p><strong>内存溢出</strong></p>
+<p>内存泄露是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制，因而造成了资源的浪费。</p>
+<p>内存溢出是指程序所需要的内存超出了系统所能分配的内存的上限。</p>
+<hr>
+<p><strong>Class类文件结构</strong></p>
+<p>Java是与平台无关的语言，这得益于Java源代码编译后生成的Class文件。</p>
+<p>Class文件是一组以8位字节为基础单位的二进制流。</p>
+<p>Java虚拟机规范规定，Class文件格式采用一种类似于C语言结构体的伪结构来存储，这种伪结构中只有两种数据类型：无符号数和表。</p>
+<p>无符号数属于基本数据类型，以u1、u2、u4、u8来分别代表1、2、4、8个字节的无符号数。</p>
+<p>表是由多个无符号数或其他表作为数据项构成的符合数据类型，所有的表都习惯性地以“_info”结尾。</p>
+<p>整个Class文件本质上就是一张表。</p>
+<p><code>magic与version</code></p>
+<p>每个Class文件的头4个字节称为魔数，它的唯一作用是判断该文件是否为一个能被虚拟机接受的Class文件。</p>
+<p>它的值固定为0xCAFEBABE。</p>
+<p>紧接着magic的4个字节存储的是Class文件的次版本号和主版本号，高版本的JDK能向下兼容低版本的Class文件，但不能运行更高版本的Class文件。</p>
+<p><code>constant_pool</code></p>
+<p>major_version之后是常量池入口，它是Class文件中与其他项目关联最多的数据类型，也是占用Class文件空间最大的数据项目之一。</p>
+<p><code>access_flag</code></p>
+<p>这个标志用于识别一些类或接口层次的访问信息，包括：这个Class是类还是接口，是否定义为public类型，abstract类型，如果是类的话，是否声明为final，等等。</p>
+<p>每种访问信息都由一个十六进制的标志值表示，如果同时具有多种访问信息，则得到的标志值为这几种访问信息的标志值的逻辑或。</p>
+<p><code>this_class、super_class、interfaces</code></p>
+<p><code>fields</code></p>
+<p><code>methods</code></p>
+<p><code>attributes</code></p>
+<p><em>Code属性</em></p>
+<p><em>Exception属性</em></p>
+<p><em>LineNumberTable属性</em></p>
+<p>描述Java源码行号与字节码行号之间的对应关系。</p>
+<p><em>LocalVariableTable属性</em></p>
+<p>描述栈帧中局部变量表中的变量与Java源码中定义的变量之间的对应关系。</p>
+<p><em>SourceFile属性</em></p>
+<p>用于记录生成这个Class文件的源码文件名称。</p>
+<p><em>ConstantValue属性</em></p>
+<p>通知虚拟机自动为静态变量赋值，只有被static修饰的变量才可以使用这项属性。</p>
+<p><em>InnerClasses属性</em></p>
+<p>用于记录内部类与宿主类之间的关联。</p>
+<p><em>Deprecated属性和Synthetic属性</em></p>
+<p>用于表示某个类、字段和方法，已经被程序作者定为不再推荐使用。</p>
+<p><em>Synthetic属性</em></p>
+<p>代表此字段或方法并不是Java源代码直接生成的，而是由编译器自行添加的，如this字段和实例构造器、类构造器等。</p>
+<hr>
+<p><strong>类初始化</strong></p>
+<hr>
+<p><strong>类加载机制</strong></p>
+<hr>
+<p>参考资料:</p>
 <ol>
-<li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
+<li><a href="https://plumbr.eu/blog/garbage-collection/minor-gc-vs-major-gc-vs-full-gc" target="_blank" rel="external">Minor GC vs Major GC vs Full GC</a></li>
+<li><a href="http://www.oracle.com/technetwork/articles/java/g1gc-1984535.html" target="_blank" rel="external">Garbage First Garbage Collector Tuning</a></li>
+<li><a href="https://blogs.oracle.com/java/entry/jshell_and_relp_in_java" target="_blank" rel="external">JShell and REPL in Java 9</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank" rel="external">Java HotSpot VM Options</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477210&amp;idx=2&amp;sn=57955ff79f6c930a54b6ed52b9b30e70&amp;scene=21#wechat_redirect" target="_blank" rel="external">Java内存区域与内存溢出</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477221&amp;idx=2&amp;sn=2217ce137006e6dbe790733e074b9ba9&amp;scene=21#wechat_redirect" target="_blank" rel="external">Class类文件结构</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477246&amp;idx=3&amp;sn=f6e706408197d24791dc317ff666b256&amp;scene=21#wechat_redirect" target="_blank" rel="external">类初始化</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477252&amp;idx=2&amp;sn=6af2ebda31862bd1cbe131a42634955d&amp;scene=23&amp;srcid=0617RCitd6RZndjA53mZPwUJ#rd" target="_blank" rel="external">类加载机制</a></li>
+<li><a href="https://www.infoq.com/articles/G1-One-Garbage-Collector-To-Rule-Them-All" target="_blank" rel="external">G1: One Garbage Collector To Rule Them All</a></li>
+<li><a href="https://blogs.oracle.com/poonam/entry/understanding_g1_gc_logs" target="_blank" rel="external">Understanding G1 GC Logs</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/16/storage/rocksdb/">RocksDB</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="RocksDB"><a href="#RocksDB" class="headerlink" title="RocksDB"></a>RocksDB</h3><p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
+<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
+<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
+<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
+<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
+<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
+<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
+<hr>
+<p><strong>Structures</strong></p>
+<p><code>Options</code> define how RocksDB behaves and performs. </p>
+<p>options specific to the whole RocksDB instance will be defined in <code>DBOptions</code> .</p>
+<p>Column Families are handled and referenced with a <code>ColumnFamilyHandle</code> .</p>
+<p><code>Options</code> is inheriting both <code>ColumnFamilyOptions</code> and <code>DBOptions</code>, which means you can still use it to define all the options for a DB instance with a single (default) column family.</p>
+<hr>
+<p><strong>Static Sorted Table (Static Sorted Table)</strong></p>
+<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
+<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
+<p>Format :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
+<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
+<p>ReadOnly Mode</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Column Families</strong></p>
+<p>Each key-value pair in RocksDB is associated with exactly one Column Family. </p>
+<p>If there is no Column Family specified, key-value pair is associated with Column Family “default”.</p>
+<p>Column Families provide a way to logically partition the database.</p>
+<ul>
+<li>Atomic writes across Column Families are supported.</li>
+<li>Consistent view of the database across Column Families.</li>
+<li>Ability to configure different Column Families independently.</li>
+<li>On-the-fly adding new Column Families and dropping them.</li>
+</ul>
+<p>The main idea behind Column Families is that they share the write-ahead log and don’t share memtables and table files. </p>
+<p>By sharing write-ahead logs we get awesome benefit of atomic writes. </p>
+<p>By separating memtables and table files, we are able to configure column families independently and delete them quickly.</p>
+<p>Every time a single Column Family is flushed, we create a new WAL . </p>
+<p>We can delete the old WAL only when all Column Families have been flushed and all data contained in that WAL persisted in table files.</p>
+<p><code>Options::max_total_wal_size</code> which can be configured such that stale column families are automatically flushed.</p>
+<hr>
+<p><strong>Memory usage</strong> </p>
+<p>There are a couple of components in RocksDB that contribute to memory usage:</p>
+<ol>
+<li>Block cache</li>
+<li>Indexes and bloom filters</li>
+<li>Memtables</li>
+<li>Blocks pinned by iterators</li>
+</ol>
+<p><strong>Block cache</strong></p>
+<p>Block cache is where RocksDB caches uncompressed data blocks.</p>
+<p>RocksDB’s cache is two-tiered: <code>block cache</code> and <code>page cache</code>.</p>
+<p>If the data block is not found in block cache, RocksDB reads it from file using buffered IO. </p>
+<p><strong>Indexes and filter blocks</strong></p>
+<p><strong>Memtable</strong></p>
+<p>Memtables ,in-memory write buffers.</p>
+<p>Each new key-value pair is first written to the memtable. </p>
+<p>Memtable size is controlled by the option <code>write_buffer_size</code>.</p>
+<p>However, memtable size is inversely proportional to write amplification </p>
+<p><code>The more memory you give to the memtable, the less the write amplification is.</code></p>
+<p>If you increase your memtable size, be sure to also increase your L1 size!</p>
+<p>L1 size is controlled by the option <code>max_bytes_for_level_base</code>.</p>
+<p><strong>Blocks pinned by iterators</strong></p>
+<p>Each iterator pins exactly one data block for each L0 file plus one data block for each L1+ level.</p>
+<p>So the total memory usage from pinned blocks is approximately <code>num_iterators * block_size * ((num_levels-1) + num_l0_files)</code></p>
+<hr>
+<p><strong>WriteBatch</strong></p>
+<p>The <code>WriteBatch</code> holds a sequence of edits to be made to the database, and these edits within the batch are applied in order. </p>
+<p><code>WriteBatch</code> may also be used to speed up bulk updates by placing lots of individual mutations into the same batch.</p>
+<p><strong>Synchronous Writes</strong></p>
+<p>By default, each write to leveldb is asynchronous: it returns after pushing the write from the process into the operating system. </p>
+<p>The transfer from operating system memory to the underlying persistent storage happens asynchronously.</p>
+<p>The <code>sync</code> flag can be turned on for a particular write to make the write operation not return until the data being written has been pushed all the way to persistent storage. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WriteOptions writeOptions = new WriteOptions();</span><br><span class="line">writeOptions.setSync(true);</span><br><span class="line">writeOptions.sync();</span><br></pre></td></tr></table></figure>
+<p><strong>Asynchronous Writes</strong></p>
+<p><code>WriteBatch</code> provides an alternative to asynchronous writes.</p>
+<p>Multiple updates may be placed in the same <code>WriteBatch</code> and applied together using a synchronous write. </p>
+<p>You can disable syncing of data files by</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setDisableDataSync(true);</span><br></pre></td></tr></table></figure>
+<p>Once the operation is finished, you can manually call sync() to flush all dirty buffers to stable storage.</p>
+<p>RocksDB by default uses faster fdatasync() to sync files. </p>
+<p>If you want to use fsync(), you can set Options::use_fsync to true.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setUseFsync(true);</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Merge operators</strong></p>
+<hr>
+<p><strong>Iteration</strong></p>
+<p>The following example demonstrates how to print all key,value pairs in a database.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RocksIterator iterator = client.newIterator();</span><br><span class="line">try &#123;</span><br><span class="line">    for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) &#123;</span><br><span class="line">        String key = new String(iterator.key());</span><br><span class="line">        String value = new String(iterator.value());</span><br><span class="line">        System.out.println(key + &quot; --&gt; &quot; + value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">    client.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The following variation shows how to process just the keys in the range [start,limit) .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (iterator.seek(&quot;yid&quot;.getBytes()); iterator.isValid(); iterator.prev()) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Checksums</strong></p>
+<p><code>Rocksdb</code> associates checksums with all data it stores in the File System. </p>
+<p>There are two separate controls provided over how aggressively these checksums are verified:</p>
+<ul>
+<li><p><code>verify_checksums</code> forces checksum verification of all data that is read from the file system on. <em>This is on by default.</em></p>
+</li>
+<li><p><code>paranoid_checks</code> may be set to true before opening a database to make the database implementation raise an error as soon as it detects an internal corruption. </p>
+</li>
+</ul>
+<hr>
+<p><strong>Key Layout</strong></p>
+<p>Adjacent keys will usually be placed in the same block.</p>
+<p>The application can improve its performance by <code>placing keys that are accessed together near each other</code> and <code>placing infrequently used keys in a separate region of the key space</code>.</p>
+<hr>
+<p><strong>Filters</strong></p>
+<p><code>FilterPolicy</code> mechanism can be used to reduce the number of disk reads substantially.</p>
+<hr>
+<p><strong>Snapshots</strong></p>
+<p>Snapshots provide consistent read-only views over the entire state of the key-value store.</p>
+<hr>
+<p><strong>Slice</strong></p>
+<hr>
+<p><strong>Write buffer</strong></p>
+<hr>
+<p><strong>Compaction</strong></p>
+<p>The options that impact behavior of Compactions :</p>
+<ul>
+<li>compaction_style</li>
+<li>disable_auto_compactions</li>
+<li>compaction_filter</li>
+<li>compaction_filter_factory</li>
+</ul>
+<p>The options impacting performance of compactions : </p>
+<ul>
+<li>access_hint_on_compaction_start</li>
+<li>level0_file_num_compaction_trigger</li>
+<li>max_mem_compaction_level</li>
+<li>target_file_size_base</li>
+<li>target_file_size_multiplier</li>
+<li>expanded_compaction_factor</li>
+<li>source_compaction_factor</li>
+<li>max_grandparent_overlap_factor</li>
+<li>disable_seek_compaction</li>
+<li>max_background_compactions</li>
+</ul>
+<hr>
+<p><strong>Thread pools</strong></p>
+<hr>
+<p><strong>Purging WAL files</strong></p>
+<p>Old write-ahead logs are deleted automatically when application doesn’t need them anymore.</p>
+<p>There are options (<code>WAL_ttl_seconds</code> and <code>WAL_size_limit_MB</code>) that enable the user to archive the logs and then delete them lazily, either in TTL fashion or based on size limit.</p>
+<ul>
+<li>If both set to 0, logs will be deleted asap and will never get into the archive.</li>
+<li>If <code>WAL_ttl_seconds</code> is 0 and <code>WAL_size_limit_MB</code> is not 0, WAL files will be checked every 10 min and if total size is greater then</li>
+<li>If <code>WAL_ttl_seconds</code> is not 0 and <code>WAL_size_limit_MB</code> is 0, then WAL files will be checked every <code>WAL_ttl_seconds</code> / 2 and those that are older than <code>WAL_ttl_seconds</code> will be deleted.</li>
+<li>If both are not 0, WAL files will be checked every 10 min and both checks will be performed with ttl being first.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Options options = new Options()</span><br><span class="line">        .setCreateIfMissing(true)</span><br><span class="line">        .setWalDir(&quot;/tmp/basic.wal&quot;)</span><br><span class="line">        .setWalSizeLimitMB(32)</span><br><span class="line">        .setWalTtlSeconds(30);</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Java</strong></p>
+<hr>
+<p><strong>MANIFEST</strong></p>
+<p><strong>Terminology</strong></p>
+<p><code>MANIFEST</code> refers to the system that keeps track of RocksDB state changes in a transactional log</p>
+<p><code>Manifest log</code> refers to an individual log file that contains RocksDB state snapshot/edits</p>
+<p><code>CURRENT</code> refers to the latest manifest log</p>
+<p><strong>Version Edit</strong></p>
+<p>A certain state of RocksDB at any given time is referred to as a <code>version</code>.</p>
+<p>Any modification to the version is considered a version edit. </p>
+<p>A version is constructed by joining a sequence of version-edits.</p>
+<p><code>A manifest log file is a sequence of version edits.</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">version-edit      = Any RocksDB state change</span><br><span class="line">version           = &#123; version-edit* &#125;</span><br><span class="line">manifest-log-file = &#123; version, version-edit* &#125;</span><br><span class="line">                  = &#123; version-edit* &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit</strong></p>
+<p><strong>Data Types</strong></p>
+<p><code>Simple data types</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VarX   - Variable character encoding of intX</span><br><span class="line">FixedX - Fixed character encoding of intX</span><br></pre></td></tr></table></figure>
+<p><code>Complex data types</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String - Length prefixed string data</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">| size (n)  | content of string  |</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">|&lt;- Var32 -&gt;|&lt;-- n            --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit Record Format</strong></p>
+<p>Version edit records have the following format. </p>
+<p>The decoder identifies the record type using the record identification number.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------ ......... ----------+</span><br><span class="line">| Record ID   | Variable size record data |</span><br><span class="line">+-------------+------ .......... ---------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- varies by type       --&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>Version Edit Record Types and Layout</strong></p>
+<p><strong>Comparator edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Captures the comparator name</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kComparator | data           |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Log number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Lates WAL log file number</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kLogNumber  | log number     |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Previous File Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Previous manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kPrevFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Next File Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Next manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kNextFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Last Sequence Number edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Last sequence number of RocksDB</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kLastSequence    | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Max Column Family edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Adjust the maximum number of family columns allowed.</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kMaxColumnFamily    | log number     |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Deleted File edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mark a file as deleted from database.</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">| kDeletedFile    | level       | file number  |</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">&lt;-- Var32     ---&gt;|&lt;-- Var32 --&gt;|&lt;-- Var64  --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record with compaction information</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile4    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br><span class="line"></span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">|kPathID ---| Path size(n)  | path  | kNeedCompaction  | 1     | value (0/1)  |</span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">&lt;- var32  -&gt;|&lt;-- var32   --&gt;|&lt;- n -&gt;|&lt;-- var32      --&gt;|&lt;- 1 -&gt;|&lt;-- 1      --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record backward compatible</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile2    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">&lt;-- var32   --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>File edit record with path information</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile3    | level       | file number  | Path ID     | file size   | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64 --&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family status edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Note the status of column family feature (enabled/disabled)</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kColumnFamily    | 0/1            |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family add edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Add a column family</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kColumnFamilyAdd    | cf name        |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
+<p><strong>Column family drop edit record:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drop all column family</span><br><span class="line">+---------------------+</span><br><span class="line">| kColumnFamilyDrop   |</span><br><span class="line">+---------------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Transactions</strong></p>
+<p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
+<p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
+<p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
+<hr>
+<p><strong>Indexing SST Files for Better Lookup Performance</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">                                file 1                              file 2</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">level 1:                     | 100, 200 |                        | 300, 400 |</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">                                </span><br><span class="line">           file 1   file 2    file 3    file 4     file 5     file 6     file 7     file 8</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">level 2: | 40, 50 | 60, 70 | 95, 110 | 150, 160 | 210, 230 | 290, 300 | 310, 320 | 410, 450 |</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">```         </span><br><span class="line"></span><br><span class="line">***</span><br><span class="line"></span><br><span class="line">**Merge Operator Implementation**</span><br><span class="line"></span><br><span class="line">*RocksDB Data Model*</span><br><span class="line"></span><br><span class="line">RocksDB is a versioned key-value store.</span><br><span class="line"></span><br><span class="line">Every change to the db is globally ordered and assigned a monotonically increasing sequence number.</span><br><span class="line"></span><br><span class="line">For each key, RocksDB keeps the history of operations.</span><br><span class="line"></span><br><span class="line">A key (K) that experienced n changes, looks like this logically</span><br></pre></td></tr></table></figure>
+<p>K:   OP1   OP2   OP3   …   OPn<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">*Get*</span><br><span class="line"></span><br><span class="line">Get returns the state of a key at a specific time.</span><br></pre></td></tr></table></figure></p>
+<p>K:   OP1    OP2   OP3   ….   OPk  …. OPn<br>                            ^<br>                            |<br>                         Get.seq<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Suppose `OPk` is the most recent operation that&apos;s visible to Get</span><br></pre></td></tr></table></figure></p>
+<p>k = max(i) {seq(OPi) &lt;= Get.seq}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>K:   OP1    OP2   OP3   ….    OPk  …. OPn<br>            Put  Merge  Merge  Merge<br>                                 ^<br>                                 |<br>                              Get.seq<br>             ——————–&gt;<br>```             </p>
+<hr>
+<p><strong>Performance</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Index</th>
+<th style="text-align:center">Key Size</th>
+<th style="text-align:center">Disable WAL</th>
+<th style="text-align:center">Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:center">1024 <em> 1024 </em> 64</td>
+<td style="text-align:center">false</td>
+<td style="text-align:center">198,285</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:center">1024 <em> 1024 </em> 64</td>
+<td style="text-align:center">true</td>
+<td style="text-align:center">178,082</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>FAQ</strong></p>
+<ol>
+<li><p>If my process crashes, can it corrupt the database?</p>
+<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
+</li>
+<li><p>Does RocksDB throw exceptions?</p>
+<p><code>No, RocksDB returns Status to indicate any error.</code></p>
+</li>
+<li><p>How to know the number of keys stored in a RocksDB database?</p>
+<p><code>Use GetIntProperty to obtain an estimated number of keys stored in a column family, or use GetAggregatedIntProperty to obtain an estimated number of keys stored in the whole RocksDB database.</code></p>
+</li>
+<li><p>Can I write to RocksDB using multiple processes?</p>
+<p><code>No RocksDB support multi-process read only process without writing the database.</code></p>
+</li>
+<li><p>What’s the maximum key and value sizes supported?</p>
+<p><code>RocksDB is not designed for large keys. The maximum recommended sizes for key and value are 8MB and 3GB respectively.</code> </p>
+</li>
+<li><p>What’s the fastest way to load data into RocksDB?</p>
+<p><code>A fast way to direct insert data to the DB</code> </p>
+<ul>
+<li>using single writer thread and insert in sorted order</li>
+<li>batch hundreds of keys into one write batch</li>
+<li>use vector memtable</li>
+<li>make sure options.max_background_flushes is at least 4</li>
+<li>before inserting the data, disable automatic compaction</li>
+</ul>
+</li>
+<li><p>Is block_size before compression , or after?</p>
+<p><code>block_size is for size before compression.</code></p>
+</li>
+<li><p>Is it safe to directly copy an open RocksDB instance?</p>
+<p><code>No, unless the RocksDB instance is opened in read-only mode.</code></p>
+</li>
+<li><p>Can I open RocksDB with a different compression type and still read old data?    </p>
+<p><code>Rocksdb stored the compression information in each SST file and performs decompression accordingly, you can change the compression and the db will still be able to read existing files.</code> </p>
+</li>
+<li><p>If I delete a column family, and I didn’t yet delete the column family handle, can I still use it to access the data?</p>
+<p><code>DropColumnFamily only marks the specified column family as dropped, and it will not be dropped until its reference count goes to zero and marked as dropped.</code></p>
+</li>
+<li><p>Does RocksDB support replication?</p>
+<p><code>RocksDB does not directly support replication.</code></p>
+</li>
+<li><p>How much resource does an iterator hold and when will these resource be released?</p>
+<p><code>Iterators hold both data blocks and memtables in memory.</code></p>
+</li>
+<li><p>Are bloom filter blocks of SST files always loaded to memory, or can they be loaded from disk?</p>
+<p><code>When cache_index_and_filter_blocks is set to true, then bloom filters and index block will be loaded into a LRU cache only when related Get() requests are issued. In the other case , then RocksDB will try to keep the index block and bloom filter in memory up to max_open_files number of SST files.</code></p>
+</li>
+</ol>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
+<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/live/psychology/">2016-06-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/12/live/psychology/">Psychology</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Psychology"><a href="#Psychology" class="headerlink" title="Psychology"></a>Psychology</h3><p><strong>我们都有成为恶魔的潜在可能</strong></p>
+<p>在心理学史上最著名的具有争议性的实验，是1971年斯坦福大学的监狱实验。它从微观上展现出社会环境会怎样影响人的行为。由心理学家Philip Zimbardo领导的研究者们，在斯坦福的心理大楼的地下室设立了一个模拟监狱，并且挑选了24名大学生（没有犯罪记录以及被视为心理健康）去扮演囚犯和监狱的警卫。然后研究人员通过使用隐蔽摄像头观察囚犯（必须每天24小时留在监狱里）还有狱警（每8小时轮班）。</p>
+<p>实验原本打算持续两周，但因为狱警的虐待行为，实验在实验的第六天就被迫中止——有时候他们甚至让囚犯遭受心理折磨——从囚犯展现出极度的情绪紧张和焦虑可以看出。</p>
+<p>“狱警对囚犯的攻击升级，让他们脱得赤裸裸的，把袋子套在他们头上，最后强迫他们做一些让人羞辱的关于性的行为，”Zimbardo这样对《美国科学家》说。“6天之后我不得不结束实验因为这个实验实在是失控了——除了担心警卫会怎么对待囚犯之外，我晚上都睡不着觉。”</p>
+<hr>
+<p><strong>我们没有注意到在我们的前方正在发生什么</strong></p>
+<p>试想一下，你知道你周围将会发生什么事吗？你可能没有像你认为的那样保持清醒。在1998年，哈佛大学和肯特州立大学针对大学里的路人展开关于人们对即时环境的警觉程度。在实验中，一个演员向路人迎面走来，然后向他问路。当路人向演员指示方向的时候，有两个人拿着一扇大木门从演员和路人之间经过，在几秒内完全阻挡了他们的视线。在那段时间内，本来的演员会替换成另一个演员，不仅他们的身高、体格不同，连衣着、发型还有声线都不一样。超过一半的被试都没有注意到这个替换改变。</p>
+<p>这个实验是最先阐明“变化视盲”的现象的实验之一，它仅仅向我们展示了对于现有提供的视觉场景，我们是非常选择性地接受——那似乎显示出我们比想象中还要依赖我们的记忆和模式识别。</p>
+<hr>
+<p><strong>延迟满足很困难——但如果延迟满足，我们会更成功</strong></p>
+<p>斯坦福在19世纪60年代末有一个很著名的实验，是测试学前儿童的抗拒即时满足的的诱惑的能力。这个实验引申出很多关于意志力和自制力的一些很有力的观点。在这个实验中，4岁的孩子们进入到一个房间里，在他们面前的事放在碟子上的一块棉花糖。研究人员告诉他们要不就把棉花糖吃掉，要不就等15分钟后研究人员回来，他们会获得两块棉花糖。</p>
+<p>虽然大部分的孩子都说他们会等，但是他们很多都难以抗拒面前的吸引然后屈服了——在研究人员回来之前就把棉花糖吃了，这里有《时代》的跟踪报道。成功延迟整整15分钟的孩子一般的采取了回避策略，例如别过头去或者盖着自己的眼睛。孩子们的行为意义很深远：能够延迟满足的孩子在青年时期很少会过于肥胖、有毒瘾或其他行为问题，他们将来的生活也会更成功。</p>
+<hr>
+<p><strong>我们可能有非常矛盾的道德冲动体验</strong></p>
+<p>耶鲁大学的心理学家 Stanley Milgram 在1961年进行了一个相当令人惊恐的著名实验，是关于人们当被要求伤害他人的时候，内心关于个人道德和服从权威的想法，进行了激烈的斗争。</p>
+<p>Milgram希望通过进行这个实验，可以在二战这个灾难后深刻理解纳粹战犯可能保有的永不可饶恕的行为。为了达到研究目的，他共同测试一对被试，一个担当“老师”，另一个担当“学生”。如果学生答错问题，老师被要求对学生进行电击（学生大概是坐在对面的房间，但实际上他不会受电击）。取而代之，Milgram会播放一些喊叫声，听起来就像是那个学生处于痛苦之中。假若那个“老师”在研究的压迫中表达出希望停止电击的意愿，实验人员会促使他继续下去。在第一次的实验中，百分之65的被试执行了最痛苦的、最后的450伏电击（标记为“XXX”）——即使许多被试明显处于有压力的状态，对于继续进行电击也感到不自在。</p>
+<p>尽管这个研究被普遍认定为对权威盲目服从的警告，《科学美国人》最近再次提起这个研究，并主张这个实验结果更倾向于暗示深刻的道德矛盾。</p>
+<p>“人类的道德自然包括移情的倾向，仁慈、友善地对待我们的同胞亲属和群组成员，再加上一种排外的倾向，残暴、恶毒第对待其他部落的人，”记者 Michael Shermer如此写道，“电击实验所反映的并不是人们的盲目服从，更多的是植根于人们心中的矛盾的道德倾向。”</p>
+<p>近日，一些评论者也对Milgram的研究方法提出质疑，其中一位评论家就特别提到，在耶鲁大学进行的实验记录表明百分之60的被试实际上违抗执行最高电压的命令。</p>
+<hr>
+<p><strong>我们很容易会因权力而贪污腐败</strong></p>
+<p>事实上，那些有权力的人有时候会对他人呈现出权力感和无礼感，这背后也蕴含着心理学原理。2003年，一个发表在《心理学评论》杂志上的研究里，学生三人一组并且共同写作一篇短论文。两个学生被指示去写论文，而第三个是负责评估这篇论文，然后决定那两个学生分别会获得多少钱。在合作的中段，研究人员拿来了一碟饼干，一共五个。虽然通常最后的那一块都没人吃，但是“老大”几乎总是把第四块饼干吃掉——还要吃得拖泥带水，嘴巴大张。</p>
+<p>“当研究人员在科学实验中向被试给予力量，他们更有可能用可能不恰当的方式，和他人有身体上的接触，或者用更直接的方式和别人调情，做出有风险的抉择和赌博，在谈判中首先提出报价，说出心中所想，还有像甜怪饼[1]那样吃饼干，在下巴和胸前都是饼干的碎屑，”心理学家Dacher Keltner，研究的领导人之一，在加利福尼亚大学伯克利分校的更大善意科学中心的杂志上这样写道。</p>
+<hr>
+<p><strong>我们在社交群体里寻找忠诚，而这样很容易被群体间的矛盾吸引</strong></p>
+<p>这个在20世纪50年代的社会心理学经典实验，在心理学基础上有希望、有可能解释为何社交群体和国家会卷入与其他国家的矛盾中——以及他们可以学习怎样再次合作。</p>
+<p>研究的领导者Muzafer Sherif 要求每组为11个小男孩的两个小组（他们都是11岁）去俄克拉何马州的穴州立公园进行“夏令营”。这两个小组的人（分别命名为“鹰”和“响尾蛇”）分别花了一个星期从分散的，变为一起游戏和建立友谊，同时对另外一组的存在一无所知。当这两个小组整合在一起，男孩们开始互相以名字称呼对方，而当他们开始在各种游戏中相互较量，更多矛盾随之出现，最终这两个组都拒绝和对方一起吃饭。在研究的下一个阶段，Sherif 设计了一个实验，通过让他们一起享受悠闲的活动（结果不成功）然后让他们一起解决难题，去尝试让他们和解。最后他们开始缓和了冲突。</p>
+<hr>
+<p><strong>我们只需要一样东西让我们快乐</strong></p>
+<p>持续了75年的哈佛授权研究——是历史上进行过的最具广度和深度的实验之一——伴随着268位来自1938~1940届的哈佛男大学生（现在他们正好迈入他们的90岁）大约75年，定期收集他们生活的各种层面的数据。普适的结论？爱真的就是一切，至少当我们要决定长时的幸福和生活的满足感的时候，它是如此。</p>
+<p>研究的长期负责人，精神病学家George Vaillant，和赫芬顿邮报说到有两种幸福：“一种是爱。另外一种是寻找一个适合生活的方法，不会把爱拒之门外。”举个例子，一个被试开始研究的时候他在未来所有方面的稳定性都是最低分的，然后他之前也尝试过自杀。但是在他生命最后的日子，他是最幸福的人之一。为什么？就像Vaillant所解释的那样，“他用他的一生去寻找爱。”</p>
+<hr>
+<p><strong>拥有强烈的自尊心和社会地位的时候，我们会有更好发展</strong></p>
+<p>获得名声和成功不仅仅是提高自我——这也可以是长寿的关键，这是根据著名的奥斯卡得奖的研究得出的结论。多伦多新宁医院、妇女大学健康科学中心的研究人员发现奥斯卡获奖演员和导演比那些被提名却没被选上的人更趋于长寿，获奖的男女演员比落选的同行要多活近4年。</p>
+<p>“我们不是说你获得奥斯卡奖就可以长寿，”Donald Redelmeier，研究的领导作者，对ABC新闻这样说，“不然人们就该去上表演课程。我们主要的结论仅仅是社会因素是很重要的……它表明个体内部自尊对于健康，以及保健都是很重要的方面。”</p>
+<hr>
+<p><strong>我们一直尝试为我们的经历辩护，让这些经历对我们有意义</strong></p>
+<p>每个以大一新生的身份参加心理101编号课程[2]的人，都对认知失调很熟悉——一个主张人类有避免心理矛盾、不和谐现象或者互斥理念的理论。在一个被广泛引用的1959年进行的实验，心理学家Leon Festinger要求被试去完成一系列很枯燥无聊的实验任务，就像是在木门把手上转动钉子，持续一个钟头。他们最后获得1美元或者20美元，然后他们要去告诉那些“等待中的被试者”这项任务很有趣。那些只收获1美元的被试者会说谎，把实验评价得很有趣，比那些收获20美元的被试者的评价还要高。结论？那些获得更多钱的被试者，感到自己有充分理由去用1个小时执行这个死板的任务，但是那些只获得1美金的被试者则感到自己需要为自己浪费了的时间做解释（还有减少自己的信念和行为之间的失调程度），于是他们骗说这个活动很有趣。</p>
+<p>换而言之，我们经常让自己撒谎去让这个世界看起来更符合逻辑、更和谐。</p>
+<hr>
+<p><strong>我们十分认同刻板印象</strong></p>
+<p>在社交群组的基础上，对不同种群的人抱有刻板印象，进行种族划分或等级分类是我们几乎都会做的事，即使我们尽力不这样做——刻板印象可以使我们对整个群体得出不平等和有潜在危害的结论。纽约大学NYU心理学家John Bargh的对于“社会行为的自动化”揭示，我们经常依据无意识的刻板印象判断一个人——而我们禁不住这样想，但行为还是可以改变的。我们也倾向于接受在社交群体里我们是其中一人的刻板印象。在一个研究中， Bargh发现，还原不清晰的关于年老的单词——“Florida,”（佛罗里达州）[3] “helpless” （无助的）和”wrinkled” （有皱纹的）的这个任务的被试，实验之后相对于其他对照组——还原不清晰的单词但不是关于年老的意思而言，在走廊里会走得极度的慢。Bargh在另外两个比较研究重复了这个发现，这有力证明了刻板印象基于种族和礼貌。</p>
+<p>“刻板印象是一些太过火的分类方式，” Bargh对今日心理学这样说，“当我们采用刻板印象，我们会以我们面前的人的性别、年龄、肤色分类，我们的意识会根据这些信息反应过来，认为他们不友善，愚蠢，动作缓慢，弱小。这些品质不是单看外表就能断定的，这样并不反映出真实情况。”</p>
+<hr>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
+<p><code>TensorFlow</code> 是一个编程系统，使用图来表示计算任务。图中的节点被称之为 op 。</p>
+<p>一个 op 获得 0 个或多个 <code>Tensor</code> 执行计算，产生 0 个或多个 <code>Tensor</code>。每个 <code>Tensor</code> 是一个类型化的多维数组。一个 TensorFlow 图描述了计算的过程. 为了进行计算, 图必须在 <code>会话</code> 里被启动。<code>会话</code> 将图的 op  发到 诸如 CPU 或 GPU 上。</p>
+<p><strong>Basic Concepts</strong></p>
+<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
+<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
+<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
+<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
+<p>核(<code>kernel</code>)</p>
+<p>kernel是operation在某种设备上的具体实现。</p>
+<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
+<p>边(<code>edge</code>)  </p>
+<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
+<p>特殊边，又称作控制依赖，(control dependencies) </p>
+<p>会话(<code>session</code>)</p>
+<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
+<p>在会话中添加节点和边，形成一张图，然后执行。</p>
+<p>变量(<code>variables</code>)</p>
+<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
+<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
+<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
+<hr>
+<p><strong>Using</strong></p>
+<p>构建图的第一步, 是创建源 op 。源 op 不需要任何输入，源 op 的输出 被传递给其它 op 做运算。</p>
+<p>TensorFlow Python 库有一个默认图 (default graph), op 构造器可以为其增加节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Create a Constant op that produces a 1x2 matrix.  The op is</span><br><span class="line"># added as a node to the default graph.</span><br><span class="line">#</span><br><span class="line"># The value returned by the constructor represents the output</span><br><span class="line"># of the Constant op.</span><br><span class="line">matrix1 = tf.constant([[3., 3.]])</span><br><span class="line"></span><br><span class="line"># Create another Constant that produces a 2x1 matrix.</span><br><span class="line">matrix2 = tf.constant([[2.],[2.]])</span><br><span class="line"></span><br><span class="line"># Create a Matmul op that takes &apos;matrix1&apos; and &apos;matrix2&apos; as inputs.</span><br><span class="line"># The returned value, &apos;product&apos;, represents the result of the matrix</span><br><span class="line"># multiplication.</span><br><span class="line">product = tf.matmul(matrix1, matrix2)</span><br></pre></td></tr></table></figure>
+<p>默认图现在有三个节点, 两个 constant() op, 和一个 matmul() op。<br>为了真正进行矩阵相乘运算, 并得到矩阵乘法的结果, 必须在<code>会话</code>里启动这个图。</p>
+<p>启动图的第一步是创建一个 <code>Session</code> , 如果无任何创建参数, 会话构造器 将启动默认图。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Launch the default graph.</span><br><span class="line">sess = tf.Session()</span><br><span class="line"></span><br><span class="line"># To run the matmul op we call the session &apos;run()&apos; method, passing &apos;product&apos;</span><br><span class="line"># which represents the output of the matmul op.  This indicates to the call</span><br><span class="line"># that we want to get the output of the matmul op back.</span><br><span class="line">#</span><br><span class="line"># All inputs needed by the op are run automatically by the session.  They</span><br><span class="line"># typically are run in parallel.</span><br><span class="line">#</span><br><span class="line"># The call &apos;run(product)&apos; thus causes the execution of three ops in the</span><br><span class="line"># graph: the two constants and matmul.</span><br><span class="line">#</span><br><span class="line"># The output of the op is returned in &apos;result&apos; as a numpy `ndarray` object.</span><br><span class="line">result = sess.run(product)</span><br><span class="line">print(result)</span><br><span class="line"># ==&gt; [[ 12.]]</span><br><span class="line"></span><br><span class="line"># Close the Session when we&apos;re done.</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Implementation</strong></p>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
+<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
 </ol>
 
       
@@ -688,41 +1462,47 @@
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Prev</a>
+    <a href="/page/3/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/5/" class="alignright next">Next</a>
+    <a href="/page/5/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -732,7 +1512,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -747,13 +1527,27 @@
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>Mathematics | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="MesosMesos 被定义为一个分布式系统内核。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。
-Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。
+  <meta name="description" content="数学三大危机：
 
-Mesos采用了master/slave结构，maste">
+希帕索斯（Hippasu，米太旁登地方人，公元前5世纪）发现了一个腰为1的等腰直角三角形的斜边（即根号2）永远无法用最简整数比（不可公度比）来表示，从而发现了第一个无理数，推翻了毕达哥拉斯的著名理论。相传当时毕达哥拉斯派的人正在海上，但就因为这一发现而把希帕索斯抛入大海；
+微积分的">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Mathematics"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -54,32 +54,21 @@ Mesos采用了master/slave结构，maste">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-27T10:55:35.000Z"><a href="/2016/04/27/distribution/mesos/">2016-04-27</a></time>
+        <time datetime="2016-11-21T16:00:00.000Z"><a href="/2016/11/22/live/math/">2016-11-22</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">Mathematics</h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h3><p>Mesos 被定义为一个<code>分布式系统内核</code>。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。</p>
-<p>Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。</p>
-<p><img src="resource/mesos/architecture.jpg" alt="Architect"></p>
-<p>Mesos采用了<code>master/slave</code>结构，master做得尽可能地轻量级，其上面所有的元数据可通过各个slave重新注册而进行重构，故很容易通过zookeeper解决该单点故障问题。</p>
-<p>Mesos 基本术语：</p>
+        <p>数学三大危机：</p>
 <ol>
-<li>Mesos Master主要负责管理各个framework和slave，并将slave上的资源分配给各个framework.</li>
-<li>Mesos Slave负责管理本节点上的各个mesos-task，比如：为各个executor分配资源</li>
-<li>Framework Hadoop，Spark等计算框架,通过MesosSchedulerDiver接入Mesos.</li>
-<li>Executor 执行器 Mesos Slave上，用于启动计算框架中的task</li>
-</ol>
-<p>Mesos Master是系统核心，负责管理接入各个framework和 slave 并将slave资源分配给framework.Mesos Slave负责接收并执行来自Mesos Master命令,管理节点上的Mesos Task</p>
-<h4 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h4><p>Reference :</p>
-<ol>
-<li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
+<li>希帕索斯（Hippasu，米太旁登地方人，公元前5世纪）发现了一个腰为1的等腰直角三角形的斜边（即根号2）永远无法用最简整数比（不可公度比）来表示，从而发现了第一个无理数，推翻了毕达哥拉斯的著名理论。相传当时毕达哥拉斯派的人正在海上，但就因为这一发现而把希帕索斯抛入大海；</li>
+<li>微积分的合理性遭到严重质疑，险些要把整个微积分理论推翻；</li>
+<li>罗素悖论：S由一切不是自身元素的集合所组成，那S包含S吗？用通俗一点的话来说，小明有一天说：“我正在撒谎！”问小明到底撒谎还是说实话。罗素悖论的可怕在于，它不像最大序数悖论或最大基数悖论那样涉及集合高深知识，它很简单，却可以轻松摧毁集合理论！</li>
 </ol>
 
       
@@ -87,7 +76,17 @@ Mesos采用了master/slave结构，maste">
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Mathematics/">Mathematics</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/Mathematics/">Mathematics</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -114,7 +113,7 @@ Mesos采用了master/slave结构，maste">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Comentarios</h1>
 
   
       <div id="fb-root"></div>
@@ -128,7 +127,7 @@ Mesos采用了master/slave结构，maste">
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/04/27/distribution/mesos/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/11/22/live/math/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
@@ -137,31 +136,37 @@ Mesos采用了master/slave结构，maste">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -171,7 +176,7 @@ Mesos采用了master/slave结构，maste">
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -186,13 +191,27 @@ Mesos采用了master/slave结构，maste">
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

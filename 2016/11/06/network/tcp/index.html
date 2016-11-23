@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TCP | darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="TCP拥塞控制机制
+拥塞的发生与其不可避免
+拥塞发生的主要原因在于网络能够提供的资源不足以满足用户的需求，这些资源包括缓存空间、链路带宽容量和中间节点的处理能力。由于互联网的设计机制导致其缺乏“接纳控制”能力，因此在网络资源不足时不能限制用户数量，而只能靠降低服务质量来继续为用户服务，也就是“尽力而">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="TCP"/>
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-05T16:00:00.000Z"><a href="/2016/11/06/network/tcp/">2016-11-06</a></time>
+      
+      
+  
+    <h1 class="title">TCP</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>TCP拥塞控制机制</strong></p>
+<p><code>拥塞的发生与其不可避免</code></p>
+<p>拥塞发生的主要原因在于网络能够提供的资源不足以满足用户的需求，这些资源包括缓存空间、链路带宽容量和中间节点的处理能力。由于互联网的设计机制导致其缺乏“接纳控制”能力，因此在网络资源不足时不能限制用户数量，而只能靠降低服务质量来继续为用户服务，也就是“尽力而为”的服务。<br>但是，是不是说只要增加网络资源，就能避免拥塞呢？答案却是否定的！拥塞虽然是由于网络资源的稀缺引起的，但单纯增加资源并不能避免拥塞的发生。例如增加缓存空间到一定程度时，只会加重拥塞，而不是减轻拥塞，这是因为当数据包经过长时间排队完成转发时，它们很可能早已超时，从而引起源端超时重发，而这些数据包还会继续传输到下一路由器，从而浪费网络资源，加重网络拥塞。事实上，缓存空间不足导致的丢包更多的是拥塞的“症状”而非原因。另外，增加链路带宽及提高处理能力也不能解决拥塞问题。<br>例如：我们有四台主机ABCD连接路由器R，所有链路带宽都是1Gbps，如果A和B同时向C以1Gbps的速率发送数据，则路由器R的输入速率为2Gbps，而输出速率只能为1Gbps，从而产生拥塞。避免拥塞的方法只能是控制AB的速率，例如，都是0.5Gbps，但是，这只是一种情况，倘若D也向R发送数据，且速率为1Gbps，那么，我们先前的修正又是不成立的，可见，拥塞其实是一个动态问题，我们没有办法用一个静态方案去解决，从这个意义上来说，拥塞是不可避免的。</p>
+<p><code>流量控制</code></p>
+<p>早期的TCP协议只有基于窗口的流控制（flow control）机制，我们简单介绍一下，并分析其不足。<br>在TCP中，为了实现可靠性，发送方发出一个数据段之后要等待接受方相应的确认信息，而不是直接发送下一个分组。具体的技术是采用滑动窗口，以便通信双方能够充分利用带宽。滑动窗口允许发送方在收到接收方的确认之前发送多个数据段。窗口大小决定了在收到目的地确认之前，一次可以传送的数据段的最大数目。窗口大小越大，主机一次可以传输的数据段就越多。当主机传输窗口大小数目的数据段后，就必须等收到确认，才可以再传下面的数据段。例如，若视窗的大小为 1，则传完数据段后，都必须经过确认，才可以再传下一个数据段；当窗口大小等于3时，发送方可以一次传输3个数据段，等待对方确认后，再传输下面三个数据段。</p>
+<p>窗口的大小在通信双方连接期间是可变的，通信双方可以通过协商动态地修改窗口大小。在TCP的每个确认中，除了指出希望收到的下一个数据段的序列号之外，还包括一个窗口通告，通告中指出了接收方还能再收多少数据段（我们可以把通告看成接收缓冲区大小）。如果通告值增大，窗口大小也相应增大；通告值减小，窗口大小也相应减小。但是我们可以发现，接收端并没有特别合适的方法来判断当前网络是否拥塞，因为它只是被动得接收，不像发送端，当发出一个数据段后，会等待对方得确认信息，如果超时，就可以认为网络已经拥塞了。所以，改变窗口大小的唯一根据，就是接收端缓冲区的大小了。</p>
+<p>流量控制作为接受方管理发送方发送数据的方式，用来防止接受方可用的数据缓存空间的溢出。流控制是一种局部控制机制，其参与者仅仅是发送方和接收方，它只考虑了接收端的接收能力，而没有考虑到网络的传输能力；而拥塞控制则注重于整体，其考虑的是整个网络的传输能力，是一种全局控制机制。正因为流控制的这种局限性，从而导致了拥塞崩溃现象的发生。</p>
+<p><code>重传</code> </p>
+<p>1、一旦收到确认，发送方关闭重发定时器并且将数据片的备份从重发队列中删除。发送方如果在规定的时间内没有收到数据确认，就重传该数据。<br>2、当TCP超时并重传时，它不一定要重传同样的报文段，相反，TCP允许进行重新分组而发送一个较大的报文段，这将有助于提高性能(当然，这个较大的报文段不能够超过接收方声明的MSS)。在协议中这是允许的，因为TCP是使用字节序号而不是报文段序号来进行识别它所要发送的数据和进行确认。<br>3、重发定时器<br>(1)  每一次一个包含数据的包被发送（包括重发），如果该定时器没有运行则启动它，使得它在RTO秒之后超时（按照当前的RTO值）。<br>(2)  当所有的发出数据都被确认之后，关闭该重发定时器。<br>(3)  当接收到一个ACK确认一个新的数据，重新启动该重发定时器，使得它在RTO秒之后超时（按照当前的RTO值）</p>
+<p><code>TCP拥塞控制机制</code></p>
+<p>TCP的拥塞控制由4个核心算法组成：“慢启动”（Slow Start）、“拥塞避免”（Congestion voidance）、“快速重传 ”（Fast Retransmit）、“快速恢复”（Fast Recovery）。具体的流程图可以参见：<a href="http://www.eventhelix.com/RealtimeMantra/Networking/。发送端叫做client，接收端叫做server，每个segment长度为512字节，阻塞窗口长度为cwnd（简化起见，下面以segment为单位），sequence" target="_blank" rel="external">http://www.eventhelix.com/RealtimeMantra/Networking/。发送端叫做client，接收端叫做server，每个segment长度为512字节，阻塞窗口长度为cwnd（简化起见，下面以segment为单位），sequence</a> number为seq_num，acknowledges number为ack_num。通常情况下，TCP每接收到两个segment，发送一个ack。</p>
+<p>－－ 慢启动<br>  早期开发的TCP应用在启动一个连接时会向网络中发送大量的数据包，这样很容易导致路由器缓存空间耗尽，网络发生拥塞，使得TCP连接的吞吐量急剧下降。由于TCP源端一开始并不知道网络资源当前的利用状况，因此新建立的TCP连接不能一开始就发送大量数据，而只能逐步增加每次发送的数据量，以避免上述现象的发生，这里有一个“学习”的过程。<br>假设client要发送5120字节到server，慢启动过程如下：<br>1.初始状态，cwnd=1,seq_num=1；client发送第一个segment;<br>2.server接收到512字节（一个segment），回应ack_num=513;<br>3.client接收ack(513)，cwnd＝1+1=2;现在可以一次发送2个数据段而不必等待ack<br>4.server接收到2个segment，回应ack_num=513+512*2=1537<br>5.client接收ack(1537)，cwnd=2+1;一次发送3个数据段<br>6.server接收到3个segment，回应2个ack，分别为ack_num=1537+1024=2561和ack_num=2561+512=3073<br>7.client接收ack(2561)和ack(3073),cwnd=3+2=5；一次可以发送5个数据段，但是只用4个就满足要求了<br>8.server接收到4个segment，回应2个ack，分别为4097,5121<br>9.已经发送5120字节，任务完成！</p>
+<p>总结一下：<br>当建立新的TCP连接时，拥塞窗口（congestion window，cwnd）初始化为一个数据包大小。源端按cwnd大小发送数据，每收到一个ACK确认，cwnd就增加一个数据包发送量。</p>
+<p>－－ 拥塞避免<br>  可以想象，如果按上述慢启动的逻辑继续下去而不加任何控制的话，必然会发生拥塞，引入一个慢启动阈值ssthresh的概念，当cwnd&lt;ssthresh的时候，tcp处于慢启动状态，否则，进入拥塞避免阶段。通常，ssthresh初始化为<br>64 Kbytes。<br>  当cwnd = 64947 + 512 = 65459，进入拥塞避免阶段，假设此时seq_num = _101024：<br>  1.client一次发送cwnd，但是先考虑头两个segment<br>  2.server回应ack_num = 102048<br>  3.client接收到ack(102048),cwnd = 65459 + [(512 * 512) /65459] = 65459 + 4 = 65463，也就是说，每接到一个ack，cwnd只增加4个字节。<br>  4.client发送一个segment，并开启ack timer,等待server对这个segment的ack，如果超时，则认为网络已经处于拥塞状态，则重设慢启动阀值ssthresh=当前cwnd/2＝65463/2=32731，并且，立刻把cwnd设为1，很极端的处理！<br>  5.此时，cwnd&lt;ssthresh，所以，恢复到慢启动状态。</p>
+<p>总结一下：<br>如果当前cwnd达到慢启动阀值，则试探性的发送一个segment，如果server超时未响应，TCP认为网络能力下降，必须降低慢启动阀值，同时，为了避免形势恶化，干脆采取极端措施，把发送窗口降为1，个人感觉应该有更好的方法。</p>
+<p>－－ 快速重传和快速恢复<br>  前面讲过标准的重传，client会等待RTO时间再重传，但有时候，不必等这么久也可以判断需要重传，例如：client一次发送8个segment，seq_num起始值为100000，但是由于网络原因，100512丢失，其他的正常，则server会响应4个ack(100512)(为什么呢，tcp会把接收到的其他segment缓存起来，ack_num必须是连续的)，这时候，client接收到四个重复的ack，它完全有理由判断100512丢失，进而重传，而不必傻等RTO时间了。这就是快速重传。<br>  那么，什么是快速恢复呢？我们通常认为client接收到3个重复的ack后，就会开始快速重传，但是，如果还有更多的重复ack呢，如何处理？这就是快速恢复要做的，事实上，我们可以把快速恢复看作是快速重传的后续处理，它不是一种单独存在的形态。</p>
+<p>以下是具体的流程：<br>假设此时cwnd=70000,client发送4096字节到server,也就是8个segment，起始seq_num = _100000：</p>
+<ol>
+<li>client发送seq_num = _100000</li>
+<li>seq_num =100512的segment丢失</li>
+<li>client发送seq_num = _101024</li>
+<li>server接收到两个segment，它意识到100512丢失，先把收到的这两个segment缓存起来</li>
+<li>server回应一个ack(100512),表示它还期待这个segment</li>
+<li>client发送seq_num = _101536</li>
+<li>server接收到一个segment，它判断不是100512，依旧把收到的这个segment缓存起来，并回应ack(100512)</li>
+<li>以下同6、7,直到client收到3个ack(100512)，进入快速重发阶段：</li>
+<li>重设慢启动阀值ssthresh=当前cwnd/2＝70000/2=35000</li>
+<li><p>client发送seq_num = 100512</p>
+<p>以下，进入快速恢复阶段：<br>11.重设cwnd = ssthresh + 3 segments =35000 + 3<em>512 = 36536，之所以要加3，是因为我们已经接收到3个ack(100512)了，根据前面说的，每接收到一个ack，cwnd加1<br>12.client接收到第四个、第五个ack(100512)，cwnd=36536+2</em>512=37560<br>13.server接收到100512,响应ack_num = _104096<br>14.此时，cwnd&gt;ssthresh，进入拥塞避免阶段。</p>
+</li>
+</ol>
+<p>【思考】：为什么通常clieng每接收到一个ack，会把cwnd增加一个segment呢？<br> 这是基于“管道”模型（pipe model）的“数据包守恒”的原则（conservation of packets principle），即同一时刻在网络中传输的数据包数量是恒定的，只有当“旧”数据包离开网络后，才能发送“新”数据包进入网络。如果发送方收到一个ACK，则认为已经有一个数据包离开了网络，于是将拥塞窗口加1。如果“数据包守恒”原则能够得到严格遵守，那么网络中将很少会发生拥塞；本质上，拥塞控制的目的就是找到违反该原则的地方并进行修正。</p>
+<p>五.联想<br>  想想看，能不能把TCP解决拥塞的方法应用到交通拥塞呢？<br>  我们有两个原则：一是拥塞不可避免，单纯增加资源并不能避免拥塞的发生，只能用动态的方法加以解决；二是数据包守恒原则。政府花费很大资金修路，并不能避免堵车，只能从源头控制，例如首先限制车辆进入主路，根据实际情况，再慢慢增加每一个路口的车流量，但是，当达到一个阀值，增加速度要放缓，并不时探测整个主路的拥堵情况，如果情况危急，立刻封闭半个路口，并将车流量降到最低，也就是重新回复到慢启动状态。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Network/">Network</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Network/">Network</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comentarios</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/11/06/network/tcp/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categorías</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
+  
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>4</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Etiquetas</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

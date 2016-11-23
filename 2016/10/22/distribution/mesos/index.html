@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Mesos | darion.johannes.yaphet</title>
+  <meta name="author" content="Darion Yaphet">
+  
+  <meta name="description" content="Mesos试想，可否整合数据中心中的所有资源，并将它们放在一个大的虚拟池里，代替单独的物理服务器；然后开放诸如CPU、内存和I/O这些基本资源而不是虚拟机？
+同样，可否把应用程序拆分成小的、隔离的任务单位，从而根据数据中心应用的需求，从虚拟数据中心池中动态分配任务资源？就像操作系统将PC的处理器和R">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Mesos"/>
+  <meta property="og:site_name" content="darion.johannes.yaphet"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="darion.johannes.yaphet" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">darion.johannes.yaphet</a></h1>
+  <h2><a href="/">long is the way and hard  that out of Hell leads up to light</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-21T16:00:00.000Z"><a href="/2016/10/22/distribution/mesos/">2016-10-22</a></time>
+      
+      
+  
+    <h1 class="title">Mesos</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h3><p><em>试想，可否整合数据中心中的所有资源，并将它们放在一个大的虚拟池里，代替单独的物理服务器；然后开放诸如CPU、内存和I/O这些基本资源而不是虚拟机？</em></p>
+<p><em>同样，可否把应用程序拆分成小的、隔离的任务单位，从而根据数据中心应用的需求，从虚拟数据中心池中动态分配任务资源？就像操作系统将PC的处理器和RAM放入资源池，使其可以为不同的进程协调分配和释放资源。</em></p>
+<p>进一步讲，我们可以把Mesos作为操作系统内核，然后将数据中心看为PC。这也是正是我想说的：<strong>Mesos正在改变数据中心，它让真正的SDDC(软件定义数据中心)成为现实</strong>。</p>
+<hr>
+<p>Mesos 被定义为一个<code>分布式系统内核</code>。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。</p>
+<p>Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。</p>
+<p><img src="resource/mesos/architecture.jpg" alt="Architect"></p>
+<p>Mesos实现了两级调度架构，第一级调度是Master的守护进程，管理Mesos集群中所有节点上运行的Slave守护进程。第二级调度由被称作Framework的组件组成。Framework包括调度器（Scheduler）和执行器（Executor）进程，其中每个节点上都会运行执行器。Mesos能和不同类型的Framework通信，每种Framework由相应的应用集群管理。</p>
+<p>Mesos采用了<code>master/slave</code>结构，master做得尽可能地轻量级，其上面所有的元数据可通过各个slave重新注册而进行重构，故很容易通过zookeeper解决该单点故障问题。</p>
+<p>Mesos 基本术语：</p>
+<ol>
+<li>Mesos Master : 主要负责管理各个Framework和Slave，并将slave上的资源分配给各个Framework</li>
+<li>Mesos Slave : 负责管理本节点上的各个Mesos Task，比如：为各个Executor分配资源</li>
+<li>Framework : Hadoop，Spark等计算框架,通过MesosSchedulerDiver接入Mesos</li>
+<li>Executor : 执行器 Mesos Slave上，用于启动计算框架中的Task</li>
+</ol>
+<p><code>Mesos Master</code> 协调全部的Slave，并确定每个节点的可用资源，<br>聚合计算跨节点的所有可用资源的报告，然后向注册到<code>Master</code>的<code>Framework</code>（作为Master的客户端）发出资源邀约。</p>
+<p><code>Framework</code>可以根据应用程序的需求，选择接受或拒绝来自<code>Master</code>的资源邀约。一旦接受邀约，<code>Master</code>即协调<code>Framework</code>和<code>Slave</code>，调度参与节点上任务，并在容器中执行，以使多种类型的任务，比如Hadoop和Cassandra，可以在同一个节点上同时运行。</p>
+<p><img src="resource/mesos/mesos-framework-example.jpg" alt="Mesos Framework Example"></p>
+<ol>
+<li>Slave 1向Master汇报其空闲资源：4个CPU、4GB内存。</li>
+<li>Master触发分配策略模块，得到的反馈是Framework 1要请求全部可用资源。</li>
+<li>Master向Framework 1发送资源邀约，描述了Slave 1上的可用资源。</li>
+<li>Framework的调度器（Scheduler）响应Master，需要在Slave上运行两个任务，第一个任务分配<2 1="" cpus,="" gb="" ram="">资源，第二个任务分配<1 2="" cpus,="" gb="" ram="">资源。</1></2></li>
+<li>Master向Slave下发任务，分配适当的资源给Framework的任务执行器（Executor）,接下来由执行器启动这两个任务（如图中虚线框所示）。</li>
+</ol>
+<hr>
+<p><strong>资源分配</strong></p>
+<p>资源邀约，即由Master向注册其上的Framework发送资源邀约。每次资源邀约包含一份Slave节点上可用的CPU、RAM等资源的列表。 Master提供这些资源给它的Framework，是基于分配策略的。</p>
+<p>分配策略对所有的Framework普遍适用，同时适用于特定的Framework。 Framework可以拒绝资源邀约，如果它不满足要求，若此，资源邀约随即可以发给其他Framework。 </p>
+<p>由Mesos管理的应用程序通常运行短周期的任务，因此这样可以快速释放资源，缓解Framework的资源饥饿； Slave定期向Master报告其可用资源，以便Master能够不断产生新的资源邀约。每个Fraamework过滤不满足要求的资源邀约、Master主动废除给定周期内一直没有被接受的邀约。</p>
+<p>Mesos实现了公平共享和严格优先级分配模块， 确保大部分用例的最佳资源共享。</p>
+<p>如何作出资源邀约的决定是由资源分配模块实现的，该模块存在于Master之中。资源分配模块确定Framework接受资源邀约的顺序，与此同时，确保在本性贪婪的Framework之间公平地共享资源。</p>
+<p>在同质环境中，使用最多的公平份额分配算法之一是最大最小公平算法（max-min fairness）。最大最小公平算法算法将最小的资源分配最大化，并将其提供给用户，确保每个用户都能获得公平的资源份额，以满足其需求所需的资源。</p>
+<p>然而，在跨数据中心调度资源并且是异构的资源需求时，资源分配将会更加困难。默认情况下，Mesos包括一个严格优先级的资源分配模块和一个改良的公平份额资源分配模块。严格优先级模块实现的算法给定Framework的优先级，使其总是接收并接受足以满足其任务要求的资源邀约。这保证了关键应用在Mesos中限制动态资源份额上的开销，但是会潜在其他Framework饥饿的情况。</p>
+<p>由于这些原因，大多数用户默认使用DRF（主导资源公平算法 Dominant Resource Fairness），这是Mesos中更适合异质环境的改良公平份额算法。</p>
+<p>DRF的目标是确保每一个用户，即Mesos中的Framework，在异质环境中能够接收到其最需资源的公平份额。Framework的主导资源是其最需的资源类型（CPU、内存等），在资源邀约中以可用资源百分比的形式展示。</p>
+<hr>
+<p><strong>容错</strong></p>
+<p>Mesos的优势之一便是将容错设计到架构之中，并以可扩展的分布式系统的方式来实现。</p>
+<p><code>Master</code></p>
+<p>Mesos使用热备份来实现 Master 节点集合。一个Master节点与多个备用节点运行在同一集群中，并由Zookeeper来监控。Zookeeper会监控Master集群中所有的节点，并在Master节点发生故障时管理新Master的选举。</p>
+<p>Mesos的状态信息实际上驻留在Framework调度器和Slave节点集合之中。当一个新的Master当选后，Zookeeper会通知Framework和选举后的Slave节点集合，以便使其在新的Master上注册。彼时，新的 Master可以根据Framework和Slave节点集合发送过来的信息，重建内部状态。</p>
+<p><code>Slave</code></p>
+<p>当Slave节点上的进程失败时，可以让执行器/任务继续运行，并为那个Slave进程重新连接那台Slave节点上运行的执行器/任务。当任务执行时，Slave会将任务的监测点元数据存入本地磁盘。</p>
+<p>如果Slave进程失败，任务会继续运行，当Master重新启动Slave进程后，因为此时没有可以响应的消息，所以重新启动的Slave进程会使用检查点数据来恢复状态，并重新与执行器/任务连接。</p>
+<p><code>Framework调度器</code></p>
+<p>Framework调度器的容错是通过Framework将调度器注册2份或者更多份到Master来实现。当一个调度器发生故障时，Master会通知另一个调度来接管。</p>
+<p><code>执行器/任务</code></p>
+<p>Master会向分配任务的Framework调度器汇报执行器/任务失败，并允许调度器根据其配置策略在任务失败时做出相应的处理。</p>
+<p>通常情况下，Framework在接收并接受来自Master的相应的资源邀约后，会在新的Slave节点上重新启动任务。</p>
+<hr>
+<h4 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h4><p>Reference :</p>
+<ol>
+<li><a href="http://mesos.apache.org/" target="_blank" rel="external">Apache Mesos</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-01" target="_blank" rel="external">深入浅出Mesos（一）：为软件定义数据中心而生的操作系统</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-02" target="_blank" rel="external">深入浅出Mesos（二）：Mesos的体系结构和工作流</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-03" target="_blank" rel="external">深入浅出Mesos（三）：持久化存储和容错</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-04" target="_blank" rel="external">深入浅出Mesos（四）：Mesos的资源分配</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-05" target="_blank" rel="external">深入浅出Mesos（五）：成功的开源社区</a></li>
+<li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
+<li><a href="https://www.wired.com/2013/03/google-borg-twitter-mesos/" target="_blank" rel="external">Return of the Borg: How Twitter Rebuilt Google’s Secret Weapon</a><br>10.<a href="https://people.eecs.berkeley.edu/~alig/papers/drf.pdf" target="_blank" rel="external">Dominant Resource Fairness: Fair Allocation of Multiple Resource Types</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Distributed/">Distributed</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Mesos/">Mesos</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comentarios</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/10/22/distribution/mesos/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Categorías</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
+  
+    <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
+  
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
+  
+    <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
+  
+    <li><a href="/categories/live/">live</a><small>4</small></li>
+  
+    <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Etiquetas</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
+  
+    <li><a href="/tags/Alluxio/">Alluxio</a><small>1</small></li>
+  
+    <li><a href="/tags/Clojure/">Clojure</a><small>1</small></li>
+  
+    <li><a href="/tags/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/tags/Hadoop/">Hadoop</a><small>5</small></li>
+  
+    <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
+  
+    <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
+  
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
+    <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
+  
+    <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
+  
+    <li><a href="/tags/Scala/">Scala</a><small>1</small></li>
+  
+    <li><a href="/tags/Streaming-Process/">Streaming Process</a><small>1</small></li>
+  
+    <li><a href="/tags/TensorFlow/">TensorFlow</a><small>1</small></li>
+  
+    <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
+  
+    <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
+  
+    <li><a href="/tags/game/">game</a><small>1</small></li>
+  
+    <li><a href="/tags/spark/">spark</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Darion Yaphet
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

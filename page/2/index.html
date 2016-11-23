@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 2 | darion.johannes.yaphet</title>
+  <title>Página 2 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,52 +50,79 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-08-28T11:44:39.000Z"><a href="/2016/08/28/algorithms/Kosaraju/">2016-08-28</a></time>
+        <time datetime="2016-10-21T16:00:00.000Z"><a href="/2016/10/22/distribution/mesos/">2016-10-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/28/algorithms/Kosaraju/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-26T16:00:00.000Z"><a href="/2016/08/27/algorithms/Graph/">2016-08-27</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/27/algorithms/Graph/">Graph</a></h1>
+    <h1 class="title"><a href="/2016/10/22/distribution/mesos/">Mesos</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h3><h5 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h5><h5 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h5><hr>
-<p>Reference :</p>
+        <h3 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h3><p><em>试想，可否整合数据中心中的所有资源，并将它们放在一个大的虚拟池里，代替单独的物理服务器；然后开放诸如CPU、内存和I/O这些基本资源而不是虚拟机？</em></p>
+<p><em>同样，可否把应用程序拆分成小的、隔离的任务单位，从而根据数据中心应用的需求，从虚拟数据中心池中动态分配任务资源？就像操作系统将PC的处理器和RAM放入资源池，使其可以为不同的进程协调分配和释放资源。</em></p>
+<p>进一步讲，我们可以把Mesos作为操作系统内核，然后将数据中心看为PC。这也是正是我想说的：<strong>Mesos正在改变数据中心，它让真正的SDDC(软件定义数据中心)成为现实</strong>。</p>
+<hr>
+<p>Mesos 被定义为一个<code>分布式系统内核</code>。它和 Linux 内核设计原则相同，只是设计在不同的抽象层级上。</p>
+<p>Mesos 运行在服务器集群上并且通过 API 的形式给诸如 Hadoop，Spark 等应用提供资源管理、任务调度等功能。</p>
+<p><img src="resource/mesos/architecture.jpg" alt="Architect"></p>
+<p>Mesos实现了两级调度架构，第一级调度是Master的守护进程，管理Mesos集群中所有节点上运行的Slave守护进程。第二级调度由被称作Framework的组件组成。Framework包括调度器（Scheduler）和执行器（Executor）进程，其中每个节点上都会运行执行器。Mesos能和不同类型的Framework通信，每种Framework由相应的应用集群管理。</p>
+<p>Mesos采用了<code>master/slave</code>结构，master做得尽可能地轻量级，其上面所有的元数据可通过各个slave重新注册而进行重构，故很容易通过zookeeper解决该单点故障问题。</p>
+<p>Mesos 基本术语：</p>
 <ol>
-<li><a href=""></a></li>
+<li>Mesos Master : 主要负责管理各个Framework和Slave，并将slave上的资源分配给各个Framework</li>
+<li>Mesos Slave : 负责管理本节点上的各个Mesos Task，比如：为各个Executor分配资源</li>
+<li>Framework : Hadoop，Spark等计算框架,通过MesosSchedulerDiver接入Mesos</li>
+<li>Executor : 执行器 Mesos Slave上，用于启动计算框架中的Task</li>
+</ol>
+<p><code>Mesos Master</code> 协调全部的Slave，并确定每个节点的可用资源，<br>聚合计算跨节点的所有可用资源的报告，然后向注册到<code>Master</code>的<code>Framework</code>（作为Master的客户端）发出资源邀约。</p>
+<p><code>Framework</code>可以根据应用程序的需求，选择接受或拒绝来自<code>Master</code>的资源邀约。一旦接受邀约，<code>Master</code>即协调<code>Framework</code>和<code>Slave</code>，调度参与节点上任务，并在容器中执行，以使多种类型的任务，比如Hadoop和Cassandra，可以在同一个节点上同时运行。</p>
+<p><img src="resource/mesos/mesos-framework-example.jpg" alt="Mesos Framework Example"></p>
+<ol>
+<li>Slave 1向Master汇报其空闲资源：4个CPU、4GB内存。</li>
+<li>Master触发分配策略模块，得到的反馈是Framework 1要请求全部可用资源。</li>
+<li>Master向Framework 1发送资源邀约，描述了Slave 1上的可用资源。</li>
+<li>Framework的调度器（Scheduler）响应Master，需要在Slave上运行两个任务，第一个任务分配<2 1="" cpus,="" gb="" ram="">资源，第二个任务分配<1 2="" cpus,="" gb="" ram="">资源。</1></2></li>
+<li>Master向Slave下发任务，分配适当的资源给Framework的任务执行器（Executor）,接下来由执行器启动这两个任务（如图中虚线框所示）。</li>
+</ol>
+<hr>
+<p><strong>资源分配</strong></p>
+<p>资源邀约，即由Master向注册其上的Framework发送资源邀约。每次资源邀约包含一份Slave节点上可用的CPU、RAM等资源的列表。 Master提供这些资源给它的Framework，是基于分配策略的。</p>
+<p>分配策略对所有的Framework普遍适用，同时适用于特定的Framework。 Framework可以拒绝资源邀约，如果它不满足要求，若此，资源邀约随即可以发给其他Framework。 </p>
+<p>由Mesos管理的应用程序通常运行短周期的任务，因此这样可以快速释放资源，缓解Framework的资源饥饿； Slave定期向Master报告其可用资源，以便Master能够不断产生新的资源邀约。每个Fraamework过滤不满足要求的资源邀约、Master主动废除给定周期内一直没有被接受的邀约。</p>
+<p>Mesos实现了公平共享和严格优先级分配模块， 确保大部分用例的最佳资源共享。</p>
+<p>如何作出资源邀约的决定是由资源分配模块实现的，该模块存在于Master之中。资源分配模块确定Framework接受资源邀约的顺序，与此同时，确保在本性贪婪的Framework之间公平地共享资源。</p>
+<p>在同质环境中，使用最多的公平份额分配算法之一是最大最小公平算法（max-min fairness）。最大最小公平算法算法将最小的资源分配最大化，并将其提供给用户，确保每个用户都能获得公平的资源份额，以满足其需求所需的资源。</p>
+<p>然而，在跨数据中心调度资源并且是异构的资源需求时，资源分配将会更加困难。默认情况下，Mesos包括一个严格优先级的资源分配模块和一个改良的公平份额资源分配模块。严格优先级模块实现的算法给定Framework的优先级，使其总是接收并接受足以满足其任务要求的资源邀约。这保证了关键应用在Mesos中限制动态资源份额上的开销，但是会潜在其他Framework饥饿的情况。</p>
+<p>由于这些原因，大多数用户默认使用DRF（主导资源公平算法 Dominant Resource Fairness），这是Mesos中更适合异质环境的改良公平份额算法。</p>
+<p>DRF的目标是确保每一个用户，即Mesos中的Framework，在异质环境中能够接收到其最需资源的公平份额。Framework的主导资源是其最需的资源类型（CPU、内存等），在资源邀约中以可用资源百分比的形式展示。</p>
+<hr>
+<p><strong>容错</strong></p>
+<p>Mesos的优势之一便是将容错设计到架构之中，并以可扩展的分布式系统的方式来实现。</p>
+<p><code>Master</code></p>
+<p>Mesos使用热备份来实现 Master 节点集合。一个Master节点与多个备用节点运行在同一集群中，并由Zookeeper来监控。Zookeeper会监控Master集群中所有的节点，并在Master节点发生故障时管理新Master的选举。</p>
+<p>Mesos的状态信息实际上驻留在Framework调度器和Slave节点集合之中。当一个新的Master当选后，Zookeeper会通知Framework和选举后的Slave节点集合，以便使其在新的Master上注册。彼时，新的 Master可以根据Framework和Slave节点集合发送过来的信息，重建内部状态。</p>
+<p><code>Slave</code></p>
+<p>当Slave节点上的进程失败时，可以让执行器/任务继续运行，并为那个Slave进程重新连接那台Slave节点上运行的执行器/任务。当任务执行时，Slave会将任务的监测点元数据存入本地磁盘。</p>
+<p>如果Slave进程失败，任务会继续运行，当Master重新启动Slave进程后，因为此时没有可以响应的消息，所以重新启动的Slave进程会使用检查点数据来恢复状态，并重新与执行器/任务连接。</p>
+<p><code>Framework调度器</code></p>
+<p>Framework调度器的容错是通过Framework将调度器注册2份或者更多份到Master来实现。当一个调度器发生故障时，Master会通知另一个调度来接管。</p>
+<p><code>执行器/任务</code></p>
+<p>Master会向分配任务的Framework调度器汇报执行器/任务失败，并允许调度器根据其配置策略在任务失败时做出相应的处理。</p>
+<p>通常情况下，Framework在接收并接受来自Master的相应的资源邀约后，会在新的Slave节点上重新启动任务。</p>
+<hr>
+<h4 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h4><p>Reference :</p>
+<ol>
+<li><a href="http://mesos.apache.org/" target="_blank" rel="external">Apache Mesos</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzAwMDU1MTE1OQ==&amp;mid=2653547005&amp;idx=1&amp;sn=5a0be692f731aa7bfae030555423ecc6&amp;scene=23&amp;srcid=0427A8Bvm3NJTtHzx3pCXasW#rd" target="_blank" rel="external">Mesos架构与去哪儿的统一框架实践</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-01" target="_blank" rel="external">深入浅出Mesos（一）：为软件定义数据中心而生的操作系统</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-02" target="_blank" rel="external">深入浅出Mesos（二）：Mesos的体系结构和工作流</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-03" target="_blank" rel="external">深入浅出Mesos（三）：持久化存储和容错</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-04" target="_blank" rel="external">深入浅出Mesos（四）：Mesos的资源分配</a></li>
+<li><a href="http://www.infoq.com/cn/articles/analyse-mesos-part-05" target="_blank" rel="external">深入浅出Mesos（五）：成功的开源社区</a></li>
+<li><a href="http://geek.csdn.net/news/detail/54860" target="_blank" rel="external">Mesos社区与生态</a></li>
+<li><a href="https://www.wired.com/2013/03/google-borg-twitter-mesos/" target="_blank" rel="external">Return of the Borg: How Twitter Rebuilt Google’s Secret Weapon</a><br>10.<a href="https://people.eecs.berkeley.edu/~alig/papers/drf.pdf" target="_blank" rel="external">Dominant Resource Fairness: Fair Allocation of Multiple Resource Types</a></li>
 </ol>
 
       
@@ -119,161 +146,49 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-08-13T16:00:00.000Z"><a href="/2016/08/14/distribution/yarn/">2016-08-14</a></time>
+        <time datetime="2016-10-19T16:00:00.000Z"><a href="/2016/10/20/distribution/storm/">2016-10-20</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/14/distribution/yarn/">Yarn</a></h1>
+    <h1 class="title"><a href="/2016/10/20/distribution/storm/">Storm</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h2><h3 id="Architecture-Overview"><a href="#Architecture-Overview" class="headerlink" title="Architecture Overview"></a>Architecture Overview</h3><p><code>Yarn</code> (Yet Another Resource Negotiator) 是一种通用资源管理系统，可为上层应用提供统一资源管理和调度，它的引入为集群在利用率、资源统一管理和数据共享等方面带来了巨大提升。</p>
-<p>The fundamental idea of Yarn is to split up the two major functionalities of the <code>JobTracker</code>, resource management and job scheduling/monitoring into separate daemons. </p>
-<p>The idea is to have a global ResourceManager and per-application ApplicationMaster. </p>
-<p>The <code>ResourceManager</code> and per-node slave, the <code>NodeManager</code>, form the data-computation framework. </p>
-<p>The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system.</p>
-<p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p>
-<p>The ResourceManager has two main components: Scheduler and ApplicationsManager.</p>
-<p>The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The Scheduler is pure scheduler in the sense that it performs no monitoring or tracking of status for the application. Also, it offers no guarantees about restarting failed tasks either due to application failure or hardware failures. The Scheduler performs its scheduling function based the resource requirements of the applications; it does so based on the abstract notion of a resource Container which incorporates elements such as memory, cpu, disk, network etc. In the first version, only memory is supported.</p>
-<p>The Scheduler has a pluggable policy plug-in, which is responsible for partitioning the cluster resources among the various queues, applications etc. The current Map-Reduce schedulers such as the CapacityScheduler and the FairScheduler would be some examples of the plug-in.</p>
-<p>The CapacityScheduler supports hierarchical queues to allow for more predictable sharing of cluster resources</p>
-<p>The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.</p>
-<p>The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p>
-<p>The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p>
-<p>MRV2 maintains API compatibility with previous stable release (hadoop-1.x). This means that all Map-Reduce jobs should still run unchanged on top of MRv2 with just a recompile.</p>
-<h3 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h3><p>RM是一个全局的资源管理器，负责整个系统的资源管理和分配。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</p>
-<h3 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h3><h3 id="ApplicationsManager"><a href="#ApplicationsManager" class="headerlink" title="ApplicationsManager"></a>ApplicationsManager</h3><h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bin/yarn</span><br><span class="line">Usage: yarn [--config confdir] [COMMAND | CLASSNAME]</span><br><span class="line">  CLASSNAME                             run the class named CLASSNAME</span><br><span class="line"> or</span><br><span class="line">  where COMMAND is one of:</span><br><span class="line">  resourcemanager -format-state-store   deletes the RMStateStore</span><br><span class="line">  resourcemanager                       run the ResourceManager</span><br><span class="line">  nodemanager                           run a nodemanager on each slave</span><br><span class="line">  timelineserver                        run the timeline server</span><br><span class="line">  rmadmin                               admin tools</span><br><span class="line">  sharedcachemanager                    run the SharedCacheManager daemon</span><br><span class="line">  scmadmin                              SharedCacheManager admin tools</span><br><span class="line">  version                               print the version</span><br><span class="line">  jar &lt;jar&gt;                             run a jar file</span><br><span class="line">  application                           prints application(s)</span><br><span class="line">                                        report/kill application</span><br><span class="line">  applicationattempt                    prints applicationattempt(s)</span><br><span class="line">                                        report</span><br><span class="line">  container                             prints container(s) report</span><br><span class="line">  node                                  prints node report(s)</span><br><span class="line">  queue                                 prints queue information</span><br><span class="line">  logs                                  dump container logs</span><br><span class="line">  classpath                             prints the class path needed to</span><br><span class="line">                                        get the Hadoop jar and the</span><br><span class="line">                                        required libraries</span><br><span class="line">  cluster                               prints cluster information</span><br><span class="line">  daemonlog                             get/set the log level for each</span><br><span class="line">                                        daemon</span><br><span class="line"></span><br><span class="line">Most commands print help when invoked w/o parameters.</span><br></pre></td></tr></table></figure>
-<p><code>yarn application [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-appStates <states></states></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application states.</td>
-</tr>
-<tr>
-<td style="text-align:left">-appTypes <types></types></td>
-<td style="text-align:left">filter applications based on input comma-separated list of application types.</td>
-</tr>
-<tr>
-<td style="text-align:left">-list</td>
-<td style="text-align:left">Lists applications from the RM. </td>
-</tr>
-<tr>
-<td style="text-align:left">-kill <applicationid></applicationid></td>
-<td style="text-align:left">Kills the application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <applicationid></applicationid></td>
-<td style="text-align:left">Prints the status of the application.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn applicationattempt [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <applicationid></applicationid></td>
-<td style="text-align:left">Lists applications attempts for the given application.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <application attempt="" id=""></application></td>
-<td style="text-align:left">Prints the status of the application attempt.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn classpath</code></p>
-<p>Prints the class path needed to get the Hadoop jar and the required libraries</p>
-<p><code>yarn container [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-list <application attempt="" id=""></application></td>
-<td style="text-align:left">Lists containers for the application attempt.</td>
-</tr>
-<tr>
-<td style="text-align:left">-status <containerid></containerid></td>
-<td style="text-align:left">Prints the status of the container.</td>
-</tr>
-</tbody>
-</table>
-<p><code>yarn jar &lt;jar&gt; [mainClass] args...</code></p>
-<p>Runs a jar file. </p>
-<p><code>yarn logs -applicationId &lt;application ID&gt; [options]</code></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">COMMAND_OPTIONS</th>
-<th style="text-align:left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">-applicationId <application id=""></application></td>
-<td style="text-align:left">Specifies an application id</td>
-</tr>
-<tr>
-<td style="text-align:left">appOwner <appowner></appowner></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-containerId <containerid></containerid></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">-nodeAddress <nodeaddress></nodeaddress></td>
-<td style="text-align:left">nodename:port</td>
-</tr>
-</tbody>
-</table>
-<h4 id="ResourceManager-1"><a href="#ResourceManager-1" class="headerlink" title="ResourceManager"></a>ResourceManager</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">#### NodeManager</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Timeline Server</span><br><span class="line"></span><br><span class="line">Storage and Retrieval of application’s current and historic information in a generic fashion is addressed in YARN through the Timeline Server.</span><br></pre></td></tr></table></figure>
-<p>```</p>
-<h3 id="REST-API’s"><a href="#REST-API’s" class="headerlink" title="REST API’s"></a>REST API’s</h3><p><code>ResourceManager</code></p>
+        <h3 id="Storm"><a href="#Storm" class="headerlink" title="Storm"></a>Storm</h3><p><strong>Trident</strong></p>
+<p><em>Trident是在storm基础上，一个以realtime 计算为目标的高度抽象。 它在提供处理大吞吐量数据能力的同时，也提供了低延时分布式查询和有状态流式处理的能力。Tident提供了 joins, aggregations, grouping, functions, 以及 filters等能力。除此之外，Trident 还提供了一些专门的原语，从而在基于数据库或者其他存储的前提下来应付有状态的递增式处理。</em></p>
+<p>让我们一起来看一个Trident的例子。在这个例子中，我们主要做了两件事情：</p>
 <ol>
-<li>Cluster Information  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/info</code></li>
-<li>Cluster Metrics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/metrics</code></li>
-<li>Cluster Scheduler API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/scheduler</code></li>
-<li>Cluster Applications API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
-<li>Cluster Application Statistics API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/appstatistics?states=accepted,running,finished&amp;applicationTypes=mapreduce</code></li>
-<li>Cluster Application API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id</code></li>
-<li>Cluster Application Attempts API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/appattempts</code></li>
-<li>Cluster Nodes API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes</code></li>
-<li>Cluster Node API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/nodes/h2:1235</code></li>
-<li>Cluster New Application API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/new-application</code></li>
-<li>Cluster Applications API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/apps</code></li>
-<li>Cluster Application State API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/state</code></li>
-<li>Cluster Application Queue API  <code>GET http://&lt;rm http address:port&gt;/ws/v1/cluster/apps/application_id/queue</code></li>
-<li>Cluster Delegation Tokens API  <code>POST http://&lt;rm http address:port&gt;/ws/v1/cluster/delegation-token</code></li>
+<li><p>从一个流式输入中读取语句病计算每个单词的个数</p>
+</li>
+<li><p>提供查询给定单词列表中每个单词当前总数的功能</p>
+</li>
 </ol>
-<p><code>NodeManager</code></p>
-<ol>
-<li>NodeManager Information API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/info</code></li>
-<li>Applications API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps</code></li>
-<li>Application API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/apps/application_id</code></li>
-<li>Containers API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/node/containers</code></li>
-<li>Container API  <code>GET http://&lt;nm http address:port&gt;/ws/v1/nodes/containers/container_id</code></li>
-</ol>
-<p><code>Timeline Server</code></p>
+<p>因为这只是一个例子，我们会从如下这样一个无限的输入流中读取语句作为输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FixedBatchSpout spout = new FixedBatchSpout(new Fields(&quot;sentence&quot;), 3,</span><br><span class="line">               new Values(&quot;the cow jumped over the moon&quot;),</span><br><span class="line">               new Values(&quot;the man went to the store and bought some candy&quot;),</span><br><span class="line">               new Values(&quot;four score and seven years ago&quot;),</span><br><span class="line">               new Values(&quot;how many apples can you eat&quot;),spout.setCycle(true);</span><br></pre></td></tr></table></figure>
+<p>这个spout会循环输出列出的那些语句到sentence stream当中，下面的代码会以这个stream作为输入并计算每个单词的个数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TridentTopology topology = new TridentTopology();        </span><br><span class="line">TridentState wordCounts =topology.newStream(&quot;spout1&quot;, spout)</span><br><span class="line">       .each(new Fields(&quot;sentence&quot;), new Split(), new Fields(&quot;word&quot;))</span><br><span class="line">       .groupBy(new Fields(&quot;word&quot;))</span><br><span class="line">       .persistentAggregate(new MemoryMapState.Factory(), new Count(), new Fields(&quot;count&quot;))  </span><br><span class="line">       .parallelismHint(6);</span><br></pre></td></tr></table></figure>
+<p>让我们一起来读一下这段代码。我们首先创建了一个TridentTopology对象。</p>
+<p>TridentTopology类相应的接口来构造Trident计算过程中的所有内容。</p>
+<p>我们在调用了TridentTopology类的newStream方法时，传入了一个spout对象，spout对象会从外部读取数据并输出到当前topology当中，从而在topology中创建了一个新的数据流。在这个例子中，我们使用了上面定义的FixedBatchSpout对象。</p>
+<p>输入数据源同样也可以是如Kestrel或者Kafka这样的队列服务。</p>
+<p>Trident会再Zookeeper中保存一小部分状态信息来追踪数据的处理情况，而在代码中我们指定的字符串“spout1”就是Zookeeper中用来存储metadata信息的Znode节点</p>
+<p>Trident在处理输入stream的时候会把输入转换成若干个tuple的batch来处理。比如说，输入的sentence stream可能会被拆分成如下的batch：       </p>
+<p>一般来说，这些小的batch中的tuple可能会在数千或者数百万这样的数量级，这完全取决于你的输入的吞吐量。</p>
+<p>Trident提供了一系列非常成熟的批量处理的API来处理这些小batch. 这些API和你在Pig或者Cascading中看到的非常类似， 你可以做group by’s, joins, aggregations, 运行 functions, 执行 filters等等。当然，独立的处理每个小的batch并不是非常有趣的事情，所以Trident提供了很多功能来实现batch之间的聚合的结果并可以将这些聚合的结果存储到内存，Memcached， Cassandra或者是一些其他的存储中。同时，Trident还提供了非常好的功能来查询实时状态。这些实时状态可以被Trident更新，同时它也可以是一个独立的状态源。</p>
+<p>回到我们的这个例子中来，spout输出了一个只有单一字段“sentence”的数据流。在下一行，topology使用了Split函数来拆分stream中的每一个tuple，Split函数读取输入流中的“sentence”字段并将其拆分成若干个word tuple。每一个sentence tuple可能会被转换成多个word tuple，比如说”the cow jumped over the moon” 会被转换成6个 “word” tuples. 下面是Split的定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Split extends BaseFunction &#123;</span><br><span class="line">   public void execute(TridentTuple tuple, TridentCollector collector) &#123;</span><br><span class="line">       String sentence = tuple.getString(0);</span><br><span class="line">       for(String word: sentence.split(&quot; &quot;)) &#123;</span><br><span class="line">           collector.emit(new Values(word));                </span><br><span class="line">       &#125;</span><br><span class="line">   &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>如你所见，真的很简单。它只是简单的根据空格拆分sentence，并将拆分出的每个单词作为一个tuple输出。</p>
+<p>topology的其他部分计算单词的个数并将计算结果保存到了持久存储中。首先，word stream被根据“word”字段进行group操作，然后每一个group使用Count聚合器进行持久化聚合。persistentAggregate会帮助你把一个状态源聚合的结果存储或者更新到存储当中。在这个例子中，单词的数量被保持在内存中，不过我们可以很简单的把这些数据保存到其他的存储当中，如 Memcached, Cassandra等。如果我们要把结果存储到Memcached中，只是简单的使用下面这句话替换掉persistentAggregate就可以，这当中的”serverLocations”是Memcached cluster的主机和端口号列表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.persistentAggregate(MemcachedState.transactional(serverLocations), new Count(), new Fields(&quot;count&quot;))        MemcachedState.transactional()</span><br><span class="line">```   </span><br><span class="line"></span><br><span class="line">persistentAggregate存储的数据就是所有batch聚合的结果。</span><br><span class="line"></span><br><span class="line">Trident非常酷的一点就是它是完全容错的，拥有者有且只有一次处理的语义。这就让你可以很轻松的使用Trident来进行实时数据处理。Trident会把状态以某种形式保持起来，当有错误发生时，它会根据需要来恢复这些状态。</span><br><span class="line"></span><br><span class="line">persistentAggregate方法会把数据流转换成一个TridentState对象。在这个例子当中，TridentState对象代表了所有的单词的数量。我们会使用这个TridentState对象来实现在计算过程中的进行分布式查询。</span><br><span class="line"></span><br><span class="line">下面这部分实现了一个低延时的单词数量的分布式查询。这个查询以一个用空格分割的单词列表为输入，并返回这些单词当天的个数。这些查询是想普通的RPC调用那样被执行的，要说不同的话，那就是他们在后台是并行执行的。下面是执行查询的一个例子：</span><br></pre></td></tr></table></figure>
+<p>DRPCClient client = new DRPCClient(“drpc.server.location”, 3772);<br>System.out.println(client.execute(“words”, “cat dog the man”);<br>// prints the JSON-encoded result, e.g.: “[[5078]]”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">如你所见，除了这是并发执行在storm cluster上之外，这看上去就是一个正常的RPC调用。这样的简单查询的延时通常在10毫秒左右。当然，更负责的DRPC调用可能会占用更长的时间，尽管延时很大程度上是取决于你给计算分配了多少资源。</span><br><span class="line"></span><br><span class="line">这个分布式查询的实现如下所示：</span><br></pre></td></tr></table></figure></p>
+<p>topology.newDRPCStream(“words”)<br>       .each(new Fields(“args”), new Split(), new Fields(“word”))<br>       .groupBy(new Fields(“word”))<br>       .stateQuery(wordCounts, new Fields(“word”), new MapGet(), new Fields(“count”))<br>       .each(new Fields(“count”), new FilterNull())<br>       .aggregate(new Fields(“count”), new Sum(), new Fields(“sum”));<br>```</p>
+<p>我们仍然是使用TridentTopology对象来创建DRPC stream，并且我们将这个函数命名为“words”。这个函数名会作为第一个参数在使用DRPC Client来执行查询的时候用到。</p>
+<p>每个DRPC请求会被当做只有一个tuple的batch来处理。在处理的过程中，以这个输入的单一tuple来表示这个请求。这个tuple包含了一个叫做“args”的字段，在这个字段中保存了客户端提供的查询参数。在这个例子中，这个参数是一个以空格分割的单词列表。</p>
+<p>首先，我们使用Splict功能把入参拆分成独立的单词。然后对“word” 进行group by操作，之后就可以使用stateQuery来在上面代码中创建的TridentState对象上进行查询。stateQuery接受一个数据源（在这个例子中，就是我们的topolgoy所计算的单词的个数）以及一个用于查询的函数作为输入。在这个例子中，我们使用了MapGet函数来获取每个单词的出现个数。由于DRPC stream是使用跟TridentState完全同样的group方式（按照“word”字段进行group），每个单词的查询会被路由到TridentState对象管理和更新这个单词的分区去执行。</p>
+<p>接下来，我们用FilterNull这个过滤器把从未出现过的单词给去掉，并使用Sum这个聚合器将这些count累加起来。最终，Trident会自动把这个结果发送回等待的客户端。</p>
+<p>Trident在如何最大程度的保证执行topogloy性能方面是非常智能的。在topology中会自动的发生两件非常有意思的事情：</p>
 <p>1. </p>
 
       
@@ -297,46 +212,140 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
+        <time datetime="2016-10-15T12:56:12.000Z"><a href="/2016/10/15/distribution/Parquet/">2016-10-15</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
+    <h1 class="title"><a href="/2016/10/15/distribution/Parquet/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p><strong>明确几个概念</strong></p>
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-15T12:56:08.000Z"><a href="/2016/10/15/distribution/ORCFile/">2016-10-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/15/distribution/ORCFile/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-15T12:56:06.000Z"><a href="/2016/10/15/distribution/RCFile/">2016-10-15</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/15/distribution/RCFile/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-12T16:00:00.000Z"><a href="/2016/10/13/operation_system/linux/">2016-10-13</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/13/operation_system/linux/">Linux</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p><strong>CPU Load Balancing</strong></p>
+<p>所谓CPU负载均衡就是将进程从繁忙的CPU迁移到比较空闲的CPU上，目的是为了提高系统的整体效率。</p>
+<p>进程在不同CPU之间迁移通常会影响cache的命中率，例如：</p>
 <ol>
-<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
-<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
-<li></li>
+<li><p>支持超线程技术(SMT)的CPU内部的虚CPU之间完全共享cache，在它们之间迁移进程对cache几乎没有影响，所以尽量保证它们之间的进程数均衡。</p>
+</li>
+<li><p>单个CPU的多个核有各自的L1缓存，但共享L2和L3缓存，在这些核之间迁移进程会导致L1缓存的失效，但是L2和L3缓存不受影响。</p>
+</li>
+<li><p>多CPU，每个CPU有各自独享的缓存，在这些CPU之间迁移进程会导致缓存失效。</p>
+</li>
+<li><p>多CPU，多内存节点（NUMA），不同CPU对于不同内存结点访问的效率不同，在这些CPU之间迁移进程不仅会影响缓存，而且会出现内存访问效率的问题。</p>
+</li>
+<li><p>多CPU+NUMA组成的阵列。</p>
+</li>
 </ol>
+<p>内核根据迁移进程所造成的影响情况设置了不同的调度域（sched_domain），最小一级的调度域是SMT的情况，SMT中的多个虚拟CPU位于同一调度域内；次小一级是单个CPU的多个核的情况，这些核位于同一调度域内；往上是多个CPU的情况以及多CPU+NUMA的情况，最上面就是阵列情况，自下而上所有的sched_domain形成一棵树形结构，越往上迁移进程导致的影响越大，所以越往上内核会增大迁移的阻力。</p>
 <hr>
-<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
-<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
-<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
-<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
-<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
-<p>结点按照被访问的顺序存入栈中。</p>
-<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
-<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
-<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
-<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
-<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
-<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
-<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
-<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
-<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
-<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
-</ol>
+<p><strong>Virtual Memory</strong></p>
+<p>Linux内核对整个系统的物理内存是通过类型为struct page的数组mem_map来管理的。</p>
+<p>Linux的内核地址空间大小为1G  用户空间0~3G，内核空间3G~4G。</p>
+<p>如果把这1G线性地址空间全部拿来直接一一映射物理内存的话，在内核态的所有进程能使用的物理内存总共最多只有1G,为了能使在内核态的所有进程能使用更多的物理内存，Linux采取了一种变通的形式：<code>它将1G内核线性地址空间分为几部分，第一部分为1G的前896M，这部分内核线性空间与物理内存的0~896M一一映射，后面128M的线性空间拿来动态映射剩下的所有物理内存，由于动态映射的方法不一样，后面的128M又分成了几个部分。</code></p>
+<p>前面896M线性空间对应的物理内存就是所谓的低端物理内存，剩下的物理内存就是高端物理内存。</p>
+<p>进程中使用的所有地址都是虚地址，在linux下这个虚地址就是所谓的线性地址。Linux中进程可运行在用户态和内核态，（典型配置情况下）当进程运行在用户态时，它使用的线性地址只能位于0~3G范围内，当进程运行于内核态时，它使用的线性地址地址范围为3G~4G。</p>
+<p>为了把线性地址转化为物理地址，每个进程都有自己私有的页目录和页表。</p>
+<p>Linux在建立进程页目录时，把用户地址空间的页目录项（0~767项）清空而将内核页目录表（swapper_pg_dir）的第768项到1023项拷贝到进程的页目录表的第768项到1023项中。</p>
+<p>由于内核在初始化时也只映射了物理内存的前896M，我们可以知道内核也目录表只能保证第768项开始的224项中有有效映射。从这里我们可以知道，所有的进程都共享了其内核线性地址空间。</p>
+<p>当一个进程在内核空间发生缺页故障的时候，这主要发生在访问内核空间动态映射区线性地址，在其处理程序中，就要通过0号进程的页目录（swapper_pg_dir）来同步本进程的内核页目录，实际上就是拷贝0号进程的内核页目录到本进程中（内核页表与进程0共享，故不需要复制）。如果进程0的该地址处的内核页目录也不存在，则出错，具体代码可以参考vmalloc的实现源码。</p>
+<p>当进程运行于用户态时，若其需要申请内存空间，内核首先会在其用户线性空间中分配需要的线性地址空间，再通过伙伴分配系统分配物理内存并把分配的物理内存跟用户空间线性地址映射起来，最后再修改进程的页目录项及页表项写入这些映射关系。</p>
 
       
     </div>
@@ -359,1131 +368,474 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/distribution/tez/">2016-08-01</a></time>
+        <time datetime="2016-10-11T16:00:00.000Z"><a href="/2016/10/12/distribution/zookeeper/">2016-10-12</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/01/distribution/tez/">Tez</a></h1>
+    <h1 class="title"><a href="/2016/10/12/distribution/zookeeper/">ZooKeeper</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h4 id="Tez"><a href="#Tez" class="headerlink" title="Tez"></a>Tez</h4><p>A Framework for YARN-based, Data Processing Applications In Hadoop. </p>
-<p>Tez improves the MapReduce paradigm by dramatically improving its speed, while maintaining MapReduce’s ability to scale to petabytes of data. </p>
-<p>Apache Tez provides a developer API and framework to write native YARN applications that bridge the spectrum of interactive and batch workloads. It allows those data access applications to work with petabytes of data over thousands nodes. </p>
-<p>The Apache Tez component library allows developers to create Hadoop applications that integrate natively with Apache Hadoop YARN and perform well within mixed workload clusters.</p>
-<p>Since Tez is extensible and embeddable, it provides the fit-to-purpose freedom to express highly optimized data processing applications, giving them an advantage over end-user-facing engines such as MapReduce and Apache Spark. </p>
-<p>Tez also offers a customizable execution architecture that allows users to express complex computations as dataflow graphs, permitting dynamic performance optimizations based on real information about the data and the resources required to process it.</p>
-<p><img src="resource/tez/H1H2Tez.png" alt="Tez on Hadoop"></p>
+        <h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><p>Google提出了中心化组件Chubby—粗粒度锁服务，通过锁原语为其他系统实现更高级的服务，比如组成员、域名服务和leader选举等等。Chubby本身也是一个小型的cell（通常由5个chubby结点组成），cell内部采用类似于状态机副本形式实现可靠容错。</p>
+<p>Google的Chubby论文在OSDI上发表后引起了很大的反响，原因很多，主要有两个：</p>
+<p>第一，chubby很好的解决了分布式开发的一致性问题；</p>
+<p>第二，Google Chubby采用Leslie Lamport提出的paxos算法来实现可靠容错，这是业界关于paxos第一个完整可行的实现。</p>
 <hr>
-<p><strong>DATA PROCESSING API IN APACHE TEZ</strong></p>
+<p>和Chubby相比，ZooKeeper做了很多突破。</p>
+<p>不像Chubby的单点服务的结构，ZooKeeper采用多个server同时处理客户端的请求，异步读同步写，通过primary节点来同步数据的update，这一点大大改善了读服务的性能，当然弱化了客户端与服务器之间的一致性。</p>
+<p>另外，ZooKeeper采用block free的服务接口，采用watch机制的方式异步处理请求结果和指定数据的变更。</p>
+<p>ZooKeeper采用paxos的变种来实现消息传输的一致性。</p>
+<p>ZooKeeper开发了原子多播协议 Zab 来实现数据的一致性传输。</p>
+<p>ZooKeeper采用的是primary-backup的结构，primary节点产生non- commutative 事务，通过协议按序的广播到其他backup节点上。在节点无错的情况下，这是非常简单的事情，然而，面对复杂的网络环境，多变的软硬件条件，节点挂掉，重启，数据重复发送，这些异常很常见。Zookeeper如何做到即便是系统出现异常，也能够保证整个系统状态是一致？paxos的变种，Zookeeper的Zab协议很好的保证了这一点。</p>
+<p>Zab 协议以epoch的方式执行（相当与序列号），在每个epoch最多只有一个进程多播数据。如果某个进程执行了协议的的第一阶段，那么进程将不再接受之前还没确定提交的epoch的数据。这样一来就保证了在进程在recovery阶段不会出现丢失已提交的数据的情况。在某个epoch下，所有参加这个epoch的进程必须此epoch之前所有已经提交的数据镜像。为了保证一致性，进程在完全恢复之前必须不能广播新的事务。</p>
+<p>Zab协议的这几个特点处理了primary异常、新旧primary以及backup节点异常的情况，的确保证了primary进程原子多播的order特性。</p>
+<p>整个Zab协议的内容分成三个阶段：Discovery、Synchronization和Broadcast阶段。</p>
+<p>Discovery阶段其实是选举leader或者发现leader。</p>
+<pre><code>在这个阶段里，follower会给（可能是）leader的进程（这里的进程可以是多个）发送当前自己epoch的信息CEPOCH；
+
+如果（可能是）leader进程收到大多数的follower的CEPOCH消息，那么leader就会产生一个新epoch的消息NEWEPOCH，其中包含新的leader，并发送给follower；当follower f收到NEWEPOCH时，f会判断其中epoch是否比当前的大，如果是则反馈信息ACK-E，其中包含f所接受的最大事务编号和历史数据；leader会从这些ACK-E中选出最新的历史数据来初始化它当前的系统状态。这个阶段其实就是paxos的执行过程，由于两个大多数集合的交集肯定不为空，所以不可能一个epoch下会选出两个不同的leader。因此Discovery阶段最后的结果肯定只有一个新leader。
+
+在整个系统初始的时候，每个节点当前的epoch都为0，这样会给其它节点发送请求，这样有可能会导致paxos死锁，对此，每个zookeeper节点会通过配置获得唯一的id，并根据id的大则优先的原则来推选leader。
+</code></pre><p>Synchronization阶段其实就会状态同步，新leader会将其最新状态通知给所有的follower；follower的到leader的状态后，会和自己的进行比较，从中提前还未提交的数据T，并反馈给leader；leader收到大多数确认反馈时，则发送提交命令commit给这些follower；follower收到commit后提交T中的所有数据。</p>
+<p>Broadcast阶段和Synchronization阶段相似，只是这个阶段是对一个请求的提交而不是一个集合的提交。</p>
 <hr>
-<p><strong>RUNTIME API IN APACHE TEZ</strong></p>
-<hr>
-<p><strong>Interface</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br></pre></td><td class="code"><pre><span class="line">public abstract class TaskScheduler implements ServicePluginLifecycle &#123;</span><br><span class="line">    /**</span><br><span class="line">     * An entry point for initialization.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void initialize() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * An entry point for starting the service.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Stop the service. This could be invoked at any point, when the service is no longer required -</span><br><span class="line">     * including in case of errors.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void shutdown() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The first step of stopping the task scheduler service. This would typically be used to stop</span><br><span class="line">     * allocating new resources. shutdown() will typically be used to unregister from external</span><br><span class="line">     * services - especially YARN for instance, so that the app is not killed</span><br><span class="line">     */</span><br><span class="line">    public void initiateStop() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the &#123;@link TaskSchedulerContext&#125; associated with this instance of the scheduler, which is</span><br><span class="line">     * used to communicate with the rest of the system</span><br><span class="line">     */</span><br><span class="line">    public final TaskSchedulerContext getContext() &#123;</span><br><span class="line">        return taskSchedulerContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the currently available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getAvailableResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the total available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getTotalResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the number of nodes available from the source</span><br><span class="line">     */</span><br><span class="line">    public abstract int getClusterNodeCount() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been blacklisted, and should not be used for subsequent</span><br><span class="line">     * allocations.</span><br><span class="line">     */</span><br><span class="line">    public abstract void blacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been un-blacklisted, and can be used from subsequent</span><br><span class="line">     * allocations</span><br><span class="line">     */</span><br><span class="line">    public abstract void unblacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, with location information</span><br><span class="line">     * optionally specified</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      String[] hosts, String[] racks, Priority priority,</span><br><span class="line">                                      Object containerSignature, Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, based on a previously used</span><br><span class="line">     * container</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      ContainerId containerId, Priority priority,</span><br><span class="line">                                      Object containerSignature,</span><br><span class="line">                                      Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to deallocate a task. This is typically a result of a task completing - with success</span><br><span class="line">     * or failure. It could also be the result of a decision to not run the task, before it is</span><br><span class="line">     * allocated or started.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Plugin writers need to de-allocate containers via the context once it&apos;s no longer required, for</span><br><span class="line">     * correct book-keeping</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean deallocateTask(Object task, boolean taskSucceeded,</span><br><span class="line">                                           TaskAttemptEndReason endReason,</span><br><span class="line">                                           @Nullable String diagnostics) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to de-allocate a previously allocated container.</span><br><span class="line">     */</span><br><span class="line">    public abstract Object deallocateContainer(ContainerId containerId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inform the scheduler that it should unregister. This is primarily valid for schedulers which</span><br><span class="line">     * require registration (YARN a.t.m)</span><br><span class="line">     */</span><br><span class="line">    public abstract void setShouldUnregister() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Checks with the scheduler whether it has unregistered.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean hasUnregistered() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indicates to the scheduler that the currently running dag has completed.</span><br><span class="line">     * This can be used to reset dag specific statistics, potentially release resources and prepare</span><br><span class="line">     * for a new DAG.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract void dagComplete() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Vertex extends Comparable&lt;Vertex&gt; &#123;</span><br><span class="line"></span><br><span class="line">    TezVertexID getVertexId();</span><br><span class="line"></span><br><span class="line">    public VertexPlan getVertexPlan();</span><br><span class="line"></span><br><span class="line">    int getDistanceFromRoot();</span><br><span class="line"></span><br><span class="line">    LinkedHashMap&lt;String, Integer&gt; getIOIndices();</span><br><span class="line"></span><br><span class="line">    String getName();</span><br><span class="line"></span><br><span class="line">    VertexState getState();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getAllCounters();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getCachedCounters();</span><br><span class="line"></span><br><span class="line">    int getMaxTaskConcurrency();</span><br><span class="line"></span><br><span class="line">    Map&lt;TezTaskID, Task&gt; getTasks();</span><br><span class="line"></span><br><span class="line">    Task getTask(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    Task getTask(int taskIndex);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; getDiagnostics();</span><br><span class="line"></span><br><span class="line">    int getTotalTasks();</span><br><span class="line"></span><br><span class="line">    int getCompletedTasks();</span><br><span class="line"></span><br><span class="line">    int getSucceededTasks();</span><br><span class="line"></span><br><span class="line">    int getRunningTasks();</span><br><span class="line"></span><br><span class="line">    float getProgress();</span><br><span class="line"></span><br><span class="line">    float getCompletedTaskProgress();</span><br><span class="line"></span><br><span class="line">    ProgressBuilder getVertexProgress();</span><br><span class="line"></span><br><span class="line">    VertexStatusBuilder getVertexStatus(Set&lt;StatusGetOpts&gt; statusOptions);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    TaskLocationHint getTaskLocationHint(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    void setParallelism(int parallelism, VertexLocationHint vertexLocationHint,</span><br><span class="line">                        Map&lt;String, EdgeManagerPluginDescriptor&gt; sourceEdgeManagers,</span><br><span class="line">                        Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate, boolean fromVertexManager)</span><br><span class="line">            throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(@Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate,</span><br><span class="line">                                  int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties,</span><br><span class="line">                                  @Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    void setVertexLocationHint(VertexLocationHint vertexLocationHint);</span><br><span class="line"></span><br><span class="line">    void vertexReconfigurationPlanned();</span><br><span class="line"></span><br><span class="line">    void doneReconfiguringVertex();</span><br><span class="line"></span><br><span class="line">    // CHANGE THESE TO LISTS AND MAINTAIN ORDER?</span><br><span class="line">    void setInputVertices(Map&lt;Vertex, Edge&gt; inVertices);</span><br><span class="line"></span><br><span class="line">    void setOutputVertices(Map&lt;Vertex, Edge&gt; outVertices);</span><br><span class="line"></span><br><span class="line">    VertexStatistics getStatistics();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getInputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getOutputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;String, OutputCommitter&gt; getOutputCommitters();</span><br><span class="line"></span><br><span class="line">    void setAdditionalInputs(List&lt;RootInputLeafOutputProto&gt; inputs);</span><br><span class="line"></span><br><span class="line">    void setAdditionalOutputs(List&lt;RootInputLeafOutputProto&gt; outputs);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;InputDescriptor, InputInitializerDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalInputs();</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;OutputDescriptor, OutputCommitterDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalOutputs();</span><br><span class="line"></span><br><span class="line">    List&lt;InputSpec&gt; getInputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;OutputSpec&gt; getOutputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;GroupInputSpec&gt; getGroupInputSpecList(int taskIndex);</span><br><span class="line"></span><br><span class="line">    void addSharedOutputs(Set&lt;String&gt; outputs);</span><br><span class="line"></span><br><span class="line">    Set&lt;String&gt; getSharedOutputs();</span><br><span class="line"></span><br><span class="line">    int getInputVerticesCount();</span><br><span class="line"></span><br><span class="line">    int getOutputVerticesCount();</span><br><span class="line"></span><br><span class="line">    void scheduleTasks(List&lt;ScheduleTaskRequest&gt; tasks);</span><br><span class="line"></span><br><span class="line">    void scheduleSpeculativeTask(TezTaskID taskId);</span><br><span class="line"></span><br><span class="line">    Resource getTaskResource();</span><br><span class="line"></span><br><span class="line">    public TaskAttemptEventInfo getTaskAttemptTezEvents(TezTaskAttemptID attemptID,</span><br><span class="line">                                                        int fromEventId, int nextPreRoutedFromEventId, int maxEvents);</span><br><span class="line"></span><br><span class="line">    void handleSpeculatorEvent(SpeculatorEvent event);</span><br><span class="line"></span><br><span class="line">    ProcessorDescriptor getProcessorDescriptor();</span><br><span class="line"></span><br><span class="line">    public DAG getDAG();</span><br><span class="line"></span><br><span class="line">    VertexTerminationCause getTerminationCause();</span><br><span class="line"></span><br><span class="line">    AppContext getAppContext();</span><br><span class="line"></span><br><span class="line">    String getLogIdentifier();</span><br><span class="line"></span><br><span class="line">    public void incrementFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public void incrementKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public Configuration getConf();</span><br><span class="line"></span><br><span class="line">    public boolean isSpeculationEnabled();</span><br><span class="line"></span><br><span class="line">    public int getTaskSchedulerIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getContainerLauncherIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getTaskCommunicatorIdentifier();</span><br><span class="line"></span><br><span class="line">    public ServicePluginInfo getServicePluginInfo();</span><br><span class="line"></span><br><span class="line">    public long getInitTime();</span><br><span class="line"></span><br><span class="line">    public long getStartTime();</span><br><span class="line"></span><br><span class="line">    public long getFinishTime();</span><br><span class="line"></span><br><span class="line">    void reportTaskStartTime(long taskStartTime);</span><br><span class="line"></span><br><span class="line">    public long getFirstTaskStartTime();</span><br><span class="line"></span><br><span class="line">    public long getLastTaskFinishTime();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Partitioner &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get partition for given key/value.</span><br><span class="line">     */</span><br><span class="line">    int getPartition(Object key, Object value, int numPartitions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ZooKeeper Config </p>
 <table>
 <thead>
 <tr>
 <th>Key</th>
-<th>Description</th>
-<th>Default Value</th>
+<th>Desc</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>tez.dag.recovery.enabled</td>
-<td>Enable recovery of DAGs. This allows a restarted app master to recover the incomplete DAGs from the previous instance of the app master.</td>
-<td>true</td>
+<td>clientPort</td>
+<td>客户端连接server的端口，即对外服务端口，一般设置为2181 </td>
 </tr>
 <tr>
-<td>tez.dag.recovery.io.buffer.size</td>
-<td></td>
-<td>8192</td>
+<td>dataDir</td>
+<td>存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。建议同时配置参数dataLogDir, 事务日志的写性能直接影响zk性能。 </td>
 </tr>
 <tr>
-<td>tez.dag.recovery.flush.interval.secs</td>
-<td></td>
-<td>30</td>
+<td>tickTime</td>
+<td>ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2*tickTime。</td>
 </tr>
 <tr>
-<td>tez.dag.recovery.max.unflushed.events</td>
-<td></td>
-<td>100</td>
+<td>dataLogDir</td>
+<td>事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。</td>
 </tr>
 <tr>
-<td>tez.task.heartbeat.timeout.check-ms</td>
-<td></td>
-<td>30000</td>
+<td>globalOutstandingLimit</td>
+<td>最大请求堆积数。默认是1000。</td>
 </tr>
 <tr>
-<td>tez.task.timeout-ms</td>
-<td></td>
-<td>300000</td>
+<td>preAllocSize</td>
+<td>预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。</td>
 </tr>
 <tr>
-<td>tez.am.acls.enabled</td>
-<td></td>
-<td>true</td>
+<td>snapCount</td>
+<td>每进行snapCount次事务日志输出后，触发一次快照(snapshot), 此时，ZK会生成一个snapshot文件，同时创建一个新的事务日志文件log。</td>
 </tr>
 <tr>
-<td>tez.allow.disabled.timeline-domains</td>
-<td></td>
-<td>false</td>
+<td>traceFile</td>
+<td>用于记录所有请求的log，一般调试过程中可以使用，但是生产环境不建议使用，会严重影响性能。</td>
 </tr>
 <tr>
-<td>tez.am.client.am.port-range</td>
-<td></td>
-<td>null</td>
+<td>maxClientCnxns</td>
+<td>单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。</td>
 </tr>
 <tr>
-<td>tez.am.client.am.thread-count</td>
-<td></td>
-<td>1</td>
+<td>clientPortAddress</td>
+<td>对于多网卡的机器，可以为每个IP指定不同的监听端口。</td>
 </tr>
 <tr>
-<td>tez.am.commit-all-outputs-on-dag-success</td>
-<td></td>
-<td>true</td>
+<td>minSessionTimeoutmaxSessionTimeout</td>
+<td>Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。</td>
 </tr>
 <tr>
-<td>tez.am.containerlauncher.thread-count-limit</td>
-<td></td>
-<td>500</td>
+<td>fsync.warningthresholdms</td>
+<td>事务日志输出时，如果调用fsync方法超过指定的超时时间，那么会在日志中输出警告信息。</td>
 </tr>
 <tr>
-<td>tez.am.container.idle.release-timeout-max.millis</td>
-<td></td>
-<td>10000</td>
+<td>autopurge.purgeInterval</td>
+<td>ZK提供了自动清理事务日志和快照文件的功能，这个参数指定了清理频率，单位是小时，需要配置一个1或更大的整数，默认是0，表示不开启自动清理功能。</td>
 </tr>
 <tr>
-<td>tez.am.container.idle.release-timeout-min.millis</td>
-<td></td>
-<td>5000</td>
+<td>autopurge.snapRetainCount</td>
+<td>需要保留的文件数目。默认是保留3个。</td>
 </tr>
 <tr>
-<td>tez.am.container.reuse.enabled</td>
-<td></td>
-<td>true</td>
+<td>electionAlg</td>
+<td>允许指定leader选举算法。</td>
 </tr>
 <tr>
-<td>tez.am.container.reuse.locality.delay-allocation-millis</td>
-<td></td>
-<td>250</td>
+<td>initLimit</td>
+<td>Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在initLimit时间内完成这个工作。</td>
 </tr>
 <tr>
-<td>tez.am.container.reuse.non-local-fallback.enabled</td>
-<td></td>
-<td>false</td>
+<td>syncLimit</td>
+<td>如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。</td>
 </tr>
 <tr>
-<td>tez.am.container.reuse.rack-fallback.enabled</td>
-<td></td>
-<td>true</td>
+<td>leaderServes</td>
+<td>Leader专注于集群中机器的协调，那么可以将这个参数设置为no，这样一来，会大大提高写操作的性能。</td>
 </tr>
 <tr>
-<td>tez.am.credentials-merge</td>
-<td></td>
-<td>null</td>
+<td>server.x=[hostname]:nnnnn[:nnnnn]</td>
+<td>第一个端口用于F和L之间的数据同步和其它通信，第二个端口用于Leader选举过程中投票通信。</td>
 </tr>
 <tr>
-<td>tez.am.dag.scheduler.class</td>
-<td></td>
-<td>org.apache.tez.dag.app.dag.impl.DAGSchedulerNaturalOrder</td>
+<td>group.x=nnnnn[:nnnnn]weight.x=nnnnn</td>
+<td>对机器分组和权重设置。</td>
 </tr>
 <tr>
-<td>tez.am.disable.client-version-check</td>
-<td></td>
-<td>false</td>
+<td>cnxTimeout</td>
+<td>Leader选举过程中，打开一次连接的超时时间，默认是5s。</td>
 </tr>
 <tr>
-<td>tez.am.inline.task.execution.enabled</td>
-<td></td>
-<td>false</td>
+<td>zookeeper.DigestAuthenticationProvider.superDigest</td>
+<td>ZK权限设置相关。</td>
 </tr>
 <tr>
-<td>tez.am.inline.task.execution.max-tasks</td>
-<td></td>
-<td>1</td>
+<td>skipACL</td>
+<td>所有客户端请求都不作ACL检查。</td>
 </tr>
 <tr>
-<td>tez.am.launch.cluster-default.cmd-opts</td>
-<td></td>
-<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
+<td>forceSync</td>
+<td>确定了是否需要在事务日志提交的时候调用FileChannel.force来保证数据完全同步到磁盘。</td>
 </tr>
 <tr>
-<td>tez.am.launch.cluster-default.env</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.launch.cmd-opts</td>
-<td></td>
-<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
-</tr>
-<tr>
-<td>tez.am.launch.env</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>tez.am.legacy.speculative.slowtask.threshold</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.log.level</td>
-<td></td>
-<td>INFO</td>
-</tr>
-<tr>
-<td>tez.am.max.allowed.time-sec.for-read-error</td>
-<td></td>
-<td>300</td>
-</tr>
-<tr>
-<td>tez.am.max.app.attempts</td>
-<td></td>
-<td>2</td>
-</tr>
-<tr>
-<td>tez.am.maxtaskfailures.per.node</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.am.modify-acls</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.node-blacklisting.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.node-blacklisting.ignore-threshold-node-percent</td>
-<td></td>
-<td>33</td>
-</tr>
-<tr>
-<td>tez.am.node-unhealthy-reschedule-tasks</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.preemption.heartbeats-between-preemptions</td>
-<td></td>
-<td>3</td>
-</tr>
-<tr>
-<td>tez.am.preemption.max.wait-time-ms</td>
-<td></td>
-<td>60000</td>
-</tr>
-<tr>
-<td>tez.am.preemption.percentage</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.am.resource.cpu.vcores</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.am.resource.memory.mb</td>
-<td></td>
-<td>1024</td>
-</tr>
-<tr>
-<td>tez.am.am-rm.heartbeat.interval-ms.max</td>
-<td></td>
-<td>1000</td>
-</tr>
-<tr>
-<td>tez.am.session.min.held-containers</td>
-<td></td>
-<td>0</td>
-</tr>
-<tr>
-<td>tez.am.mode.session</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.am.speculation.enabled</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.staging-dir</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.staging.scratch-data.auto-delete</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.am.task.listener.thread-count</td>
-<td></td>
-<td>30</td>
-</tr>
-<tr>
-<td>tez.am.task.max.failed.attempts</td>
-<td></td>
-<td>4</td>
-</tr>
-<tr>
-<td>tez.am.tez-ui.history-url.template</td>
-<td></td>
-<td><strong><strong>HISTORY_URL_BASE</strong>/#/tez-app/<strong>APPLICATION_ID</strong></strong></td>
-</tr>
-<tr>
-<td>tez.am.vertex.max-task-concurrency</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.am.view-acls</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.am.tez-ui.webservice.enable</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.application.tags</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.aux.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.cancel.delegation.tokens.on.completion</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.client.asynchronous-stop</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.client.diagnostics.wait.timeout-ms</td>
-<td></td>
-<td>3000</td>
-</tr>
-<tr>
-<td>tez.client.timeout-ms</td>
-<td></td>
-<td>30000</td>
-</tr>
-<tr>
-<td>tez.java.opts.checker.class</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.java.opts.checker.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.container.max.java.heap.fraction</td>
-<td></td>
-<td>0.8</td>
-</tr>
-<tr>
-<td>tez.counters.counter-name.max-length</td>
-<td></td>
-<td>64</td>
-</tr>
-<tr>
-<td>tez.counters.group-name.max-length</td>
-<td></td>
-<td>256</td>
-</tr>
-<tr>
-<td>tez.counters.max</td>
-<td></td>
-<td>1200</td>
-</tr>
-<tr>
-<td>tez.counters.max.groups</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.credentials.path</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.dag.status.pollinterval-ms</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.generate.debug.artifacts</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.history.logging.service.class</td>
-<td></td>
-<td>org.apache.tez.dag.history.logging.impl.SimpleHistoryLoggingService</td>
-</tr>
-<tr>
-<td>tez.tez-ui.history-url.base</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.ignore.lib.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.ipc.payload.reserved.bytes</td>
-<td></td>
-<td>5242880</td>
-</tr>
-<tr>
-<td>tez.lib.uris</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.lib.uris.classpath</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.local.mode</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.queue.name</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.session.am.dag.submit.timeout.secs</td>
-<td></td>
-<td>300</td>
-</tr>
-<tr>
-<td>tez.session.client.timeout.secs</td>
-<td></td>
-<td>120</td>
-</tr>
-<tr>
-<td>tez.simple.history.logging.dir</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.simple.history.max.errors</td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>tez.task.am.heartbeat.counter.interval-ms.max</td>
-<td></td>
-<td>4000</td>
-</tr>
-<tr>
-<td>tez.task.am.heartbeat.interval-ms.max</td>
-<td></td>
-<td>100</td>
-</tr>
-<tr>
-<td>tez.task.generate.counters.per.io</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.get-task.sleep.interval-ms.max</td>
-<td></td>
-<td>200</td>
-</tr>
-<tr>
-<td>tez.task.initialize-processor-first</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.initialize-processor-io-serially</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.task.launch.cluster-default.cmd-opts</td>
-<td></td>
-<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
-</tr>
-<tr>
-<td>tez.task.launch.cluster-default.env</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.launch.cmd-opts</td>
-<td></td>
-<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
-</tr>
-<tr>
-<td>tez.task.launch.env</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>tez.task.log.level</td>
-<td></td>
-<td>INFO</td>
-</tr>
-<tr>
-<td>tez.task.max-events-per-heartbeat</td>
-<td></td>
-<td>500</td>
-</tr>
-<tr>
-<td>tez.task.max-event-backlog</td>
-<td></td>
-<td>10000</td>
-</tr>
-<tr>
-<td>tez.task.progress.stuck.interval-ms</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.task.resource.calculator.process-tree.class</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.resource.cpu.vcores</td>
-<td></td>
-<td>1</td>
-</tr>
-<tr>
-<td>tez.task.resource.memory.mb</td>
-<td></td>
-<td>1024</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.additional-reservation.fraction.max</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.additional-reservation.fraction.per-io</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.allocator.class</td>
-<td></td>
-<td>org.apache.tez.runtime.library.resources.WeightedScalingMemoryDistributor</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.enabled</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.reserve-fraction</td>
-<td></td>
-<td>0.3</td>
-</tr>
-<tr>
-<td>tez.task.scale.memory.ratios</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.launch.cmd-opts</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.launch.cmd-opts.list</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.task-specific.log.level</td>
-<td></td>
-<td>null</td>
-</tr>
-<tr>
-<td>tez.test.minicluster.app.wait.on.shutdown.secs</td>
-<td></td>
-<td>30</td>
-</tr>
-<tr>
-<td>tez.use.cluster.hadoop-libs</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.acl.domains.auto-create</td>
-<td></td>
-<td>true</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.event.flush.timeout.millis</td>
-<td></td>
-<td>-1</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.max.events.per.batch</td>
-<td></td>
-<td>5</td>
-</tr>
-<tr>
-<td>tez.yarn.ats.max.polling.time.per.event.millis</td>
-<td></td>
-<td>10</td>
+<td>jute.maxbuffer</td>
+<td>每个节点最大数据量，是默认是1M。</td>
 </tr>
 </tbody>
 </table>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-09-25T16:00:00.000Z"><a href="/2016/09/26/machine_learning/Terms/">2016-09-26</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/09/26/machine_learning/Terms/">Machine Learning</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h3><p><code>激活函数（Activation Function）</code></p>
+<p>为了让神经网络能够学习复杂的决策边界（decision boundary），我们在其一些层应用一个非线性激活函数。最常用的函数包括  sigmoid、tanh、ReLU（Rectified Linear Unit 线性修正单元） 以及这些函数的变体。</p>
 <hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://zh.hortonworks.com/apache/tez/" target="_blank" rel="external">Apache Tez</a></li>
-<li><a href="http://zh.hortonworks.com/blog/apache-tez-a-new-chapter-in-hadoop-data-processing/" target="_blank" rel="external">APACHE TEZ: A NEW CHAPTER IN HADOOP DATA PROCESSING</a></li>
-<li><a href="http://tez.apache.org/releases/0.8.4/tez-api-javadocs/configs/TezConfiguration.html" target="_blank" rel="external">Tez Configuration</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-24T16:00:00.000Z"><a href="/2016/07/25/distribution/hive/">2016-07-25</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/07/25/distribution/hive/">Hive</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>Hive</strong></p>
-<p>order by<br>order by 会对输入做全局排序，因此只有一个reducer（多个reducer无法保证全局有序）<br>只有一个reducer，会导致当输入规模较大时，需要较长的计算时间。</p>
-<p>set hive.mapred.mode=nonstrict; (default value / 默认值)</p>
-<p>set hive.mapred.mode=strict;</p>
-<p>order by 和数据库中的Order by 功能一致，按照某一项 &amp; 几项 排序输出。</p>
-<p>与数据库中 order by 的区别在于在hive.mapred.mode = strict 模式下 必须指定 limit 否则执行会报错。</p>
-<p>hive&gt; select * from test order by id;     </p>
-<p>FAILED: Error in semantic analysis: 1:28 In strict mode, if ORDER BY is specified, LIMIT must also be specified. Error encountered near token ‘id’</p>
-<p>原因： 在order by 状态下所有数据会到一台服务器进行reduce操作也即只有一个reduce，如果在数据量大的情况下会出现无法输出结果的情况，如果进行 limit n ，那只有  n * map number 条记录而已。只有一个reduce也可以处理过来。</p>
-<p>sort by<br>sort by不是全局排序，其在数据进入reducer前完成排序.</p>
-<p>因此，如果用sort by进行排序，并且设置mapred.reduce.tasks&gt;1， 则sort by只保证每个reducer的输出有序，不保证全局有序。</p>
-<p>sort by 不受 hive.mapred.mode 是否为strict ,nostrict 的影响</p>
-<p>sort by 的数据只能保证在同一reduce中的数据可以按指定字段排序。</p>
-<p>使用sort by 你可以指定执行的reduce 个数 （set mapred.reduce.tasks=<number>）,对输出的数据再执行归并排序，即可以得到全部结果。</number></p>
-<p>注意：可以用limit子句大大减少数据量。使用limit n后，传输到reduce端（单机）的数据记录数就减少到n* （map个数）。否则由于数据过大可能出不了结果。</p>
-<p>distribute by<br>按照指定的字段对数据进行划分到不同的输出reduce  / 文件中。</p>
-<p>insert overwrite local directory ‘/home/hadoop/out’ select * from test order by name distribute by length(name);  </p>
-<p>此方法会根据name的长度划分到不同的reduce中，最终输出到不同的文件中。 </p>
-<p>length 是内建函数，也可以指定其他的函数或这使用自定义函数。</p>
-<p>Cluster By<br>cluster by 除了具有 distribute by 的功能外还兼具 sort by 的功能。 </p>
-<p>但是排序只能是倒序排序，不能指定排序规则为asc 或者desc。</p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Description</th>
-<th>Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hive.exec.stagingdir</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.exec.scratchdir</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.query.length</td>
-<td>The maximum size of a query string .</td>
-<td>100 KB</td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.elements.in.clause</td>
-<td>The maximum number of values in a IN clause. Once exceeded, it will be broken into multiple OR separated IN clauses.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.direct.sql.max.elements.values.clause</td>
-<td>The maximum number of values in a VALUES clause for INSERT statement.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.table.parameters.default</td>
-<td>Default property values for newly created tables</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.session.id</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.session.silent</td>
-<td></td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.session.history.enabled</td>
-<td>Whether to log Hive query, query plan, runtime statistics etc.</td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.query.string</td>
-<td>Query being executed</td>
-<td></td>
-</tr>
-<tr>
-<td>hive.query.id</td>
-<td>ID for query being executed</td>
-<td></td>
-</tr>
-<tr>
-<td>hive.jobname.length</td>
-<td>max jobname length</td>
-<td>50</td>
-</tr>
-<tr>
-<td>hive.alias</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>hive.map.aggr</td>
-<td>Whether to use map-side aggregation in Hive Group By queries</td>
-<td>true</td>
-</tr>
-<tr>
-<td>hive.groupby.skewindata</td>
-<td>Whether there is skew in data to optimize group by queries</td>
-<td>false</td>
-</tr>
-<tr>
-<td>hive.join.emit.interval</td>
-<td>How many rows in the right-most join operand Hive should buffer before emitting the join result.</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.join.cache.size</td>
-<td>How many rows in the joining tables (except the streaming table) should be cached in memory.</td>
-<td>25000</td>
-</tr>
-<tr>
-<td>hive.mapjoin.bucket.cache.size</td>
-<td></td>
-<td>100</td>
-</tr>
-<tr>
-<td>hive.mapjoin.optimized.hashtable</td>
-<td>Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez and Spark, because memory-optimized hashtable cannot be serialized.</td>
-<td>true</td>
-</tr>
-<tr>
-<td>hive.groupby.mapaggr.checkinterval</td>
-<td>Number of rows after which size of the grouping keys/aggregation classes is performed</td>
-<td>100000</td>
-</tr>
-<tr>
-<td>hive.map.aggr.hash.percentmemory</td>
-<td>Portion of total memory to be used by map-side group aggregation hash table</td>
-<td>0.5</td>
-</tr>
-<tr>
-<td>hive.mapjoin.followby.map.aggr.hash.percentmemory</td>
-<td>Portion of total memory to be used by map-side group aggregation hash table, when this group by is followed by map join</td>
-<td>0.3</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>hive.heartbeat.interval</td>
-<td>Send a heartbeat after this interval - used by mapjoin and filter operators</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>hive.limit.row.max.size</td>
-<td>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</td>
-<td>100000</td>
-</tr>
-<tr>
-<td>hive.limit.optimize.limit.file</td>
-<td>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</td>
-<td>10</td>
-</tr>
-<tr>
-<td>hive.limit.optimize.enable</td>
-<td>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</td>
-<td>false</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-02T05:49:49.000Z"><a href="/2016/07/02/distribution/kafka/">2016-07-02</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/07/02/distribution/kafka/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><h4 id="Log-Compaction"><a href="#Log-Compaction" class="headerlink" title="Log Compaction"></a>Log Compaction</h4><p>A log is a data structure that maintains a timeline of things.</p>
-<p>Here is a high-level picture that shows the logical structure of a Kafka log with the offset for each message. </p>
-<p>The head of the log is identical to a traditional Kafka log.</p>
-<p>Log compaction adds an option for handling the tail of the log. </p>
-<p><code>In 0.7 the tail of the log is always deleted.</code></p>
-<p><code>In 0.8 there is a per-topic option to choose either &quot;delete&quot; or &quot;compact&quot;.</code></p>
-<p><img src="resource/kafka/Log_Compaction.png" alt="Log Compaction"></p>
-<table>
-<thead>
-<tr>
-<th>configuration</th>
-<th>description</th>
-<th>default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>log.cleaner.enable</td>
-<td>Turn on log cleaning. This is disabled by default for now.</td>
-<td>false</td>
-</tr>
-<tr>
-<td>log.cleaner.dedupe.buffer.size</td>
-<td>The amount of memory that can be used for log cleaning across all cleaner threads.</td>
-<td>500 MB</td>
-</tr>
-<tr>
-<td>log.cleaner.io.buffer.size</td>
-<td>The buffer used for reads and writes to the log.</td>
-<td>512K</td>
-</tr>
-<tr>
-<td>log.cleaner.delete.retention.ms</td>
-<td>The time for which delete markers are retained in the tail of the log.</td>
-<td>24 Hours</td>
-</tr>
-<tr>
-<td>log.cleaner.min.cleanable.ratio</td>
-<td>The minimum ratio of cleanable log head to total log for a log to be eligible for cleaning.</td>
-<td>0.5</td>
-</tr>
-<tr>
-<td>log.cleaner.threads</td>
-<td>The number of background threads to use for log cleaning.</td>
-<td>1</td>
-</tr>
-<tr>
-<td>log.cleaner.max.io.bytes.per.second</td>
-<td>The maximum I/O that the log cleaning across all threads.</td>
-<td>Infinity</td>
-</tr>
-<tr>
-<td>log.cleaner.backoff.ms</td>
-<td>The time to wait in between checking if there are any cleanable logs.</td>
-<td>30 seconds</td>
-</tr>
-<tr>
-<td>log.cleanup.policy</td>
-<td>The default policy for handling log tails. Can be either delete or compact.</td>
-<td>delete</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Internals"><a href="#Internals" class="headerlink" title="Internals"></a>Internals</h4><p><code>Kafka API layer</code></p>
-<p><code>LogManager and Log</code></p>
-<p><code>ReplicaManager</code></p>
-<p><code>ZookeeperConsumerConnector</code></p>
-<p><img src="resource/kafka/kafka_broker_internals.png" alt="Internals"></p>
-<h4 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h4><table>
-<thead>
-<tr>
-<th>configuration</th>
-<th>description</th>
-<th>default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>compression.codec</td>
-<td>Controls the compression codec to be used by the producer. 0 means no compression. 1 means GZIP compression. 2 means Snappy compression</td>
-<td>0</td>
-</tr>
-<tr>
-<td>compressed.topics</td>
-<td>comma separated list of topics for which compression should be enabled.</td>
-<td>empty</td>
-</tr>
-</tbody>
-</table>
+<p><code>Adadelta</code></p>
+<p>Adadelta 是一个基于梯度下降的学习算法，可以随时间调整适应每个参数的学习率。它是作为 Adagrad 的改进版提出的，它比超参数（hyperparameter）更敏感而且可能会太过严重地降低学习率。Adadelta 类似于 rmsprop，而且可被用来替代 vanilla SGD。</p>
+<ul>
+<li>论文：Adadelta：一种自适应学习率方法（ADADELTA: An Adaptive Learning Rate Method）</li>
+<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
 <hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://www.confluent.io/blog/apache-kafka-0.9-is-released" target="_blank" rel="external">Apache Kafka 0.9 is Released</a></li>
-<li><a href="http://www.confluent.io/blog/290-reasons-to-upgrade-to-apache-kafka-0.9.0.0" target="_blank" rel="external">290 Reasons to Upgrade to Apache Kafka 0.9.0.0</a></li>
-<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Log+Compaction" target="_blank" rel="external">Log Compaction</a></li>
-<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Client+Re-Design" target="_blank" rel="external">Consumer Client Re-Design</a></li>
-<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Offset+Management" target="_blank" rel="external">Offset Management</a></li>
-<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Compression" target="_blank" rel="external">Compression</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-07-02T02:04:08.000Z"><a href="/2016/07/02/other/gobblin/">2016-07-02</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/07/02/other/gobblin/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Gobblin"><a href="#Gobblin" class="headerlink" title="Gobblin"></a>Gobblin</h3><p><strong>Data lifecycle management</strong></p>
-<p>Here is a sampling of the most common requirements :</p>
-<ol>
-<li>Can you also copy this data onto these other Hadoop clusters?</li>
-<li>Can you purge some rows for compliance reasons? Can this be done continuously?</li>
-<li>Can the data be automatically registered with Hive, Presto, etc.?</li>
-<li>Can you provide certain datasets in a more optimal format like ORC?</li>
-<li>Can you retain data for a period of time and then purge it on an ongoing basis?</li>
-<li>Can you guarantee that the data doesn’t have duplicates?</li>
-<li>Can I easily declare lifecycle management policies that apply to datasets, dataset groups and clusters?</li>
-</ol>
+<p><code>Adagrad</code></p>
+<p>Adagrad 是一种自适应学习率算法，能够随时间跟踪平方梯度并自动适应每个参数的学习率。它可被用来替代vanilla SGD (<a href="http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。" target="_blank" rel="external">http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。</a></p>
+<ul>
+<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
+<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
 <hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://engineering.linkedin.com/blog/2016/06/announcing-gobblin-0-7-0--going-beyond-ingestion" target="_blank" rel="external">Announcing Gobblin 0.7.0: Going Beyond Ingestion</a></li>
-</ol>
+<p><code>Adam</code></p>
+<p>Adam 是一种类似于 rmsprop 的自适应学习率算法，但它的更新是通过使用梯度的第一和第二时刻的运行平均值（running average）直接估计的，而且还包括一个偏差校正项。</p>
+<ul>
+<li>论文：Adam：一种随机优化方法（Adam: A Method for Stochastic Optimization）</li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>仿射层（Affine Layer）</code></p>
+<p>神经网络中的一个全连接层。仿射（Affine）的意思是前面一层中的每一个神经元都连接到当前层中的每一个神经元。在许多方面，这是神经网络的「标准」层。仿射层通常被加在卷积神经网络或循环神经网络做出最终预测前的输出的顶层。仿射层的一般形式为 y = f(Wx + b)，其中 x 是层输入，w 是参数，b 是一个偏差矢量，f 是一个非线性激活函数。</p>
+<hr>
+<p><code>注意机制（Attention Mechanism）</code></p>
+<p>注意机制是由人类视觉注意所启发的，是一种关注图像中特定部分的能力。注意机制可被整合到语言处理和图像识别的架构中以帮助网络学习在做出预测时应该「关注」什么。</p>
+<ul>
+<li>技术博客：深度学习和自然语言处理中的注意和记忆（<a href="http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）" target="_blank" rel="external">http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）</a></li>
+</ul>
+<hr>
+<p><code>Alexnet</code></p>
+<p>Alexnet 是一种卷积神经网络架构的名字，这种架构曾在 2012 年 ILSVRC 挑战赛中以巨大优势获胜，而且它还导致了人们对用于图像识别的卷积神经网络（CNN）的兴趣的复苏。它由 5 个卷积层组成。其中一些后面跟随着最大池化（max-pooling）层和带有最终 1000 条路径的 softmax (1000-way softmax)的 3个全连接层。Alexnet 被引入到了使用深度卷积神经网络的 ImageNet 分类中。</p>
+<hr>
+<p><code>自编码器（Autoencoder）</code></p>
+<p>自编码器是一种神经网络模型，它的目标是预测输入自身，这通常通过网络中某个地方的「瓶颈（bottleneck）」实现。通过引入瓶颈，我们迫使网络学习输入更低维度的表征，从而有效地将输入压缩成一个好的表征。自编码器和 PCA 等降维技术相关，但因为它们的非线性本质，它们可以学习更为复杂的映射。目前已有一些范围涵盖较广的自编码器存在，包括 降噪自编码器（Denoising Autoencoders）、变自编码器（Variational Autoencoders）和序列自编码器（Sequence Autoencoders）。</p>
+<ul>
+<li>降噪自编码器论文：Stacked Denoising Autoencoders: Learning Useful Representations in a Deep Network with a Local Denoising Criterion </li>
+<li>变自编码器论文：Auto-Encoding Variational Bayes</li>
+<li>序列自编码器论文：Semi-supervised Sequence Learning</li>
+</ul>
+<hr>
+<p><code>平均池化（Average-Pooling）</code></p>
+<p>平均池化是一种在卷积神经网络中用于图像识别的池化（Pooling）技术。它的工作原理是在特征的局部区域上滑动窗口，比如像素，然后再取窗口中所有值的平均。它将输入表征压缩成一种更低维度的表征。</p>
+<hr>
+<p><code>反向传播（Backpropagation）</code></p>
+<p>反向传播是一种在神经网络中用来有效地计算梯度的算法，或更一般而言，是一种前馈计算图（feedforward computational graph）。其可以归结成从网络输出开始应用分化的链式法则，然后向后传播梯度。反向传播的第一个应用可以追溯到 1960 年代的 Vapnik 等人，但论文 Learning representations by back-propagating errors常常被作为引用源。</p>
+<ul>
+<li>技术博客：计算图上的微积分学：反向传播（<a href="http://colah.github.io/posts/2015-08-Backprop/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Backprop/）</a></li>
+</ul>
+<hr>
+<p><code>通过时间的反向传播（BPTT：Backpropagation Through Time）</code></p>
+<p>通过时间的反向传播是应用于循环神经网络（RNN）的反向传播算法。BPTT 可被看作是应用于 RNN 的标准反向传播算法，其中的每一个时间步骤（time step）都代表一个计算层，而且它的参数是跨计算层共享的。因为 RNN 在所有的时间步骤中都共享了同样的参数，一个时间步骤的错误必然能「通过时间」反向到之前所有的时间步骤，该算法也因而得名。当处理长序列（数百个输入）时，为降低计算成本常常使用一种删节版的 BPTT。删节的 BPTT 会在固定数量的步骤之后停止反向传播错误。</p>
+<p>论文：Backpropagation Through Time: What It Does and How to Do It</p>
+<hr>
+<p><code>分批标准化（BN：Batch Normalization）</code></p>
+<p>分批标准化是一种按小批量的方式标准化层输入的技术。它能加速训练过程，允许使用更高的学习率，还可用作规范器（regularizer）。人们发现，分批标准化在卷积和前馈神经网络中应用时非常高效，但尚未被成功应用到循环神经网络上。</p>
+<p>论文：分批标准化：通过减少内部协变量位移（Covariate Shift）加速深度网络训练（Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift）<br>论文：使用分批标准化的循环神经网络（Batch Normalized Recurrent Neural Networks）</p>
+<p>双向循环神经网络（Bidirectional RNN）</p>
+<p>双向循环神经网络是一类包含两个方向不同的 RNN 的神经网络。其中的前向 RNN 从起点向终点读取输入序列，而反向 RNN 则从终点向起点读取。这两个 RNN 互相彼此堆叠，它们的状态通常通过附加两个矢量的方式进行组合。双向 RNN 常被用在自然语言问题中，因为在自然语言中我们需要同时考虑话语的前后上下文以做出预测。</p>
+<ul>
+<li>论文：双向循环神经网络（Bidirectional Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>Caffe</code></p>
+<p>Caffe 是由伯克利大学视觉和学习中心开发的一种深度学习框架。在视觉任务和卷积神经网络模型中，Caffe 格外受欢迎且性能优异<br>.<br>分类交叉熵损失（Categorical Cross-Entropy Loss）</p>
+<p>分类交叉熵损失也被称为负对数似然（negative log likelihood）。这是一种用于解决分类问题的流行的损失函数，可用于测量两种概率分布（通常是真实标签和预测标签）之间的相似性。它可用 L = -sum(y * log(y_prediction)) 表示，其中 y 是真实标签的概率分布（通常是一个one-hot vector），y_prediction 是预测标签的概率分布，通常来自于一个 softmax。</p>
+<hr>
+<p><code>信道（Channel）</code></p>
+<p>深度学习模型的输入数据可以有多个信道。图像就是个典型的例子，它有红、绿和蓝三个颜色信道。一个图像可以被表示成一个三维的张量（Tensor），其中的维度对应于信道、高度和宽度。自然语言数据也可以有多个信道，比如在不同类型的嵌入（embedding）形式中。</p>
+<hr>
+<p><code>卷积神经网络（CNN/ConvNet：Convolutional Neural Network）</code></p>
+<p>CNN 使用卷积连接从输入的局部区域中提取的特征。大部分 CNN 都包含了卷积层、池化层和仿射层的组合。CNN 尤其凭借其在视觉识别任务的卓越性能表现而获得了普及，它已经在该领域保持了好几年的领先。</p>
+<ul>
+<li>技术博客：斯坦福CS231n类——用于视觉识别的卷积神经网络（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：理解用于自然语言处理的卷积神经网络（<a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）" target="_blank" rel="external">http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）</a></li>
+</ul>
+<hr>
+<p><code>深度信念网络（DBN：Deep Belief Network）</code></p>
+<p>DBN 是一类以无监督的方式学习数据的分层表征的概率图形模型。DBN 由多个隐藏层组成，这些隐藏层的每一对连续层之间的神经元是相互连接的。DBN 通过彼此堆叠多个 RBN（限制波尔兹曼机）并一个接一个地训练而创建。</p>
+<ul>
+<li>论文：深度信念网络的一种快速学习算法（A fast learning algorithm for deep belief nets）</li>
+</ul>
+<hr>
+<p><code>Deep Dream</code></p>
+<p>这是谷歌发明的一种试图用来提炼深度卷积神经网络获取的知识的技术。这种技术可以生成新的图像或转换已有的图片从而给它们一种幻梦般的感觉，尤其是递归地应用时。</p>
+<p>代码：Github 上的 Deep Dream（<a href="https://github.com/google/deepdream）" target="_blank" rel="external">https://github.com/google/deepdream）</a><br>技术博客：Inceptionism：向神经网络掘进更深（<a href="https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）" target="_blank" rel="external">https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）</a></p>
+<hr>
+<p><code>Dropout</code></p>
+<p>Dropout 是一种用于神经网络防止过拟合的正则化技术。它通过在每次训练迭代中随机地设置神经元中的一小部分为 0 来阻止神经元共适应（co-adapting），Dropout 可以通过多种方式进行解读，比如从不同网络的指数数字中随机取样。Dropout 层首先通过它们在卷积神经网络中的应用而得到普及，但自那以后也被应用到了其它层上，包括输入嵌入或循环网络。</p>
+<ul>
+<li>论文：Dropout: 一种防止神经网络过拟合的简单方法（Dropout: A Simple Way to Prevent Neural Networks from Overfitting）</li>
+<li>论文：循环神经网络正则化（Recurrent Neural Network Regularization）</li>
+</ul>
+<hr>
+<p><code>嵌入（Embedding）</code></p>
+<p>一个嵌入映射到一个输入表征，比如一个词或一句话映射到一个矢量。一种流行的嵌入是词语嵌入（word embedding，国内常用的说法是：词向量），如 word2vec 或 GloVe。我们也可以嵌入句子、段落或图像。比如说，通过将图像和他们的文本描述映射到一个共同的嵌入空间中并最小化它们之间的距离，我们可以将标签和图像进行匹配。嵌入可以被明确地学习到，比如在 word2vec 中；嵌入也可作为监督任务的一部分例如情感分析（Sentiment Analysis）。通常一个网络的输入层是通过预先训练的嵌入进行初始化，然后再根据当前任务进行微调（fine-tuned）。</p>
+<p>梯度爆炸问题（Exploding Gradient Problem）</p>
+<p>梯度爆炸问题是梯度消失问题（Vanishing Gradient Problem）的对立面。在深度神经网络中，梯度可能会在反向传播过程中爆炸，导致数字溢出。解决梯度爆炸的一个常见技术是执行梯度裁剪（Gradient Clipping）。</p>
+<p>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</p>
+<hr>
+<p><code>微调（Fine-Tuning）</code></p>
+<p>Fine-Tuning 这种技术是指使用来自另一个任务（例如一个无监督训练网络）的参数初始化网络，然后再基于当前任务更新这些参数。比如，自然语言处理架构通常使用 word2vec 这样的预训练的词向量（word embeddings），然后这些词向量会在训练过程中基于特定的任务（如情感分析）进行更新。</p>
+<hr>
+<p><code>梯度裁剪（Gradient Clipping）</code></p>
+<p>梯度裁剪是一种在非常深度的网络（通常是循环神经网络）中用于防止梯度爆炸（exploding gradient）的技术。执行梯度裁剪的方法有很多，但常见的一种是当参数矢量的 L2 范数（L2 norm）超过一个特定阈值时对参数矢量的梯度进行标准化，这个特定阈值根据函数：新梯度=梯度<em>阈值/L2范数（梯度）{new_gradients = gradients </em> threshold / l2_norm(gradients)}确定。</p>
+<ul>
+<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>GloVe</code></p>
+<p>Glove 是一种为话语获取矢量表征（嵌入）的无监督学习算法。GloVe 的使用目的和 word2vec 一样，但 GloVe 具有不同的矢量表征，因为它是在共现（co-occurrence）统计数据上训练的。</p>
+<ul>
+<li>论文：GloVe：用于词汇表征（Word Representation）的全局矢量（Global Vector）（GloVe: Global Vectors for Word Representation ）</li>
+</ul>
+<hr>
+<p><code>GoogleLeNet</code></p>
+<p>GoogleLeNet 是曾赢得了 2014 年 ILSVRC 挑战赛的一种卷积神经网络架构。这种网络使用 Inception 模块（Inception Module）以减少参数和提高网络中计算资源的利用率。</p>
+<ul>
+<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
+</ul>
+<hr>
+<p><code>GRU</code></p>
+<p>GRU（Gated Recurrent Unit：门控循环单元）是一种 LSTM 单元的简化版本，拥有更少的参数。和 LSTM 细胞（LSTM cell）一样，它使用门控机制，通过防止梯度消失问题（vanishing gradient problem）让循环神经网络可以有效学习长程依赖（long-range dependency）。GRU 包含一个复位和更新门，它们可以根据当前时间步骤的新值决定旧记忆中哪些部分需要保留或更新。</p>
+<ul>
+<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
+<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
+</ul>
+<hr>
+<p><code>Highway Layer</code></p>
+<p>Highway Layer　是使用门控机制控制通过层的信息流的一种神经网络层。堆叠多个 Highway Layer 层可让训练非常深的网络成为可能。Highway Layer 的工作原理是通过学习一个选择输入的哪部分通过和哪部分通过一个变换函数（如标准的仿射层）的门控函数来进行学习。Highway Layer 的基本公式是 T <em> h(x) + (1 - T) </em> x；其中 T 是学习过的门控函数，取值在 0 到 1 之间；h(x) 是一个任意的输入变换，x 是输入。注意所有这些都必须具有相同的大小。</p>
+<ul>
+<li>论文：Highway Networks</li>
+</ul>
+<hr>
+<p><code>ICML</code></p>
+<p>即国际机器学习大会（International Conference for Machine Learning），一个顶级的机器学习会议。</p>
+<hr>
+<p><code>ILSVRC</code></p>
+<p>即 ImageNet 大型视觉识别挑战赛（ImageNet Large Scale Visual Recognition Challenge），该比赛用于评估大规模对象检测和图像分类的算法。它是计算机视觉领域最受欢迎的学术挑战赛。过去几年中，深度学习让错误率出现了显著下降，从 30% 降到了不到 5%，在许多分类任务中击败了人类。</p>
+<hr>
+<p><code>Inception模块（Inception Module）</code></p>
+<p>Inception模块被用在卷积神经网络中，通过堆叠 1×1 卷积的降维（dimensionality reduction）带来更高效的计算和更深度的网络。</p>
+<ul>
+<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
+</ul>
+<hr>
+<p><code>Keras</code></p>
+<p>Kears 是一个基于 Python 的深度学习库，其中包括许多用于深度神经网络的高层次构建模块。它可以运行在 TensorFlow 或 Theano 上。</p>
+<hr>
+<p><code>LSTM</code></p>
+<p>长短期记忆（Long Short-Term Memory）网络通过使用内存门控机制防止循环神经网络（RNN）中的梯度消失问题（vanishing gradient problem）。使用 LSTM 单元计算 RNN 中的隐藏状态可以帮助该网络有效地传播梯度和学习长程依赖（long-range dependency）。</p>
+<ul>
+<li>论文：长短期记忆（LONG SHORT-TERM MEMORY）</li>
+<li>技术博客：理解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
+<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
+</ul>
+<hr>
+<p><code>最大池化（Max-Pooling）</code></p>
+<p>池化（Pooling）操作通常被用在卷积神经网络中。一个最大池化层从一块特征中选取最大值。和卷积层一样，池化层也是通过窗口（块）大小和步幅尺寸进行参数化。比如，我们可能在一个 10×10 特征矩阵上以 2 的步幅滑动一个 2×2 的窗口，然后选取每个窗口的 4 个值中的最大值，得到一个 5×5 特征矩阵。池化层通过只保留最突出的信息来减少表征的维度；在这个图像输入的例子中，它们为转译提供了基本的不变性（即使图像偏移了几个像素，仍可选出同样的最大值）。池化层通常被安插在连续卷积层之间。</p>
+<hr>
+<p><code>MNIST</code></p>
+<p>MNIST数据集可能是最常用的一个图像识别数据集。它包含 60,000 个手写数字的训练样本和 10,000 个测试样本。每一张图像的尺寸为 28×28像素。目前最先进的模型通常能在该测试集中达到 99.5% 或更高的准确度。</p>
+<hr>
+<p><code>动量（Momentum）</code></p>
+<p>动量是梯度下降算法（Gradient Descent Algorithm）的扩展，可以加速和阻抑参数更新。在实际应用中，在梯度下降更新中包含一个动量项可在深度网络中得到更好的收敛速度（convergence rate）。</p>
+<ul>
+<li>论文：通过反向传播（back-propagating error）错误学习表征</li>
+</ul>
+<hr>
+<p><code>多层感知器（MLP：Multilayer Perceptron）</code></p>
+<p>多层感知器是一种带有多个全连接层的前馈神经网络，这些全连接层使用非线性激活函数（activation function）处理非线性可分的数据。MLP 是多层神经网络或有两层以上的深度神经网络的最基本形式。</p>
+<p>负对数似然（NLL：Negative Log Likelihood）</p>
+<p>参见分类交叉熵损失（Categorical Cross-Entropy Loss）。</p>
+<p>神经网络机器翻译（NMT：Neural Machine Translation）</p>
+<p>NMT 系统使用神经网络实现语言（如英语和法语）之间的翻译。NMT 系统可以使用双语语料库进行端到端的训练，这有别于需要手工打造特征和开发的传统机器翻译系统。NMT 系统通常使用编码器和解码器循环神经网络实现，它可以分别编码源句和生成目标句。</p>
+<ul>
+<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
+<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
+</ul>
+<hr>
+<p><code>神经图灵机（NTM：Neural Turing Machine）</code></p>
+<p>NTM 是可以从案例中推导简单算法的神经网络架构。比如，NTM 可以通过案例的输入和输出学习排序算法。NTM 通常学习记忆和注意机制的某些形式以处理程序执行过程中的状态。</p>
+<ul>
+<li>论文：神经图灵机（Neural Turing Machines）</li>
+</ul>
+<hr>
+<p><code>非线性（Nonlinearity）</code></p>
+<p>参见激活函数（Activation Function）。</p>
+<p>噪音对比估计（NCE：noise-contrastive estimation）</p>
+<p>噪音对比估计是一种通常被用于训练带有大输出词汇的分类器的采样损失（sampling loss）。在大量的可能的类上计算 softmax 是异常昂贵的。使用 NCE，我们可以将问题降低成二元分类问题，这可以通过训练分类器区别对待取样和「真实」分布以及人工生成的噪声分布来实现。</p>
+<ul>
+<li>论文：噪音对比估计：一种用于非标准化统计模型的新估计原理（Noise-contrastive estimation: A new estimation principle for unnormalized statistical models ）</li>
+<li>论文：使用噪音对比估计有效地学习词向量（Learning word embeddings efficiently with noise-contrastive estimation）</li>
+</ul>
+<hr>
+<p><code>池化</code></p>
+<p>参见最大池化（Max-Pooling）或平均池化（Average-Pooling）。</p>
+<hr>
+<p><code>受限玻尔兹曼机（RBN：Restricted Boltzmann Machine）</code></p>
+<p>RBN 是一种可被解释为一个随机人工神经网络的概率图形模型。RBN 以无监督的形式学习数据的表征。RBN 由可见层和隐藏层以及每一个这些层中的二元神经元的连接所构成。RBN 可以使用对比散度（contrastive divergence）进行有效的训练，这是梯度下降的一种近似。</p>
+<ul>
+<li>论文：受限玻尔兹曼机简介（An Introduction to Restricted Boltzmann Machines）</li>
+</ul>
+<hr>
+<p><code>循环神经网络（RNN：Recurrent Neural Network）</code></p>
+<p>RNN 模型通过隐藏状态（或称记忆）连续进行相互作用。它可以使用最多 N 个输入，并产生最多 N 个输出。比如，一个输入序列可能是一个句子，其输出为每个单词的词性标注（part-of-speech tag）（N 到 N）；一个输入可能是一个句子，其输出为该句子的情感分类（N 到 1）；一个输入可能是单个图像，其输出为描述该图像所对应一系列词语（1 到 N）。在每一个时间步骤中，RNN 会基于当前输入和之前的隐藏状态计算新的隐藏状态「记忆」。其中「循环（recurrent）」这个术语来自这个事实：在每一步中都是用了同样的参数，该网络根据不同的输入执行同样的计算。</p>
+<ul>
+<li>技术博客：了解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
+<li>技术博客：循环神经网络教程第1部分——介绍 RNN （<a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）" target="_blank" rel="external">http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）</a></li>
+</ul>
+<hr>
+<p><code>递归神经网络（Recursive Neural Network）</code></p>
+<p>递归神经网络是循环神经网络的树状结构的一种泛化（generalization）。每一次递归都使用相同的权重。就像 RNN 一样，递归神经网络可以使用向后传播（backpropagation）进行端到端的训练。尽管可以学习树结构以将其用作优化问题的一部分，但递归神经网络通常被用在已有预定义结构的问题中，如自然语言处理的解析树中。</p>
+<ul>
+<li>论文：使用递归神经网络解析自然场景和自然语言（Parsing Natural Scenes and Natural Language with Recursive Neural Networks ）</li>
+</ul>
+<hr>
+<p><code>ReLU</code></p>
+<p>即线性修正单元（Rectified Linear Unit）。ReLU 常在深度神经网络中被用作激活函数。它们的定义是 f(x) = max(0, x) 。ReLU 相对于 tanh 等函数的优势包括它们往往很稀疏（它们的活化可以很容易设置为 0），而且它们受到梯度消失问题的影响也更小。ReLU 主要被用在卷积神经网络中用作激活函数。ReLU 存在几种变体，如Leaky ReLUs、Parametric ReLU (PReLU) 或更为流畅的 softplus近似。</p>
+<ul>
+<li>论文：深入研究修正器（Rectifiers）：在 ImageNet 分类上超越人类水平的性能（Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification）</li>
+<li>论文：修正非线性改进神经网络声学模型（Rectifier Nonlinearities Improve Neural Network Acoustic Models ）</li>
+<li>论文：线性修正单元改进受限玻尔兹曼机（Rectified Linear Units Improve Restricted Boltzmann Machines  ）</li>
+</ul>
+<hr>
+<p><code>残差网络（ResNet）</code></p>
+<p>深度残差网络（Deep Residual Network）赢得了 2015 年的 ILSVRC 挑战赛。这些网络的工作方式是引入跨层堆栈的快捷连接，让优化器可以学习更「容易」的残差映射（residual mapping）而非更为复杂的原映射（original mapping）。这些快捷连接和 Highway Layer 类似，但它们与数据无关且不会引入额外的参数或训练复杂度。ResNet 在 ImageNet 测试集中实现了 3.57% 的错误率。</p>
+<ul>
+<li>论文：用于图像识别的深度残差网络（Deep Residual Learning for Image Recognition）</li>
+</ul>
+<hr>
+<p><code>RMSProp</code></p>
+<p>RMSProp 是一种基于梯度的优化算法。它与 Adagrad 类似，但引入了一个额外的衰减项抵消 Adagrad 在学习率上的快速下降。</p>
+<ul>
+<li>PPT：用于机器学习的神经网络 讲座6a</li>
+<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>序列到序列（Seq2Seq）</code></p>
+<p>序列到序列（Sequence-to-Sequence）模型读取一个序列（如一个句子）作为输入，然后产生另一个序列作为输出。它和标准的 RNN 不同；在标准的 RNN 中，输入序列会在网络开始产生任何输出之前被完整地读取。通常而言，Seq2Seq 通过两个分别作为编码器和解码器的 RNN 实现。神经网络机器翻译是一类典型的 Seq2Seq 模型。</p>
+<ul>
+<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
+</ul>
+<hr>
+<p><code>随机梯度下降（SGD：Stochastic Gradient Descent）</code></p>
+<p>随机梯度下降是一种被用在训练阶段学习网络参数的基于梯度的优化算法。梯度通常使用反向传播算法计算。在实际应用中，人们使用微小批量版本的 SGD，其中的参数更新基于批案例而非单个案例进行执行，这能增加计算效率。vanilla SGD 存在许多扩展，包括动量（Momentum）、Adagrad、rmsprop、Adadelta 或 Adam。</p>
+<ul>
+<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
+<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
+<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
+</ul>
+<hr>
+<p><code>Softmax</code></p>
+<p>Softmax 函数通常被用于将原始分数（raw score）的矢量转换成用于分类的神经网络的输出层上的类概率（class probability）。它通过对归一化常数（normalization constant）进行指数化和相除运算而对分数进行规范化。如果我们正在处理大量的类，例如机器翻译中的大量词汇，计算归一化常数是很昂贵的。有许多种可以让计算更高效的替代选择，包括分层 Softmax（Hierarchical Softmax）或使用基于取样的损失函数，如 NCE。</p>
+<hr>
+<p><code>TensorFlow</code></p>
+<p>TensorFlow是一个开源 C ++ / Python 软件库，用于使用数据流图的数值计算，尤其是深度神经网络。它是由谷歌创建的。在设计方面，它最类似于 Theano，但比  Caffe 或 Keras 更低级。</p>
+<hr>
+<p><code>Theano</code></p>
+<p>Theano 是一个让你可以定义、优化和评估数学表达式的 Python 库。它包含许多用于深度神经网络的构造模块。Theano 是类似于 TensorFlow 的低级别库。更高级别的库包括Keras 和 Caffe。</p>
+<hr>
+<p><code>梯度消失问题（Vanishing Gradient Problem）</code></p>
+<p>梯度消失问题出现在使用梯度很小（在 0 到 1 的范围内）的激活函数的非常深的神经网络中，通常是循环神经网络。因为这些小梯度会在反向传播中相乘，它们往往在这些层中传播时「消失」，从而让网络无法学习长程依赖。解决这一问题的常用方法是使用 ReLU 这样的不受小梯度影响的激活函数，或使用明确针对消失梯度问题的架构，如LSTM。这个问题的反面被称为梯度爆炸问题（exploding gradient problem）。</p>
+<ul>
+<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
+</ul>
+<hr>
+<p><code>VGG</code></p>
+<p>VGG 是在 2014 年 ImageNet 定位和分类比赛中分别斩获第一和第二位置的卷积神经网络模型。这个 VGG 模型包含 16-19 个权重层，并使用了大小为 3×3 和 1×1 的小型卷积过滤器。</p>
+<ul>
+<li>论文：用于大规模图像识别的非常深度的卷积网络（Very Deep Convolutional Networks for Large-Scale Image Recognition）</li>
+</ul>
+<hr>
+<p><code>word2vec</code></p>
+<p>word2vec 是一种试图通过预测文档中话语的上下文来学习词向量（word embedding）的算法和工具 (<a href="https://code.google.com/p/word2vec/)。最终得到的词矢量（word" target="_blank" rel="external">https://code.google.com/p/word2vec/)。最终得到的词矢量（word</a> vector）有一些有趣的性质，例如vector(‘queen’) ~= vector(‘king’) - vector(‘man’) + vector(‘woman’) （女王~=国王-男人+女人）。两个不同的目标函数可以用来学习这些嵌入：Skip-Gram 目标函数尝试预测一个词的上下文，CBOW  目标函数则尝试从词上下文预测这个词。</p>
+<ul>
+<li>论文：向量空间中词汇表征的有效评估（Efficient Estimation of Word Representations in Vector Space）</li>
+<li>论文：分布式词汇和短语表征以及他们的组合性（Distributed Representations of Words and Phrases and their Compositionality）</li>
+<li>论文：解释 word2vec 参数学习（word2vec Parameter Learning Explained）</li>
+</ul>
+<hr>
+<p><code>AUC (Area Under Curve)</code></p>
+<p>在计算广告学中，AUC经常用于统计ROC曲线的面积，用来量化评估广告的CTR质量。ROC(Receiver Operating Characteristics) graphs ROC经常被用于模式识别、分类器的结果展现和性能评测。传统的ROC曲线多用于医学检测领域，2000年以后，在机器学习、数据挖掘领域开始有使用、</p>
+<p>ROC是二维平面上的曲线，平面的横坐标是false positive rate(FPR)，纵坐标是true positive rate(TPR)，对某个待评估的数据挖掘方法而言，我们可以根据其在测试样本上的表现得到一个TPR和FPR点对。这样，分类器就可以映射成ROC平面上的一个点，这些点构成一个阶梯状的曲线，计算的AUC也就是这些阶梯下面的面积之和。</p>
+<p>在广告中，根据CTR的高低，将最有可能被用户点击的广告按顺序依次展现，根据点击反馈，可以生成ROC曲线（y方向，点击+1；x方向，未点击+1），很明显，用户点击的越多，被点击的广告排序越靠前，ROC曲线下的面积越大，即AUC越大，则表明广告投放的效果越好，也就是CTR预测越准确。</p>
+<hr>
 
       
     </div>
@@ -1506,11 +858,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-20T03:43:00.000Z"><a href="/2016/06/20/statistics/ExponentialDistribution/">2016-06-20</a></time>
+        <time datetime="2016-09-15T02:49:36.000Z"><a href="/2016/09/15/other/antlr/">2016-09-15</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/06/20/statistics/ExponentialDistribution/"></a></h1>
+    <h1 class="title"><a href="/2016/09/15/other/antlr/"></a></h1>
   
 
     </header>
@@ -1538,11 +890,11 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-20T03:42:27.000Z"><a href="/2016/06/20/statistics/PoissonDistribution/">2016-06-20</a></time>
+        <time datetime="2016-09-03T14:32:16.000Z"><a href="/2016/09/03/machine_learning/RidgeRegression/">2016-09-03</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/06/20/statistics/PoissonDistribution/"></a></h1>
+    <h1 class="title"><a href="/2016/09/03/machine_learning/RidgeRegression/"></a></h1>
   
 
     </header>
@@ -1567,41 +919,47 @@
 
 <nav id="pagination">
   
-    <a href="/" class="alignleft prev">Prev</a>
+    <a href="/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/3/" class="alignright next">Next</a>
+    <a href="/page/3/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -1611,7 +969,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -1626,13 +984,27 @@
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   

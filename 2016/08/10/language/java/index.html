@@ -3,20 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>darion.johannes.yaphet</title>
+  <title>Java | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
-  <meta name="description" content="###Java
-####Class Loader
-####Collection
-探索ConcurrentHashMap
+  <meta name="description" content="JavaClass LoaderCollection探索ConcurrentHashMap
 ConcurrentHashMap 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。
-JMM由一些">
+JMM由一些规则组成，这些规则确定线程对">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Java"/>
   <meta property="og:site_name" content="darion.johannes.yaphet"/>
 
   
@@ -56,20 +53,17 @@ JMM由一些">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/java/">2016-04-21</a></time>
+        <time datetime="2016-08-09T16:00:00.000Z"><a href="/2016/08/10/language/java/">2016-08-10</a></time>
       
       
   
-    <h1 class="title"></h1>
+    <h1 class="title">Java</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Java</p>
-<p>####Class Loader</p>
-<p>####Collection</p>
-<p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
+        <h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><h4 id="Class-Loader"><a href="#Class-Loader" class="headerlink" title="Class Loader"></a>Class Loader</h4><h4 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h4><p><a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/" target="_blank" rel="external"><strong>探索ConcurrentHashMap</strong></a></p>
 <p><code>ConcurrentHashMap</code> 是建立在 Java 内存模型基础上的，为了更好的理解 ConcurrentHashMap，首先简单了解一下 Java 的内存模型。</p>
 <p>JMM由一些规则组成，这些规则确定线程对内存访问如何排序以及何时可以确保它们对线程是可见的。</p>
 <p><code>ConcurrentHashMap</code> 类中包含两个静态内部类 HashEntry 和 Segment。</p>
@@ -149,7 +143,17 @@ JMM由一些">
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/Language/">Language</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/Java/">Java</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -176,7 +180,7 @@ JMM由一些">
 
 
 <section id="comment">
-  <h1 class="title">Comments</h1>
+  <h1 class="title">Comentarios</h1>
 
   
       <div id="fb-root"></div>
@@ -190,7 +194,7 @@ JMM由一些">
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-comments" data-href="http://yoursite.com/2016/04/21/language/java/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+<div class="fb-comments" data-href="http://yoursite.com/2016/08/10/language/java/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
 </section>
@@ -199,31 +203,37 @@ JMM由一些">
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categories</h3>
+  <h3 class="title">Categorías</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Algorithms/">Algorithms</a><small>1</small></li>
+    <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
   
-    <li><a href="/categories/Distributed/">Distributed</a><small>9</small></li>
+    <li><a href="/categories/Distributed/">Distributed</a><small>10</small></li>
   
-    <li><a href="/categories/Language/">Language</a><small>4</small></li>
+    <li><a href="/categories/Language/">Language</a><small>6</small></li>
   
     <li><a href="/categories/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/categories/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/categories/Network/">Network</a><small>2</small></li>
+  
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
+  
+    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
   
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>3</small></li>
+    <li><a href="/categories/live/">live</a><small>4</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
   
@@ -233,7 +243,7 @@ JMM由一些">
 
   
 <div class="widget tag">
-  <h3 class="title">Tags</h3>
+  <h3 class="title">Etiquetas</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
@@ -248,13 +258,27 @@ JMM由一些">
   
     <li><a href="/tags/JVM/">JVM</a><small>1</small></li>
   
-    <li><a href="/tags/Java/">Java</a><small>1</small></li>
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
   
     <li><a href="/tags/Linux/">Linux</a><small>1</small></li>
   
     <li><a href="/tags/Machine-Learning/">Machine Learning</a><small>1</small></li>
   
+    <li><a href="/tags/Mathematics/">Mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/Mesos/">Mesos</a><small>1</small></li>
+  
     <li><a href="/tags/MySQL/">MySQL</a><small>1</small></li>
+  
+    <li><a href="/tags/Network/">Network</a><small>2</small></li>
+  
+    <li><a href="/tags/Node/">Node</a><small>1</small></li>
+  
+    <li><a href="/tags/Politics/">Politics</a><small>1</small></li>
+  
+    <li><a href="/tags/Psychology/">Psychology</a><small>1</small></li>
+  
+    <li><a href="/tags/RedBlackTree/">RedBlackTree</a><small>1</small></li>
   
     <li><a href="/tags/RocksDB/">RocksDB</a><small>1</small></li>
   
