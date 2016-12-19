@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 4 | darion.johannes.yaphet</title>
+  <title>Seite 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,137 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-02T05:49:49.000Z"><a href="/2016/07/02/distribution/kafka/">2016-07-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/02/distribution/kafka/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><h4 id="Log-Compaction"><a href="#Log-Compaction" class="headerlink" title="Log Compaction"></a>Log Compaction</h4><p>A log is a data structure that maintains a timeline of things.</p>
+<p>Here is a high-level picture that shows the logical structure of a Kafka log with the offset for each message. </p>
+<p>The head of the log is identical to a traditional Kafka log.</p>
+<p>Log compaction adds an option for handling the tail of the log. </p>
+<p><code>In 0.7 the tail of the log is always deleted.</code></p>
+<p><code>In 0.8 there is a per-topic option to choose either &quot;delete&quot; or &quot;compact&quot;.</code></p>
+<p><img src="resource/kafka/Log_Compaction.png" alt="Log Compaction"></p>
+<table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>log.cleaner.enable</td>
+<td>Turn on log cleaning. This is disabled by default for now.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>log.cleaner.dedupe.buffer.size</td>
+<td>The amount of memory that can be used for log cleaning across all cleaner threads.</td>
+<td>500 MB</td>
+</tr>
+<tr>
+<td>log.cleaner.io.buffer.size</td>
+<td>The buffer used for reads and writes to the log.</td>
+<td>512K</td>
+</tr>
+<tr>
+<td>log.cleaner.delete.retention.ms</td>
+<td>The time for which delete markers are retained in the tail of the log.</td>
+<td>24 Hours</td>
+</tr>
+<tr>
+<td>log.cleaner.min.cleanable.ratio</td>
+<td>The minimum ratio of cleanable log head to total log for a log to be eligible for cleaning.</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>log.cleaner.threads</td>
+<td>The number of background threads to use for log cleaning.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>log.cleaner.max.io.bytes.per.second</td>
+<td>The maximum I/O that the log cleaning across all threads.</td>
+<td>Infinity</td>
+</tr>
+<tr>
+<td>log.cleaner.backoff.ms</td>
+<td>The time to wait in between checking if there are any cleanable logs.</td>
+<td>30 seconds</td>
+</tr>
+<tr>
+<td>log.cleanup.policy</td>
+<td>The default policy for handling log tails. Can be either delete or compact.</td>
+<td>delete</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Internals"><a href="#Internals" class="headerlink" title="Internals"></a>Internals</h4><p><code>Kafka API layer</code></p>
+<p><code>LogManager and Log</code></p>
+<p><code>ReplicaManager</code></p>
+<p><code>ZookeeperConsumerConnector</code></p>
+<p><img src="resource/kafka/kafka_broker_internals.png" alt="Internals"></p>
+<h4 id="Compression"><a href="#Compression" class="headerlink" title="Compression"></a>Compression</h4><table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>description</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compression.codec</td>
+<td>Controls the compression codec to be used by the producer. 0 means no compression. 1 means GZIP compression. 2 means Snappy compression</td>
+<td>0</td>
+</tr>
+<tr>
+<td>compressed.topics</td>
+<td>comma separated list of topics for which compression should be enabled.</td>
+<td>empty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://www.confluent.io/blog/apache-kafka-0.9-is-released" target="_blank" rel="external">Apache Kafka 0.9 is Released</a></li>
+<li><a href="http://www.confluent.io/blog/290-reasons-to-upgrade-to-apache-kafka-0.9.0.0" target="_blank" rel="external">290 Reasons to Upgrade to Apache Kafka 0.9.0.0</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Log+Compaction" target="_blank" rel="external">Log Compaction</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Client+Re-Design" target="_blank" rel="external">Consumer Client Re-Design</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Offset+Management" target="_blank" rel="external">Offset Management</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/Compression" target="_blank" rel="external">Compression</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -167,6 +298,38 @@
       
   
     <h1 class="title"><a href="/2016/06/20/machine_learning/NeuralNetworks/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
   
 
     </header>
@@ -917,38 +1080,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
       
       
@@ -1281,6 +1412,75 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
+<p><code>TensorFlow</code> 是一个编程系统，使用图来表示计算任务。图中的节点被称之为 op 。</p>
+<p>一个 op 获得 0 个或多个 <code>Tensor</code> 执行计算，产生 0 个或多个 <code>Tensor</code>。每个 <code>Tensor</code> 是一个类型化的多维数组。一个 TensorFlow 图描述了计算的过程. 为了进行计算, 图必须在 <code>会话</code> 里被启动。<code>会话</code> 将图的 op  发到 诸如 CPU 或 GPU 上。</p>
+<p><strong>Basic Concepts</strong></p>
+<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
+<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
+<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
+<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
+<p>核(<code>kernel</code>)</p>
+<p>kernel是operation在某种设备上的具体实现。</p>
+<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
+<p>边(<code>edge</code>)  </p>
+<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
+<p>特殊边，又称作控制依赖，(control dependencies) </p>
+<p>会话(<code>session</code>)</p>
+<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
+<p>在会话中添加节点和边，形成一张图，然后执行。</p>
+<p>变量(<code>variables</code>)</p>
+<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
+<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
+<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
+<hr>
+<p><strong>Using</strong></p>
+<p>构建图的第一步, 是创建源 op 。源 op 不需要任何输入，源 op 的输出 被传递给其它 op 做运算。</p>
+<p>TensorFlow Python 库有一个默认图 (default graph), op 构造器可以为其增加节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Create a Constant op that produces a 1x2 matrix.  The op is</span><br><span class="line"># added as a node to the default graph.</span><br><span class="line">#</span><br><span class="line"># The value returned by the constructor represents the output</span><br><span class="line"># of the Constant op.</span><br><span class="line">matrix1 = tf.constant([[3., 3.]])</span><br><span class="line"></span><br><span class="line"># Create another Constant that produces a 2x1 matrix.</span><br><span class="line">matrix2 = tf.constant([[2.],[2.]])</span><br><span class="line"></span><br><span class="line"># Create a Matmul op that takes &apos;matrix1&apos; and &apos;matrix2&apos; as inputs.</span><br><span class="line"># The returned value, &apos;product&apos;, represents the result of the matrix</span><br><span class="line"># multiplication.</span><br><span class="line">product = tf.matmul(matrix1, matrix2)</span><br></pre></td></tr></table></figure>
+<p>默认图现在有三个节点, 两个 constant() op, 和一个 matmul() op。<br>为了真正进行矩阵相乘运算, 并得到矩阵乘法的结果, 必须在<code>会话</code>里启动这个图。</p>
+<p>启动图的第一步是创建一个 <code>Session</code> , 如果无任何创建参数, 会话构造器 将启动默认图。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Launch the default graph.</span><br><span class="line">sess = tf.Session()</span><br><span class="line"></span><br><span class="line"># To run the matmul op we call the session &apos;run()&apos; method, passing &apos;product&apos;</span><br><span class="line"># which represents the output of the matmul op.  This indicates to the call</span><br><span class="line"># that we want to get the output of the matmul op back.</span><br><span class="line">#</span><br><span class="line"># All inputs needed by the op are run automatically by the session.  They</span><br><span class="line"># typically are run in parallel.</span><br><span class="line">#</span><br><span class="line"># The call &apos;run(product)&apos; thus causes the execution of three ops in the</span><br><span class="line"># graph: the two constants and matmul.</span><br><span class="line">#</span><br><span class="line"># The output of the op is returned in &apos;result&apos; as a numpy `ndarray` object.</span><br><span class="line">result = sess.run(product)</span><br><span class="line">print(result)</span><br><span class="line"># ==&gt; [[ 12.]]</span><br><span class="line"></span><br><span class="line"># Close the Session when we&apos;re done.</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Implementation</strong></p>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/live/psychology/">2016-06-12</a></time>
       
       
@@ -1351,135 +1551,27 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
-<p><code>TensorFlow</code> 是一个编程系统，使用图来表示计算任务。图中的节点被称之为 op 。</p>
-<p>一个 op 获得 0 个或多个 <code>Tensor</code> 执行计算，产生 0 个或多个 <code>Tensor</code>。每个 <code>Tensor</code> 是一个类型化的多维数组。一个 TensorFlow 图描述了计算的过程. 为了进行计算, 图必须在 <code>会话</code> 里被启动。<code>会话</code> 将图的 op  发到 诸如 CPU 或 GPU 上。</p>
-<p><strong>Basic Concepts</strong></p>
-<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
-<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
-<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
-<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
-<p>核(<code>kernel</code>)</p>
-<p>kernel是operation在某种设备上的具体实现。</p>
-<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
-<p>边(<code>edge</code>)  </p>
-<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
-<p>特殊边，又称作控制依赖，(control dependencies) </p>
-<p>会话(<code>session</code>)</p>
-<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
-<p>在会话中添加节点和边，形成一张图，然后执行。</p>
-<p>变量(<code>variables</code>)</p>
-<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
-<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
-<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
-<hr>
-<p><strong>Using</strong></p>
-<p>构建图的第一步, 是创建源 op 。源 op 不需要任何输入，源 op 的输出 被传递给其它 op 做运算。</p>
-<p>TensorFlow Python 库有一个默认图 (default graph), op 构造器可以为其增加节点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Create a Constant op that produces a 1x2 matrix.  The op is</span><br><span class="line"># added as a node to the default graph.</span><br><span class="line">#</span><br><span class="line"># The value returned by the constructor represents the output</span><br><span class="line"># of the Constant op.</span><br><span class="line">matrix1 = tf.constant([[3., 3.]])</span><br><span class="line"></span><br><span class="line"># Create another Constant that produces a 2x1 matrix.</span><br><span class="line">matrix2 = tf.constant([[2.],[2.]])</span><br><span class="line"></span><br><span class="line"># Create a Matmul op that takes &apos;matrix1&apos; and &apos;matrix2&apos; as inputs.</span><br><span class="line"># The returned value, &apos;product&apos;, represents the result of the matrix</span><br><span class="line"># multiplication.</span><br><span class="line">product = tf.matmul(matrix1, matrix2)</span><br></pre></td></tr></table></figure>
-<p>默认图现在有三个节点, 两个 constant() op, 和一个 matmul() op。<br>为了真正进行矩阵相乘运算, 并得到矩阵乘法的结果, 必须在<code>会话</code>里启动这个图。</p>
-<p>启动图的第一步是创建一个 <code>Session</code> , 如果无任何创建参数, 会话构造器 将启动默认图。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Launch the default graph.</span><br><span class="line">sess = tf.Session()</span><br><span class="line"></span><br><span class="line"># To run the matmul op we call the session &apos;run()&apos; method, passing &apos;product&apos;</span><br><span class="line"># which represents the output of the matmul op.  This indicates to the call</span><br><span class="line"># that we want to get the output of the matmul op back.</span><br><span class="line">#</span><br><span class="line"># All inputs needed by the op are run automatically by the session.  They</span><br><span class="line"># typically are run in parallel.</span><br><span class="line">#</span><br><span class="line"># The call &apos;run(product)&apos; thus causes the execution of three ops in the</span><br><span class="line"># graph: the two constants and matmul.</span><br><span class="line">#</span><br><span class="line"># The output of the op is returned in &apos;result&apos; as a numpy `ndarray` object.</span><br><span class="line">result = sess.run(product)</span><br><span class="line">print(result)</span><br><span class="line"># ==&gt; [[ 12.]]</span><br><span class="line"></span><br><span class="line"># Close the Session when we&apos;re done.</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Implementation</strong></p>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
-<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-03T15:55:06.000Z"><a href="/2016/06/03/architecture/microservice/">2016-06-03</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/03/architecture/microservice/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><strong>Microservices</strong> is a software architecture style in which complex applications are composed of small, independent processes communicating with each other using language-agnostic APIs.</p>
-<p>These services are small, highly decoupled and focus on doing a small task,facilitating a modular approach to system-building.</p>
-<p>Reference :</p>
-<ol>
-<li><a href="http://www.importnew.com/17588.html" target="_blank" rel="external">微服务那点事</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="external">Wiki Microservices</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Anterior</a>
+    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
   
   
-    <a href="/page/5/" class="alignright next">Siguiente</a>
+    <a href="/page/5/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -1512,7 +1604,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>

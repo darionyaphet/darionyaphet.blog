@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 7 | darion.johannes.yaphet</title>
+  <title>Seite 7 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,45 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:41.000Z"><a href="/2016/04/22/other/calcite/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/calcite/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Calcite</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">First, we define a schema based on a schema factory class in a model file. </span><br><span class="line"></span><br><span class="line">Then the schema factory creates a schema, and the schema creates several tables, each of which knows how to get data by scanning a CSV file. </span><br><span class="line"></span><br><span class="line">Last, after Calcite has parsed the query and planned it to use those tables, Calcite invokes the tables to read the data as the query is being executed.</span><br></pre></td></tr></table></figure>
+<p>Here is a JSON Modle:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  version: &apos;1.0&apos;,</span><br><span class="line">  defaultSchema: &apos;SALES&apos;,</span><br><span class="line">  schemas: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: &apos;SALES&apos;,</span><br><span class="line">      type: &apos;custom&apos;,</span><br><span class="line">      factory: &apos;org.apache.calcite.adapter.csv.CsvSchemaFactory&apos;,</span><br><span class="line">      operand: &#123;</span><br><span class="line">        directory: &apos;target/test-classes/sales&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Driven by the model, the schema factory instantiates a single schema <code>SALES</code></p>
+<p>A schema’s job is to produce a list of tables. </p>
+<p>The tables implement Calcite’s <code>Table</code> interface.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line">package org.darion.yaphet.calcite;</span><br><span class="line"></span><br><span class="line">import org.apache.calcite.adapter.jdbc.JdbcSchema;</span><br><span class="line">import org.apache.calcite.schema.SchemaPlus;</span><br><span class="line">import org.apache.calcite.sql.SqlBasicCall;</span><br><span class="line">import org.apache.calcite.sql.SqlDelete;</span><br><span class="line">import org.apache.calcite.sql.SqlInsert;</span><br><span class="line">import org.apache.calcite.sql.SqlNode;</span><br><span class="line">import org.apache.calcite.sql.SqlUpdate;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParseException;</span><br><span class="line">import org.apache.calcite.sql.parser.SqlParser;</span><br><span class="line">import org.apache.calcite.tools.FrameworkConfig;</span><br><span class="line">import org.apache.calcite.tools.Frameworks;</span><br><span class="line">import org.apache.calcite.tools.Planner;</span><br><span class="line">import org.apache.calcite.tools.RelConversionException;</span><br><span class="line">import org.apache.calcite.tools.ValidationException;</span><br><span class="line"></span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by darion.johannes.yaphet on 16/3/8.</span><br><span class="line"> */</span><br><span class="line">public class ParseSQL &#123;</span><br><span class="line"></span><br><span class="line">    private static final String[] SQLArray = &#123;</span><br><span class="line">            &quot;INSERT INTO TABLE0(ID,NAME) VALUES(0,&apos;darion&apos;)&quot;,</span><br><span class="line">            &quot;UPDATE TABLE0 SET NAME = &apos;darion.yaphet&apos; WHERE ID = 1&quot;,</span><br><span class="line">            &quot;DELETE FROM TABLE0 WHERE ID = 1 &quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws ClassNotFoundException, SqlParseException, ValidationException, RelConversionException &#123;</span><br><span class="line">        String sDriverName = &quot;com.mysql.jdbc.Driver&quot;;</span><br><span class="line">        Class.forName(sDriverName);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; operand = new HashMap&lt;&gt;();</span><br><span class="line">        operand.put(&quot;jdbcDriver&quot;, sDriverName);</span><br><span class="line">        operand.put(&quot;jdbcUrl&quot;, &quot;jdbc:mysql://localhost:3306/test&quot;);</span><br><span class="line">        operand.put(&quot;jdbcUser&quot;, &quot;root&quot;);</span><br><span class="line">        operand.put(&quot;jdbcPassword&quot;, &quot;&quot;);</span><br><span class="line">        operand.put(&quot;Lex&quot;, &quot;MYSQL_ANSI&quot;);</span><br><span class="line"></span><br><span class="line">        SchemaPlus rootSchema = Frameworks.createRootSchema(true);</span><br><span class="line">        org.apache.calcite.schema.Schema schema = new JdbcSchema.Factory().create(rootSchema, &quot;TABLE0&quot;, operand);</span><br><span class="line">        rootSchema = rootSchema.add(&quot;TABLE0&quot;, schema);</span><br><span class="line"></span><br><span class="line">        Frameworks.ConfigBuilder configBuilder = Frameworks.newConfigBuilder();</span><br><span class="line">        configBuilder.defaultSchema(rootSchema);</span><br><span class="line"></span><br><span class="line">        FrameworkConfig config = Frameworks.newConfigBuilder()</span><br><span class="line">                .parserConfig(SqlParser.configBuilder()</span><br><span class="line">                        .setCaseSensitive(false)</span><br><span class="line">                        .build())</span><br><span class="line">                .defaultSchema(rootSchema)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;SELECT * FROM TABLE0 WHERE AGE &gt; 15.0&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,CONCAT(&apos;NAME&apos;,&apos;AGE&apos;))&quot;;</span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) SELECT ID,NAME FROM TABLE0 WHERE ID = 0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;select concat(&apos;11&apos;,&apos;22&apos;,&apos;33&apos;) FROM TABLE0&quot;;</span><br><span class="line">        //String SQL = &quot;select COUNT(*) FROM TABLE0&quot;;</span><br><span class="line"></span><br><span class="line">        //String SQL = &quot;INSERT INTO TABLE0(ID,NAME) VALUES(1,&apos;darion&apos;)&quot;;</span><br><span class="line"></span><br><span class="line">        for (String SQL : SQLArray) &#123;</span><br><span class="line">            System.out.println(SQL);</span><br><span class="line">            Planner planner = Frameworks.getPlanner(config);</span><br><span class="line">            SqlNode node = planner.parse(SQL);</span><br><span class="line">            SqlNode validated = planner.validate(node);</span><br><span class="line">            System.out.println(&quot;Type : &quot; + validated.getKind());</span><br><span class="line"></span><br><span class="line">            switch (validated.getKind().toString()) &#123;</span><br><span class="line">                case &quot;INSERT&quot;:</span><br><span class="line">                    SqlInsert insertNode = (SqlInsert) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List : &quot; + insertNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Column List  : &quot; + insertNode.getTargetColumnList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Target Table : &quot; + insertNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    for (SqlNode insertToken : ((SqlBasicCall) insertNode.getSource()).getOperandList()) &#123;</span><br><span class="line">                        System.out.println(&quot;Source       : &quot; + ((SqlBasicCall) insertToken) + &quot; &quot; +</span><br><span class="line">                                ((SqlBasicCall) insertToken).getKind());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;DELETE&quot;:</span><br><span class="line">                    SqlDelete deleteNode = (SqlDelete) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + deleteNode.getOperandList() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + deleteNode.getCondition() + &quot; &quot;);// where</span><br><span class="line">                    System.out.println(&quot;Target Table  : &quot; + deleteNode.getTargetTable() + &quot; &quot;);</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + deleteNode.getSourceSelect() + &quot; &quot; + deleteNode.getSourceSelect().getKind());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                case &quot;UPDATE&quot;:</span><br><span class="line">                    SqlUpdate updateNode = (SqlUpdate) validated;</span><br><span class="line">                    System.out.println(&quot;Operand List  : &quot; + updateNode.getOperandList());</span><br><span class="line">                    System.out.println(&quot;Source Select : &quot; + updateNode.getSourceSelect());</span><br><span class="line">                    System.out.println(&quot;Condition     : &quot; + updateNode.getCondition());</span><br><span class="line">                    break;</span><br><span class="line"></span><br><span class="line">                default:</span><br><span class="line">                    System.out.println(&quot;Unknow Type : &quot; + validated.getKind());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //RelNode relationalExpression = planner.rel(validated).rel;</span><br><span class="line">            System.out.println(&quot;-----------------------------------&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //System.out.println(relationalExpression.getRowType());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getQualifiedName());</span><br><span class="line">        //System.out.println(relationalExpression.getTable().getCollationList());</span><br><span class="line"></span><br><span class="line">        //JavaTypeFactory typeFactory = new JavaTypeFactoryImpl(</span><br><span class="line">        //        RelDataTypeSystem.DEFAULT);</span><br><span class="line"></span><br><span class="line">        //RelToSqlConverter converter = new RelToSqlConverter(SqlDialect.CALCITE);</span><br><span class="line">        //SqlImplementor.Result result = converter.visitChild(0, relationalExpression);</span><br><span class="line"></span><br><span class="line">        // select</span><br><span class="line">        //SqlNode sqlNode = converter.visitChild(0, relationalExpression).asQuery();</span><br><span class="line">        //System.out.println(sqlNode.getKind());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getSelectList());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getFrom());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getWhere());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getGroup());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getHaving());</span><br><span class="line">        //System.out.println(((SqlSelect) sqlNode).getOrderList());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // insert</span><br><span class="line">        //System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -134,6 +173,40 @@
 <li><a href="http://blog.jobbole.com/75348/" target="_blank" rel="external">让你的Git水平更上一层楼的10个小贴士</a></li>
 <li><a href="http://www.kancloud.cn/thinkphp/github-tips" target="_blank" rel="external">GitHub秘籍</a></li>
 </ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Simple Build Tool</p>
+<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
 
       
     </div>
@@ -247,18 +320,24 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Simple Build Tool</p>
-<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
+<ol>
+<li>#<code>runtime metaprogramming</code></li>
+</ol>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
 
       
     </div>
@@ -281,17 +360,51 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
   
 
     </header>
     <div class="entry">
       
+        <p>###Golang</p>
+
+      
+    </div>
+    <footer>
+      
         
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Domain-specific language</p>
+
       
     </div>
     <footer>
@@ -363,169 +476,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/ES6/">2016-04-21</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Golang</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+    <h1 class="title"><a href="/2016/04/21/language/ES6/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
-<ol>
-<li>#<code>runtime metaprogramming</code></li>
-</ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
         
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Domain-specific language</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/paxos/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/paxos/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Paxos </p>
-<p>角色分为proposers，acceptors，和learners（允许身兼数职）。</p>
-<p><code>proposers</code>提出提案，提案信息包括提案编号和提议的value；<code>acceptor</code>收到提案后可以接受（accept）提案，若提案获得多数acceptors的接受，则称该提案被批准（chosen）；<code>learners</code>只能“学习”被批准的提案。划分角色后，就可以更精确的定义问题：</p>
-<ol>
-<li>决议（value）只有在被proposers提出后才能被批准（未经批准的决议称为“提案（proposal）”）</li>
-<li>在一次Paxos算法的执行实例中，只批准（chosen）一个value</li>
-<li>learners只能获得被批准（chosen）的value</li>
-</ol>
-<p>批准value的过程中，首先proposers将value发送给acceptors，之后acceptors对value进行接受（accept）。</p>
-<p>为了满足只批准一个value的约束，要求经“多数派（majority）”接受的value成为正式的决议（称为“批准”决议）。这是因为无论是按照人数还是按照权重划分，两组“多数派”至少有一个公共的acceptor，如果每个acceptor只能接受一个value，约束2就能保证。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1：一个acceptor必须接受（accept）第一次收到的提案。</span><br></pre></td></tr></table></figure>
-<p>如果恰好一半acceptor接受的提案具有value A，另一半接受的提案具有value B，那么就无法形成多数派，无法批准任何一个value。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2a：一旦一个具有value v的提案被批准（chosen），那么之后任何acceptor再次接受（accept）的提案必须具有value v。</span><br></pre></td></tr></table></figure>
-<p>由于通信是异步的，P2a和P1会发生冲突。如果一个value被批准后，一个proposer和一个acceptor从休眠中苏醒，前者提出一个具有新的value的提案。根据P1，后者应当接受，根据P2a，则不应当接受，这中场景下P2a和P1有矛盾。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P2b：一旦一个具有value v的提案被批准（chosen），那么以后任何proposer提出的提案必须具有value v。</span><br></pre></td></tr></table></figure>
-<p>由于acceptor能接受的提案都必须由proposer提出，所以P2b蕴涵了P2a，是一个更强的约束。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P2c：如果一个编号为n的提案具有value v，那么存在一个多数派，要么他们中所有人都没有接受（accept）编号小于n </span><br><span class="line">的任何提案，要么他们已经接受（accept）的所有编号小于n的提案中编号最大的那个提案具有value v。</span><br></pre></td></tr></table></figure>
-<p><strong><code>数学归纳法</code>证明P2c蕴涵P2b：</strong></p>
-<p>假设具有value v的提案m获得批准，当n=m+1时，采用反证法，假如提案n不具有value v，而是具有value w，根据P2c，则存在一个多数派S1，要么他们中没有人接受过编号小于n的任何提案，要么他们已经接受的所有编号小于n的提案中编号最大的那个提案是value w。由于S1和通过提案m时的多数派C之间至少有一个公共的acceptor，所以以上两个条件都不成立，导出矛盾从而推翻假设，证明了提案n必须具有value v；</p>
-<p>若（m+1）..（N-1）所有提案都具有value v，采用反证法，假如新提案N不具有value v，而是具有value w’,根据P2c，则存在一个多数派S2，要么他们没有接受过m..（N-1）中的任何提案，要么他们已经接受的所有编号小于N的提案中编号最大的那个提案是value w’。由于S2和通过m的多数派C之间至少有一个公共的acceptor，所以至少有一个acceptor曾经接受了m，从而也可以推出S2中已接受的所有编号小于n的提案中编号最大的那个提案的编号范围在m..（N-1）之间，而根据初始假设，m..（N-1）之间的所有提案都具有value v，所以S2中已接受的所有编号小于n的提案中编号最大的那个提案肯定具有value v，导出矛盾从而推翻新提案n不具有value v的假设。根据数学归纳法，我们证明了若满足P2c，则P2b一定满足。</p>
-<p>P2c是可以通过消息传递模型实现的。另外，引入了P2c后，也解决了前文提到的P1不完备的问题。</p>
-<p>如果一个没有chosen过任何proposer提案的acceptor在prepare过程中回答了一个proposer针对提案n的问题，但是在开始对n进行投票前，又接受（accept）了编号小于n的另一个提案（例如n-1），如果n-1和n具有不同的value，这个投票就会违背P2c。因此在prepare过程中，acceptor进行的回答同时也应包含承诺：不会再接受（accept）编号小于n的提案。这是对P1的加强：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1a：当且仅当acceptor没有回应过编号大于n的prepare请求时，acceptor接受（accept）编号为n的提案。</span><br></pre></td></tr></table></figure>
-<p><strong>通过一个决议分为两个阶段：</strong></p>
-<ol>
-<li><p>prepare阶段:</p>
-<ul>
-<li>proposer选择一个提案编号n并将prepare请求发送给acceptors中的一个多数派</li>
-<li>acceptor收到prepare消息后，如果提案的编号大于它已经回复的所有prepare消息，则acceptor将自己上次接受的提案回复给proposer，并承诺不再回复小于n的提案；</li>
-</ul>
-</li>
-<li><p>批准阶段：</p>
-<ul>
-<li><p>当一个proposer收到了多数acceptors对prepare的回复后，就进入批准阶段。</p>
-<p>它要向回复prepare请求的acceptors发送accept请求，包括编号n和根据P2c决定的value（如果根据P2c没有已经接受的value，那么它可以自由决定value）。</p>
-</li>
-<li><p>在不违背自己向其他proposer的承诺的前提下，acceptor收到accept请求后即接受这个请求。</p>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Paxos%E7%AE%97%E6%B3%95#.E5.AE.9E.E4.BE.8B" target="_blank" rel="external">Wiki Paxos算法</a></li>
-</ol>
-
       
     </div>
     <footer>
@@ -544,24 +505,24 @@
 
 <nav id="pagination">
   
-    <a href="/page/6/" class="alignleft prev">Anterior</a>
+    <a href="/page/6/" class="alignleft prev">Vorherige Seite</a>
   
   
-    <a href="/page/8/" class="alignright next">Siguiente</a>
+    <a href="/page/8/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -594,7 +555,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>

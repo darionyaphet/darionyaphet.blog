@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Página 9 | darion.johannes.yaphet</title>
+  <title>Seite 9 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -44,6 +44,38 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -276,6 +308,59 @@
 <p>#####Exceptions Collection</p>
 <ol>
 <li><code>Space for commit to queue couldn&#39;t be acquired Sinks are likely not keeping up with sources, or the buffer size is too tight</code></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>####Gearpump</p>
+<p>#####Basic Concepts</p>
+<ol>
+<li><p>System timestamp and Application timestamp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
+<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
+<p>Gearpump natively supports Streaming Application types</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
+<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
+<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
+<p>#####Command Line Interface</p>
+<p>Reference :</p>
+<ol>
+<li><a href="https://www.oreilly.com/ideas/the-world-beyond-batch-streaming-101" target="_blank" rel="external">The world beyond batch: Streaming 101</a></li>
+<li><a href="https://www.oreilly.com/ideas/the-world-beyond-batch-streaming-102" target="_blank" rel="external">The world beyond batch: Streaming 102</a></li>
 </ol>
 
       
@@ -587,38 +672,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-01-21T08:57:31.000Z"><a href="/2016/01/21/distribution/gearpump/">2016-01-21</a></time>
+        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/01/21/distribution/gearpump/"></a></h1>
+    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>####Gearpump</p>
-<p>#####Basic Concepts</p>
-<ol>
-<li><p>System timestamp and Application timestamp</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   System timestamp is the time of backend cluster system. </span><br><span class="line">   Application timestamp is the time at which message generated.</span><br><span class="line">   ``` </span><br><span class="line"></span><br><span class="line">2. Master, and Worker</span><br></pre></td></tr></table></figure>
-<p> Gearpump follow master slave architecture.<br> Every cluster contains one or more Master node, and several worker nodes.<br> Worker node is responsible to manage local resources on single machine.<br> Master node is responsible to manage global resources of the whole cluster.    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"></span><br><span class="line">3. Application</span><br></pre></td></tr></table></figure>
-<p>Gearpump natively supports Streaming Application types</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">4. AppMaster and Executor</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">5. Application Submission Flow</span><br></pre></td></tr></table></figure>
-   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">6. Streaming Topology, Processor, and Task</span><br></pre></td></tr></table></figure>
-<p>   Each application contains a topology, which is a DAG to describe the data flow.<br>   Each node in the DAG is a processor.<br>   An application is a DAG of processors. Each processor handles messages.<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   ![Directed Acyclic Graph](../resource/distribution/gearpump/dag.png)   </span><br><span class="line">   </span><br><span class="line">7. Streaming Task and Partitioner</span><br></pre></td></tr></table></figure></p>
-<p>   Task is the minimum unit of parallelism.<br>   ``` </p>
-<p>#####Command Line Interface</p>
-<p>Reference :</p>
-<ol>
-<li><a href="https://www.oreilly.com/ideas/the-world-beyond-batch-streaming-101" target="_blank" rel="external">The world beyond batch: Streaming 101</a></li>
-<li><a href="https://www.oreilly.com/ideas/the-world-beyond-batch-streaming-102" target="_blank" rel="external">The world beyond batch: Streaming 102</a></li>
-</ol>
-
+        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
       
     </div>
     <footer>
@@ -1141,42 +1205,10 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-12-31T16:00:00.000Z"><a href="/2016/01/01/language/clojure/">2016-01-01</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/01/01/language/clojure/">Clojur</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Clojur"><a href="#Clojur" class="headerlink" title="Clojur"></a>Clojur</h3>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/8/" class="alignleft prev">Anterior</a>
+    <a href="/page/8/" class="alignleft prev">Vorherige Seite</a>
   
   
   <div class="clearfix"></div>
@@ -1184,14 +1216,14 @@
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Buscar">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Categorías</h3>
+  <h3 class="title">Kategorien</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -1224,7 +1256,7 @@
 
   
 <div class="widget tag">
-  <h3 class="title">Etiquetas</h3>
+  <h3 class="title">Tags</h3>
   <ul class="entry">
   
     <li><a href="/tags/Algorithms/">Algorithms</a><small>1</small></li>
