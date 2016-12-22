@@ -50,6 +50,145 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-11-08T02:52:38.000Z"><a href="/2016/11/08/network/finagle/">2016-11-08</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/11/08/network/finagle/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Finagle</p>
+<p><a href="http://monkey.org/~marius/funsrv.pdf" target="_blank" rel="external">http://monkey.org/~marius/funsrv.pdf</a></p>
+<ol>
+<li><p><code>Futures</code> The results of asynchronous operations are represented by futures which compose to express dependencies between operations.</p>
+</li>
+<li><p><code>Services</code> Systems boundaries are represented by asynchronous functions called services. They provide a symmetric and uniform API: the same abstraction represents both clients and servers.</p>
+</li>
+<li><p><code>Filters</code> Application-agnostic concerns  are encapsulated by filters which compose to build services from multiple independent modules.</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-07T03:24:34.000Z"><a href="/2016/11/07/machine_learning/BoltzmannMachine/">2016-11-07</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/11/07/machine_learning/BoltzmannMachine/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-05T16:00:00.000Z"><a href="/2016/11/06/network/tcp/">2016-11-06</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/11/06/network/tcp/">TCP</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>TCP拥塞控制机制</strong></p>
+<p><code>拥塞的发生与其不可避免</code></p>
+<p>拥塞发生的主要原因在于网络能够提供的资源不足以满足用户的需求，这些资源包括缓存空间、链路带宽容量和中间节点的处理能力。由于互联网的设计机制导致其缺乏“接纳控制”能力，因此在网络资源不足时不能限制用户数量，而只能靠降低服务质量来继续为用户服务，也就是“尽力而为”的服务。<br>但是，是不是说只要增加网络资源，就能避免拥塞呢？答案却是否定的！拥塞虽然是由于网络资源的稀缺引起的，但单纯增加资源并不能避免拥塞的发生。例如增加缓存空间到一定程度时，只会加重拥塞，而不是减轻拥塞，这是因为当数据包经过长时间排队完成转发时，它们很可能早已超时，从而引起源端超时重发，而这些数据包还会继续传输到下一路由器，从而浪费网络资源，加重网络拥塞。事实上，缓存空间不足导致的丢包更多的是拥塞的“症状”而非原因。另外，增加链路带宽及提高处理能力也不能解决拥塞问题。<br>例如：我们有四台主机ABCD连接路由器R，所有链路带宽都是1Gbps，如果A和B同时向C以1Gbps的速率发送数据，则路由器R的输入速率为2Gbps，而输出速率只能为1Gbps，从而产生拥塞。避免拥塞的方法只能是控制AB的速率，例如，都是0.5Gbps，但是，这只是一种情况，倘若D也向R发送数据，且速率为1Gbps，那么，我们先前的修正又是不成立的，可见，拥塞其实是一个动态问题，我们没有办法用一个静态方案去解决，从这个意义上来说，拥塞是不可避免的。</p>
+<p><code>流量控制</code></p>
+<p>早期的TCP协议只有基于窗口的流控制（flow control）机制，我们简单介绍一下，并分析其不足。<br>在TCP中，为了实现可靠性，发送方发出一个数据段之后要等待接受方相应的确认信息，而不是直接发送下一个分组。具体的技术是采用滑动窗口，以便通信双方能够充分利用带宽。滑动窗口允许发送方在收到接收方的确认之前发送多个数据段。窗口大小决定了在收到目的地确认之前，一次可以传送的数据段的最大数目。窗口大小越大，主机一次可以传输的数据段就越多。当主机传输窗口大小数目的数据段后，就必须等收到确认，才可以再传下面的数据段。例如，若视窗的大小为 1，则传完数据段后，都必须经过确认，才可以再传下一个数据段；当窗口大小等于3时，发送方可以一次传输3个数据段，等待对方确认后，再传输下面三个数据段。</p>
+<p>窗口的大小在通信双方连接期间是可变的，通信双方可以通过协商动态地修改窗口大小。在TCP的每个确认中，除了指出希望收到的下一个数据段的序列号之外，还包括一个窗口通告，通告中指出了接收方还能再收多少数据段（我们可以把通告看成接收缓冲区大小）。如果通告值增大，窗口大小也相应增大；通告值减小，窗口大小也相应减小。但是我们可以发现，接收端并没有特别合适的方法来判断当前网络是否拥塞，因为它只是被动得接收，不像发送端，当发出一个数据段后，会等待对方得确认信息，如果超时，就可以认为网络已经拥塞了。所以，改变窗口大小的唯一根据，就是接收端缓冲区的大小了。</p>
+<p>流量控制作为接受方管理发送方发送数据的方式，用来防止接受方可用的数据缓存空间的溢出。流控制是一种局部控制机制，其参与者仅仅是发送方和接收方，它只考虑了接收端的接收能力，而没有考虑到网络的传输能力；而拥塞控制则注重于整体，其考虑的是整个网络的传输能力，是一种全局控制机制。正因为流控制的这种局限性，从而导致了拥塞崩溃现象的发生。</p>
+<p><code>重传</code> </p>
+<p>1、一旦收到确认，发送方关闭重发定时器并且将数据片的备份从重发队列中删除。发送方如果在规定的时间内没有收到数据确认，就重传该数据。<br>2、当TCP超时并重传时，它不一定要重传同样的报文段，相反，TCP允许进行重新分组而发送一个较大的报文段，这将有助于提高性能(当然，这个较大的报文段不能够超过接收方声明的MSS)。在协议中这是允许的，因为TCP是使用字节序号而不是报文段序号来进行识别它所要发送的数据和进行确认。<br>3、重发定时器<br>(1)  每一次一个包含数据的包被发送（包括重发），如果该定时器没有运行则启动它，使得它在RTO秒之后超时（按照当前的RTO值）。<br>(2)  当所有的发出数据都被确认之后，关闭该重发定时器。<br>(3)  当接收到一个ACK确认一个新的数据，重新启动该重发定时器，使得它在RTO秒之后超时（按照当前的RTO值）</p>
+<p><code>TCP拥塞控制机制</code></p>
+<p>TCP的拥塞控制由4个核心算法组成：“慢启动”（Slow Start）、“拥塞避免”（Congestion voidance）、“快速重传 ”（Fast Retransmit）、“快速恢复”（Fast Recovery）。具体的流程图可以参见：<a href="http://www.eventhelix.com/RealtimeMantra/Networking/。发送端叫做client，接收端叫做server，每个segment长度为512字节，阻塞窗口长度为cwnd（简化起见，下面以segment为单位），sequence" target="_blank" rel="external">http://www.eventhelix.com/RealtimeMantra/Networking/。发送端叫做client，接收端叫做server，每个segment长度为512字节，阻塞窗口长度为cwnd（简化起见，下面以segment为单位），sequence</a> number为seq_num，acknowledges number为ack_num。通常情况下，TCP每接收到两个segment，发送一个ack。</p>
+<p>－－ 慢启动<br>  早期开发的TCP应用在启动一个连接时会向网络中发送大量的数据包，这样很容易导致路由器缓存空间耗尽，网络发生拥塞，使得TCP连接的吞吐量急剧下降。由于TCP源端一开始并不知道网络资源当前的利用状况，因此新建立的TCP连接不能一开始就发送大量数据，而只能逐步增加每次发送的数据量，以避免上述现象的发生，这里有一个“学习”的过程。<br>假设client要发送5120字节到server，慢启动过程如下：<br>1.初始状态，cwnd=1,seq_num=1；client发送第一个segment;<br>2.server接收到512字节（一个segment），回应ack_num=513;<br>3.client接收ack(513)，cwnd＝1+1=2;现在可以一次发送2个数据段而不必等待ack<br>4.server接收到2个segment，回应ack_num=513+512*2=1537<br>5.client接收ack(1537)，cwnd=2+1;一次发送3个数据段<br>6.server接收到3个segment，回应2个ack，分别为ack_num=1537+1024=2561和ack_num=2561+512=3073<br>7.client接收ack(2561)和ack(3073),cwnd=3+2=5；一次可以发送5个数据段，但是只用4个就满足要求了<br>8.server接收到4个segment，回应2个ack，分别为4097,5121<br>9.已经发送5120字节，任务完成！</p>
+<p>总结一下：<br>当建立新的TCP连接时，拥塞窗口（congestion window，cwnd）初始化为一个数据包大小。源端按cwnd大小发送数据，每收到一个ACK确认，cwnd就增加一个数据包发送量。</p>
+<p>－－ 拥塞避免<br>  可以想象，如果按上述慢启动的逻辑继续下去而不加任何控制的话，必然会发生拥塞，引入一个慢启动阈值ssthresh的概念，当cwnd&lt;ssthresh的时候，tcp处于慢启动状态，否则，进入拥塞避免阶段。通常，ssthresh初始化为<br>64 Kbytes。<br>  当cwnd = 64947 + 512 = 65459，进入拥塞避免阶段，假设此时seq_num = _101024：<br>  1.client一次发送cwnd，但是先考虑头两个segment<br>  2.server回应ack_num = 102048<br>  3.client接收到ack(102048),cwnd = 65459 + [(512 * 512) /65459] = 65459 + 4 = 65463，也就是说，每接到一个ack，cwnd只增加4个字节。<br>  4.client发送一个segment，并开启ack timer,等待server对这个segment的ack，如果超时，则认为网络已经处于拥塞状态，则重设慢启动阀值ssthresh=当前cwnd/2＝65463/2=32731，并且，立刻把cwnd设为1，很极端的处理！<br>  5.此时，cwnd&lt;ssthresh，所以，恢复到慢启动状态。</p>
+<p>总结一下：<br>如果当前cwnd达到慢启动阀值，则试探性的发送一个segment，如果server超时未响应，TCP认为网络能力下降，必须降低慢启动阀值，同时，为了避免形势恶化，干脆采取极端措施，把发送窗口降为1，个人感觉应该有更好的方法。</p>
+<p>－－ 快速重传和快速恢复<br>  前面讲过标准的重传，client会等待RTO时间再重传，但有时候，不必等这么久也可以判断需要重传，例如：client一次发送8个segment，seq_num起始值为100000，但是由于网络原因，100512丢失，其他的正常，则server会响应4个ack(100512)(为什么呢，tcp会把接收到的其他segment缓存起来，ack_num必须是连续的)，这时候，client接收到四个重复的ack，它完全有理由判断100512丢失，进而重传，而不必傻等RTO时间了。这就是快速重传。<br>  那么，什么是快速恢复呢？我们通常认为client接收到3个重复的ack后，就会开始快速重传，但是，如果还有更多的重复ack呢，如何处理？这就是快速恢复要做的，事实上，我们可以把快速恢复看作是快速重传的后续处理，它不是一种单独存在的形态。</p>
+<p>以下是具体的流程：<br>假设此时cwnd=70000,client发送4096字节到server,也就是8个segment，起始seq_num = _100000：</p>
+<ol>
+<li>client发送seq_num = _100000</li>
+<li>seq_num =100512的segment丢失</li>
+<li>client发送seq_num = _101024</li>
+<li>server接收到两个segment，它意识到100512丢失，先把收到的这两个segment缓存起来</li>
+<li>server回应一个ack(100512),表示它还期待这个segment</li>
+<li>client发送seq_num = _101536</li>
+<li>server接收到一个segment，它判断不是100512，依旧把收到的这个segment缓存起来，并回应ack(100512)</li>
+<li>以下同6、7,直到client收到3个ack(100512)，进入快速重发阶段：</li>
+<li>重设慢启动阀值ssthresh=当前cwnd/2＝70000/2=35000</li>
+<li><p>client发送seq_num = 100512</p>
+<p>以下，进入快速恢复阶段：<br>11.重设cwnd = ssthresh + 3 segments =35000 + 3<em>512 = 36536，之所以要加3，是因为我们已经接收到3个ack(100512)了，根据前面说的，每接收到一个ack，cwnd加1<br>12.client接收到第四个、第五个ack(100512)，cwnd=36536+2</em>512=37560<br>13.server接收到100512,响应ack_num = _104096<br>14.此时，cwnd&gt;ssthresh，进入拥塞避免阶段。</p>
+</li>
+</ol>
+<p>【思考】：为什么通常clieng每接收到一个ack，会把cwnd增加一个segment呢？<br> 这是基于“管道”模型（pipe model）的“数据包守恒”的原则（conservation of packets principle），即同一时刻在网络中传输的数据包数量是恒定的，只有当“旧”数据包离开网络后，才能发送“新”数据包进入网络。如果发送方收到一个ACK，则认为已经有一个数据包离开了网络，于是将拥塞窗口加1。如果“数据包守恒”原则能够得到严格遵守，那么网络中将很少会发生拥塞；本质上，拥塞控制的目的就是找到违反该原则的地方并进行修正。</p>
+<p>五.联想<br>  想想看，能不能把TCP解决拥塞的方法应用到交通拥塞呢？<br>  我们有两个原则：一是拥塞不可避免，单纯增加资源并不能避免拥塞的发生，只能用动态的方法加以解决；二是数据包守恒原则。政府花费很大资金修路，并不能避免堵车，只能从源头控制，例如首先限制车辆进入主路，根据实际情况，再慢慢增加每一个路口的车流量，但是，当达到一个阀值，增加速度要放缓，并不时探测整个主路的拥堵情况，如果情况危急，立刻封闭半个路口，并将车流量降到最低，也就是重新回复到慢启动状态。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-11-05T16:00:00.000Z"><a href="/2016/11/06/network/http/">2016-11-06</a></time>
       
       
@@ -398,532 +537,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-10-11T16:00:00.000Z"><a href="/2016/10/12/distribution/zookeeper/">2016-10-12</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/10/12/distribution/zookeeper/">ZooKeeper</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><p>Google提出了中心化组件Chubby—粗粒度锁服务，通过锁原语为其他系统实现更高级的服务，比如组成员、域名服务和leader选举等等。Chubby本身也是一个小型的cell（通常由5个chubby结点组成），cell内部采用类似于状态机副本形式实现可靠容错。</p>
-<p>Google的Chubby论文在OSDI上发表后引起了很大的反响，原因很多，主要有两个：</p>
-<p>第一，chubby很好的解决了分布式开发的一致性问题；</p>
-<p>第二，Google Chubby采用Leslie Lamport提出的paxos算法来实现可靠容错，这是业界关于paxos第一个完整可行的实现。</p>
-<hr>
-<p>和Chubby相比，ZooKeeper做了很多突破。</p>
-<p>不像Chubby的单点服务的结构，ZooKeeper采用多个server同时处理客户端的请求，异步读同步写，通过primary节点来同步数据的update，这一点大大改善了读服务的性能，当然弱化了客户端与服务器之间的一致性。</p>
-<p>另外，ZooKeeper采用block free的服务接口，采用watch机制的方式异步处理请求结果和指定数据的变更。</p>
-<p>ZooKeeper采用paxos的变种来实现消息传输的一致性。</p>
-<p>ZooKeeper开发了原子多播协议 Zab 来实现数据的一致性传输。</p>
-<p>ZooKeeper采用的是primary-backup的结构，primary节点产生non- commutative 事务，通过协议按序的广播到其他backup节点上。在节点无错的情况下，这是非常简单的事情，然而，面对复杂的网络环境，多变的软硬件条件，节点挂掉，重启，数据重复发送，这些异常很常见。Zookeeper如何做到即便是系统出现异常，也能够保证整个系统状态是一致？paxos的变种，Zookeeper的Zab协议很好的保证了这一点。</p>
-<p>Zab 协议以epoch的方式执行（相当与序列号），在每个epoch最多只有一个进程多播数据。如果某个进程执行了协议的的第一阶段，那么进程将不再接受之前还没确定提交的epoch的数据。这样一来就保证了在进程在recovery阶段不会出现丢失已提交的数据的情况。在某个epoch下，所有参加这个epoch的进程必须此epoch之前所有已经提交的数据镜像。为了保证一致性，进程在完全恢复之前必须不能广播新的事务。</p>
-<p>Zab协议的这几个特点处理了primary异常、新旧primary以及backup节点异常的情况，的确保证了primary进程原子多播的order特性。</p>
-<p>整个Zab协议的内容分成三个阶段：Discovery、Synchronization和Broadcast阶段。</p>
-<p>Discovery阶段其实是选举leader或者发现leader。</p>
-<pre><code>在这个阶段里，follower会给（可能是）leader的进程（这里的进程可以是多个）发送当前自己epoch的信息CEPOCH；
-
-如果（可能是）leader进程收到大多数的follower的CEPOCH消息，那么leader就会产生一个新epoch的消息NEWEPOCH，其中包含新的leader，并发送给follower；当follower f收到NEWEPOCH时，f会判断其中epoch是否比当前的大，如果是则反馈信息ACK-E，其中包含f所接受的最大事务编号和历史数据；leader会从这些ACK-E中选出最新的历史数据来初始化它当前的系统状态。这个阶段其实就是paxos的执行过程，由于两个大多数集合的交集肯定不为空，所以不可能一个epoch下会选出两个不同的leader。因此Discovery阶段最后的结果肯定只有一个新leader。
-
-在整个系统初始的时候，每个节点当前的epoch都为0，这样会给其它节点发送请求，这样有可能会导致paxos死锁，对此，每个zookeeper节点会通过配置获得唯一的id，并根据id的大则优先的原则来推选leader。
-</code></pre><p>Synchronization阶段其实就会状态同步，新leader会将其最新状态通知给所有的follower；follower的到leader的状态后，会和自己的进行比较，从中提前还未提交的数据T，并反馈给leader；leader收到大多数确认反馈时，则发送提交命令commit给这些follower；follower收到commit后提交T中的所有数据。</p>
-<p>Broadcast阶段和Synchronization阶段相似，只是这个阶段是对一个请求的提交而不是一个集合的提交。</p>
-<hr>
-<p>ZooKeeper Config </p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>clientPort</td>
-<td>客户端连接server的端口，即对外服务端口，一般设置为2181 </td>
-</tr>
-<tr>
-<td>dataDir</td>
-<td>存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。建议同时配置参数dataLogDir, 事务日志的写性能直接影响zk性能。 </td>
-</tr>
-<tr>
-<td>tickTime</td>
-<td>ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2*tickTime。</td>
-</tr>
-<tr>
-<td>dataLogDir</td>
-<td>事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。</td>
-</tr>
-<tr>
-<td>globalOutstandingLimit</td>
-<td>最大请求堆积数。默认是1000。</td>
-</tr>
-<tr>
-<td>preAllocSize</td>
-<td>预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。</td>
-</tr>
-<tr>
-<td>snapCount</td>
-<td>每进行snapCount次事务日志输出后，触发一次快照(snapshot), 此时，ZK会生成一个snapshot文件，同时创建一个新的事务日志文件log。</td>
-</tr>
-<tr>
-<td>traceFile</td>
-<td>用于记录所有请求的log，一般调试过程中可以使用，但是生产环境不建议使用，会严重影响性能。</td>
-</tr>
-<tr>
-<td>maxClientCnxns</td>
-<td>单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。</td>
-</tr>
-<tr>
-<td>clientPortAddress</td>
-<td>对于多网卡的机器，可以为每个IP指定不同的监听端口。</td>
-</tr>
-<tr>
-<td>minSessionTimeoutmaxSessionTimeout</td>
-<td>Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。</td>
-</tr>
-<tr>
-<td>fsync.warningthresholdms</td>
-<td>事务日志输出时，如果调用fsync方法超过指定的超时时间，那么会在日志中输出警告信息。</td>
-</tr>
-<tr>
-<td>autopurge.purgeInterval</td>
-<td>ZK提供了自动清理事务日志和快照文件的功能，这个参数指定了清理频率，单位是小时，需要配置一个1或更大的整数，默认是0，表示不开启自动清理功能。</td>
-</tr>
-<tr>
-<td>autopurge.snapRetainCount</td>
-<td>需要保留的文件数目。默认是保留3个。</td>
-</tr>
-<tr>
-<td>electionAlg</td>
-<td>允许指定leader选举算法。</td>
-</tr>
-<tr>
-<td>initLimit</td>
-<td>Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在initLimit时间内完成这个工作。</td>
-</tr>
-<tr>
-<td>syncLimit</td>
-<td>如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。</td>
-</tr>
-<tr>
-<td>leaderServes</td>
-<td>Leader专注于集群中机器的协调，那么可以将这个参数设置为no，这样一来，会大大提高写操作的性能。</td>
-</tr>
-<tr>
-<td>server.x=[hostname]:nnnnn[:nnnnn]</td>
-<td>第一个端口用于F和L之间的数据同步和其它通信，第二个端口用于Leader选举过程中投票通信。</td>
-</tr>
-<tr>
-<td>group.x=nnnnn[:nnnnn]weight.x=nnnnn</td>
-<td>对机器分组和权重设置。</td>
-</tr>
-<tr>
-<td>cnxTimeout</td>
-<td>Leader选举过程中，打开一次连接的超时时间，默认是5s。</td>
-</tr>
-<tr>
-<td>zookeeper.DigestAuthenticationProvider.superDigest</td>
-<td>ZK权限设置相关。</td>
-</tr>
-<tr>
-<td>skipACL</td>
-<td>所有客户端请求都不作ACL检查。</td>
-</tr>
-<tr>
-<td>forceSync</td>
-<td>确定了是否需要在事务日志提交的时候调用FileChannel.force来保证数据完全同步到磁盘。</td>
-</tr>
-<tr>
-<td>jute.maxbuffer</td>
-<td>每个节点最大数据量，是默认是1M。</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-09-25T16:00:00.000Z"><a href="/2016/09/26/machine_learning/Terms/">2016-09-26</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/09/26/machine_learning/Terms/">Machine Learning</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h3><p><code>激活函数（Activation Function）</code></p>
-<p>为了让神经网络能够学习复杂的决策边界（decision boundary），我们在其一些层应用一个非线性激活函数。最常用的函数包括  sigmoid、tanh、ReLU（Rectified Linear Unit 线性修正单元） 以及这些函数的变体。</p>
-<hr>
-<p><code>Adadelta</code></p>
-<p>Adadelta 是一个基于梯度下降的学习算法，可以随时间调整适应每个参数的学习率。它是作为 Adagrad 的改进版提出的，它比超参数（hyperparameter）更敏感而且可能会太过严重地降低学习率。Adadelta 类似于 rmsprop，而且可被用来替代 vanilla SGD。</p>
-<ul>
-<li>论文：Adadelta：一种自适应学习率方法（ADADELTA: An Adaptive Learning Rate Method）</li>
-<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
-<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
-</ul>
-<hr>
-<p><code>Adagrad</code></p>
-<p>Adagrad 是一种自适应学习率算法，能够随时间跟踪平方梯度并自动适应每个参数的学习率。它可被用来替代vanilla SGD (<a href="http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。" target="_blank" rel="external">http://www.wildml.com/deep-learning-glossary/#sgd)；而且在稀疏数据上更是特别有用，在其中它可以将更高的学习率分配给更新不频繁的参数。</a></p>
-<ul>
-<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
-<li>技术博客：斯坦福 CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
-<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
-</ul>
-<hr>
-<p><code>Adam</code></p>
-<p>Adam 是一种类似于 rmsprop 的自适应学习率算法，但它的更新是通过使用梯度的第一和第二时刻的运行平均值（running average）直接估计的，而且还包括一个偏差校正项。</p>
-<ul>
-<li>论文：Adam：一种随机优化方法（Adam: A Method for Stochastic Optimization）</li>
-<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
-</ul>
-<hr>
-<p><code>仿射层（Affine Layer）</code></p>
-<p>神经网络中的一个全连接层。仿射（Affine）的意思是前面一层中的每一个神经元都连接到当前层中的每一个神经元。在许多方面，这是神经网络的「标准」层。仿射层通常被加在卷积神经网络或循环神经网络做出最终预测前的输出的顶层。仿射层的一般形式为 y = f(Wx + b)，其中 x 是层输入，w 是参数，b 是一个偏差矢量，f 是一个非线性激活函数。</p>
-<hr>
-<p><code>注意机制（Attention Mechanism）</code></p>
-<p>注意机制是由人类视觉注意所启发的，是一种关注图像中特定部分的能力。注意机制可被整合到语言处理和图像识别的架构中以帮助网络学习在做出预测时应该「关注」什么。</p>
-<ul>
-<li>技术博客：深度学习和自然语言处理中的注意和记忆（<a href="http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）" target="_blank" rel="external">http://www.wildml.com/2016/01/attention-and-memory-in-deep-learning-and-nlp/）</a></li>
-</ul>
-<hr>
-<p><code>Alexnet</code></p>
-<p>Alexnet 是一种卷积神经网络架构的名字，这种架构曾在 2012 年 ILSVRC 挑战赛中以巨大优势获胜，而且它还导致了人们对用于图像识别的卷积神经网络（CNN）的兴趣的复苏。它由 5 个卷积层组成。其中一些后面跟随着最大池化（max-pooling）层和带有最终 1000 条路径的 softmax (1000-way softmax)的 3个全连接层。Alexnet 被引入到了使用深度卷积神经网络的 ImageNet 分类中。</p>
-<hr>
-<p><code>自编码器（Autoencoder）</code></p>
-<p>自编码器是一种神经网络模型，它的目标是预测输入自身，这通常通过网络中某个地方的「瓶颈（bottleneck）」实现。通过引入瓶颈，我们迫使网络学习输入更低维度的表征，从而有效地将输入压缩成一个好的表征。自编码器和 PCA 等降维技术相关，但因为它们的非线性本质，它们可以学习更为复杂的映射。目前已有一些范围涵盖较广的自编码器存在，包括 降噪自编码器（Denoising Autoencoders）、变自编码器（Variational Autoencoders）和序列自编码器（Sequence Autoencoders）。</p>
-<ul>
-<li>降噪自编码器论文：Stacked Denoising Autoencoders: Learning Useful Representations in a Deep Network with a Local Denoising Criterion </li>
-<li>变自编码器论文：Auto-Encoding Variational Bayes</li>
-<li>序列自编码器论文：Semi-supervised Sequence Learning</li>
-</ul>
-<hr>
-<p><code>平均池化（Average-Pooling）</code></p>
-<p>平均池化是一种在卷积神经网络中用于图像识别的池化（Pooling）技术。它的工作原理是在特征的局部区域上滑动窗口，比如像素，然后再取窗口中所有值的平均。它将输入表征压缩成一种更低维度的表征。</p>
-<hr>
-<p><code>反向传播（Backpropagation）</code></p>
-<p>反向传播是一种在神经网络中用来有效地计算梯度的算法，或更一般而言，是一种前馈计算图（feedforward computational graph）。其可以归结成从网络输出开始应用分化的链式法则，然后向后传播梯度。反向传播的第一个应用可以追溯到 1960 年代的 Vapnik 等人，但论文 Learning representations by back-propagating errors常常被作为引用源。</p>
-<ul>
-<li>技术博客：计算图上的微积分学：反向传播（<a href="http://colah.github.io/posts/2015-08-Backprop/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Backprop/）</a></li>
-</ul>
-<hr>
-<p><code>通过时间的反向传播（BPTT：Backpropagation Through Time）</code></p>
-<p>通过时间的反向传播是应用于循环神经网络（RNN）的反向传播算法。BPTT 可被看作是应用于 RNN 的标准反向传播算法，其中的每一个时间步骤（time step）都代表一个计算层，而且它的参数是跨计算层共享的。因为 RNN 在所有的时间步骤中都共享了同样的参数，一个时间步骤的错误必然能「通过时间」反向到之前所有的时间步骤，该算法也因而得名。当处理长序列（数百个输入）时，为降低计算成本常常使用一种删节版的 BPTT。删节的 BPTT 会在固定数量的步骤之后停止反向传播错误。</p>
-<p>论文：Backpropagation Through Time: What It Does and How to Do It</p>
-<hr>
-<p><code>分批标准化（BN：Batch Normalization）</code></p>
-<p>分批标准化是一种按小批量的方式标准化层输入的技术。它能加速训练过程，允许使用更高的学习率，还可用作规范器（regularizer）。人们发现，分批标准化在卷积和前馈神经网络中应用时非常高效，但尚未被成功应用到循环神经网络上。</p>
-<p>论文：分批标准化：通过减少内部协变量位移（Covariate Shift）加速深度网络训练（Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift）<br>论文：使用分批标准化的循环神经网络（Batch Normalized Recurrent Neural Networks）</p>
-<p>双向循环神经网络（Bidirectional RNN）</p>
-<p>双向循环神经网络是一类包含两个方向不同的 RNN 的神经网络。其中的前向 RNN 从起点向终点读取输入序列，而反向 RNN 则从终点向起点读取。这两个 RNN 互相彼此堆叠，它们的状态通常通过附加两个矢量的方式进行组合。双向 RNN 常被用在自然语言问题中，因为在自然语言中我们需要同时考虑话语的前后上下文以做出预测。</p>
-<ul>
-<li>论文：双向循环神经网络（Bidirectional Recurrent Neural Networks）</li>
-</ul>
-<hr>
-<p><code>Caffe</code></p>
-<p>Caffe 是由伯克利大学视觉和学习中心开发的一种深度学习框架。在视觉任务和卷积神经网络模型中，Caffe 格外受欢迎且性能优异<br>.<br>分类交叉熵损失（Categorical Cross-Entropy Loss）</p>
-<p>分类交叉熵损失也被称为负对数似然（negative log likelihood）。这是一种用于解决分类问题的流行的损失函数，可用于测量两种概率分布（通常是真实标签和预测标签）之间的相似性。它可用 L = -sum(y * log(y_prediction)) 表示，其中 y 是真实标签的概率分布（通常是一个one-hot vector），y_prediction 是预测标签的概率分布，通常来自于一个 softmax。</p>
-<hr>
-<p><code>信道（Channel）</code></p>
-<p>深度学习模型的输入数据可以有多个信道。图像就是个典型的例子，它有红、绿和蓝三个颜色信道。一个图像可以被表示成一个三维的张量（Tensor），其中的维度对应于信道、高度和宽度。自然语言数据也可以有多个信道，比如在不同类型的嵌入（embedding）形式中。</p>
-<hr>
-<p><code>卷积神经网络（CNN/ConvNet：Convolutional Neural Network）</code></p>
-<p>CNN 使用卷积连接从输入的局部区域中提取的特征。大部分 CNN 都包含了卷积层、池化层和仿射层的组合。CNN 尤其凭借其在视觉识别任务的卓越性能表现而获得了普及，它已经在该领域保持了好几年的领先。</p>
-<ul>
-<li>技术博客：斯坦福CS231n类——用于视觉识别的卷积神经网络（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
-<li>技术博客：理解用于自然语言处理的卷积神经网络（<a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）" target="_blank" rel="external">http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/）</a></li>
-</ul>
-<hr>
-<p><code>深度信念网络（DBN：Deep Belief Network）</code></p>
-<p>DBN 是一类以无监督的方式学习数据的分层表征的概率图形模型。DBN 由多个隐藏层组成，这些隐藏层的每一对连续层之间的神经元是相互连接的。DBN 通过彼此堆叠多个 RBN（限制波尔兹曼机）并一个接一个地训练而创建。</p>
-<ul>
-<li>论文：深度信念网络的一种快速学习算法（A fast learning algorithm for deep belief nets）</li>
-</ul>
-<hr>
-<p><code>Deep Dream</code></p>
-<p>这是谷歌发明的一种试图用来提炼深度卷积神经网络获取的知识的技术。这种技术可以生成新的图像或转换已有的图片从而给它们一种幻梦般的感觉，尤其是递归地应用时。</p>
-<p>代码：Github 上的 Deep Dream（<a href="https://github.com/google/deepdream）" target="_blank" rel="external">https://github.com/google/deepdream）</a><br>技术博客：Inceptionism：向神经网络掘进更深（<a href="https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）" target="_blank" rel="external">https://research.googleblog.com/2015/06/inceptionism-going-deeper-into-neural.html）</a></p>
-<hr>
-<p><code>Dropout</code></p>
-<p>Dropout 是一种用于神经网络防止过拟合的正则化技术。它通过在每次训练迭代中随机地设置神经元中的一小部分为 0 来阻止神经元共适应（co-adapting），Dropout 可以通过多种方式进行解读，比如从不同网络的指数数字中随机取样。Dropout 层首先通过它们在卷积神经网络中的应用而得到普及，但自那以后也被应用到了其它层上，包括输入嵌入或循环网络。</p>
-<ul>
-<li>论文：Dropout: 一种防止神经网络过拟合的简单方法（Dropout: A Simple Way to Prevent Neural Networks from Overfitting）</li>
-<li>论文：循环神经网络正则化（Recurrent Neural Network Regularization）</li>
-</ul>
-<hr>
-<p><code>嵌入（Embedding）</code></p>
-<p>一个嵌入映射到一个输入表征，比如一个词或一句话映射到一个矢量。一种流行的嵌入是词语嵌入（word embedding，国内常用的说法是：词向量），如 word2vec 或 GloVe。我们也可以嵌入句子、段落或图像。比如说，通过将图像和他们的文本描述映射到一个共同的嵌入空间中并最小化它们之间的距离，我们可以将标签和图像进行匹配。嵌入可以被明确地学习到，比如在 word2vec 中；嵌入也可作为监督任务的一部分例如情感分析（Sentiment Analysis）。通常一个网络的输入层是通过预先训练的嵌入进行初始化，然后再根据当前任务进行微调（fine-tuned）。</p>
-<p>梯度爆炸问题（Exploding Gradient Problem）</p>
-<p>梯度爆炸问题是梯度消失问题（Vanishing Gradient Problem）的对立面。在深度神经网络中，梯度可能会在反向传播过程中爆炸，导致数字溢出。解决梯度爆炸的一个常见技术是执行梯度裁剪（Gradient Clipping）。</p>
-<p>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</p>
-<hr>
-<p><code>微调（Fine-Tuning）</code></p>
-<p>Fine-Tuning 这种技术是指使用来自另一个任务（例如一个无监督训练网络）的参数初始化网络，然后再基于当前任务更新这些参数。比如，自然语言处理架构通常使用 word2vec 这样的预训练的词向量（word embeddings），然后这些词向量会在训练过程中基于特定的任务（如情感分析）进行更新。</p>
-<hr>
-<p><code>梯度裁剪（Gradient Clipping）</code></p>
-<p>梯度裁剪是一种在非常深度的网络（通常是循环神经网络）中用于防止梯度爆炸（exploding gradient）的技术。执行梯度裁剪的方法有很多，但常见的一种是当参数矢量的 L2 范数（L2 norm）超过一个特定阈值时对参数矢量的梯度进行标准化，这个特定阈值根据函数：新梯度=梯度<em>阈值/L2范数（梯度）{new_gradients = gradients </em> threshold / l2_norm(gradients)}确定。</p>
-<ul>
-<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
-</ul>
-<hr>
-<p><code>GloVe</code></p>
-<p>Glove 是一种为话语获取矢量表征（嵌入）的无监督学习算法。GloVe 的使用目的和 word2vec 一样，但 GloVe 具有不同的矢量表征，因为它是在共现（co-occurrence）统计数据上训练的。</p>
-<ul>
-<li>论文：GloVe：用于词汇表征（Word Representation）的全局矢量（Global Vector）（GloVe: Global Vectors for Word Representation ）</li>
-</ul>
-<hr>
-<p><code>GoogleLeNet</code></p>
-<p>GoogleLeNet 是曾赢得了 2014 年 ILSVRC 挑战赛的一种卷积神经网络架构。这种网络使用 Inception 模块（Inception Module）以减少参数和提高网络中计算资源的利用率。</p>
-<ul>
-<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
-</ul>
-<hr>
-<p><code>GRU</code></p>
-<p>GRU（Gated Recurrent Unit：门控循环单元）是一种 LSTM 单元的简化版本，拥有更少的参数。和 LSTM 细胞（LSTM cell）一样，它使用门控机制，通过防止梯度消失问题（vanishing gradient problem）让循环神经网络可以有效学习长程依赖（long-range dependency）。GRU 包含一个复位和更新门，它们可以根据当前时间步骤的新值决定旧记忆中哪些部分需要保留或更新。</p>
-<ul>
-<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
-<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
-</ul>
-<hr>
-<p><code>Highway Layer</code></p>
-<p>Highway Layer　是使用门控机制控制通过层的信息流的一种神经网络层。堆叠多个 Highway Layer 层可让训练非常深的网络成为可能。Highway Layer 的工作原理是通过学习一个选择输入的哪部分通过和哪部分通过一个变换函数（如标准的仿射层）的门控函数来进行学习。Highway Layer 的基本公式是 T <em> h(x) + (1 - T) </em> x；其中 T 是学习过的门控函数，取值在 0 到 1 之间；h(x) 是一个任意的输入变换，x 是输入。注意所有这些都必须具有相同的大小。</p>
-<ul>
-<li>论文：Highway Networks</li>
-</ul>
-<hr>
-<p><code>ICML</code></p>
-<p>即国际机器学习大会（International Conference for Machine Learning），一个顶级的机器学习会议。</p>
-<hr>
-<p><code>ILSVRC</code></p>
-<p>即 ImageNet 大型视觉识别挑战赛（ImageNet Large Scale Visual Recognition Challenge），该比赛用于评估大规模对象检测和图像分类的算法。它是计算机视觉领域最受欢迎的学术挑战赛。过去几年中，深度学习让错误率出现了显著下降，从 30% 降到了不到 5%，在许多分类任务中击败了人类。</p>
-<hr>
-<p><code>Inception模块（Inception Module）</code></p>
-<p>Inception模块被用在卷积神经网络中，通过堆叠 1×1 卷积的降维（dimensionality reduction）带来更高效的计算和更深度的网络。</p>
-<ul>
-<li>论文：使用卷积获得更深（Going Deeper with Convolutions）</li>
-</ul>
-<hr>
-<p><code>Keras</code></p>
-<p>Kears 是一个基于 Python 的深度学习库，其中包括许多用于深度神经网络的高层次构建模块。它可以运行在 TensorFlow 或 Theano 上。</p>
-<hr>
-<p><code>LSTM</code></p>
-<p>长短期记忆（Long Short-Term Memory）网络通过使用内存门控机制防止循环神经网络（RNN）中的梯度消失问题（vanishing gradient problem）。使用 LSTM 单元计算 RNN 中的隐藏状态可以帮助该网络有效地传播梯度和学习长程依赖（long-range dependency）。</p>
-<ul>
-<li>论文：长短期记忆（LONG SHORT-TERM MEMORY）</li>
-<li>技术博客：理解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
-<li>技术博客：循环神经网络教程，第 4 部分：用 Python 和 Theano 实现 GRU/LSTM RNN（<a href="http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-network-tutorial-part-4-implementing-a-grulstm-rnn-with-python-and-theano/）</a></li>
-</ul>
-<hr>
-<p><code>最大池化（Max-Pooling）</code></p>
-<p>池化（Pooling）操作通常被用在卷积神经网络中。一个最大池化层从一块特征中选取最大值。和卷积层一样，池化层也是通过窗口（块）大小和步幅尺寸进行参数化。比如，我们可能在一个 10×10 特征矩阵上以 2 的步幅滑动一个 2×2 的窗口，然后选取每个窗口的 4 个值中的最大值，得到一个 5×5 特征矩阵。池化层通过只保留最突出的信息来减少表征的维度；在这个图像输入的例子中，它们为转译提供了基本的不变性（即使图像偏移了几个像素，仍可选出同样的最大值）。池化层通常被安插在连续卷积层之间。</p>
-<hr>
-<p><code>MNIST</code></p>
-<p>MNIST数据集可能是最常用的一个图像识别数据集。它包含 60,000 个手写数字的训练样本和 10,000 个测试样本。每一张图像的尺寸为 28×28像素。目前最先进的模型通常能在该测试集中达到 99.5% 或更高的准确度。</p>
-<hr>
-<p><code>动量（Momentum）</code></p>
-<p>动量是梯度下降算法（Gradient Descent Algorithm）的扩展，可以加速和阻抑参数更新。在实际应用中，在梯度下降更新中包含一个动量项可在深度网络中得到更好的收敛速度（convergence rate）。</p>
-<ul>
-<li>论文：通过反向传播（back-propagating error）错误学习表征</li>
-</ul>
-<hr>
-<p><code>多层感知器（MLP：Multilayer Perceptron）</code></p>
-<p>多层感知器是一种带有多个全连接层的前馈神经网络，这些全连接层使用非线性激活函数（activation function）处理非线性可分的数据。MLP 是多层神经网络或有两层以上的深度神经网络的最基本形式。</p>
-<p>负对数似然（NLL：Negative Log Likelihood）</p>
-<p>参见分类交叉熵损失（Categorical Cross-Entropy Loss）。</p>
-<p>神经网络机器翻译（NMT：Neural Machine Translation）</p>
-<p>NMT 系统使用神经网络实现语言（如英语和法语）之间的翻译。NMT 系统可以使用双语语料库进行端到端的训练，这有别于需要手工打造特征和开发的传统机器翻译系统。NMT 系统通常使用编码器和解码器循环神经网络实现，它可以分别编码源句和生成目标句。</p>
-<ul>
-<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
-<li>论文：为统计机器翻译使用 RNN 编码器-解码器学习短语表征（Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation）</li>
-</ul>
-<hr>
-<p><code>神经图灵机（NTM：Neural Turing Machine）</code></p>
-<p>NTM 是可以从案例中推导简单算法的神经网络架构。比如，NTM 可以通过案例的输入和输出学习排序算法。NTM 通常学习记忆和注意机制的某些形式以处理程序执行过程中的状态。</p>
-<ul>
-<li>论文：神经图灵机（Neural Turing Machines）</li>
-</ul>
-<hr>
-<p><code>非线性（Nonlinearity）</code></p>
-<p>参见激活函数（Activation Function）。</p>
-<p>噪音对比估计（NCE：noise-contrastive estimation）</p>
-<p>噪音对比估计是一种通常被用于训练带有大输出词汇的分类器的采样损失（sampling loss）。在大量的可能的类上计算 softmax 是异常昂贵的。使用 NCE，我们可以将问题降低成二元分类问题，这可以通过训练分类器区别对待取样和「真实」分布以及人工生成的噪声分布来实现。</p>
-<ul>
-<li>论文：噪音对比估计：一种用于非标准化统计模型的新估计原理（Noise-contrastive estimation: A new estimation principle for unnormalized statistical models ）</li>
-<li>论文：使用噪音对比估计有效地学习词向量（Learning word embeddings efficiently with noise-contrastive estimation）</li>
-</ul>
-<hr>
-<p><code>池化</code></p>
-<p>参见最大池化（Max-Pooling）或平均池化（Average-Pooling）。</p>
-<hr>
-<p><code>受限玻尔兹曼机（RBN：Restricted Boltzmann Machine）</code></p>
-<p>RBN 是一种可被解释为一个随机人工神经网络的概率图形模型。RBN 以无监督的形式学习数据的表征。RBN 由可见层和隐藏层以及每一个这些层中的二元神经元的连接所构成。RBN 可以使用对比散度（contrastive divergence）进行有效的训练，这是梯度下降的一种近似。</p>
-<ul>
-<li>论文：受限玻尔兹曼机简介（An Introduction to Restricted Boltzmann Machines）</li>
-</ul>
-<hr>
-<p><code>循环神经网络（RNN：Recurrent Neural Network）</code></p>
-<p>RNN 模型通过隐藏状态（或称记忆）连续进行相互作用。它可以使用最多 N 个输入，并产生最多 N 个输出。比如，一个输入序列可能是一个句子，其输出为每个单词的词性标注（part-of-speech tag）（N 到 N）；一个输入可能是一个句子，其输出为该句子的情感分类（N 到 1）；一个输入可能是单个图像，其输出为描述该图像所对应一系列词语（1 到 N）。在每一个时间步骤中，RNN 会基于当前输入和之前的隐藏状态计算新的隐藏状态「记忆」。其中「循环（recurrent）」这个术语来自这个事实：在每一步中都是用了同样的参数，该网络根据不同的输入执行同样的计算。</p>
-<ul>
-<li>技术博客：了解 LSTM 网络（<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/）" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/）</a></li>
-<li>技术博客：循环神经网络教程第1部分——介绍 RNN （<a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）" target="_blank" rel="external">http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/）</a></li>
-</ul>
-<hr>
-<p><code>递归神经网络（Recursive Neural Network）</code></p>
-<p>递归神经网络是循环神经网络的树状结构的一种泛化（generalization）。每一次递归都使用相同的权重。就像 RNN 一样，递归神经网络可以使用向后传播（backpropagation）进行端到端的训练。尽管可以学习树结构以将其用作优化问题的一部分，但递归神经网络通常被用在已有预定义结构的问题中，如自然语言处理的解析树中。</p>
-<ul>
-<li>论文：使用递归神经网络解析自然场景和自然语言（Parsing Natural Scenes and Natural Language with Recursive Neural Networks ）</li>
-</ul>
-<hr>
-<p><code>ReLU</code></p>
-<p>即线性修正单元（Rectified Linear Unit）。ReLU 常在深度神经网络中被用作激活函数。它们的定义是 f(x) = max(0, x) 。ReLU 相对于 tanh 等函数的优势包括它们往往很稀疏（它们的活化可以很容易设置为 0），而且它们受到梯度消失问题的影响也更小。ReLU 主要被用在卷积神经网络中用作激活函数。ReLU 存在几种变体，如Leaky ReLUs、Parametric ReLU (PReLU) 或更为流畅的 softplus近似。</p>
-<ul>
-<li>论文：深入研究修正器（Rectifiers）：在 ImageNet 分类上超越人类水平的性能（Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification）</li>
-<li>论文：修正非线性改进神经网络声学模型（Rectifier Nonlinearities Improve Neural Network Acoustic Models ）</li>
-<li>论文：线性修正单元改进受限玻尔兹曼机（Rectified Linear Units Improve Restricted Boltzmann Machines  ）</li>
-</ul>
-<hr>
-<p><code>残差网络（ResNet）</code></p>
-<p>深度残差网络（Deep Residual Network）赢得了 2015 年的 ILSVRC 挑战赛。这些网络的工作方式是引入跨层堆栈的快捷连接，让优化器可以学习更「容易」的残差映射（residual mapping）而非更为复杂的原映射（original mapping）。这些快捷连接和 Highway Layer 类似，但它们与数据无关且不会引入额外的参数或训练复杂度。ResNet 在 ImageNet 测试集中实现了 3.57% 的错误率。</p>
-<ul>
-<li>论文：用于图像识别的深度残差网络（Deep Residual Learning for Image Recognition）</li>
-</ul>
-<hr>
-<p><code>RMSProp</code></p>
-<p>RMSProp 是一种基于梯度的优化算法。它与 Adagrad 类似，但引入了一个额外的衰减项抵消 Adagrad 在学习率上的快速下降。</p>
-<ul>
-<li>PPT：用于机器学习的神经网络 讲座6a</li>
-<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
-<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
-</ul>
-<hr>
-<p><code>序列到序列（Seq2Seq）</code></p>
-<p>序列到序列（Sequence-to-Sequence）模型读取一个序列（如一个句子）作为输入，然后产生另一个序列作为输出。它和标准的 RNN 不同；在标准的 RNN 中，输入序列会在网络开始产生任何输出之前被完整地读取。通常而言，Seq2Seq 通过两个分别作为编码器和解码器的 RNN 实现。神经网络机器翻译是一类典型的 Seq2Seq 模型。</p>
-<ul>
-<li>论文：使用神经网络的序列到序列学习（Sequence to Sequence Learning with Neural Networks）</li>
-</ul>
-<hr>
-<p><code>随机梯度下降（SGD：Stochastic Gradient Descent）</code></p>
-<p>随机梯度下降是一种被用在训练阶段学习网络参数的基于梯度的优化算法。梯度通常使用反向传播算法计算。在实际应用中，人们使用微小批量版本的 SGD，其中的参数更新基于批案例而非单个案例进行执行，这能增加计算效率。vanilla SGD 存在许多扩展，包括动量（Momentum）、Adagrad、rmsprop、Adadelta 或 Adam。</p>
-<ul>
-<li>论文：用于在线学习和随机优化的自适应次梯度方法（Adaptive Subgradient Methods for Online Learning and Stochastic Optimization）</li>
-<li>技术博客：斯坦福CS231n：优化算法（<a href="http://cs231n.github.io/neural-networks-3/）" target="_blank" rel="external">http://cs231n.github.io/neural-networks-3/）</a></li>
-<li>技术博客：梯度下降优化算法概述（<a href="http://sebastianruder.com/optimizing-gradient-descent/）" target="_blank" rel="external">http://sebastianruder.com/optimizing-gradient-descent/）</a></li>
-</ul>
-<hr>
-<p><code>Softmax</code></p>
-<p>Softmax 函数通常被用于将原始分数（raw score）的矢量转换成用于分类的神经网络的输出层上的类概率（class probability）。它通过对归一化常数（normalization constant）进行指数化和相除运算而对分数进行规范化。如果我们正在处理大量的类，例如机器翻译中的大量词汇，计算归一化常数是很昂贵的。有许多种可以让计算更高效的替代选择，包括分层 Softmax（Hierarchical Softmax）或使用基于取样的损失函数，如 NCE。</p>
-<hr>
-<p><code>TensorFlow</code></p>
-<p>TensorFlow是一个开源 C ++ / Python 软件库，用于使用数据流图的数值计算，尤其是深度神经网络。它是由谷歌创建的。在设计方面，它最类似于 Theano，但比  Caffe 或 Keras 更低级。</p>
-<hr>
-<p><code>Theano</code></p>
-<p>Theano 是一个让你可以定义、优化和评估数学表达式的 Python 库。它包含许多用于深度神经网络的构造模块。Theano 是类似于 TensorFlow 的低级别库。更高级别的库包括Keras 和 Caffe。</p>
-<hr>
-<p><code>梯度消失问题（Vanishing Gradient Problem）</code></p>
-<p>梯度消失问题出现在使用梯度很小（在 0 到 1 的范围内）的激活函数的非常深的神经网络中，通常是循环神经网络。因为这些小梯度会在反向传播中相乘，它们往往在这些层中传播时「消失」，从而让网络无法学习长程依赖。解决这一问题的常用方法是使用 ReLU 这样的不受小梯度影响的激活函数，或使用明确针对消失梯度问题的架构，如LSTM。这个问题的反面被称为梯度爆炸问题（exploding gradient problem）。</p>
-<ul>
-<li>论文：训练循环神经网络的困难之处（On the difficulty of training Recurrent Neural Networks）</li>
-</ul>
-<hr>
-<p><code>VGG</code></p>
-<p>VGG 是在 2014 年 ImageNet 定位和分类比赛中分别斩获第一和第二位置的卷积神经网络模型。这个 VGG 模型包含 16-19 个权重层，并使用了大小为 3×3 和 1×1 的小型卷积过滤器。</p>
-<ul>
-<li>论文：用于大规模图像识别的非常深度的卷积网络（Very Deep Convolutional Networks for Large-Scale Image Recognition）</li>
-</ul>
-<hr>
-<p><code>word2vec</code></p>
-<p>word2vec 是一种试图通过预测文档中话语的上下文来学习词向量（word embedding）的算法和工具 (<a href="https://code.google.com/p/word2vec/)。最终得到的词矢量（word" target="_blank" rel="external">https://code.google.com/p/word2vec/)。最终得到的词矢量（word</a> vector）有一些有趣的性质，例如vector(‘queen’) ~= vector(‘king’) - vector(‘man’) + vector(‘woman’) （女王~=国王-男人+女人）。两个不同的目标函数可以用来学习这些嵌入：Skip-Gram 目标函数尝试预测一个词的上下文，CBOW  目标函数则尝试从词上下文预测这个词。</p>
-<ul>
-<li>论文：向量空间中词汇表征的有效评估（Efficient Estimation of Word Representations in Vector Space）</li>
-<li>论文：分布式词汇和短语表征以及他们的组合性（Distributed Representations of Words and Phrases and their Compositionality）</li>
-<li>论文：解释 word2vec 参数学习（word2vec Parameter Learning Explained）</li>
-</ul>
-<hr>
-<p><code>AUC (Area Under Curve)</code></p>
-<p>在计算广告学中，AUC经常用于统计ROC曲线的面积，用来量化评估广告的CTR质量。ROC(Receiver Operating Characteristics) graphs ROC经常被用于模式识别、分类器的结果展现和性能评测。传统的ROC曲线多用于医学检测领域，2000年以后，在机器学习、数据挖掘领域开始有使用、</p>
-<p>ROC是二维平面上的曲线，平面的横坐标是false positive rate(FPR)，纵坐标是true positive rate(TPR)，对某个待评估的数据挖掘方法而言，我们可以根据其在测试样本上的表现得到一个TPR和FPR点对。这样，分类器就可以映射成ROC平面上的一个点，这些点构成一个阶梯状的曲线，计算的AUC也就是这些阶梯下面的面积之和。</p>
-<p>在广告中，根据CTR的高低，将最有可能被用户点击的广告按顺序依次展现，根据点击反馈，可以生成ROC曲线（y方向，点击+1；x方向，未点击+1），很明显，用户点击的越多，被点击的广告排序越靠前，ROC曲线下的面积越大，即AUC越大，则表明广告投放的效果越好，也就是CTR预测越准确。</p>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4NjA4MTkzMw==&amp;mid=2651988678&amp;idx=2&amp;sn=63a680c87e9f0d0396128a1c6c87a880&amp;chksm=8428aa24b35f23326b5ce549384bee69bb309106393ce142d6a35e608023b64cc1610f90f8dd&amp;mpshare=1&amp;scene=23&amp;srcid=1205RmVmyr5dddhg1e8q3O2b#rd" target="_blank" rel="external">轻松看懂机器学习十大常用算法</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-09-15T02:49:36.000Z"><a href="/2016/09/15/other/antlr/">2016-09-15</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/09/15/other/antlr/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -963,13 +576,13 @@
   
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
-    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
-  
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>4</small></li>
+    <li><a href="/categories/live/">live</a><small>7</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+    <li><a href="/categories/math/">math</a><small>1</small></li>
   
   </ul>
 </div>
@@ -1024,7 +637,13 @@
   
     <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
+    <li><a href="/tags/chess/">chess</a><small>1</small></li>
+  
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/discrete-mathematics/">discrete_mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/economics/">economics</a><small>1</small></li>
   
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   

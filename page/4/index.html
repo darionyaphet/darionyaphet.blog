@@ -50,6 +50,439 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>明确几个概念</strong></p>
+<ol>
+<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
+<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
+<li></li>
+</ol>
+<hr>
+<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
+<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
+<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
+<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
+<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
+<p>结点按照被访问的顺序存入栈中。</p>
+<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
+<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
+<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
+<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
+<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
+<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
+<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
+<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
+<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
+<hr>
+<p>Reference :</p>
+<ol>
+<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
+<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-24T16:00:00.000Z"><a href="/2016/07/25/distribution/hive/">2016-07-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/25/distribution/hive/">Hive</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><strong>Hive</strong></p>
+<p>order by<br>order by 会对输入做全局排序，因此只有一个reducer（多个reducer无法保证全局有序）<br>只有一个reducer，会导致当输入规模较大时，需要较长的计算时间。</p>
+<p>set hive.mapred.mode=nonstrict; (default value / 默认值)</p>
+<p>set hive.mapred.mode=strict;</p>
+<p>order by 和数据库中的Order by 功能一致，按照某一项 &amp; 几项 排序输出。</p>
+<p>与数据库中 order by 的区别在于在hive.mapred.mode = strict 模式下 必须指定 limit 否则执行会报错。</p>
+<p>hive&gt; select * from test order by id;     </p>
+<p>FAILED: Error in semantic analysis: 1:28 In strict mode, if ORDER BY is specified, LIMIT must also be specified. Error encountered near token ‘id’</p>
+<p>原因： 在order by 状态下所有数据会到一台服务器进行reduce操作也即只有一个reduce，如果在数据量大的情况下会出现无法输出结果的情况，如果进行 limit n ，那只有  n * map number 条记录而已。只有一个reduce也可以处理过来。</p>
+<p>sort by<br>sort by不是全局排序，其在数据进入reducer前完成排序.</p>
+<p>因此，如果用sort by进行排序，并且设置mapred.reduce.tasks&gt;1， 则sort by只保证每个reducer的输出有序，不保证全局有序。</p>
+<p>sort by 不受 hive.mapred.mode 是否为strict ,nostrict 的影响</p>
+<p>sort by 的数据只能保证在同一reduce中的数据可以按指定字段排序。</p>
+<p>使用sort by 你可以指定执行的reduce 个数 （set mapred.reduce.tasks=<number>）,对输出的数据再执行归并排序，即可以得到全部结果。</number></p>
+<p>注意：可以用limit子句大大减少数据量。使用limit n后，传输到reduce端（单机）的数据记录数就减少到n* （map个数）。否则由于数据过大可能出不了结果。</p>
+<p>distribute by<br>按照指定的字段对数据进行划分到不同的输出reduce  / 文件中。</p>
+<p>insert overwrite local directory ‘/home/hadoop/out’ select * from test order by name distribute by length(name);  </p>
+<p>此方法会根据name的长度划分到不同的reduce中，最终输出到不同的文件中。 </p>
+<p>length 是内建函数，也可以指定其他的函数或这使用自定义函数。</p>
+<p>Cluster By<br>cluster by 除了具有 distribute by 的功能外还兼具 sort by 的功能。 </p>
+<p>但是排序只能是倒序排序，不能指定排序规则为asc 或者desc。</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hive.exec.stagingdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.exec.scratchdir</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.query.length</td>
+<td>The maximum size of a query string .</td>
+<td>100 KB</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.in.clause</td>
+<td>The maximum number of values in a IN clause. Once exceeded, it will be broken into multiple OR separated IN clauses.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.direct.sql.max.elements.values.clause</td>
+<td>The maximum number of values in a VALUES clause for INSERT statement.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.table.parameters.default</td>
+<td>Default property values for newly created tables</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.id</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.session.silent</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.session.history.enabled</td>
+<td>Whether to log Hive query, query plan, runtime statistics etc.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.query.string</td>
+<td>Query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.query.id</td>
+<td>ID for query being executed</td>
+<td></td>
+</tr>
+<tr>
+<td>hive.jobname.length</td>
+<td>max jobname length</td>
+<td>50</td>
+</tr>
+<tr>
+<td>hive.alias</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>hive.map.aggr</td>
+<td>Whether to use map-side aggregation in Hive Group By queries</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.skewindata</td>
+<td>Whether there is skew in data to optimize group by queries</td>
+<td>false</td>
+</tr>
+<tr>
+<td>hive.join.emit.interval</td>
+<td>How many rows in the right-most join operand Hive should buffer before emitting the join result.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.join.cache.size</td>
+<td>How many rows in the joining tables (except the streaming table) should be cached in memory.</td>
+<td>25000</td>
+</tr>
+<tr>
+<td>hive.mapjoin.bucket.cache.size</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>hive.mapjoin.optimized.hashtable</td>
+<td>Whether Hive should use memory-optimized hash table for MapJoin. Only works on Tez and Spark, because memory-optimized hashtable cannot be serialized.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>hive.groupby.mapaggr.checkinterval</td>
+<td>Number of rows after which size of the grouping keys/aggregation classes is performed</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>hive.mapjoin.followby.map.aggr.hash.percentmemory</td>
+<td>Portion of total memory to be used by map-side group aggregation hash table, when this group by is followed by map join</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>hive.heartbeat.interval</td>
+<td>Send a heartbeat after this interval - used by mapjoin and filter operators</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>hive.limit.row.max.size</td>
+<td>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.limit.file</td>
+<td>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</td>
+<td>10</td>
+</tr>
+<tr>
+<td>hive.limit.optimize.enable</td>
+<td>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</td>
+<td>false</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-07-19T16:00:00.000Z"><a href="/2016/07/20/language/node/">2016-07-20</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/20/language/node/">Node</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-07-02T05:49:49.000Z"><a href="/2016/07/02/distribution/kafka/">2016-07-02</a></time>
       
       
@@ -298,38 +731,6 @@
       
   
     <h1 class="title"><a href="/2016/06/20/machine_learning/NeuralNetworks/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
   
 
     </header>
@@ -1080,462 +1481,17 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-06-15T16:00:00.000Z"><a href="/2016/06/16/storage/rocksdb/">2016-06-16</a></time>
+        <time datetime="2016-06-17T16:00:00.000Z"><a href="/2016/06/18/language/jvm_compiler/">2016-06-18</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/06/16/storage/rocksdb/">RocksDB</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="RocksDB"><a href="#RocksDB" class="headerlink" title="RocksDB"></a>RocksDB</h3><p>RocksDB is an embedded key-value store where keys and values are arbitrary byte streams. </p>
-<p>RocksDB organizes all data in sorted order and the common operations are Get, Put, Delete and Scan.</p>
-<p>The three basic constructs of RocksDB are memtable, sstfile and logfile. </p>
-<p>The memtable is an in-memory data structure - new writes are inserted into the memtable and are optionally written to the logfile. </p>
-<p>The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a sstfile on storage and the corresponding logfile can be safely deleted. </p>
-<p>The data in an sstfile is sorted to facilitate easy lookup of keys.</p>
-<p>Keys and values are treated as pure byte streams.<br>There is no limit to the size of a key or a value.</p>
-<hr>
-<p><strong>Structures</strong></p>
-<p><code>Options</code> define how RocksDB behaves and performs. </p>
-<p>options specific to the whole RocksDB instance will be defined in <code>DBOptions</code> .</p>
-<p>Column Families are handled and referenced with a <code>ColumnFamilyHandle</code> .</p>
-<p><code>Options</code> is inheriting both <code>ColumnFamilyOptions</code> and <code>DBOptions</code>, which means you can still use it to define all the options for a DB instance with a single (default) column family.</p>
-<hr>
-<p><strong>Static Sorted Table (Static Sorted Table)</strong></p>
-<p>All RocksDB’s persistent data is stored in a collection of SSTs.</p>
-<p>Right now we have two types of tables: <code>plain table</code> and <code>block based table</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Block-based table</span><br><span class="line"></span><br><span class="line">This is the default table type, which was designed for storing data in hard disk or flash device.</span><br><span class="line"></span><br><span class="line">In block-based table, data is chucked into fix-sized blocks. </span><br><span class="line"></span><br><span class="line">Each block, in turn, keeps a bunch of entries.</span><br><span class="line"></span><br><span class="line">When storing data, we can compress and/or encode data efficiently within a block, which often resulted in a much smaller data size compared with the raw data size.</span><br><span class="line"></span><br><span class="line">As for the record retrieval, we&apos;ll first locate the block where target record may reside, then read the block to memory, and finally search that record within the block. </span><br><span class="line"></span><br><span class="line">Of course, to avoid frequent reads of the same block, we introduced the block cache to keep the loaded blocks in the memory.</span><br></pre></td></tr></table></figure>
-<p>Format :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;beginning_of_file&gt;</span><br><span class="line">  [data block 1]</span><br><span class="line">  [data block 2]</span><br><span class="line">  ...</span><br><span class="line">  [data block N]</span><br><span class="line"></span><br><span class="line">  [meta block 1: filter block] </span><br><span class="line">  [meta block 2: stats block]  </span><br><span class="line">  ...</span><br><span class="line">  [meta block K: future extended block]  </span><br><span class="line">  </span><br><span class="line">  [metaindex block]</span><br><span class="line">  [index block]</span><br><span class="line">  [Footer]       </span><br><span class="line">&lt;end_of_file&gt;</span><br></pre></td></tr></table></figure>
-<p>The sequence of <code>key/value pairs</code> are stored in sorted order and partitioned into a sequence of data blocks.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Plain table</span><br><span class="line"></span><br><span class="line">Plain table stores data in a sequence of key/value pairs.</span><br><span class="line"></span><br><span class="line">1. No memory copy needed.</span><br><span class="line">   As part of in-memory database, we can easily mmap a plain table and allows direct access to its data without copying.   </span><br><span class="line">   Also plain table bypasses the concept of &quot;block&quot; and therefore avoids the overhead inherent in block-based table, like extra block lookup, bock cache, etc.</span><br><span class="line">   </span><br><span class="line">2. Faster Hash-based index.</span><br><span class="line">   Compared with block-based table, which employs mostly binary search for entry lookup, the well designed hash-based index in plain table enables us to locate data magnitudes faster.</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">There&apos;re some limitations for this plain table format:</span><br><span class="line"></span><br><span class="line">1. File size may not be greater than 2^31 - 1 bytes (2G)2. 2. </span><br><span class="line"></span><br><span class="line">2. Data compression/Delta encoding is not supported, which may resulted in bigger file size compared with block-based table.</span><br><span class="line"></span><br><span class="line">3. Backward scan is not supported.</span><br><span class="line"></span><br><span class="line">4. Non-prefix-based Seek() is not supported</span><br><span class="line"></span><br><span class="line">5. Table loading is slower since indexes are built on the fly by 2-pass table 6. scanning.</span><br><span class="line"></span><br><span class="line">6. Only support mmap mode.</span><br></pre></td></tr></table></figure>
-<p>ReadOnly Mode</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Rocksdb could opened in ReadOnly mode.</span><br><span class="line"></span><br><span class="line">This results in much higher read performance because avoid locks completely.</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Column Families</strong></p>
-<p>Each key-value pair in RocksDB is associated with exactly one Column Family. </p>
-<p>If there is no Column Family specified, key-value pair is associated with Column Family “default”.</p>
-<p>Column Families provide a way to logically partition the database.</p>
-<ul>
-<li>Atomic writes across Column Families are supported.</li>
-<li>Consistent view of the database across Column Families.</li>
-<li>Ability to configure different Column Families independently.</li>
-<li>On-the-fly adding new Column Families and dropping them.</li>
-</ul>
-<p>The main idea behind Column Families is that they share the write-ahead log and don’t share memtables and table files. </p>
-<p>By sharing write-ahead logs we get awesome benefit of atomic writes. </p>
-<p>By separating memtables and table files, we are able to configure column families independently and delete them quickly.</p>
-<p>Every time a single Column Family is flushed, we create a new WAL . </p>
-<p>We can delete the old WAL only when all Column Families have been flushed and all data contained in that WAL persisted in table files.</p>
-<p><code>Options::max_total_wal_size</code> which can be configured such that stale column families are automatically flushed.</p>
-<hr>
-<p><strong>Memory usage</strong> </p>
-<p>There are a couple of components in RocksDB that contribute to memory usage:</p>
-<ol>
-<li>Block cache</li>
-<li>Indexes and bloom filters</li>
-<li>Memtables</li>
-<li>Blocks pinned by iterators</li>
-</ol>
-<p><strong>Block cache</strong></p>
-<p>Block cache is where RocksDB caches uncompressed data blocks.</p>
-<p>RocksDB’s cache is two-tiered: <code>block cache</code> and <code>page cache</code>.</p>
-<p>If the data block is not found in block cache, RocksDB reads it from file using buffered IO. </p>
-<p><strong>Indexes and filter blocks</strong></p>
-<p><strong>Memtable</strong></p>
-<p>Memtables ,in-memory write buffers.</p>
-<p>Each new key-value pair is first written to the memtable. </p>
-<p>Memtable size is controlled by the option <code>write_buffer_size</code>.</p>
-<p>However, memtable size is inversely proportional to write amplification </p>
-<p><code>The more memory you give to the memtable, the less the write amplification is.</code></p>
-<p>If you increase your memtable size, be sure to also increase your L1 size!</p>
-<p>L1 size is controlled by the option <code>max_bytes_for_level_base</code>.</p>
-<p><strong>Blocks pinned by iterators</strong></p>
-<p>Each iterator pins exactly one data block for each L0 file plus one data block for each L1+ level.</p>
-<p>So the total memory usage from pinned blocks is approximately <code>num_iterators * block_size * ((num_levels-1) + num_l0_files)</code></p>
-<hr>
-<p><strong>WriteBatch</strong></p>
-<p>The <code>WriteBatch</code> holds a sequence of edits to be made to the database, and these edits within the batch are applied in order. </p>
-<p><code>WriteBatch</code> may also be used to speed up bulk updates by placing lots of individual mutations into the same batch.</p>
-<p><strong>Synchronous Writes</strong></p>
-<p>By default, each write to leveldb is asynchronous: it returns after pushing the write from the process into the operating system. </p>
-<p>The transfer from operating system memory to the underlying persistent storage happens asynchronously.</p>
-<p>The <code>sync</code> flag can be turned on for a particular write to make the write operation not return until the data being written has been pushed all the way to persistent storage. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WriteOptions writeOptions = new WriteOptions();</span><br><span class="line">writeOptions.setSync(true);</span><br><span class="line">writeOptions.sync();</span><br></pre></td></tr></table></figure>
-<p><strong>Asynchronous Writes</strong></p>
-<p><code>WriteBatch</code> provides an alternative to asynchronous writes.</p>
-<p>Multiple updates may be placed in the same <code>WriteBatch</code> and applied together using a synchronous write. </p>
-<p>You can disable syncing of data files by</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setDisableDataSync(true);</span><br></pre></td></tr></table></figure>
-<p>Once the operation is finished, you can manually call sync() to flush all dirty buffers to stable storage.</p>
-<p>RocksDB by default uses faster fdatasync() to sync files. </p>
-<p>If you want to use fsync(), you can set Options::use_fsync to true.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.setUseFsync(true);</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Merge operators</strong></p>
-<hr>
-<p><strong>Iteration</strong></p>
-<p>The following example demonstrates how to print all key,value pairs in a database.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RocksIterator iterator = client.newIterator();</span><br><span class="line">try &#123;</span><br><span class="line">    for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) &#123;</span><br><span class="line">        String key = new String(iterator.key());</span><br><span class="line">        String value = new String(iterator.value());</span><br><span class="line">        System.out.println(key + &quot; --&gt; &quot; + value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">    client.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>The following variation shows how to process just the keys in the range [start,limit) .</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (iterator.seek(&quot;yid&quot;.getBytes()); iterator.isValid(); iterator.prev()) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Checksums</strong></p>
-<p><code>Rocksdb</code> associates checksums with all data it stores in the File System. </p>
-<p>There are two separate controls provided over how aggressively these checksums are verified:</p>
-<ul>
-<li><p><code>verify_checksums</code> forces checksum verification of all data that is read from the file system on. <em>This is on by default.</em></p>
-</li>
-<li><p><code>paranoid_checks</code> may be set to true before opening a database to make the database implementation raise an error as soon as it detects an internal corruption. </p>
-</li>
-</ul>
-<hr>
-<p><strong>Key Layout</strong></p>
-<p>Adjacent keys will usually be placed in the same block.</p>
-<p>The application can improve its performance by <code>placing keys that are accessed together near each other</code> and <code>placing infrequently used keys in a separate region of the key space</code>.</p>
-<hr>
-<p><strong>Filters</strong></p>
-<p><code>FilterPolicy</code> mechanism can be used to reduce the number of disk reads substantially.</p>
-<hr>
-<p><strong>Snapshots</strong></p>
-<p>Snapshots provide consistent read-only views over the entire state of the key-value store.</p>
-<hr>
-<p><strong>Slice</strong></p>
-<hr>
-<p><strong>Write buffer</strong></p>
-<hr>
-<p><strong>Compaction</strong></p>
-<p>The options that impact behavior of Compactions :</p>
-<ul>
-<li>compaction_style</li>
-<li>disable_auto_compactions</li>
-<li>compaction_filter</li>
-<li>compaction_filter_factory</li>
-</ul>
-<p>The options impacting performance of compactions : </p>
-<ul>
-<li>access_hint_on_compaction_start</li>
-<li>level0_file_num_compaction_trigger</li>
-<li>max_mem_compaction_level</li>
-<li>target_file_size_base</li>
-<li>target_file_size_multiplier</li>
-<li>expanded_compaction_factor</li>
-<li>source_compaction_factor</li>
-<li>max_grandparent_overlap_factor</li>
-<li>disable_seek_compaction</li>
-<li>max_background_compactions</li>
-</ul>
-<hr>
-<p><strong>Thread pools</strong></p>
-<hr>
-<p><strong>Purging WAL files</strong></p>
-<p>Old write-ahead logs are deleted automatically when application doesn’t need them anymore.</p>
-<p>There are options (<code>WAL_ttl_seconds</code> and <code>WAL_size_limit_MB</code>) that enable the user to archive the logs and then delete them lazily, either in TTL fashion or based on size limit.</p>
-<ul>
-<li>If both set to 0, logs will be deleted asap and will never get into the archive.</li>
-<li>If <code>WAL_ttl_seconds</code> is 0 and <code>WAL_size_limit_MB</code> is not 0, WAL files will be checked every 10 min and if total size is greater then</li>
-<li>If <code>WAL_ttl_seconds</code> is not 0 and <code>WAL_size_limit_MB</code> is 0, then WAL files will be checked every <code>WAL_ttl_seconds</code> / 2 and those that are older than <code>WAL_ttl_seconds</code> will be deleted.</li>
-<li>If both are not 0, WAL files will be checked every 10 min and both checks will be performed with ttl being first.</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Options options = new Options()</span><br><span class="line">        .setCreateIfMissing(true)</span><br><span class="line">        .setWalDir(&quot;/tmp/basic.wal&quot;)</span><br><span class="line">        .setWalSizeLimitMB(32)</span><br><span class="line">        .setWalTtlSeconds(30);</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Java</strong></p>
-<hr>
-<p><strong>MANIFEST</strong></p>
-<p><strong>Terminology</strong></p>
-<p><code>MANIFEST</code> refers to the system that keeps track of RocksDB state changes in a transactional log</p>
-<p><code>Manifest log</code> refers to an individual log file that contains RocksDB state snapshot/edits</p>
-<p><code>CURRENT</code> refers to the latest manifest log</p>
-<p><strong>Version Edit</strong></p>
-<p>A certain state of RocksDB at any given time is referred to as a <code>version</code>.</p>
-<p>Any modification to the version is considered a version edit. </p>
-<p>A version is constructed by joining a sequence of version-edits.</p>
-<p><code>A manifest log file is a sequence of version edits.</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">version-edit      = Any RocksDB state change</span><br><span class="line">version           = &#123; version-edit* &#125;</span><br><span class="line">manifest-log-file = &#123; version, version-edit* &#125;</span><br><span class="line">                  = &#123; version-edit* &#125;</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit</strong></p>
-<p><strong>Data Types</strong></p>
-<p><code>Simple data types</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VarX   - Variable character encoding of intX</span><br><span class="line">FixedX - Fixed character encoding of intX</span><br></pre></td></tr></table></figure>
-<p><code>Complex data types</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String - Length prefixed string data</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">| size (n)  | content of string  |</span><br><span class="line">+-----------+--------------------+</span><br><span class="line">|&lt;- Var32 -&gt;|&lt;-- n            --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit Record Format</strong></p>
-<p>Version edit records have the following format. </p>
-<p>The decoder identifies the record type using the record identification number.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------ ......... ----------+</span><br><span class="line">| Record ID   | Variable size record data |</span><br><span class="line">+-------------+------ .......... ---------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- varies by type       --&gt;</span><br></pre></td></tr></table></figure>
-<p><strong>Version Edit Record Types and Layout</strong></p>
-<p><strong>Comparator edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Captures the comparator name</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kComparator | data           |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Log number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Lates WAL log file number</span><br><span class="line">+-------------+----------------+</span><br><span class="line">| kLogNumber  | log number     |</span><br><span class="line">+-------------+----------------+</span><br><span class="line">&lt;-- Var32 ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Previous File Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Previous manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kPrevFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Next File Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Next manifest file number</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kNextFileNumber  | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Last Sequence Number edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Last sequence number of RocksDB</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kLastSequence    | log number     |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Max Column Family edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Adjust the maximum number of family columns allowed.</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kMaxColumnFamily    | log number     |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Deleted File edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Mark a file as deleted from database.</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">| kDeletedFile    | level       | file number  |</span><br><span class="line">+-----------------+-------------+--------------+</span><br><span class="line">&lt;-- Var32     ---&gt;|&lt;-- Var32 --&gt;|&lt;-- Var64  --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record with compaction information</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile4    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br><span class="line"></span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">|kPathID ---| Path size(n)  | path  | kNeedCompaction  | 1     | value (0/1)  |</span><br><span class="line">+-----------+---------------+-------+------------------+-------+--------------+</span><br><span class="line">&lt;- var32  -&gt;|&lt;-- var32   --&gt;|&lt;- n -&gt;|&lt;-- var32      --&gt;|&lt;- 1 -&gt;|&lt;-- 1      --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record backward compatible</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile2    | level       | file number  | file size  | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+------------+----------------+--------------+----------------+----------------+</span><br><span class="line">&lt;-- var32   --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-  var64 -&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>File edit record with path information</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">| kNewFile3    | level       | file number  | Path ID     | file size   | smallest_key   | largest_key  | smallest_seqno | largest_seq_no |</span><br><span class="line">+--------------+-------------+--------------+-------------+-------------+----------------+--------------+----------------+----------------+</span><br><span class="line">|&lt;-- var32  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64  --&gt;|&lt;-- var32 --&gt;|&lt;-- var64 --&gt;|&lt;-- String   --&gt;|&lt;-- String --&gt;|&lt;-- var64    --&gt;|&lt;-- var64    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family status edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Note the status of column family feature (enabled/disabled)</span><br><span class="line">+------------------+----------------+</span><br><span class="line">| kColumnFamily    | 0/1            |</span><br><span class="line">+------------------+----------------+</span><br><span class="line">&lt;-- Var32      ---&gt;|&lt;-- Var32    --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family add edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Add a column family</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">| kColumnFamilyAdd    | cf name        |</span><br><span class="line">+---------------------+----------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|&lt;-- String   --&gt;|</span><br></pre></td></tr></table></figure>
-<p><strong>Column family drop edit record:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Drop all column family</span><br><span class="line">+---------------------+</span><br><span class="line">| kColumnFamilyDrop   |</span><br><span class="line">+---------------------+</span><br><span class="line">&lt;-- Var32         ---&gt;|</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Transactions</strong></p>
-<p>Transactions have a simple BEGIN/COMMIT/ROLLBACK api and allow applications to modify their data concurrently while letting RocksDB handle the conflict checking.</p>
-<p><code>RocksDB provides Atomicity by default when writing multiple keys via WriteBatch.</code></p>
-<p><code>Transactions provide a way to guarantee that a batch of writes will only be written if there are no conflicts.</code></p>
-<hr>
-<p><strong>Indexing SST Files for Better Lookup Performance</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">                                file 1                              file 2</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">level 1:                     | 100, 200 |                        | 300, 400 |</span><br><span class="line">                             +----------+                        +----------+</span><br><span class="line">                                </span><br><span class="line">           file 1   file 2    file 3    file 4     file 5     file 6     file 7     file 8</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">level 2: | 40, 50 | 60, 70 | 95, 110 | 150, 160 | 210, 230 | 290, 300 | 310, 320 | 410, 450 |</span><br><span class="line">         +--------+--------+---------+----------+----------+----------+----------+----------+</span><br><span class="line">```         </span><br><span class="line"></span><br><span class="line">***</span><br><span class="line"></span><br><span class="line">**Merge Operator Implementation**</span><br><span class="line"></span><br><span class="line">*RocksDB Data Model*</span><br><span class="line"></span><br><span class="line">RocksDB is a versioned key-value store.</span><br><span class="line"></span><br><span class="line">Every change to the db is globally ordered and assigned a monotonically increasing sequence number.</span><br><span class="line"></span><br><span class="line">For each key, RocksDB keeps the history of operations.</span><br><span class="line"></span><br><span class="line">A key (K) that experienced n changes, looks like this logically</span><br></pre></td></tr></table></figure>
-<p>K:   OP1   OP2   OP3   …   OPn<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">*Get*</span><br><span class="line"></span><br><span class="line">Get returns the state of a key at a specific time.</span><br></pre></td></tr></table></figure></p>
-<p>K:   OP1    OP2   OP3   ….   OPk  …. OPn<br>                            ^<br>                            |<br>                         Get.seq<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Suppose `OPk` is the most recent operation that&apos;s visible to Get</span><br></pre></td></tr></table></figure></p>
-<p>k = max(i) {seq(OPi) &lt;= Get.seq}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-<p>K:   OP1    OP2   OP3   ….    OPk  …. OPn<br>            Put  Merge  Merge  Merge<br>                                 ^<br>                                 |<br>                              Get.seq<br>             ——————–&gt;<br>```             </p>
-<hr>
-<p><strong>Performance</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Index</th>
-<th style="text-align:center">Key Size</th>
-<th style="text-align:center">Disable WAL</th>
-<th style="text-align:center">Time (ms)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">0</td>
-<td style="text-align:center">1024 <em> 1024 </em> 64</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">198,285</td>
-</tr>
-<tr>
-<td style="text-align:left">1</td>
-<td style="text-align:center">1024 <em> 1024 </em> 64</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">178,082</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<p><strong>FAQ</strong></p>
-<ol>
-<li><p>If my process crashes, can it corrupt the database?</p>
-<p><code>No, but data in the un-flushed mem-tables might be lost if Write-Ahead-Log (WAL) is disabled.</code></p>
-</li>
-<li><p>Does RocksDB throw exceptions?</p>
-<p><code>No, RocksDB returns Status to indicate any error.</code></p>
-</li>
-<li><p>How to know the number of keys stored in a RocksDB database?</p>
-<p><code>Use GetIntProperty to obtain an estimated number of keys stored in a column family, or use GetAggregatedIntProperty to obtain an estimated number of keys stored in the whole RocksDB database.</code></p>
-</li>
-<li><p>Can I write to RocksDB using multiple processes?</p>
-<p><code>No RocksDB support multi-process read only process without writing the database.</code></p>
-</li>
-<li><p>What’s the maximum key and value sizes supported?</p>
-<p><code>RocksDB is not designed for large keys. The maximum recommended sizes for key and value are 8MB and 3GB respectively.</code> </p>
-</li>
-<li><p>What’s the fastest way to load data into RocksDB?</p>
-<p><code>A fast way to direct insert data to the DB</code> </p>
-<ul>
-<li>using single writer thread and insert in sorted order</li>
-<li>batch hundreds of keys into one write batch</li>
-<li>use vector memtable</li>
-<li>make sure options.max_background_flushes is at least 4</li>
-<li>before inserting the data, disable automatic compaction</li>
-</ul>
-</li>
-<li><p>Is block_size before compression , or after?</p>
-<p><code>block_size is for size before compression.</code></p>
-</li>
-<li><p>Is it safe to directly copy an open RocksDB instance?</p>
-<p><code>No, unless the RocksDB instance is opened in read-only mode.</code></p>
-</li>
-<li><p>Can I open RocksDB with a different compression type and still read old data?    </p>
-<p><code>Rocksdb stored the compression information in each SST file and performs decompression accordingly, you can change the compression and the db will still be able to read existing files.</code> </p>
-</li>
-<li><p>If I delete a column family, and I didn’t yet delete the column family handle, can I still use it to access the data?</p>
-<p><code>DropColumnFamily only marks the specified column family as dropped, and it will not be dropped until its reference count goes to zero and marked as dropped.</code></p>
-</li>
-<li><p>Does RocksDB support replication?</p>
-<p><code>RocksDB does not directly support replication.</code></p>
-</li>
-<li><p>How much resource does an iterator hold and when will these resource be released?</p>
-<p><code>Iterators hold both data blocks and memtables in memory.</code></p>
-</li>
-<li><p>Are bloom filter blocks of SST files always loaded to memory, or can they be loaded from disk?</p>
-<p><code>When cache_index_and_filter_blocks is set to true, then bloom filters and index block will be loaded into a LRU cache only when related Get() requests are issued. In the other case , then RocksDB will try to keep the index block and bloom filter in memory up to max_open_files number of SST files.</code></p>
-</li>
-</ol>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Basics" target="_blank" rel="external">Rocksdb Architecture Guide</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations" target="_blank" rel="external">Basic Operations</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksJava-Basics" target="_blank" rel="external">RocksJava Basics</a></li>
-<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ" target="_blank" rel="external">RocksDB FAQ</a></li>
-<li><a href="https://raw.githubusercontent.com/facebook/rocksdb/gh-pages/talks/2014-03-27-RocksDB-Meetup-Siying-Prefix-Hash.pdf" target="_blank" rel="external">Prefix hashing in RocksDB</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Prefix_hash_tree" target="_blank" rel="external">Wiki Prefix Hash Tree</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/machine_learning/TensorFlow/">2016-06-12</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/12/machine_learning/TensorFlow/">TensorFlow</a></h1>
+    <h1 class="title"><a href="/2016/06/18/language/jvm_compiler/">Java Virtual Machine Compiler</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h3 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h3><p>TensorFlow (TF) 是Google去年发布的机器学习平台，发布以后由于其速度快，扩展性好，推广速度还是蛮快的。江湖上流传着Google的大战略，Android占领了移动端，TF占领神经网络提供AI服务，未来的趋势恰好是语音图像以及AI的时代，而Google IO上发布的Gbot似乎正是这一交叉领域的初步尝试。</p>
-<p><code>TensorFlow</code> 是一个编程系统，使用图来表示计算任务。图中的节点被称之为 op 。</p>
-<p>一个 op 获得 0 个或多个 <code>Tensor</code> 执行计算，产生 0 个或多个 <code>Tensor</code>。每个 <code>Tensor</code> 是一个类型化的多维数组。一个 TensorFlow 图描述了计算的过程. 为了进行计算, 图必须在 <code>会话</code> 里被启动。<code>会话</code> 将图的 op  发到 诸如 CPU 或 GPU 上。</p>
-<p><strong>Basic Concepts</strong></p>
-<p>张量(<code>tensor</code>)，即任意维度的数据。</p>
-<p>张量的流动(<code>flow</code>)则是指保持计算节点不变，让数据进行流动。</p>
-<p>在TF的实现中，机器学习算法被表达成图，图中的节点是算子(operation)，节点会有0到多个输出。</p>
-<p>每个算子都会有属性，所有的属性都在建立图的时候被确定下来。</p>
-<p>核(<code>kernel</code>)</p>
-<p>kernel是operation在某种设备上的具体实现。</p>
-<p>通过注册机制来定义op和kernel，所以可以通过链接一个其他的库来进行kernel和op的扩展。</p>
-<p>边(<code>edge</code>)  </p>
-<p>正常边，正常边上可以流动数据，即正常边就是tensor</p>
-<p>特殊边，又称作控制依赖，(control dependencies) </p>
-<p>会话(<code>session</code>)</p>
-<p>客户端使用会话来和TF系统交互，一般的模式是，建立会话，此时会生成一张空图；</p>
-<p>在会话中添加节点和边，形成一张图，然后执行。</p>
-<p>变量(<code>variables</code>)</p>
-<p>机器学习算法都会有参数，而参数的状态是需要保存的。</p>
-<p>参数是在图中有其固定的位置的，不能像普通数据那样正常流动。</p>
-<p>TF中将Variables实现为一个特殊的算子，该算子会返回它所保存的可变tensor的句柄。</p>
-<hr>
-<p><strong>Using</strong></p>
-<p>构建图的第一步, 是创建源 op 。源 op 不需要任何输入，源 op 的输出 被传递给其它 op 做运算。</p>
-<p>TensorFlow Python 库有一个默认图 (default graph), op 构造器可以为其增加节点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># Create a Constant op that produces a 1x2 matrix.  The op is</span><br><span class="line"># added as a node to the default graph.</span><br><span class="line">#</span><br><span class="line"># The value returned by the constructor represents the output</span><br><span class="line"># of the Constant op.</span><br><span class="line">matrix1 = tf.constant([[3., 3.]])</span><br><span class="line"></span><br><span class="line"># Create another Constant that produces a 2x1 matrix.</span><br><span class="line">matrix2 = tf.constant([[2.],[2.]])</span><br><span class="line"></span><br><span class="line"># Create a Matmul op that takes &apos;matrix1&apos; and &apos;matrix2&apos; as inputs.</span><br><span class="line"># The returned value, &apos;product&apos;, represents the result of the matrix</span><br><span class="line"># multiplication.</span><br><span class="line">product = tf.matmul(matrix1, matrix2)</span><br></pre></td></tr></table></figure>
-<p>默认图现在有三个节点, 两个 constant() op, 和一个 matmul() op。<br>为了真正进行矩阵相乘运算, 并得到矩阵乘法的结果, 必须在<code>会话</code>里启动这个图。</p>
-<p>启动图的第一步是创建一个 <code>Session</code> , 如果无任何创建参数, 会话构造器 将启动默认图。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Launch the default graph.</span><br><span class="line">sess = tf.Session()</span><br><span class="line"></span><br><span class="line"># To run the matmul op we call the session &apos;run()&apos; method, passing &apos;product&apos;</span><br><span class="line"># which represents the output of the matmul op.  This indicates to the call</span><br><span class="line"># that we want to get the output of the matmul op back.</span><br><span class="line">#</span><br><span class="line"># All inputs needed by the op are run automatically by the session.  They</span><br><span class="line"># typically are run in parallel.</span><br><span class="line">#</span><br><span class="line"># The call &apos;run(product)&apos; thus causes the execution of three ops in the</span><br><span class="line"># graph: the two constants and matmul.</span><br><span class="line">#</span><br><span class="line"># The output of the op is returned in &apos;result&apos; as a numpy `ndarray` object.</span><br><span class="line">result = sess.run(product)</span><br><span class="line">print(result)</span><br><span class="line"># ==&gt; [[ 12.]]</span><br><span class="line"></span><br><span class="line"># Close the Session when we&apos;re done.</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Implementation</strong></p>
-<hr>
-<p>Reference :</p>
-<ol>
-<li><a href="http://m.blog.csdn.net/article/details?id=51645396" target="_blank" rel="external">tensorflow架构</a></li>
-<li><a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">TensorFlow 官方文档中文版</a></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
         
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-11T16:00:00.000Z"><a href="/2016/06/12/live/psychology/">2016-06-12</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/12/live/psychology/">Psychology</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="Psychology"><a href="#Psychology" class="headerlink" title="Psychology"></a>Psychology</h3><p><strong>我们都有成为恶魔的潜在可能</strong></p>
-<p>在心理学史上最著名的具有争议性的实验，是1971年斯坦福大学的监狱实验。它从微观上展现出社会环境会怎样影响人的行为。由心理学家Philip Zimbardo领导的研究者们，在斯坦福的心理大楼的地下室设立了一个模拟监狱，并且挑选了24名大学生（没有犯罪记录以及被视为心理健康）去扮演囚犯和监狱的警卫。然后研究人员通过使用隐蔽摄像头观察囚犯（必须每天24小时留在监狱里）还有狱警（每8小时轮班）。</p>
-<p>实验原本打算持续两周，但因为狱警的虐待行为，实验在实验的第六天就被迫中止——有时候他们甚至让囚犯遭受心理折磨——从囚犯展现出极度的情绪紧张和焦虑可以看出。</p>
-<p>“狱警对囚犯的攻击升级，让他们脱得赤裸裸的，把袋子套在他们头上，最后强迫他们做一些让人羞辱的关于性的行为，”Zimbardo这样对《美国科学家》说。“6天之后我不得不结束实验因为这个实验实在是失控了——除了担心警卫会怎么对待囚犯之外，我晚上都睡不着觉。”</p>
-<hr>
-<p><strong>我们没有注意到在我们的前方正在发生什么</strong></p>
-<p>试想一下，你知道你周围将会发生什么事吗？你可能没有像你认为的那样保持清醒。在1998年，哈佛大学和肯特州立大学针对大学里的路人展开关于人们对即时环境的警觉程度。在实验中，一个演员向路人迎面走来，然后向他问路。当路人向演员指示方向的时候，有两个人拿着一扇大木门从演员和路人之间经过，在几秒内完全阻挡了他们的视线。在那段时间内，本来的演员会替换成另一个演员，不仅他们的身高、体格不同，连衣着、发型还有声线都不一样。超过一半的被试都没有注意到这个替换改变。</p>
-<p>这个实验是最先阐明“变化视盲”的现象的实验之一，它仅仅向我们展示了对于现有提供的视觉场景，我们是非常选择性地接受——那似乎显示出我们比想象中还要依赖我们的记忆和模式识别。</p>
-<hr>
-<p><strong>延迟满足很困难——但如果延迟满足，我们会更成功</strong></p>
-<p>斯坦福在19世纪60年代末有一个很著名的实验，是测试学前儿童的抗拒即时满足的的诱惑的能力。这个实验引申出很多关于意志力和自制力的一些很有力的观点。在这个实验中，4岁的孩子们进入到一个房间里，在他们面前的事放在碟子上的一块棉花糖。研究人员告诉他们要不就把棉花糖吃掉，要不就等15分钟后研究人员回来，他们会获得两块棉花糖。</p>
-<p>虽然大部分的孩子都说他们会等，但是他们很多都难以抗拒面前的吸引然后屈服了——在研究人员回来之前就把棉花糖吃了，这里有《时代》的跟踪报道。成功延迟整整15分钟的孩子一般的采取了回避策略，例如别过头去或者盖着自己的眼睛。孩子们的行为意义很深远：能够延迟满足的孩子在青年时期很少会过于肥胖、有毒瘾或其他行为问题，他们将来的生活也会更成功。</p>
-<hr>
-<p><strong>我们可能有非常矛盾的道德冲动体验</strong></p>
-<p>耶鲁大学的心理学家 Stanley Milgram 在1961年进行了一个相当令人惊恐的著名实验，是关于人们当被要求伤害他人的时候，内心关于个人道德和服从权威的想法，进行了激烈的斗争。</p>
-<p>Milgram希望通过进行这个实验，可以在二战这个灾难后深刻理解纳粹战犯可能保有的永不可饶恕的行为。为了达到研究目的，他共同测试一对被试，一个担当“老师”，另一个担当“学生”。如果学生答错问题，老师被要求对学生进行电击（学生大概是坐在对面的房间，但实际上他不会受电击）。取而代之，Milgram会播放一些喊叫声，听起来就像是那个学生处于痛苦之中。假若那个“老师”在研究的压迫中表达出希望停止电击的意愿，实验人员会促使他继续下去。在第一次的实验中，百分之65的被试执行了最痛苦的、最后的450伏电击（标记为“XXX”）——即使许多被试明显处于有压力的状态，对于继续进行电击也感到不自在。</p>
-<p>尽管这个研究被普遍认定为对权威盲目服从的警告，《科学美国人》最近再次提起这个研究，并主张这个实验结果更倾向于暗示深刻的道德矛盾。</p>
-<p>“人类的道德自然包括移情的倾向，仁慈、友善地对待我们的同胞亲属和群组成员，再加上一种排外的倾向，残暴、恶毒第对待其他部落的人，”记者 Michael Shermer如此写道，“电击实验所反映的并不是人们的盲目服从，更多的是植根于人们心中的矛盾的道德倾向。”</p>
-<p>近日，一些评论者也对Milgram的研究方法提出质疑，其中一位评论家就特别提到，在耶鲁大学进行的实验记录表明百分之60的被试实际上违抗执行最高电压的命令。</p>
-<hr>
-<p><strong>我们很容易会因权力而贪污腐败</strong></p>
-<p>事实上，那些有权力的人有时候会对他人呈现出权力感和无礼感，这背后也蕴含着心理学原理。2003年，一个发表在《心理学评论》杂志上的研究里，学生三人一组并且共同写作一篇短论文。两个学生被指示去写论文，而第三个是负责评估这篇论文，然后决定那两个学生分别会获得多少钱。在合作的中段，研究人员拿来了一碟饼干，一共五个。虽然通常最后的那一块都没人吃，但是“老大”几乎总是把第四块饼干吃掉——还要吃得拖泥带水，嘴巴大张。</p>
-<p>“当研究人员在科学实验中向被试给予力量，他们更有可能用可能不恰当的方式，和他人有身体上的接触，或者用更直接的方式和别人调情，做出有风险的抉择和赌博，在谈判中首先提出报价，说出心中所想，还有像甜怪饼[1]那样吃饼干，在下巴和胸前都是饼干的碎屑，”心理学家Dacher Keltner，研究的领导人之一，在加利福尼亚大学伯克利分校的更大善意科学中心的杂志上这样写道。</p>
-<hr>
-<p><strong>我们在社交群体里寻找忠诚，而这样很容易被群体间的矛盾吸引</strong></p>
-<p>这个在20世纪50年代的社会心理学经典实验，在心理学基础上有希望、有可能解释为何社交群体和国家会卷入与其他国家的矛盾中——以及他们可以学习怎样再次合作。</p>
-<p>研究的领导者Muzafer Sherif 要求每组为11个小男孩的两个小组（他们都是11岁）去俄克拉何马州的穴州立公园进行“夏令营”。这两个小组的人（分别命名为“鹰”和“响尾蛇”）分别花了一个星期从分散的，变为一起游戏和建立友谊，同时对另外一组的存在一无所知。当这两个小组整合在一起，男孩们开始互相以名字称呼对方，而当他们开始在各种游戏中相互较量，更多矛盾随之出现，最终这两个组都拒绝和对方一起吃饭。在研究的下一个阶段，Sherif 设计了一个实验，通过让他们一起享受悠闲的活动（结果不成功）然后让他们一起解决难题，去尝试让他们和解。最后他们开始缓和了冲突。</p>
-<hr>
-<p><strong>我们只需要一样东西让我们快乐</strong></p>
-<p>持续了75年的哈佛授权研究——是历史上进行过的最具广度和深度的实验之一——伴随着268位来自1938~1940届的哈佛男大学生（现在他们正好迈入他们的90岁）大约75年，定期收集他们生活的各种层面的数据。普适的结论？爱真的就是一切，至少当我们要决定长时的幸福和生活的满足感的时候，它是如此。</p>
-<p>研究的长期负责人，精神病学家George Vaillant，和赫芬顿邮报说到有两种幸福：“一种是爱。另外一种是寻找一个适合生活的方法，不会把爱拒之门外。”举个例子，一个被试开始研究的时候他在未来所有方面的稳定性都是最低分的，然后他之前也尝试过自杀。但是在他生命最后的日子，他是最幸福的人之一。为什么？就像Vaillant所解释的那样，“他用他的一生去寻找爱。”</p>
-<hr>
-<p><strong>拥有强烈的自尊心和社会地位的时候，我们会有更好发展</strong></p>
-<p>获得名声和成功不仅仅是提高自我——这也可以是长寿的关键，这是根据著名的奥斯卡得奖的研究得出的结论。多伦多新宁医院、妇女大学健康科学中心的研究人员发现奥斯卡获奖演员和导演比那些被提名却没被选上的人更趋于长寿，获奖的男女演员比落选的同行要多活近4年。</p>
-<p>“我们不是说你获得奥斯卡奖就可以长寿，”Donald Redelmeier，研究的领导作者，对ABC新闻这样说，“不然人们就该去上表演课程。我们主要的结论仅仅是社会因素是很重要的……它表明个体内部自尊对于健康，以及保健都是很重要的方面。”</p>
-<hr>
-<p><strong>我们一直尝试为我们的经历辩护，让这些经历对我们有意义</strong></p>
-<p>每个以大一新生的身份参加心理101编号课程[2]的人，都对认知失调很熟悉——一个主张人类有避免心理矛盾、不和谐现象或者互斥理念的理论。在一个被广泛引用的1959年进行的实验，心理学家Leon Festinger要求被试去完成一系列很枯燥无聊的实验任务，就像是在木门把手上转动钉子，持续一个钟头。他们最后获得1美元或者20美元，然后他们要去告诉那些“等待中的被试者”这项任务很有趣。那些只收获1美元的被试者会说谎，把实验评价得很有趣，比那些收获20美元的被试者的评价还要高。结论？那些获得更多钱的被试者，感到自己有充分理由去用1个小时执行这个死板的任务，但是那些只获得1美金的被试者则感到自己需要为自己浪费了的时间做解释（还有减少自己的信念和行为之间的失调程度），于是他们骗说这个活动很有趣。</p>
-<p>换而言之，我们经常让自己撒谎去让这个世界看起来更符合逻辑、更和谐。</p>
-<hr>
-<p><strong>我们十分认同刻板印象</strong></p>
-<p>在社交群组的基础上，对不同种群的人抱有刻板印象，进行种族划分或等级分类是我们几乎都会做的事，即使我们尽力不这样做——刻板印象可以使我们对整个群体得出不平等和有潜在危害的结论。纽约大学NYU心理学家John Bargh的对于“社会行为的自动化”揭示，我们经常依据无意识的刻板印象判断一个人——而我们禁不住这样想，但行为还是可以改变的。我们也倾向于接受在社交群体里我们是其中一人的刻板印象。在一个研究中， Bargh发现，还原不清晰的关于年老的单词——“Florida,”（佛罗里达州）[3] “helpless” （无助的）和”wrinkled” （有皱纹的）的这个任务的被试，实验之后相对于其他对照组——还原不清晰的单词但不是关于年老的意思而言，在走廊里会走得极度的慢。Bargh在另外两个比较研究重复了这个发现，这有力证明了刻板印象基于种族和礼貌。</p>
-<p>“刻板印象是一些太过火的分类方式，” Bargh对今日心理学这样说，“当我们采用刻板印象，我们会以我们面前的人的性别、年龄、肤色分类，我们的意识会根据这些信息反应过来，认为他们不友善，愚蠢，动作缓慢，弱小。这些品质不是单看外表就能断定的，这样并不反映出真实情况。”</p>
-<hr>
-
       
     </div>
     <footer>
@@ -1590,13 +1546,13 @@
   
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
-    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
-  
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>4</small></li>
+    <li><a href="/categories/live/">live</a><small>7</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+    <li><a href="/categories/math/">math</a><small>1</small></li>
   
   </ul>
 </div>
@@ -1651,7 +1607,13 @@
   
     <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
+    <li><a href="/tags/chess/">chess</a><small>1</small></li>
+  
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/discrete-mathematics/">discrete_mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/economics/">economics</a><small>1</small></li>
   
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   

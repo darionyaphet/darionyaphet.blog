@@ -50,6 +50,131 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-22T06:49:53.000Z"><a href="/2016/04/22/web/spring/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/web/spring/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/logback/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/logback/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-22T06:45:54.000Z"><a href="/2016/04/22/other/log4j/">2016-04-22</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/22/other/log4j/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Loj4J</p>
+<p>#####Basic<br>Log4j由三个重要的组件构成：日志信息的优先级，日志信息的输出目的地，日志信息的输出格式。</p>
+<p><code>日志信息优先级</code>从高到低有ERROR、WARN、 INFO、DEBUG，分别用来指定这条日志信息的重要程度；<br><code>日志信息的输出目的地</code>指定了日志将打印到控制台还是文件中；<br><code>日志输出格式</code>则控制了日志信息的显示内容。</p>
+<p>#####定义配置文件<br>Log4j支持两种配置文件格式，一种是XML文件，一种是Java Properties文件。</p>
+<ol>
+<li><p>配置根Logger语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log4j.rootLogger = [ level ] , appenderName, appenderName, …</span><br></pre></td></tr></table></figure>
+<p>level 是日志记录的优先级，分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL或者您定义的级别。</p>
+<p>Log4j建议只使用四个级别，优 先级从高到低分别是ERROR、WARN、INFO、DEBUG。通过在这里定义的级别，可以控制到应用程序中相应级别的日志信息的开关。</p>
+</li>
+<li><p>配置日志信息输出目的地Appender语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName = fully.qualified.name.of.appender.class  </span><br><span class="line">log4j.appender.appenderName.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.optionN = valueN</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   Log4j提供的appender有以下几种：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.ConsoleAppender（控制台）</span><br><span class="line">org.apache.log4j.FileAppender（文件）</span><br><span class="line">org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件）</span><br><span class="line">org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件）</span><br><span class="line">org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>配置日志信息的格式（布局）语法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log4j.appender.appenderName.layout = fully.qualified.name.of.layout.class  </span><br><span class="line">log4j.appender.appenderName.layout.option1 = value1  </span><br><span class="line">log4j.appender.appenderName.layout.optionN = valueN</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>   Log4j提供的layout有已下几种：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.apache.log4j.HTMLLayout（以HTML表格形式布局） </span><br><span class="line">org.apache.log4j.PatternLayout（可以灵活地指定布局模式）</span><br><span class="line">org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串）</span><br><span class="line">org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</span><br></pre></td></tr></table></figure>
+<p>   Log4J采用类似C语言中的printf函数的打印格式格式化日志信息，打印参数如下：</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL  </span><br><span class="line">%r 输出自应用启动到输出该log信息耗费的毫秒数  </span><br><span class="line">%c 输出所属的类目，通常就是所在类的全名  </span><br><span class="line">%t 输出产生该日志事件的线程名  </span><br><span class="line">%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”  </span><br><span class="line">%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d&#123;yyy MMM dd HH:mm:ss,SSS&#125;，输出类似：2002年10月18日 22：10：28，921  </span><br><span class="line">%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li><a href="http://www.codeceo.com/article/log4j-usage.html" target="_blank" rel="external">最详细的Log4j使用教程</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-22T06:45:41.000Z"><a href="/2016/04/22/other/calcite/">2016-04-22</a></time>
       
       
@@ -195,40 +320,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Simple Build Tool</p>
-<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/gradle/">2016-04-22</a></time>
       
       
@@ -320,140 +411,18 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+        <time datetime="2016-04-22T06:44:20.000Z"><a href="/2016/04/22/other/sbt/">2016-04-22</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Groovy</p>
-<p>####metaprogramming</p>
-<ol>
-<li>#<code>runtime metaprogramming</code></li>
-</ol>
-<ol>
-<li>#<code>compile-time metaprogramming</code></li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/go/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/go/"></a></h1>
+    <h1 class="title"><a href="/2016/04/22/other/sbt/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Golang</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/dsl/dsl/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/dsl/dsl/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Domain-specific language</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/python/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/language/python/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>###Python</p>
-<p><strong>Python Egg</strong></p>
-<p>Python 中的egg文件 就如同Java中的jar文件 是一个打包文件 用于方便安装部署。</p>
-<p>Python的setup.py其实是python工具包distutils的配置文件，setuptools就是基于distutils来做的。</p>
-<p>在setup.py中通过setup函数来配置打包信息。</p>
-<p>首先要引入setuptools的函数setup。</p>
-<p>setuptools的setup其实就是distutils的setup函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#coding=utf8</span><br><span class="line"></span><br><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name = &quot;py-example-example&quot;,</span><br><span class="line">    version = &quot;0.1&quot;,</span><br><span class="line">    packages = find_packages(),</span><br><span class="line"></span><br><span class="line">    description = &quot;python egg example&quot;,</span><br><span class="line">    long_description = &quot;python egg example&quot;,</span><br><span class="line">    author = &quot;darion&quot;,</span><br><span class="line">    author_email = &quot;darion.yaphet@gmail.com&quot;,</span><br><span class="line"></span><br><span class="line">    license = &quot;GPL&quot;,</span><br><span class="line">    keywords = (&quot;python&quot;, &quot;egg&quot;),</span><br><span class="line">    platforms = &quot;Independant&quot;,</span><br><span class="line">    url = &quot;http://darion.yaphet.github.io&quot;, </span><br><span class="line">	</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>运行<code>python setup.py bdist_egg</code> ,生成Python egg文件。</p>
-<hr>
-<p><strong>IPython</strong></p>
-<hr>
-<p>####Debugger framework</p>
-<p>####Python Debugger</p>
-<p>Reference:</p>
-<ol>
-<li><a href="http://www.snarky.ca/why-print-became-a-function-in-python-3" target="_blank" rel="external">Why <code>print</code> became a function in Python 3</a></li>
-</ol>
+        <p>###Simple Build Tool</p>
+<p><a href="http://article.yeeyan.org/view/433044/378612" target="_blank" rel="external">Scala构建工具(SBT)教程</a></p>
 
       
     </div>
@@ -487,6 +456,46 @@
     <div class="entry">
       
         
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:33.000Z"><a href="/2016/04/21/language/groovy/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/language/groovy/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>###Groovy</p>
+<p>####metaprogramming</p>
+<ol>
+<li>#<code>runtime metaprogramming</code></li>
+</ol>
+<ol>
+<li>#<code>compile-time metaprogramming</code></li>
+</ol>
+
       
     </div>
     <footer>
@@ -541,13 +550,13 @@
   
     <li><a href="/categories/OP/">OP</a><small>1</small></li>
   
-    <li><a href="/categories/Psychology/">Psychology</a><small>1</small></li>
-  
     <li><a href="/categories/Storage/">Storage</a><small>2</small></li>
   
-    <li><a href="/categories/live/">live</a><small>4</small></li>
+    <li><a href="/categories/live/">live</a><small>7</small></li>
   
     <li><a href="/categories/machine-learning/">machine_learning</a><small>1</small></li>
+  
+    <li><a href="/categories/math/">math</a><small>1</small></li>
   
   </ul>
 </div>
@@ -602,7 +611,13 @@
   
     <li><a href="/tags/ZooKeeper/">ZooKeeper</a><small>1</small></li>
   
+    <li><a href="/tags/chess/">chess</a><small>1</small></li>
+  
     <li><a href="/tags/coffee/">coffee</a><small>1</small></li>
+  
+    <li><a href="/tags/discrete-mathematics/">discrete_mathematics</a><small>1</small></li>
+  
+    <li><a href="/tags/economics/">economics</a><small>1</small></li>
   
     <li><a href="/tags/fitness/">fitness</a><small>1</small></li>
   
