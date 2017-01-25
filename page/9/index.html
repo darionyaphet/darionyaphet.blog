@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 9 | darion.johannes.yaphet</title>
+  <title>Side 9 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,75 +50,43 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/sort/">2016-04-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/21/algorithms/sort/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/string/">2016-04-21</a></time>
       
       
   
     <h1 class="title"><a href="/2016/04/21/algorithms/string/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-21T13:02:24.000Z"><a href="/2016/04/21/algorithms/search/">2016-04-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/21/algorithms/search/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
   
 
     </header>
@@ -189,6 +157,38 @@
 <li><a href="http://mp.weixin.qq.com/s?__biz=MjM5MTQzNzU2NA==&amp;mid=2651642931&amp;idx=1&amp;sn=b19144eafafb8509f86276ac33a46bca&amp;scene=23&amp;srcid=0724T72b2uKgzYkHuKhI8cuB#rd" target="_blank" rel="external">最具争议的12个数学事实</a></li>
 </ol>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-04-18T16:00:00.000Z"><a href="/2016/04/19/live/fitness/">2016-04-19</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/19/live/fitness/">Fitness</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
       
     </div>
     <footer>
@@ -1201,6 +1201,11 @@
 </table>
 <p><code>Spark Driver 是执行main()方法的进程</code></p>
 <p><code>执行器节点</code></p>
+<h3 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h3><p><code>checkpoint</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Mark this RDD for checkpointing. </span><br><span class="line">It will be saved to a file inside the checkpoint directory set with `SparkContext#setCheckpointDir` and all references to its parent RDDs will be removed. </span><br><span class="line">This function must be called before any job has been executed on this RDD. </span><br><span class="line">It is strongly recommended that this RDD is persisted in memory, otherwise saving it on a file will require recomputation.</span><br></pre></td></tr></table></figure>
+<p>强烈建议在执行 <code>checkpoint</code> 之前先进行persisted操作 </p>
+<p>因为 <code>checkpoint</code> 会触发一个Job  如果执行 <code>checkpoint</code> 的rdd是由其他rdd经过许多计算转换过来的，如果没有 <code>persisted</code> 这个rdd，那么又要重头开始计算该rdd。所以建议先persist rdd然后再checkpoint。</p>
+<p><code>checkpoint</code> 会丢弃该rdd的以前的依赖关系，使该rdd成为顶层父rdd，这样在失败的时候恢复只需要恢复该rdd,而不需要重新计算该rdd了，这在迭代计算中是很有用的。假设你在迭代1000次的计算中在第999次失败了，然后你没有checkpoint，你只能重新开始恢复了，如果恰好你在第998次迭代的时候你做了一个checkpoint，那么你只需要恢复第998次产生的rdd,然后再执行2次迭代完成总共1000的迭代，这样效率就很高，比较适用于迭代计算非常复杂的情况，也就是恢复计算代价非常高的情况，适当进行checkpoint会有很大的好处。</p>
 <h3 id="DataFrame-amp-DataSet"><a href="#DataFrame-amp-DataSet" class="headerlink" title="DataFrame &amp; DataSet"></a>DataFrame &amp; DataSet</h3><p>Reference:</p>
 <ol>
 <li><a href="http://www.infoq.com/cn/articles/2015-Review-Spark" target="_blank" rel="external">解读2015之Spark篇：新生态系统的形成</a></li>
@@ -1240,24 +1245,24 @@
 
 <nav id="pagination">
   
-    <a href="/page/8/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/8/" class="alignleft prev">Forrige</a>
   
   
-    <a href="/page/10/" class="alignright next">Nächste Seite</a>
+    <a href="/page/10/" class="alignright next">Neste</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Søk">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Kategorier</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -1359,7 +1364,7 @@
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 Darion Yaphet
+  &copy; 2017 Darion Yaphet
   
 </div>
 <div class="clearfix"></div></footer>

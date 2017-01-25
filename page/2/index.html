@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 2 | darion.johannes.yaphet</title>
+  <title>Side 2 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,26 +50,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-11-08T02:52:38.000Z"><a href="/2016/11/08/network/finagle/">2016-11-08</a></time>
+        <time datetime="2016-11-08T02:52:38.000Z"><a href="/2016/11/08/network/libuv/">2016-11-08</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/11/08/network/finagle/"></a></h1>
+    <h1 class="title"><a href="/2016/11/08/network/libuv/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>###Finagle</p>
-<p><a href="http://monkey.org/~marius/funsrv.pdf" target="_blank" rel="external">http://monkey.org/~marius/funsrv.pdf</a></p>
-<ol>
-<li><p><code>Futures</code> The results of asynchronous operations are represented by futures which compose to express dependencies between operations.</p>
-</li>
-<li><p><code>Services</code> Systems boundaries are represented by asynchronous functions called services. They provide a symmetric and uniform API: the same abstraction represents both clients and servers.</p>
-</li>
-<li><p><code>Filters</code> Application-agnostic concerns  are encapsulated by filters which compose to build services from multiple independent modules.</p>
-</li>
-</ol>
+        <p>###Libuv</p>
+<p>libuv是一个高性能事件驱动的程序库,采用了异步, 事件驱动编程风格,提供了一套事件循环和基于IO通知回调函数。</p>
+<p>Libuv Hello World示例程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;uv.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    uv_loop_t *loop = uv_loop_new();</span><br><span class="line"></span><br><span class="line">    printf(&quot;Now quitting.\n&quot;);</span><br><span class="line">    uv_run(loop, UV_RUN_DEFAULT);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -540,24 +534,24 @@
 
 <nav id="pagination">
   
-    <a href="/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/" class="alignleft prev">Forrige</a>
   
   
-    <a href="/page/3/" class="alignright next">Nächste Seite</a>
+    <a href="/page/3/" class="alignright next">Neste</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Søk">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Kategorier</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -659,7 +653,7 @@
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 Darion Yaphet
+  &copy; 2017 Darion Yaphet
   
 </div>
 <div class="clearfix"></div></footer>

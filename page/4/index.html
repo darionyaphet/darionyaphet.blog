@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 4 | darion.johannes.yaphet</title>
+  <title>Side 4 | darion.johannes.yaphet</title>
   <meta name="author" content="Darion Yaphet">
   
   
@@ -50,45 +50,612 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/algorithms/Tarjan/">2016-08-01</a></time>
+        <time datetime="2016-07-31T16:00:00.000Z"><a href="/2016/08/01/distribution/tez/">2016-08-01</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/01/algorithms/Tarjan/">Tez</a></h1>
+    <h1 class="title"><a href="/2016/08/01/distribution/tez/">Tez</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p><strong>明确几个概念</strong></p>
-<ol>
-<li>强连通图 : 在一个强连通图中，任意两个点都通过一定路径互相连通。</li>
-<li>强连通分量 : 在一个非强连通图中极大的强连通子图就是该图的强连通分量。</li>
-<li></li>
-</ol>
+        <h4 id="Tez"><a href="#Tez" class="headerlink" title="Tez"></a>Tez</h4><p>A Framework for YARN-based, Data Processing Applications In Hadoop. </p>
+<p>Tez improves the MapReduce paradigm by dramatically improving its speed, while maintaining MapReduce’s ability to scale to petabytes of data. </p>
+<p>Apache Tez provides a developer API and framework to write native YARN applications that bridge the spectrum of interactive and batch workloads. It allows those data access applications to work with petabytes of data over thousands nodes. </p>
+<p>The Apache Tez component library allows developers to create Hadoop applications that integrate natively with Apache Hadoop YARN and perform well within mixed workload clusters.</p>
+<p>Since Tez is extensible and embeddable, it provides the fit-to-purpose freedom to express highly optimized data processing applications, giving them an advantage over end-user-facing engines such as MapReduce and Apache Spark. </p>
+<p>Tez also offers a customizable execution architecture that allows users to express complex computations as dataflow graphs, permitting dynamic performance optimizations based on real information about the data and the resources required to process it.</p>
+<p><img src="resource/tez/H1H2Tez.png" alt="Tez on Hadoop"></p>
 <hr>
-<h3 id="Tarjan算法"><a href="#Tarjan算法" class="headerlink" title="Tarjan算法"></a>Tarjan算法</h3><p><code>Tarjan算法</code>是一个在图中寻找强连通分量的算法。</p>
-<p>此算法以一个有向图作为输入，并按照所在的强连通分量给出其顶点集的一个划分。</p>
-<p>图中的每个结点只在一个强连通分量中出现，即使是在有些结点单独构成一个强连通分量的情况下（比如图中出现了树形结构或孤立结点）。</p>
-<p>算法的基本思想如下：任选一结点开始进行深度优先搜索（若深度优先搜索结束后仍有未访问的结点，则再从中任选一点再次进行）。</p>
-<p>搜索过程中已访问的结点不再访问。搜索树的若干子树构成了图的强连通分量。</p>
-<p>结点按照被访问的顺序存入栈中。</p>
-<p>从搜索树的子树返回至一个结点时，检查该结点是否是某一强连通分量的根结点（见下）并将其从栈中删除。</p>
-<p>如果某结点是强连通分量的根，则在它之前出栈且还不属于其他强连通分量的结点构成了该结点所在的强连通分量。</p>
-<p>算法的关键在于如何判定某结点是否是强连通分量的根。</p>
-<p>注意“<strong>强连通分量的根</strong>”这一说法仅针对此算法，事实上强连通分量是没有特定的“根”的。</p>
-<p>在这里根结点指深度优先搜索时强连通分量中首个被访问的结点。</p>
-<p>为找到根结点，我们给每个结点v一个深度优先搜索标号v.index，表示它是第几个被访问的结点。</p>
-<p>此外，每个结点v还有一个值v.lowlink，表示从v出发经有向边可到达的所有结点中最小的index。</p>
-<p>显然v.lowlink总是不大于v.index，且当从v出发经有向边不能到达其他结点时，这两个值相等。</p>
-<p>v.lowlink在深度优先搜索的过程中求得，v是强连通分量的根当且仅当v.lowlink = v.index。</p>
+<p><strong>DATA PROCESSING API IN APACHE TEZ</strong></p>
 <hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">algorithm tarjan is</span><br><span class="line">  input: 图 G = (V, E)</span><br><span class="line">  output: 以所在的强连通分量划分的顶点集</span><br><span class="line"></span><br><span class="line">  index := 0</span><br><span class="line">  S := empty    // 置栈为空</span><br><span class="line">  for each v in V do</span><br><span class="line">    if (v.index is undefined)</span><br><span class="line">      strongconnect(v)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">  function strongconnect(v)</span><br><span class="line">    // 将未使用的最小index值作为结点v的index</span><br><span class="line">    v.index := index</span><br><span class="line">    v.lowlink := index</span><br><span class="line">    index := index + 1</span><br><span class="line">    S.push(v)</span><br><span class="line"></span><br><span class="line">    // 考虑v的后继结点</span><br><span class="line">    for each (v, w) in E do</span><br><span class="line">      if (w.index is undefined) then</span><br><span class="line">        // 后继结点w未访问，递归调用</span><br><span class="line">        strongconnect(w)</span><br><span class="line">        v.lowlink := min(v.lowlink, w.lowlink)</span><br><span class="line">      else if (w is in S) then</span><br><span class="line">        // w已在栈S中，亦即在当前强连通分量中</span><br><span class="line">        v.lowlink := min(v.lowlink, w.index)</span><br><span class="line">      end if</span><br><span class="line"></span><br><span class="line">    // 若v是根则出栈，并求得一个强连通分量</span><br><span class="line">    if (v.lowlink = v.index) then</span><br><span class="line">      start a new strongly connected component</span><br><span class="line">      repeat</span><br><span class="line">        w := S.pop()</span><br><span class="line">        add w to current strongly connected component</span><br><span class="line">      until (w = v)</span><br><span class="line">      output the current strongly connected component</span><br><span class="line">    end if</span><br><span class="line">  end function</span><br></pre></td></tr></table></figure>
+<p><strong>RUNTIME API IN APACHE TEZ</strong></p>
+<hr>
+<p><strong>Interface</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br></pre></td><td class="code"><pre><span class="line">public abstract class TaskScheduler implements ServicePluginLifecycle &#123;</span><br><span class="line">    /**</span><br><span class="line">     * An entry point for initialization.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void initialize() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * An entry point for starting the service.</span><br><span class="line">     * Order of service setup. Constructor, initialize(), start() - when starting a service.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void start() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Stop the service. This could be invoked at any point, when the service is no longer required -</span><br><span class="line">     * including in case of errors.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void shutdown() throws Exception &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The first step of stopping the task scheduler service. This would typically be used to stop</span><br><span class="line">     * allocating new resources. shutdown() will typically be used to unregister from external</span><br><span class="line">     * services - especially YARN for instance, so that the app is not killed</span><br><span class="line">     */</span><br><span class="line">    public void initiateStop() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the &#123;@link TaskSchedulerContext&#125; associated with this instance of the scheduler, which is</span><br><span class="line">     * used to communicate with the rest of the system</span><br><span class="line">     */</span><br><span class="line">    public final TaskSchedulerContext getContext() &#123;</span><br><span class="line">        return taskSchedulerContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the currently available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getAvailableResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the total available resources from this source</span><br><span class="line">     */</span><br><span class="line">    public abstract Resource getTotalResources() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the number of nodes available from the source</span><br><span class="line">     */</span><br><span class="line">    public abstract int getClusterNodeCount() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been blacklisted, and should not be used for subsequent</span><br><span class="line">     * allocations.</span><br><span class="line">     */</span><br><span class="line">    public abstract void blacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indication to a source that a node has been un-blacklisted, and can be used from subsequent</span><br><span class="line">     * allocations</span><br><span class="line">     */</span><br><span class="line">    public abstract void unblacklistNode(NodeId nodeId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, with location information</span><br><span class="line">     * optionally specified</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      String[] hosts, String[] racks, Priority priority,</span><br><span class="line">                                      Object containerSignature, Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to the source to allocate resources for a requesting task, based on a previously used</span><br><span class="line">     * container</span><br><span class="line">     */</span><br><span class="line">    public abstract void allocateTask(Object task, Resource capability,</span><br><span class="line">                                      ContainerId containerId, Priority priority,</span><br><span class="line">                                      Object containerSignature,</span><br><span class="line">                                      Object clientCookie) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to deallocate a task. This is typically a result of a task completing - with success</span><br><span class="line">     * or failure. It could also be the result of a decision to not run the task, before it is</span><br><span class="line">     * allocated or started.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Plugin writers need to de-allocate containers via the context once it&apos;s no longer required, for</span><br><span class="line">     * correct book-keeping</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean deallocateTask(Object task, boolean taskSucceeded,</span><br><span class="line">                                           TaskAttemptEndReason endReason,</span><br><span class="line">                                           @Nullable String diagnostics) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * A request to de-allocate a previously allocated container.</span><br><span class="line">     */</span><br><span class="line">    public abstract Object deallocateContainer(ContainerId containerId) throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Inform the scheduler that it should unregister. This is primarily valid for schedulers which</span><br><span class="line">     * require registration (YARN a.t.m)</span><br><span class="line">     */</span><br><span class="line">    public abstract void setShouldUnregister() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Checks with the scheduler whether it has unregistered.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract boolean hasUnregistered() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Indicates to the scheduler that the currently running dag has completed.</span><br><span class="line">     * This can be used to reset dag specific statistics, potentially release resources and prepare</span><br><span class="line">     * for a new DAG.</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">    public abstract void dagComplete() throws ServicePluginException;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Vertex extends Comparable&lt;Vertex&gt; &#123;</span><br><span class="line"></span><br><span class="line">    TezVertexID getVertexId();</span><br><span class="line"></span><br><span class="line">    public VertexPlan getVertexPlan();</span><br><span class="line"></span><br><span class="line">    int getDistanceFromRoot();</span><br><span class="line"></span><br><span class="line">    LinkedHashMap&lt;String, Integer&gt; getIOIndices();</span><br><span class="line"></span><br><span class="line">    String getName();</span><br><span class="line"></span><br><span class="line">    VertexState getState();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getAllCounters();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get all the counters of this vertex.</span><br><span class="line">     * @return aggregate task-counters</span><br><span class="line">     */</span><br><span class="line">    TezCounters getCachedCounters();</span><br><span class="line"></span><br><span class="line">    int getMaxTaskConcurrency();</span><br><span class="line"></span><br><span class="line">    Map&lt;TezTaskID, Task&gt; getTasks();</span><br><span class="line"></span><br><span class="line">    Task getTask(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    Task getTask(int taskIndex);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; getDiagnostics();</span><br><span class="line"></span><br><span class="line">    int getTotalTasks();</span><br><span class="line"></span><br><span class="line">    int getCompletedTasks();</span><br><span class="line"></span><br><span class="line">    int getSucceededTasks();</span><br><span class="line"></span><br><span class="line">    int getRunningTasks();</span><br><span class="line"></span><br><span class="line">    float getProgress();</span><br><span class="line"></span><br><span class="line">    float getCompletedTaskProgress();</span><br><span class="line"></span><br><span class="line">    ProgressBuilder getVertexProgress();</span><br><span class="line"></span><br><span class="line">    VertexStatusBuilder getVertexStatus(Set&lt;StatusGetOpts&gt; statusOptions);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    TaskLocationHint getTaskLocationHint(TezTaskID taskID);</span><br><span class="line"></span><br><span class="line">    void setParallelism(int parallelism, VertexLocationHint vertexLocationHint,</span><br><span class="line">                        Map&lt;String, EdgeManagerPluginDescriptor&gt; sourceEdgeManagers,</span><br><span class="line">                        Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate, boolean fromVertexManager)</span><br><span class="line">            throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(@Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate,</span><br><span class="line">                                  int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    public void reconfigureVertex(int parallelism,</span><br><span class="line">                                  @Nullable VertexLocationHint locationHint,</span><br><span class="line">                                  @Nullable Map&lt;String, EdgeProperty&gt; sourceEdgeProperties,</span><br><span class="line">                                  @Nullable Map&lt;String, InputSpecUpdate&gt; rootInputSpecUpdate) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    void setVertexLocationHint(VertexLocationHint vertexLocationHint);</span><br><span class="line"></span><br><span class="line">    void vertexReconfigurationPlanned();</span><br><span class="line"></span><br><span class="line">    void doneReconfiguringVertex();</span><br><span class="line"></span><br><span class="line">    // CHANGE THESE TO LISTS AND MAINTAIN ORDER?</span><br><span class="line">    void setInputVertices(Map&lt;Vertex, Edge&gt; inVertices);</span><br><span class="line"></span><br><span class="line">    void setOutputVertices(Map&lt;Vertex, Edge&gt; outVertices);</span><br><span class="line"></span><br><span class="line">    VertexStatistics getStatistics();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getInputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;Vertex, Edge&gt; getOutputVertices();</span><br><span class="line"></span><br><span class="line">    Map&lt;String, OutputCommitter&gt; getOutputCommitters();</span><br><span class="line"></span><br><span class="line">    void setAdditionalInputs(List&lt;RootInputLeafOutputProto&gt; inputs);</span><br><span class="line"></span><br><span class="line">    void setAdditionalOutputs(List&lt;RootInputLeafOutputProto&gt; outputs);</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;InputDescriptor, InputInitializerDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalInputs();</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    public Map&lt;String, RootInputLeafOutput&lt;OutputDescriptor, OutputCommitterDescriptor&gt;&gt;</span><br><span class="line">    getAdditionalOutputs();</span><br><span class="line"></span><br><span class="line">    List&lt;InputSpec&gt; getInputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;OutputSpec&gt; getOutputSpecList(int taskIndex) throws AMUserCodeException;</span><br><span class="line"></span><br><span class="line">    List&lt;GroupInputSpec&gt; getGroupInputSpecList(int taskIndex);</span><br><span class="line"></span><br><span class="line">    void addSharedOutputs(Set&lt;String&gt; outputs);</span><br><span class="line"></span><br><span class="line">    Set&lt;String&gt; getSharedOutputs();</span><br><span class="line"></span><br><span class="line">    int getInputVerticesCount();</span><br><span class="line"></span><br><span class="line">    int getOutputVerticesCount();</span><br><span class="line"></span><br><span class="line">    void scheduleTasks(List&lt;ScheduleTaskRequest&gt; tasks);</span><br><span class="line"></span><br><span class="line">    void scheduleSpeculativeTask(TezTaskID taskId);</span><br><span class="line"></span><br><span class="line">    Resource getTaskResource();</span><br><span class="line"></span><br><span class="line">    public TaskAttemptEventInfo getTaskAttemptTezEvents(TezTaskAttemptID attemptID,</span><br><span class="line">                                                        int fromEventId, int nextPreRoutedFromEventId, int maxEvents);</span><br><span class="line"></span><br><span class="line">    void handleSpeculatorEvent(SpeculatorEvent event);</span><br><span class="line"></span><br><span class="line">    ProcessorDescriptor getProcessorDescriptor();</span><br><span class="line"></span><br><span class="line">    public DAG getDAG();</span><br><span class="line"></span><br><span class="line">    VertexTerminationCause getTerminationCause();</span><br><span class="line"></span><br><span class="line">    AppContext getAppContext();</span><br><span class="line"></span><br><span class="line">    String getLogIdentifier();</span><br><span class="line"></span><br><span class="line">    public void incrementFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public void incrementKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getFailedTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public int getKilledTaskAttemptCount();</span><br><span class="line"></span><br><span class="line">    public Configuration getConf();</span><br><span class="line"></span><br><span class="line">    public boolean isSpeculationEnabled();</span><br><span class="line"></span><br><span class="line">    public int getTaskSchedulerIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getContainerLauncherIdentifier();</span><br><span class="line"></span><br><span class="line">    public int getTaskCommunicatorIdentifier();</span><br><span class="line"></span><br><span class="line">    public ServicePluginInfo getServicePluginInfo();</span><br><span class="line"></span><br><span class="line">    public long getInitTime();</span><br><span class="line"></span><br><span class="line">    public long getStartTime();</span><br><span class="line"></span><br><span class="line">    public long getFinishTime();</span><br><span class="line"></span><br><span class="line">    void reportTaskStartTime(long taskStartTime);</span><br><span class="line"></span><br><span class="line">    public long getFirstTaskStartTime();</span><br><span class="line"></span><br><span class="line">    public long getLastTaskFinishTime();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public interface Partitioner &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get partition for given key/value.</span><br><span class="line">     */</span><br><span class="line">    int getPartition(Object key, Object value, int numPartitions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tez.dag.recovery.enabled</td>
+<td>Enable recovery of DAGs. This allows a restarted app master to recover the incomplete DAGs from the previous instance of the app master.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.io.buffer.size</td>
+<td></td>
+<td>8192</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.flush.interval.secs</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.dag.recovery.max.unflushed.events</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>tez.task.heartbeat.timeout.check-ms</td>
+<td></td>
+<td>30000</td>
+</tr>
+<tr>
+<td>tez.task.timeout-ms</td>
+<td></td>
+<td>300000</td>
+</tr>
+<tr>
+<td>tez.am.acls.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.allow.disabled.timeline-domains</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.client.am.port-range</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.client.am.thread-count</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.commit-all-outputs-on-dag-success</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.containerlauncher.thread-count-limit</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.am.container.idle.release-timeout-max.millis</td>
+<td></td>
+<td>10000</td>
+</tr>
+<tr>
+<td>tez.am.container.idle.release-timeout-min.millis</td>
+<td></td>
+<td>5000</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.locality.delay-allocation-millis</td>
+<td></td>
+<td>250</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.non-local-fallback.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.container.reuse.rack-fallback.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.credentials-merge</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.dag.scheduler.class</td>
+<td></td>
+<td>org.apache.tez.dag.app.dag.impl.DAGSchedulerNaturalOrder</td>
+</tr>
+<tr>
+<td>tez.am.disable.client-version-check</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.inline.task.execution.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.inline.task.execution.max-tasks</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.launch.cluster-default.cmd-opts</td>
+<td></td>
+<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
+</tr>
+<tr>
+<td>tez.am.launch.cluster-default.env</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.launch.cmd-opts</td>
+<td></td>
+<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
+</tr>
+<tr>
+<td>tez.am.launch.env</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tez.am.legacy.speculative.slowtask.threshold</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.log.level</td>
+<td></td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>tez.am.max.allowed.time-sec.for-read-error</td>
+<td></td>
+<td>300</td>
+</tr>
+<tr>
+<td>tez.am.max.app.attempts</td>
+<td></td>
+<td>2</td>
+</tr>
+<tr>
+<td>tez.am.maxtaskfailures.per.node</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.am.modify-acls</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.node-blacklisting.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.node-blacklisting.ignore-threshold-node-percent</td>
+<td></td>
+<td>33</td>
+</tr>
+<tr>
+<td>tez.am.node-unhealthy-reschedule-tasks</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.preemption.heartbeats-between-preemptions</td>
+<td></td>
+<td>3</td>
+</tr>
+<tr>
+<td>tez.am.preemption.max.wait-time-ms</td>
+<td></td>
+<td>60000</td>
+</tr>
+<tr>
+<td>tez.am.preemption.percentage</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.am.resource.cpu.vcores</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.am.resource.memory.mb</td>
+<td></td>
+<td>1024</td>
+</tr>
+<tr>
+<td>tez.am.am-rm.heartbeat.interval-ms.max</td>
+<td></td>
+<td>1000</td>
+</tr>
+<tr>
+<td>tez.am.session.min.held-containers</td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td>tez.am.mode.session</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.am.speculation.enabled</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.staging-dir</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.staging.scratch-data.auto-delete</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.am.task.listener.thread-count</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.am.task.max.failed.attempts</td>
+<td></td>
+<td>4</td>
+</tr>
+<tr>
+<td>tez.am.tez-ui.history-url.template</td>
+<td></td>
+<td><strong><strong>HISTORY_URL_BASE</strong>/#/tez-app/<strong>APPLICATION_ID</strong></strong></td>
+</tr>
+<tr>
+<td>tez.am.vertex.max-task-concurrency</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.am.view-acls</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.am.tez-ui.webservice.enable</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.application.tags</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.aux.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.cancel.delegation.tokens.on.completion</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.client.asynchronous-stop</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.client.diagnostics.wait.timeout-ms</td>
+<td></td>
+<td>3000</td>
+</tr>
+<tr>
+<td>tez.client.timeout-ms</td>
+<td></td>
+<td>30000</td>
+</tr>
+<tr>
+<td>tez.java.opts.checker.class</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.java.opts.checker.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.container.max.java.heap.fraction</td>
+<td></td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>tez.counters.counter-name.max-length</td>
+<td></td>
+<td>64</td>
+</tr>
+<tr>
+<td>tez.counters.group-name.max-length</td>
+<td></td>
+<td>256</td>
+</tr>
+<tr>
+<td>tez.counters.max</td>
+<td></td>
+<td>1200</td>
+</tr>
+<tr>
+<td>tez.counters.max.groups</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.credentials.path</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.dag.status.pollinterval-ms</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.generate.debug.artifacts</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.history.logging.service.class</td>
+<td></td>
+<td>org.apache.tez.dag.history.logging.impl.SimpleHistoryLoggingService</td>
+</tr>
+<tr>
+<td>tez.tez-ui.history-url.base</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.ignore.lib.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.ipc.payload.reserved.bytes</td>
+<td></td>
+<td>5242880</td>
+</tr>
+<tr>
+<td>tez.lib.uris</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.lib.uris.classpath</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.local.mode</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.queue.name</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.session.am.dag.submit.timeout.secs</td>
+<td></td>
+<td>300</td>
+</tr>
+<tr>
+<td>tez.session.client.timeout.secs</td>
+<td></td>
+<td>120</td>
+</tr>
+<tr>
+<td>tez.simple.history.logging.dir</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.simple.history.max.errors</td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>tez.task.am.heartbeat.counter.interval-ms.max</td>
+<td></td>
+<td>4000</td>
+</tr>
+<tr>
+<td>tez.task.am.heartbeat.interval-ms.max</td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td>tez.task.generate.counters.per.io</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.get-task.sleep.interval-ms.max</td>
+<td></td>
+<td>200</td>
+</tr>
+<tr>
+<td>tez.task.initialize-processor-first</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.initialize-processor-io-serially</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.task.launch.cluster-default.cmd-opts</td>
+<td></td>
+<td>-server -Djava.net.preferIPv4Stack=true -Dhadoop.metrics.log.level=WARN</td>
+</tr>
+<tr>
+<td>tez.task.launch.cluster-default.env</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.launch.cmd-opts</td>
+<td></td>
+<td>-XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps -XX:+UseNUMA -XX:+UseParallelGC</td>
+</tr>
+<tr>
+<td>tez.task.launch.env</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tez.task.log.level</td>
+<td></td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>tez.task.max-events-per-heartbeat</td>
+<td></td>
+<td>500</td>
+</tr>
+<tr>
+<td>tez.task.max-event-backlog</td>
+<td></td>
+<td>10000</td>
+</tr>
+<tr>
+<td>tez.task.progress.stuck.interval-ms</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.task.resource.calculator.process-tree.class</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.resource.cpu.vcores</td>
+<td></td>
+<td>1</td>
+</tr>
+<tr>
+<td>tez.task.resource.memory.mb</td>
+<td></td>
+<td>1024</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.additional-reservation.fraction.max</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.additional-reservation.fraction.per-io</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.allocator.class</td>
+<td></td>
+<td>org.apache.tez.runtime.library.resources.WeightedScalingMemoryDistributor</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.enabled</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.reserve-fraction</td>
+<td></td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>tez.task.scale.memory.ratios</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.launch.cmd-opts</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.launch.cmd-opts.list</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.task-specific.log.level</td>
+<td></td>
+<td>null</td>
+</tr>
+<tr>
+<td>tez.test.minicluster.app.wait.on.shutdown.secs</td>
+<td></td>
+<td>30</td>
+</tr>
+<tr>
+<td>tez.use.cluster.hadoop-libs</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.acl.domains.auto-create</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.event.flush.timeout.millis</td>
+<td></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.max.events.per.batch</td>
+<td></td>
+<td>5</td>
+</tr>
+<tr>
+<td>tez.yarn.ats.max.polling.time.per.event.millis</td>
+<td></td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <p>Reference :</p>
 <ol>
-<li><a href="https://zh.wikipedia.org/zh-cn/Tarjan%E7%AE%97%E6%B3%95" target="_blank" rel="external">Wiki Tarjan算法</a></li>
-<li><a href="https://www.byvoid.com/blog/scc-tarjan" target="_blank" rel="external">有向图强连通分量的Tarjan算法</a></li>
+<li><a href="http://zh.hortonworks.com/apache/tez/" target="_blank" rel="external">Apache Tez</a></li>
+<li><a href="http://zh.hortonworks.com/blog/apache-tez-a-new-chapter-in-hadoop-data-processing/" target="_blank" rel="external">APACHE TEZ: A NEW CHAPTER IN HADOOP DATA PROCESSING</a></li>
+<li><a href="http://tez.apache.org/releases/0.8.4/tez-api-javadocs/configs/TezConfiguration.html" target="_blank" rel="external">Tez Configuration</a></li>
 </ol>
 
       
@@ -1510,24 +2077,24 @@
 
 <nav id="pagination">
   
-    <a href="/page/3/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/3/" class="alignleft prev">Forrige</a>
   
   
-    <a href="/page/5/" class="alignright next">Nächste Seite</a>
+    <a href="/page/5/" class="alignright next">Neste</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Søk">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
 
   
 <div class="widget tag">
-  <h3 class="title">Kategorien</h3>
+  <h3 class="title">Kategorier</h3>
   <ul class="entry">
   
     <li><a href="/categories/Algorithms/">Algorithms</a><small>2</small></li>
@@ -1629,7 +2196,7 @@
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 Darion Yaphet
+  &copy; 2017 Darion Yaphet
   
 </div>
 <div class="clearfix"></div></footer>
